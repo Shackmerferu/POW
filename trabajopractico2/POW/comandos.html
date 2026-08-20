@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referencia HTML - Comandos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #161616;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+        }
+
+        .top-bar h1 {
+            font-size: 1.2rem;
+            color: #e6edf3;
+            font-weight: 700;
+        }
+
+        .top-bar h1 span {
+            color: #7dd3fc;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bar a {
+            color: #7dd3fc;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .top-bar a:hover {
+            opacity: 0.8;
+        }
+
+        .search-container {
+            padding: 80px 30px 20px;
+            position: sticky;
+            top: 60px;
+            background: #0f0f0f;
+            z-index: 999;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: block;
+            padding: 12px 20px;
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: #c9d1d9;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar:focus {
+            border-color: #7dd3fc;
+        }
+
+        .search-bar::placeholder {
+            color: #484f58;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px 60px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #e6edf3;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+            font-weight: 600;
+        }
+
+        .tags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        .tag-card {
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s, transform 0.1s;
+        }
+
+        .tag-card:hover {
+            border-color: #7dd3fc33;
+        }
+
+        .tag-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: #7dd3fc;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .tag-desc {
+            color: #e6edf3;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .tag-usage {
+            color: #8b949e;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+
+        .tag-example {
+            background: #0f0f0f;
+            border: 1px solid #222;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .hl-tag { color: #7dd3fc; }
+        .hl-attr { color: #d2a8ff; }
+        .hl-val { color: #a5d6ff; }
+        .hl-cmt { color: #484f58; }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .tags-grid {
+                grid-template-columns: 1fr;
+            }
+            .top-bar {
+                padding: 0 15px;
+            }
+            .container {
+                padding: 0 15px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1><span>&lt;HTML&gt;</span> Referencia de Comandos</h1>
+        <a href="index.html">&larr; Volver al Inicio</a>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-bar" id="searchInput" placeholder="Buscar tags... (ej: form, img, semantic)">
+    </div>
+
+    <div class="container" id="container">
+
+        <!-- ==================== ESTRUCTURA BASE ==================== -->
+        <h2 class="section-title" data-section>Estructura Base</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="doctype declaracion documento html5 tipo">
+                <div class="tag-name">&lt;!DOCTYPE html&gt;</div>
+                <div class="tag-desc">Declaración del tipo de documento.</div>
+                <div class="tag-usage">Se coloca en la primera línea de todo archivo HTML. Le indica al navegador que el documento está en modo estándar HTML5.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;!DOCTYPE html&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="html raiz documento raíz idioma lang">
+                <div class="tag-name">&lt;html&gt;</div>
+                <div class="tag-desc">Elemento raíz del documento HTML.</div>
+                <div class="tag-usage">Envuelve todo el contenido de la página. El atributo <code>lang</code> define el idioma del documento para accesibilidad y SEO.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;html</span> <span class="hl-attr">lang</span>=<span class="hl-val">"es"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-cmt">&lt;!-- contenido del documento --&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="head cabecera metadata metadatos">
+                <div class="tag-name">&lt;head&gt;</div>
+                <div class="tag-desc">Contenedor de metadatos del documento.</div>
+                <div class="tag-usage">Agrupa información que no se muestra visualmente: título, charset, estilos, scripts, favicon y otros metadatos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;head&gt;</span>
+    <span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span>=<span class="hl-val">"UTF-8"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;title&gt;</span>Mi Página<span class="hl-tag">&lt;/title&gt;</span>
+    <span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-val">"stylesheet"</span> <span class="hl-attr">href</span>=<span class="hl-val">"style.css"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="body cuerpo contenido principal pagina">
+                <div class="tag-name">&lt;body&gt;</div>
+                <div class="tag-desc">Contenido visible del documento.</div>
+                <div class="tag-usage">Contiene todo el contenido que se renderiza en el navegador: texto, imágenes, formularios, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;body&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span>Hola Mundo<span class="hl-tag">&lt;/h1&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Contenido visible<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/body&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="title titulo pestaña browser">
+                <div class="tag-name">&lt;title&gt;</div>
+                <div class="tag-desc">Título del documento.</div>
+                <div class="tag-usage">Define el texto que aparece en la pestaña del navegador. Obligatorio en todo documento HTML y esencial para SEO.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;title&gt;</span>Mi Sitio Web<span class="hl-tag">&lt;/title&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="meta metadatos charset viewport descripcion keywords robots">
+                <div class="tag-name">&lt;meta&gt;</div>
+                <div class="tag-desc">Metadatos del documento.</div>
+                <div class="tag-usage">Define información como charset, viewport (responsiveness), descripción para SEO, robots, autor, y refresh.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span>=<span class="hl-val">"UTF-8"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;meta</span> <span class="hl-attr">name</span>=<span class="hl-val">"viewport"</span> <span class="hl-attr">content</span>=<span class="hl-val">"width=device-width, initial-scale=1.0"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;meta</span> <span class="hl-attr">name</span>=<span class="hl-val">"description"</span> <span class="hl-attr">content</span>=<span class="hl-val">"Descripción del sitio"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="link enlace stylesheet css rel icon favicon prefetch">
+                <div class="tag-name">&lt;link&gt;</div>
+                <div class="tag-desc">Enlaza recursos externos.</div>
+                <div class="tag-usage">Se usa para conectar hojas de estilo CSS, favicon, fuentes, prefetch y preconnect. No tiene contenido visual.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-val">"stylesheet"</span> <span class="hl-attr">href</span>=<span class="hl-val">"styles.css"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-val">"icon"</span> <span class="hl-attr">href</span>=<span class="hl-val">"favicon.ico"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="style estilos css inline">
+                <div class="tag-name">&lt;style&gt;</div>
+                <div class="tag-desc">Define estilos CSS internos.</div>
+                <div class="tag-usage">Permite escribir CSS directamente en el HTML dentro del <code>&lt;head&gt;</code>. Útil para estilos de página o cuando no se usa un archivo externo.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;style&gt;</span>
+    <span class="hl-tag">body</span> { <span class="hl-attr">background</span>: <span class="hl-val">#0f0f0f</span>; }
+    <span class="hl-tag">h1</span> { <span class="hl-attr">color</span>: <span class="hl-val">#7dd3fc</span>; }
+<span class="hl-tag">&lt;/style&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="script javascript codigo ejecucion defer async src">
+                <div class="tag-name">&lt;script&gt;</div>
+                <div class="tag-desc">Incluye o ejecuta JavaScript.</div>
+                <div class="tag-usage">Carga scripts externos con <code>src</code> o escribe código JS inline. Usar <code>defer</code> para no bloquear el render o <code>async</code> para carga paralela.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-val">"app.js"</span> <span class="hl-attr">defer</span><span class="hl-tag">&gt;&lt;/script&gt;</span>
+<span class="hl-tag">&lt;script&gt;</span>
+    console.log(<span class="hl-val">"Hola"</span>);
+<span class="hl-tag">&lt;/script&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="base url base href prefijo enlaces">
+                <div class="tag-name">&lt;base&gt;</div>
+                <div class="tag-desc">Define la URL base para enlaces relativos.</div>
+                <div class="tag-usage">Especifica la URL base que se usará para resolver todos los enlaces relativos en el documento. Solo uno por página.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;head&gt;</span>
+    <span class="hl-tag">&lt;base</span> <span class="hl-attr">href</span>=<span class="hl-val">"https://misitio.com/"</span> <span class="hl-attr">target</span>=<span class="hl-val">"_blank"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== TEXTOS Y CONTENIDO ==================== -->
+        <h2 class="section-title" data-section>Textos y Contenido</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="h1 h2 h3 h4 h5 h6 heading titulo encabezado">
+                <div class="tag-name">&lt;h1&gt; a &lt;h6&gt;</div>
+                <div class="tag-desc">Encabezados de diferentes niveles.</div>
+                <div class="tag-usage">Definen la jerarquía de títulos. <code>&lt;h1&gt;</code> es el más importante (solo uno por página recomendado), bajando hasta <code>&lt;h6&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;h1&gt;</span>Título Principal<span class="hl-tag">&lt;/h1&gt;</span>
+<span class="hl-tag">&lt;h2&gt;</span>Subtítulo<span class="hl-tag">&lt;/h2&gt;</span>
+<span class="hl-tag">&lt;h3&gt;</span>Sección menor<span class="hl-tag">&lt;/h3&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="p parrafo texto bloque">
+                <div class="tag-name">&lt;p&gt;</div>
+                <div class="tag-desc">Párrafo de texto.</div>
+                <div class="tag-usage">Agrupa texto en párrafos. Los navegadores añaden margen vertical automáticamente. Es el elemento base para contenido de texto.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Este es un párrafo de texto que el navegador renderiza con espaciado entre párrafos.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="br salto linea break">
+                <div class="tag-name">&lt;br&gt;</div>
+                <div class="tag-desc">Salto de línea.</div>
+                <div class="tag-usage">Inserta un salto de línea dentro de un elemento. Es un elemento vacío (sin cierre). Usar con moderación; preferir CSS para espaciado.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Línea uno<span class="hl-tag">&lt;br&gt;</span>Línea dos<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="hr separador linea horizontal division">
+                <div class="tag-name">&lt;hr&gt;</div>
+                <div class="tag-desc">Separador temático.</div>
+                <div class="tag-usage">Representa una pausa temática entre párrafos (cambio de tema). Visualmente se muestra como una línea horizontal.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Contenido anterior<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;hr&gt;</span>
+<span class="hl-tag">&lt;p&gt;</span>Contenido posterior<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="pre prefomateado preformateado codigo bloque espacio">
+                <div class="tag-name">&lt;pre&gt;</div>
+                <div class="tag-desc">Texto preformateado.</div>
+                <div class="tag-usage">Preserva espacios, saltos de línea y formato. Ideal para mostrar código, arte ASCII o cualquier texto donde el formato importe.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;pre&gt;</span>
+    Nombre    Edad
+    ─────────────
+    Ana       25
+    Carlos    30
+<span class="hl-tag">&lt;/pre&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="blockquote cita referencia externa">
+                <div class="tag-name">&lt;blockquote&gt;</div>
+                <div class="tag-desc">Cita en bloque.</div>
+                <div class="tag-usage">Representa un contenido citado de otra fuente. Los navegadores lo indentan por defecto. Usar <code>cite</code> para la URL de origen.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;blockquote</span> <span class="hl-attr">cite</span>=<span class="hl-val">"https://ejemplo.com"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>La citación va aquí<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/blockquote&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="q cita inline textual">
+                <div class="tag-name">&lt;q&gt;</div>
+                <div class="tag-desc">Cita inline.</div>
+                <div class="tag-usage">Para citas textuales cortas dentro de un párrafo. El navegador añade comillas automáticamente según el idioma.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Einstein dijo: <span class="hl-tag">&lt;q&gt;</span>La imaginación es más importante que el conocimiento<span class="hl-tag">&lt;/q&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="abbr abreviatura abreviacion title">
+                <div class="tag-name">&lt;abbr&gt;</div>
+                <div class="tag-desc">Abreviatura.</div>
+                <div class="tag-usage">Representa una abreviatura o acrónimo. El atributo <code>title</code> muestra la explicación completa al pasar el cursor.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;abbr</span> <span class="hl-attr">title</span>=<span class="hl-val">"HyperText Markup Language"</span><span class="hl-tag">&gt;</span>HTML<span class="hl-tag">&lt;/abbr&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="cite cita referencia titulo obra">
+                <div class="tag-name">&lt;cite&gt;</div>
+                <div class="tag-desc">Título de una obra citada.</div>
+                <div class="tag-usage">Indica el título de una obra creativa (libro, película, canción). Se renderiza en itálica por defecto.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Mi libro favorito es <span class="hl-tag">&lt;cite&gt;</span>Don Quijote<span class="hl-tag">&lt;/cite&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="address contacto informacion autor">
+                <div class="tag-name">&lt;address&gt;</div>
+                <div class="tag-desc">Información de contacto.</div>
+                <div class="tag-usage">Proporciona información de contacto del autor/propietario del documento. Usar dentro de <code>&lt;header&gt;</code> o <code>&lt;footer&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;address&gt;</span>
+    Escrito por <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"mailto:info@ejemplo.com"</span><span class="hl-tag">&gt;</span>María<span class="hl-tag">&lt;/a&gt;</span>
+<span class="hl-tag">&lt;/address&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== FORMATO DE TEXTO ==================== -->
+        <h2 class="section-title" data-section>Formato de Texto</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="strong importancia negrita bold">
+                <div class="tag-name">&lt;strong&gt;</div>
+                <div class="tag-desc">Importancia fuerte.</div>
+                <div class="tag-usage">Indica que el contenido tiene importancia fuerte (generalmente se muestra en negrita). Es semántico, a diferencia de <code>&lt;b&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>¡<span class="hl-tag">&lt;strong&gt;</span>Advertencia!<span class="hl-tag">&lt;/strong&gt;</span> No tocar.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="b negrita bold estilistico">
+                <div class="tag-name">&lt;b&gt;</div>
+                <div class="tag-desc">Negrita estilística (sin énfasis semántico).</div>
+                <div class="tag-usage">Pone el texto en negrita pero sin implicar importancia extra. Para atención visual sin significado semántico (nombres de producto, etc.).</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>El producto <span class="hl-tag">&lt;b&gt;</span>ProMax<span class="hl-tag">&lt;/b&gt;</span> está disponible.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="em enfasis italica cursiva">
+                <div class="tag-name">&lt;em&gt;</div>
+                <div class="tag-desc">Énfasis semántico.</div>
+                <div class="tag-usage">Añade énfasis al texto (generalmente en itálica). Tiene significado semántico para lectores de pantalla.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Esto es <span class="hl-tag">&lt;em&gt;</span>muy importante<span class="hl-tag">&lt;/em&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="i italica cursiva estilistico">
+                <div class="tag-name">&lt;i&gt;</div>
+                <div class="tag-desc">Itálico estilístico.</div>
+                <div class="tag-usage">Texto en itálico sin énfasis semántico. Para términos técnicos, palabras en otro idioma, pensamientos, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>El término <span class="hl-tag">&lt;i&gt;</span>status quo<span class="hl-tag">&lt;/i&gt;</span> viene del latín.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="small diminuto chico texto secundario legal">
+                <div class="tag-name">&lt;small&gt;</div>
+                <div class="tag-desc">Texto secundario o pequeño.</div>
+                <div class="tag-usage">Para texto de notas al pie, derechos de autor, aclaraciones legales. Se renderiza más pequeño.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Producto registrado® <span class="hl-tag">&lt;small&gt;</span>© 2024 Empresa S.A.<span class="hl-tag">&lt;/small&gt;</span><span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="mark resaltar amarillo destacado">
+                <div class="tag-name">&lt;mark&gt;</div>
+                <div class="tag-desc">Texto resaltado.</div>
+                <div class="tag-usage">Resalta texto con fondo amarillo (por defecto). Ideal para resultados de búsqueda o contenido destacado.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Busca: <span class="hl-tag">&lt;mark&gt;</span>HTML<span class="hl-tag">&lt;/mark&gt;</span> en el documento.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="del eliminado tachado borrado">
+                <div class="tag-name">&lt;del&gt;</div>
+                <div class="tag-desc">Texto eliminado.</div>
+                <div class="tag-usage">Muestra texto que fue borrado del documento. Se renderiza con tachado. Útil para mostrar ediciones.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Precio: <span class="hl-tag">&lt;del&gt;</span>$100<span class="hl-tag">&lt;/del&gt;</span> <span class="hl-tag">&lt;ins&gt;</span>$75<span class="hl-tag">&lt;/ins&gt;</span><span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="ins insertado subrayado agregado">
+                <div class="tag-name">&lt;ins&gt;</div>
+                <div class="tag-desc">Texto insertado.</div>
+                <div class="tag-usage">Indica contenido recién agregado. Se renderiza con subrayado. Complemento natural de <code>&lt;del&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Precio: <span class="hl-tag">&lt;del&gt;</span>$100<span class="hl-tag">&lt;/del&gt;</span> <span class="hl-tag">&lt;ins&gt;</span>$75<span class="hl-tag">&lt;/ins&gt;</span><span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="s tachado strikethrough obsoleto">
+                <div class="tag-name">&lt;s&gt;</div>
+                <div class="tag-desc">Texto ya no relevante.</div>
+                <div class="tag-usage">Muestra contenido que ya no es correcto o relevante (sin indicar edición). Diferente de <code>&lt;del&gt;</code> que implica borrado deliberado.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span><span class="hl-tag">&lt;s&gt;</span>$200<span class="hl-tag">&lt;/s&gt;</span> $150 - ¡Oferta!<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="sub subindice inferior quimica formula">
+                <div class="tag-name">&lt;sub&gt;</div>
+                <div class="tag-desc">Subíndice.</div>
+                <div class="tag-usage">Texto que se muestra como subíndice (más abajo y pequeño). Para fórmulas químicas, notas al pie, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Agua: H<span class="hl-tag">&lt;sub&gt;</span>2<span class="hl-tag">&lt;/sub&gt;</span>O<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="sup superindice superior potencia matematicas">
+                <div class="tag-name">&lt;sup&gt;</div>
+                <div class="tag-desc">Superíndice.</div>
+                <div class="tag-usage">Texto que se muestra como superíndice (más arriba y pequeño). Para potencias, exponentes, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>x<span class="hl-tag">&lt;sup&gt;</span>2<span class="hl-tag">&lt;/sup&gt;</span> + y<span class="hl-tag">&lt;sup&gt;</span>2<span class="hl-tag">&lt;/sup&gt;</span> = z<span class="hl-tag">&lt;sup&gt;</span>2<span class="hl-tag">&lt;/sup&gt;</span><span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="code codigo fuente programacion inline">
+                <div class="tag-name">&lt;code&gt;</div>
+                <div class="tag-desc">Código en línea.</div>
+                <div class="tag-usage">Representa un fragmento de código. Se renderiza con fuente monoespaciada. Combinar con <code>&lt;pre&gt;</code> para bloques de código.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Usa <span class="hl-tag">&lt;code&gt;</span>console.log()<span class="hl-tag">&lt;/code&gt;</span> para depurar.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="kbd teclado entrada comando">
+                <div class="tag-name">&lt;kbd&gt;</div>
+                <div class="tag-desc">Entrada de teclado.</div>
+                <div class="tag-usage">Representa una pulsación de tecla o combinación de teclas. Ideal para instrucciones y documentación.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Presiona <span class="hl-tag">&lt;kbd&gt;</span>Ctrl<span class="hl-tag">&lt;/kbd&gt;</span> + <span class="hl-tag">&lt;kbd&gt;</span>S<span class="hl-tag">&lt;/kbd&gt;</span> para guardar.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="samp salida ejemplo resultado">
+                <div class="tag-name">&lt;samp&gt;</div>
+                <div class="tag-desc">Salida de ejemplo.</div>
+                <div class="tag-usage">Muestra la salida de un programa o sistema. Para documentar resultados esperados.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>El programa imprime: <span class="hl-tag">&lt;samp&gt;</span>Error 404: No encontrado<span class="hl-tag">&lt;/samp&gt;</span><span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="var variable algebra programacion">
+                <div class="tag-name">&lt;var&gt;</div>
+                <div class="tag-desc">Variable matemática o de programación.</div>
+                <div class="tag-usage">Representa una variable en contexto matemático o de programación. Se muestra en itálica.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Si <span class="hl-tag">&lt;var&gt;</span>x<span class="hl-tag">&lt;/var&gt;</span> = 5, entonces <span class="hl-tag">&lt;var&gt;</span>x<span class="hl-tag">&lt;/var&gt;</span><span class="hl-tag">&lt;sup&gt;</span>2<span class="hl-tag">&lt;/sup&gt;</span> = 25<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== ENLACES E IMAGENES ==================== -->
+        <h2 class="section-title" data-section>Enlaces e Imágenes</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="a anchor link enlace href target">
+                <div class="tag-name">&lt;a&gt;</div>
+                <div class="tag-desc">Enlace (ancla).</div>
+                <div class="tag-usage">Crea hipervínculos a otras páginas, archivos o secciones. Usar <code>target="_blank"</code> para nueva pestaña y <code>rel="noopener"</code> por seguridad.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"https://google.com"</span> <span class="hl-attr">target</span>=<span class="hl-val">"_blank"</span> <span class="hl-attr">rel</span>=<span class="hl-val">"noopener"</span><span class="hl-tag">&gt;</span>Ir a Google<span class="hl-tag">&lt;/a&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="img imagen foto photo src alt">
+                <div class="tag-name">&lt;img&gt;</div>
+                <div class="tag-desc">Imagen.</div>
+                <div class="tag-usage">Inserta una imagen. El atributo <code>alt</code> es obligatorio para accesibilidad. Usar <code>loading="lazy"</code> para carga diferida.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-val">"foto.jpg"</span> <span class="hl-attr">alt</span>=<span class="hl-val">"Descripción"</span> <span class="hl-attr">width</span>=<span class="hl-val">"300"</span> <span class="hl-attr">loading</span>=<span class="hl-val">"lazy"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="picture responsive imagen responsiva art direction">
+                <div class="tag-name">&lt;picture&gt;</div>
+                <div class="tag-desc">Contenedor de imagen responsiva.</div>
+                <div class="tag-usage">Permite servir diferentes versiones de imagen según el tamaño de pantalla o formato soportado. Envuelve <code>&lt;source&gt;</code> y <code>&lt;img&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;picture&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">media</span>=<span class="hl-val">"(min-width: 800px)"</span> <span class="hl-attr">srcset</span>=<span class="hl-val">"grande.webp"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-val">"pequeña.jpg"</span> <span class="hl-attr">alt</span>=<span class="hl-val">"Imagen"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/picture&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="source fuente formato tipo media srcset">
+                <div class="tag-name">&lt;source&gt;</div>
+                <div class="tag-desc">Fuente multimedia alternativa.</div>
+                <div class="tag-usage">Define fuentes alternativas para <code>&lt;picture&gt;</code>, <code>&lt;video&gt;</code> o <code>&lt;audio&gt;</code>. Permite formatos y resoluciones múltiples.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;video</span> <span class="hl-attr">controls</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">src</span>=<span class="hl-val">"video.webm"</span> <span class="hl-attr">type</span>=<span class="hl-val">"video/webm"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">src</span>=<span class="hl-val">"video.mp4"</span> <span class="hl-attr">type</span>=<span class="hl-val">"video/mp4"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/video&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="area zona mapa imagen clickable">
+                <div class="tag-name">&lt;area&gt;</div>
+                <div class="tag-desc">Zona clickeable en un mapa de imagen.</div>
+                <div class="tag-usage">Define áreas clickeables dentro de un <code>&lt;map&gt;</code>. Puede ser rectangular, circular o poligonal.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;map</span> <span class="hl-attr">name</span>=<span class="hl-val">"mapa"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;area</span> <span class="hl-attr">shape</span>=<span class="hl-val">"rect"</span> <span class="hl-attr">coords</span>=<span class="hl-val">"0,0,100,100"</span> <span class="hl-attr">href</span>=<span class="hl-val">"zona1.html"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/map&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="map mapa imagen clickable areas">
+                <div class="tag-name">&lt;map&gt;</div>
+                <div class="tag-desc">Mapa de imagen.</div>
+                <div class="tag-usage">Define un mapa de imagen con áreas clickeables. Se conecta con <code>&lt;img&gt;</code> mediante el atributo <code>usemap</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-val">"plano.jpg"</span> <span class="hl-attr">usemap</span>=<span class="hl-val">"#plano"</span> <span class="hl-attr">alt</span>=<span class="hl-val">"Plano"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;map</span> <span class="hl-attr">name</span>=<span class="hl-val">"plano"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;area</span> <span class="hl-attr">shape</span>=<span class="hl-val">"circle"</span> <span class="hl-attr">coords</span>=<span class="hl-val">"150,100,50"</span> <span class="hl-attr">href</span>=<span class="hl-val">"info.html"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/map&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== LISTAS ==================== -->
+        <h2 class="section-title" data-section>Listas</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="ul lista desordenada bullet puntos">
+                <div class="tag-name">&lt;ul&gt;</div>
+                <div class="tag-desc">Lista desordenada.</div>
+                <div class="tag-usage">Lista con viñetas (puntos). Usar cuando el orden no importa: características, opciones, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;ul&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>HTML<span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>CSS<span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>JavaScript<span class="hl-tag">&lt;/li&gt;</span>
+<span class="hl-tag">&lt;/ul&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="ol lista ordenada numerada pasos">
+                <div class="tag-name">&lt;ol&gt;</div>
+                <div class="tag-desc">Lista ordenada.</div>
+                <div class="tag-usage">Lista numerada o con letras. Usar para pasos, rankings, prioridades. Atributo <code>type</code>: 1, A, a, I, i.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;ol</span> <span class="hl-attr">type</span>=<span class="hl-val">"1"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>Primero<span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>Segundo<span class="hl-tag">&lt;/li&gt;</span>
+    <span class="hl-tag">&lt;li&gt;</span>Tercero<span class="hl-tag">&lt;/li&gt;</span>
+<span class="hl-tag">&lt;/ol&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="li item elemento lista">
+                <div class="tag-name">&lt;li&gt;</div>
+                <div class="tag-desc">Elemento de lista.</div>
+                <div class="tag-usage">Cada ítem dentro de <code>&lt;ul&gt;</code> o <code>&lt;ol&gt;</code>. Puede contener cualquier contenido, incluyendo otras listas anidadas.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;li&gt;</span>Texto del ítem<span class="hl-tag">&lt;/li&gt;</span>
+<span class="hl-tag">&lt;li&gt;</span>
+    <span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-val">"icon.png"</span> <span class="hl-attr">alt</span>=<span class="hl-val">"Icono"</span><span class="hl-tag">&gt;</span> Con imagen
+<span class="hl-tag">&lt;/li&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="dl lista definiciones definicion">
+                <div class="tag-name">&lt;dl&gt;</div>
+                <div class="tag-desc">Lista de definiciones.</div>
+                <div class="tag-usage">Agrupa pares de término y descripción. Ideal para glosarios, FAQ, metadatos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;dl&gt;</span>
+    <span class="hl-tag">&lt;dt&gt;</span>HTML<span class="hl-tag">&lt;/dt&gt;</span>
+    <span class="hl-tag">&lt;dd&gt;</span>Lenguaje de marcado para páginas web<span class="hl-tag">&lt;/dd&gt;</span>
+<span class="hl-tag">&lt;/dl&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="dt termino definicion lista">
+                <div class="tag-name">&lt;dt&gt;</div>
+                <div class="tag-desc">Término en lista de definiciones.</div>
+                <div class="tag-usage">Define el término o nombre dentro de un <code>&lt;dl&gt;</code>. Se empareja con <code>&lt;dd&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;dt&gt;</span>CSS<span class="hl-tag">&lt;/dt&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="dd descripcion definicion lista">
+                <div class="tag-name">&lt;dd&gt;</div>
+                <div class="tag-desc">Descripción en lista de definiciones.</div>
+                <div class="tag-usage">Contiene la descripción o definición del término <code>&lt;dt&gt;</code>. Se indenta por defecto.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;dd&gt;</span>Hojas de estilo en cascada para diseñar la apariencia web<span class="hl-tag">&lt;/dd&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== TABLAS ==================== -->
+        <h2 class="section-title" data-section>Tablas</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="table tabla datos filas columnas">
+                <div class="tag-name">&lt;table&gt;</div>
+                <div class="tag-desc">Tabla de datos.</div>
+                <div class="tag-usage">Estructura tabular de datos (no para diseño). Usar con <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code> para semántica correcta.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;table&gt;</span>
+    <span class="hl-tag">&lt;caption&gt;</span>Usuarios<span class="hl-tag">&lt;/caption&gt;</span>
+    <span class="hl-tag">&lt;thead&gt;</span>...<span class="hl-tag">&lt;/thead&gt;</span>
+    <span class="hl-tag">&lt;tbody&gt;</span>...<span class="hl-tag">&lt;/tbody&gt;</span>
+<span class="hl-tag">&lt;/table&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="tr fila table row">
+                <div class="tag-name">&lt;tr&gt;</div>
+                <div class="tag-desc">Fila de tabla.</div>
+                <div class="tag-usage">Define una fila dentro de la tabla. Contiene celdas <code>&lt;td&gt;</code> o <code>&lt;th&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;tr&gt;</span>
+    <span class="hl-tag">&lt;td&gt;</span>Dato 1<span class="hl-tag">&lt;/td&gt;</span>
+    <span class="hl-tag">&lt;td&gt;</span>Dato 2<span class="hl-tag">&lt;/td&gt;</span>
+<span class="hl-tag">&lt;/tr&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="td celda datos cell data">
+                <div class="tag-name">&lt;td&gt;</div>
+                <div class="tag-desc">Celda de datos.</div>
+                <div class="tag-usage">Celda estándar de tabla con contenido de datos. Usar <code>colspan</code> y <code>rowspan</code> para celdas que abarcan múltiples filas/columnas.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;td</span> <span class="hl-attr">colspan</span>=<span class="hl-val">"2"</span><span class="hl-tag">&gt;</span>Contenido ampliado<span class="hl-tag">&lt;/td&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="th celda encabezado header cell">
+                <div class="tag-name">&lt;th&gt;</div>
+                <div class="tag-desc">Celda de encabezado.</div>
+                <div class="tag-usage">Celda de encabezado (generalmente en negrita y centrada). Usar en filas de <code>&lt;thead&gt;</code> o primera columna.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;th</span> <span class="hl-attr">scope</span>=<span class="hl-val">"col"</span><span class="hl-tag">&gt;</span>Nombre<span class="hl-tag">&lt;/th&gt;</span>
+<span class="hl-tag">&lt;th</span> <span class="hl-attr">scope</span>=<span class="hl-val">"col"</span><span class="hl-tag">&gt;</span>Edad<span class="hl-tag">&lt;/th&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="thead encabezado tabla header grupo">
+                <div class="tag-name">&lt;thead&gt;</div>
+                <div class="tag-desc">Grupo de encabezados de tabla.</div>
+                <div class="tag-usage">Agrupa las filas de encabezado. Mejora la accesibilidad y permite estilos específicos para el encabezado.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;thead&gt;</span>
+    <span class="hl-tag">&lt;tr&gt;</span>
+        <span class="hl-tag">&lt;th&gt;</span>Nombre<span class="hl-tag">&lt;/th&gt;</span>
+        <span class="hl-tag">&lt;th&gt;</span>Edad<span class="hl-tag">&lt;/th&gt;</span>
+    <span class="hl-tag">&lt;/tr&gt;</span>
+<span class="hl-tag">&lt;/thead&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="tbody cuerpo tabla body grupo datos">
+                <div class="tag-name">&lt;tbody&gt;</div>
+                <div class="tag-desc">Grupo de cuerpo de tabla.</div>
+                <div class="tag-usage">Contiene las filas de datos principales. Se genera automáticamente si se omite, pero es mejor incluirlo explícitamente.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;tbody&gt;</span>
+    <span class="hl-tag">&lt;tr&gt;</span><span class="hl-tag">&lt;td&gt;</span>Ana<span class="hl-tag">&lt;/td&gt;</span><span class="hl-tag">&lt;td&gt;</span>25<span class="hl-tag">&lt;/td&gt;</span><span class="hl-tag">&lt;/tr&gt;</span>
+<span class="hl-tag">&lt;/tbody&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="tfoot pie tabla footer total">
+                <div class="tag-name">&lt;tfoot&gt;</div>
+                <div class="tag-desc">Grupo de pies de tabla.</div>
+                <div class="tag-usage">Contiene filas de resumen al final de la tabla (totales, promedios). Siempre después de <code>&lt;tbody&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;tfoot&gt;</span>
+    <span class="hl-tag">&lt;tr&gt;</span>
+        <span class="hl-tag">&lt;td&gt;</span>Total<span class="hl-tag">&lt;/td&gt;</span>
+        <span class="hl-tag">&lt;td&gt;</span>$1,500<span class="hl-tag">&lt;/td&gt;</span>
+    <span class="hl-tag">&lt;/tr&gt;</span>
+<span class="hl-tag">&lt;/tfoot&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="caption titulo tabla descripción">
+                <div class="tag-name">&lt;caption&gt;</div>
+                <div class="tag-desc">Título de la tabla.</div>
+                <div class="tag-usage">Describe el contenido de la tabla. Esencial para accesibilidad. Se posiciona arriba o abajo con CSS.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;table&gt;</span>
+    <span class="hl-tag">&lt;caption&gt;</span>Ventas mensuales 2024<span class="hl-tag">&lt;/caption&gt;</span>
+    <span class="hl-cmt">&lt;!-- filas y celdas --&gt;</span>
+<span class="hl-tag">&lt;/table&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="colgroup col columna agrupar estilo">
+                <div class="tag-name">&lt;colgroup&gt; / &lt;col&gt;</div>
+                <div class="tag-desc">Agrupación y estilo de columnas.</div>
+                <div class="tag-usage"><code>&lt;colgroup&gt;</code> agrupa columnas; <code>&lt;col&gt;</code> define propiedades de cada una. Para ancho, fondo o estilos por columna.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;colgroup&gt;</span>
+    <span class="hl-tag">&lt;col</span> <span class="hl-attr">span</span>=<span class="hl-val">"2"</span> <span class="hl-attr">style</span>=<span class="hl-val">"background: #eee"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;col</span> <span class="hl-attr">style</span>=<span class="hl-val">"background: #ddd"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/colgroup&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== FORMULARIOS ==================== -->
+        <h2 class="section-title" data-section>Formularios</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="form formulario enviar submit action method">
+                <div class="tag-name">&lt;form&gt;</div>
+                <div class="tag-desc">Formulario de entrada.</div>
+                <div class="tag-usage">Contenedor de campos de formulario. <code>action</code> define la URL de envío; <code>method</code> puede ser GET o POST.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;form</span> <span class="hl-attr">action</span>=<span class="hl-val">"/enviar"</span> <span class="hl-attr">method</span>=<span class="hl-val">"POST"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-cmt">&lt;!-- campos del formulario --&gt;</span>
+    <span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span>=<span class="hl-val">"submit"</span><span class="hl-tag">&gt;</span>Enviar<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;/form&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="input campo entrada texto email password number checkbox radio">
+                <div class="tag-name">&lt;input&gt;</div>
+                <div class="tag-desc">Campo de entrada.</div>
+                <div class="tag-usage">El elemento más versátil del formulario. Type: text, email, password, number, checkbox, radio, date, file, range, color, url, tel, search, hidden.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"text"</span> <span class="hl-attr">name</span>=<span class="hl-val">"nombre"</span> <span class="hl-attr">placeholder</span>=<span class="hl-val">"Tu nombre"</span> <span class="hl-attr">required</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"email"</span> <span class="hl-attr">name</span>=<span class="hl-val">"email"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"checkbox"</span> <span class="hl-attr">name</span>=<span class="hl-val">"acepto"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="textarea area texto multiline multi linea">
+                <div class="tag-name">&lt;textarea&gt;</div>
+                <div class="tag-desc">Área de texto multilínea.</div>
+                <div class="tag-usage">Campo de texto con múltiples líneas. Atributos: <code>rows</code>, <code>cols</code>, <code>placeholder</code>, <code>maxlength</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;textarea</span> <span class="hl-attr">name</span>=<span class="hl-val">"mensaje"</span> <span class="hl-attr">rows</span>=<span class="hl-val">"5"</span> <span class="hl-attr">cols</span>=<span class="hl-val">"40"</span> <span class="hl-attr">placeholder</span>=<span class="hl-val">"Escribe aquí..."</span><span class="hl-tag">&gt;&lt;/textarea&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="select option dropdown desplegable elegir lista">
+                <div class="tag-name">&lt;select&gt; / &lt;option&gt;</div>
+                <div class="tag-desc">Menú desplegable de selección.</div>
+                <div class="tag-usage"><code>&lt;select&gt;</code> crea el menú; <code>&lt;option&gt;</code> cada elemento. Usar <code>selected</code> para valor por defecto.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;select</span> <span class="hl-attr">name</span>=<span class="hl-val">"pais"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">""</span><span class="hl-tag">&gt;</span>Seleccionar...<span class="hl-tag">&lt;/option&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">"ar"</span> <span class="hl-attr">selected</span><span class="hl-tag">&gt;</span>Argentina<span class="hl-tag">&lt;/option&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">"mx"</span><span class="hl-tag">&gt;</span>México<span class="hl-tag">&lt;/option&gt;</span>
+<span class="hl-tag">&lt;/select&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="label etiqueta acessibilidad campo formulario">
+                <div class="tag-name">&lt;label&gt;</div>
+                <div class="tag-desc">Etiqueta de campo.</div>
+                <div class="tag-usage">Asocia un texto descriptivo con un campo. Esencial para accesibilidad. Usar <code>for</code> con el <code>id</code> del campo.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;label</span> <span class="hl-attr">for</span>=<span class="hl-val">"email"</span><span class="hl-tag">&gt;</span>Email:<span class="hl-tag">&lt;/label&gt;</span>
+<span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"email"</span> <span class="hl-attr">id</span>=<span class="hl-val">"email"</span> <span class="hl-attr">name</span>=<span class="hl-val">"email"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="button boton submit reset accion formulario">
+                <div class="tag-name">&lt;button&gt;</div>
+                <div class="tag-desc">Botón clickeable.</div>
+                <div class="tag-usage">Botón interactivo. Type: <code>submit</code> (envía form), <code>reset</code> (limpia), <code>button</code> (sin acción por defecto).</div>
+                <div class="tag-example"><span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span>=<span class="hl-val">"submit"</span><span class="hl-tag">&gt;</span>Enviar<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span>=<span class="hl-val">"reset"</span><span class="hl-tag">&gt;</span>Limpiar<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span>=<span class="hl-val">"button"</span> <span class="hl-attr">onclick</span>=<span class="hl-val">"alert('hi')"</span><span class="hl-tag">&gt;</span>Click<span class="hl-tag">&lt;/button&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="fieldset grupo campos formulario borde">
+                <div class="tag-name">&lt;fieldset&gt;</div>
+                <div class="tag-desc">Grupo de campos.</div>
+                <div class="tag-usage">Agrupa campos relacionados con un borde visual. Mejora accesibilidad y organización de formularios complejos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;fieldset&gt;</span>
+    <span class="hl-tag">&lt;legend&gt;</span>Datos personales<span class="hl-tag">&lt;/legend&gt;</span>
+    <span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"text"</span> <span class="hl-attr">name</span>=<span class="hl-val">"nombre"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/fieldset&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="legend titulo fieldset grupo borde">
+                <div class="tag-name">&lt;legend&gt;</div>
+                <div class="tag-desc">Título de fieldset.</div>
+                <div class="tag-usage">Define el título/caption de un <code>&lt;fieldset&gt;</code>. Aparece dentro del borde del grupo.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;fieldset&gt;</span>
+    <span class="hl-tag">&lt;legend&gt;</span>Información de envío<span class="hl-tag">&lt;/legend&gt;</span>
+    <span class="hl-cmt">&lt;!-- campos --&gt;</span>
+<span class="hl-tag">&lt;/fieldset&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="datalist opciones autocompletado sugerencias input">
+                <div class="tag-name">&lt;datalist&gt;</div>
+                <div class="tag-desc">Lista de sugerencias para input.</div>
+                <div class="tag-usage">Proporciona opciones predefinidas para un <code>&lt;input&gt;</code>. El usuario puede elegir o escribir su propio valor.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;input</span> <span class="hl-attr">list</span>=<span class="hl-val">"colores"</span> <span class="hl-attr">name</span>=<span class="hl-val">"color"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;datalist</span> <span class="hl-attr">id</span>=<span class="hl-val">"colores"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">"Rojo"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">"Azul"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;option</span> <span class="hl-attr">value</span>=<span class="hl-val">"Verde"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/datalist&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="optgroup agrupar opciones select grupo">
+                <div class="tag-name">&lt;optgroup&gt;</div>
+                <div class="tag-desc">Grupo de opciones.</div>
+                <div class="tag-usage">Agrupa opciones dentro de un <code>&lt;select&gt;</code> con una etiqueta. Para listas con categorías.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;select&gt;</span>
+    <span class="hl-tag">&lt;optgroup</span> <span class="hl-attr">label</span>=<span class="hl-val">"América"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-tag">&lt;option&gt;</span>Argentina<span class="hl-tag">&lt;/option&gt;</span>
+        <span class="hl-tag">&lt;option&gt;</span>Brasil<span class="hl-tag">&lt;/option&gt;</span>
+    <span class="hl-tag">&lt;/optgroup&gt;</span>
+<span class="hl-tag">&lt;/select&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="output resultado calculo formularia computo">
+                <div class="tag-name">&lt;output&gt;</div>
+                <div class="tag-desc">Resultado de un cálculo.</div>
+                <div class="tag-usage">Muestra el resultado de una operación del formulario. Se actualiza con JavaScript. Asociar con <code>for</code> a los inputs involucrados.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"number"</span> <span class="hl-attr">value</span>=<span class="hl-val">"5"</span> <span class="hl-attr">id</span>=<span class="hl-val">"a"</span><span class="hl-tag">&gt;</span> ×
+<span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-val">"number"</span> <span class="hl-attr">value</span>=<span class="hl-val">"3"</span> <span class="hl-attr">id</span>=<span class="hl-val">"b"</span><span class="hl-tag">&gt;</span> =
+<span class="hl-tag">&lt;output</span> <span class="hl-attr">name</span>=<span class="hl-val">"resultado"</span> <span class="hl-attr">for</span>=<span class="hl-val">"a b"</span><span class="hl-tag">&gt;</span>15<span class="hl-tag">&lt;/output&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== SEMANTICOS HTML5 ==================== -->
+        <h2 class="section-title" data-section>Semánticos HTML5</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="header cabecera encabezado top bar">
+                <div class="tag-name">&lt;header&gt;</div>
+                <div class="tag-desc">Encabezado de sección o página.</div>
+                <div class="tag-usage">Contenido introductorio: logo, navegación, título. Puede usarse múltiples veces (uno por <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, etc.).</div>
+                <div class="tag-example"><span class="hl-tag">&lt;header&gt;</span>
+    <span class="hl-tag">&lt;h1&gt;</span>Mi Sitio<span class="hl-tag">&lt;/h1&gt;</span>
+    <span class="hl-tag">&lt;nav&gt;</span>...<span class="hl-tag">&lt;/nav&gt;</span>
+<span class="hl-tag">&lt;/header&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="footer pie abajo copyright links">
+                <div class="tag-name">&lt;footer&gt;</div>
+                <div class="tag-desc">Pie de sección o página.</div>
+                <div class="tag-usage">Contenido final: copyright, enlaces, info de contacto. Como <code>&lt;header&gt;</code>, puede usarse múltiples veces.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;footer&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>© 2024 Mi Empresa<span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"/privacidad"</span><span class="hl-tag">&gt;</span>Privacidad<span class="hl-tag">&lt;/a&gt;</span>
+<span class="hl-tag">&lt;/footer&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="nav navegacion menu links">
+                <div class="tag-name">&lt;nav&gt;</div>
+                <div class="tag-desc">Bloque de navegación.</div>
+                <div class="tag-usage">Contiene enlaces de navegación principales. No todos los enlaces necesitan estar en <code>&lt;nav&gt;</code>, solo los principales.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;nav&gt;</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"/"</span><span class="hl-tag">&gt;</span>Inicio<span class="hl-tag">&lt;/a&gt;</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"/about"</span><span class="hl-tag">&gt;</span>Nosotros<span class="hl-tag">&lt;/a&gt;</span>
+    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"/contact"</span><span class="hl-tag">&gt;</span>Contacto<span class="hl-tag">&lt;/a&gt;</span>
+<span class="hl-tag">&lt;/nav&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="main contenido principal unico body">
+                <div class="tag-name">&lt;main&gt;</div>
+                <div class="tag-desc">Contenido principal.</div>
+                <div class="tag-usage">El contenido dominante de la página. Solo uno por documento. Excluye header, footer, nav, sidebar repetitivos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;main&gt;</span>
+    <span class="hl-tag">&lt;article&gt;</span>...<span class="hl-tag">&lt;/article&gt;</span>
+<span class="hl-tag">&lt;/main&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="article articulo contenido independiente post blog noticia">
+                <div class="tag-name">&lt;article&gt;</div>
+                <div class="tag-desc">Contenido independiente.</div>
+                <div class="tag-usage">Contenido que tiene sentido por sí solo: blog post, noticia, tweet, widget. Puede contener otros artículos (comentarios).</div>
+                <div class="tag-example"><span class="hl-tag">&lt;article&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>Título del Post<span class="hl-tag">&lt;/h2&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Contenido del artículo...<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/article&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="section seccion bloque tematico contenido">
+                <div class="tag-name">&lt;section&gt;</div>
+                <div class="tag-desc">Sección temática genérica.</div>
+                <div class="tag-usage">Agrupa contenido por tema. Diferente de <code>&lt;div&gt;</code>: tiene significado semántico. Usar con un título interno.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;section&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>Características<span class="hl-tag">&lt;/h2&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Lista de features...<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="aside sidebar contenido relacionado publicidad">
+                <div class="tag-name">&lt;aside&gt;</div>
+                <div class="tag-desc">Contenido lateral.</div>
+                <div class="tag-usage">Contenido tangencialmente relacionado: sidebars, publicidad, enlaces relacionados, biografía del autor.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;aside&gt;</span>
+    <span class="hl-tag">&lt;h3&gt;</span>Artículos relacionados<span class="hl-tag">&lt;/h3&gt;</span>
+    <span class="hl-tag">&lt;ul&gt;</span>...<span class="hl-tag">&lt;/ul&gt;</span>
+<span class="hl-tag">&lt;/aside&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="figure imagen ilustracion diagrama">
+                <div class="tag-name">&lt;figure&gt;</div>
+                <div class="tag-desc">Contenido independiente (imagen, diagrama).</div>
+                <div class="tag-usage">Envuelve contenido independiente del flujo: imágenes, gráficos, código. Se asocia con <code>&lt;figcaption&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;figure&gt;</span>
+    <span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-val">"diagrama.png"</span> <span class="hl-attr">alt</span>=<span class="hl-val">"Arquitectura"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;figcaption&gt;</span>Arquitectura del sistema<span class="hl-tag">&lt;/figcaption&gt;</span>
+<span class="hl-tag">&lt;/figure&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="figcaption pie figura imagen descripcion caption">
+                <div class="tag-name">&lt;figcaption&gt;</div>
+                <div class="tag-desc">Caption de figure.</div>
+                <div class="tag-usage">Describe el contenido de un <code>&lt;figure&gt;</code>. Puede ir antes o después del contenido que describe.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;figcaption&gt;</span>Figura 1: Diagrama de flujo del sistema<span class="hl-tag">&lt;/figcaption&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="div contenedor bloque agrupar layout caja">
+                <div class="tag-name">&lt;div&gt;</div>
+                <div class="tag-desc">Contenedor genérico (bloque).</div>
+                <div class="tag-usage">Contenedor sin significado semántico. Usar cuando ningún otro elemento semántico se ajusta. Base del layout con CSS/JS.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-val">"container"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Contenido genérico<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="span inline contenedor texto inline caja">
+                <div class="tag-name">&lt;span&gt;</div>
+                <div class="tag-desc">Contenedor genérico (inline).</div>
+                <div class="tag-usage">Contenedor inline sin significado semántico. Para aplicar estilos o scripts a fragmentos de texto dentro de un párrafo.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p&gt;</span>Esta palabra es <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span>=<span class="hl-val">"resaltada"</span><span class="hl-tag">&gt;</span>especial<span class="hl-tag">&lt;/span&gt;</span>.<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== MULTIMEDIA ==================== -->
+        <h2 class="section-title" data-section>Multimedia</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="video pelicula movie mp4 webm controls autoplay">
+                <div class="tag-name">&lt;video&gt;</div>
+                <div class="tag-desc">Reproductor de video.</div>
+                <div class="tag-usage">Incrusta video con controles nativos. Atributos: <code>controls</code>, <code>autoplay</code>, <code>loop</code>, <code>muted</code>, <code>poster</code>, <code>preload</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;video</span> <span class="hl-attr">controls</span> <span class="hl-attr">width</span>=<span class="hl-val">"640"</span> <span class="hl-attr">poster</span>=<span class="hl-val">"thumb.jpg"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">src</span>=<span class="hl-val">"video.mp4"</span> <span class="hl-attr">type</span>=<span class="hl-val">"video/mp4"</span><span class="hl-tag">&gt;</span>
+    Tu navegador no soporta video.
+<span class="hl-tag">&lt;/video&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="audio sonido musica mp3 ogg controls">
+                <div class="tag-name">&lt;audio&gt;</div>
+                <div class="tag-desc">Reproductor de audio.</div>
+                <div class="tag-usage">Incrusta audio con controles. Mismos atributos que video. Soporta múltiples formatos con <code>&lt;source&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;audio</span> <span class="hl-attr">controls</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">src</span>=<span class="hl-val">"audio.mp3"</span> <span class="hl-attr">type</span>=<span class="hl-val">"audio/mpeg"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;source</span> <span class="hl-attr">src</span>=<span class="hl-val">"audio.ogg"</span> <span class="hl-attr">type</span>=<span class="hl-val">"audio/ogg"</span><span class="hl-tag">&gt;</span>
+    Tu navegador no soporta audio.
+<span class="hl-tag">&lt;/audio&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="iframe marco embed contenido externo youtube mapa">
+                <div class="tag-name">&lt;iframe&gt;</div>
+                <div class="tag-desc">Marco en línea (contenido externo).</div>
+                <div class="tag-usage">Incrusta contenido de otra página: YouTube, Google Maps, etc. Usar <code>loading="lazy"</code> y <code>sandbox</code> por seguridad.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;iframe</span>
+    <span class="hl-attr">src</span>=<span class="hl-val">"https://youtube.com/embed/ID"</span>
+    <span class="hl-attr">width</span>=<span class="hl-val">"560"</span>
+    <span class="hl-attr">height</span>=<span class="hl-val">"315"</span>
+    <span class="hl-attr">loading</span>=<span class="hl-val">"lazy"</span>
+    <span class="hl-attr">sandbox</span>=<span class="hl-val">"allow-scripts"</span>
+    <span class="hl-attr">title</span>=<span class="hl-val">"Video"</span>
+<span class="hl-tag">&gt;&lt;/iframe&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="embed plugin externo swf">
+                <div class="tag-name">&lt;embed&gt;</div>
+                <div class="tag-desc">Contenido externo embebido.</div>
+                <div class="tag-usage">Incrusta contenido externo (plugins, SVG, PDF). El contenido es autónomo. Usar cuando se conoce el tipo exacto.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;embed</span> <span class="hl-attr">src</span>=<span class="hl-val">"diagrama.svg"</span> <span class="hl-attr">type</span>=<span class="hl-val">"image/svg+xml"</span> <span class="hl-attr">width</span>=<span class="hl-val">"400"</span><span class="hl-tag">&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="object plugin multimedia content fallback">
+                <div class="tag-name">&lt;object&gt;</div>
+                <div class="tag-desc">Contenido externo genérico.</div>
+                <div class="tag-usage">Incrusta contenido externo con fallback. Puede contener <code>&lt;param&gt;</code> para configuración. Más flexible que <code>&lt;embed&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;object</span> <span class="hl-attr">data</span>=<span class="hl-val">"doc.pdf"</span> <span class="hl-attr">type</span>=<span class="hl-val">"application/pdf"</span> <span class="hl-attr">width</span>=<span class="hl-val">"600"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Tu navegador no soporta PDFs. <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"doc.pdf"</span><span class="hl-tag">&gt;</span>Descargar<span class="hl-tag">&lt;/a&gt;</span><span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/object&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== DETALLES ==================== -->
+        <h2 class="section-title" data-section>Detalles</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="details acordeon colapsable toggle expandir">
+                <div class="tag-name">&lt;details&gt;</div>
+                <div class="tag-desc">Contenido colapsable (acordeón).</div>
+                <div class="tag-usage">Crea un widget expandible sin JavaScript. El contenido se oculta por defecto y se muestra al hacer clic en <code>&lt;summary&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;details&gt;</span>
+    <span class="hl-tag">&lt;summary&gt;</span>Ver más información<span class="hl-tag">&lt;/summary&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Contenido oculto que se muestra al expandir.<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/details&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="summary titulo details acordeon encabezado">
+                <div class="tag-name">&lt;summary&gt;</div>
+                <div class="tag-desc">Resumen/cabecera de details.</div>
+                <div class="tag-usage">Define el elemento clickeable que muestra/oculta el contenido de <code>&lt;details&gt;</code>. Requerido dentro de <code>&lt;details&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;details&gt;</span>
+    <span class="hl-tag">&lt;summary&gt;</span>¿Cómo funciona?<span class="hl-tag">&lt;/summary&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Funciona con JavaScript nativo del navegador.<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/details&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="dialog modal ventana popup overlay">
+                <div class="tag-name">&lt;dialog&gt;</div>
+                <div class="tag-desc">Diálogo modal o no modal.</div>
+                <div class="tag-usage">Crea un diálogo/modal nativo. Método <code>showModal()</code> para modal, <code>show()</code> para no modal. Sin librerías externas.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;dialog</span> <span class="hl-attr">id</span>=<span class="hl-val">"miDialog"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;h2&gt;</span>Título del diálogo<span class="hl-tag">&lt;/h2&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>Contenido del modal<span class="hl-tag">&lt;/p&gt;</span>
+    <span class="hl-tag">&lt;button</span> <span class="hl-attr">onclick</span>=<span class="hl-val">"this.closest('dialog').close()"</span><span class="hl-tag">&gt;</span>Cerrar<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;/dialog&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== PROGRESO Y MEDICION ==================== -->
+        <h2 class="section-title" data-section>Progreso y Medición</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="progress barra progreso loading carga porcentaje">
+                <div class="tag-name">&lt;progress&gt;</div>
+                <div class="tag-desc">Barra de progreso.</div>
+                <div class="tag-usage">Muestra el progreso de una tarea (carga, descarga). Atributos: <code>value</code> (0 a max) y <code>max</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;progress</span> <span class="hl-attr">value</span>=<span class="hl-val">"70"</span> <span class="hl-attr">max</span>=<span class="hl-val">"100"</span><span class="hl-tag">&gt;</span>70%<span class="hl-tag">&lt;/progress&gt;</span>
+<span class="hl-tag">&lt;progress&gt;</span><span class="hl-tag">&lt;/progress&gt;</span> <span class="hl-cmt">&lt;!-- indeterminado --&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="meter medicion medida gauge indicador rango">
+                <div class="tag-name">&lt;meter&gt;</div>
+                <div class="tag-desc">Medición escalar.</div>
+                <div class="tag-usage">Muestra un valor dentro de un rango conocido: disco duro, temperatura, puntuación. Atributos: <code>value</code>, <code>min</code>, <code>max</code>, <code>low</code>, <code>high</code>, <code>optimum</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;meter</span> <span class="hl-attr">value</span>=<span class="hl-val">"0.7"</span> <span class="hl-attr">min</span>=<span class="hl-val">"0"</span> <span class="hl-attr">max</span>=<span class="hl-val">"1"</span> <span class="hl-attr">low</span>=<span class="hl-val">"0.2"</span> <span class="hl-attr">high</span>=<span class="hl-val">"0.8"</span> <span class="hl-attr">optimum</span>=<span class="hl-val">"0.9"</span><span class="hl-tag">&gt;</span>
+    70% de uso
+<span class="hl-tag">&lt;/meter&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="time fecha hora datetime publicacion">
+                <div class="tag-name">&lt;time&gt;</div>
+                <div class="tag-desc">Fecha/hora legible por máquina.</div>
+                <div class="tag-usage">Representa una fecha/hora específica. El atributo <code>datetime</code> tiene el formato ISO 8601 para máquinas; el contenido es legible para humanos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;time</span> <span class="hl-attr">datetime</span>=<span class="hl-val">"2024-03-15"</span><span class="hl-tag">&gt;</span>15 de marzo de 2024<span class="hl-tag">&lt;/time&gt;</span>
+<span class="hl-tag">&lt;time</span> <span class="hl-attr">datetime</span>=<span class="hl-val">"14:30"</span><span class="hl-tag">&gt;</span>2:30 PM<span class="hl-tag">&lt;/time&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="data valor dato maquina microdata itemprop">
+                <div class="tag-name">&lt;data&gt;</div>
+                <div class="tag-desc">Valor legible por máquina.</div>
+                <div class="tag-usage">Asocia un contenido con un valor legible por máquina. Similar a <code>&lt;time&gt;</code> pero para cualquier valor: IDs, códigos, etc.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;data</span> <span class="hl-attr">value</span>=<span class="hl-val">"3958"</span><span class="hl-tag">&gt;</span>Camiseta XL<span class="hl-tag">&lt;/data&gt;</span>
+<span class="hl-tag">&lt;data</span> <span class="hl-attr">value</span>=<span class="hl-val">"8972"</span><span class="hl-tag">&gt;</span>Pantalón M<span class="hl-tag">&lt;/data&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== COMENTARIOS Y OTROS ==================== -->
+        <h2 class="section-title" data-section>Comentarios y Otros</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="comentario comment notepad">
+                <div class="tag-name">&lt;!-- comentarios --&gt;</div>
+                <div class="tag-desc">Comentario HTML.</div>
+                <div class="tag-usage">No se renderiza en el navegador. Para notas del desarrollador, explicar código, o deshabilitar temporalmente elementos.</div>
+                <div class="tag-example"><span class="hl-cmt">&lt;!-- Este es un comentario --&gt;</span>
+<span class="hl-cmt">&lt;!-- TODO: completar esta sección --&gt;</span>
+<span class="hl-cmt">&lt;!-- &lt;p&gt;Este párrafo está deshabilitado&lt;/p&gt; --&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="noscript sin javascript fallback polyfill">
+                <div class="tag-name">&lt;noscript&gt;</div>
+                <div class="tag-desc">Contenido sin JavaScript.</div>
+                <div class="tag-usage">Muestra contenido alternativo cuando JavaScript está deshabilitado. También para SEO o fallback de <code>&lt;iframe&gt;</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;noscript&gt;</span>
+    <span class="hl-tag">&lt;p&gt;</span>JavaScript está deshabilitado. Actívalo para usar esta página.<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;/noscript&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="template plantilla clonar instanciar dynamic">
+                <div class="tag-name">&lt;template&gt;</div>
+                <div class="tag-desc">Plantilla de contenido.</div>
+                <div class="tag-usage">Almacena contenido HTML que no se renderiza pero está disponible para clonar con JavaScript. Ideal para componentes dinámicos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;template</span> <span class="hl-attr">id</span>=<span class="hl-val">"card-template"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-val">"card"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-tag">&lt;h3&gt;&lt;/h3&gt;</span>
+        <span class="hl-tag">&lt;p&gt;&lt;/p&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/template&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="canvas graficos 2d 3d dibujo animacion webgl">
+                <div class="tag-name">&lt;canvas&gt;</div>
+                <div class="tag-desc">Lienzo para gráficos dinámicos.</div>
+                <div class="tag-usage">Área para dibujar gráficos 2D/3D con JavaScript (Canvas API o WebGL). Juegos, visualizaciones, editor de imágenes.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;canvas</span> <span class="hl-attr">id</span>=<span class="hl-val">"miCanvas"</span> <span class="hl-attr">width</span>=<span class="hl-val">"800"</span> <span class="hl-attr">height</span>=<span class="hl-val">"600"</span><span class="hl-tag">&gt;</span>
+    Tu navegador no soporta canvas.
+<span class="hl-tag">&lt;/canvas&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="svg vector graficos escalar iconos animacion">
+                <div class="tag-name">&lt;svg&gt;</div>
+                <div class="tag-desc">Gráficos vectoriales escalables.</div>
+                <div class="tag-usage">Incrusta SVG para gráficos vectoriales: iconos, logos, ilustraciones, diagramas. Escalable sin pérdida de calidad.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;svg</span> <span class="hl-attr">width</span>=<span class="hl-val">"100"</span> <span class="hl-attr">height</span>=<span class="hl-val">"100"</span> <span class="hl-attr">viewBox</span>=<span class="hl-val">"0 0 100 100"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;circle</span> <span class="hl-attr">cx</span>=<span class="hl-val">"50"</span> <span class="hl-attr">cy</span>=<span class="hl-val">"50"</span> <span class="hl-attr">r</span>=<span class="hl-val">"40"</span> <span class="hl-attr">fill</span>=<span class="hl-val">"#7dd3fc"</span><span class="hl-tag">/&gt;</span>
+<span class="hl-tag">&lt;/svg&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== ATRIBUTOS GLOBALES ==================== -->
+        <h2 class="section-title" data-section>Atributos Globales</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="class clase css estilo selector">
+                <div class="tag-name">class</div>
+                <div class="tag-desc">Nombre de clase CSS.</div>
+                <div class="tag-usage">Define una o más clases para aplicar estilos CSS o seleccionar con JavaScript. Se pueden asignar múltiples clases separadas por espacios.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span>=<span class="hl-val">"container active dark"</span><span class="hl-tag">&gt;</span>
+    Contenido estilizado
+<span class="hl-tag">&lt;/div&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="id identificador unico selector anchor">
+                <div class="tag-name">id</div>
+                <div class="tag-desc">Identificador único.</div>
+                <div class="tag-usage">Identifica un elemento de forma única en la página. Un solo <code>id</code> por elemento. Usar para JavaScript, CSS y anclas.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">id</span>=<span class="hl-val">"main-content"</span><span class="hl-tag">&gt;</span>...<span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span>=<span class="hl-val">"#main-content"</span><span class="hl-tag">&gt;</span>Ir al contenido<span class="hl-tag">&lt;/a&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="style estilos inline css">
+                <div class="tag-name">style</div>
+                <div class="tag-desc">Estilos CSS inline.</div>
+                <div class="tag-usage">Aplica estilos CSS directamente al elemento. Para estilos dinámicos o puntuales. Preferir clases para mantenimiento.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p</span> <span class="hl-attr">style</span>=<span class="hl-val">"color: #7dd3fc; font-size: 1.2rem;"</span><span class="hl-tag">&gt;</span>
+    Texto estilizado inline
+<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="title tooltip descripcion hover">
+                <div class="tag-name">title</div>
+                <div class="tag-desc">Información emergente (tooltip).</div>
+                <div class="tag-usage">Muestra un tooltip al pasar el cursor sobre el elemento. No reemplaza <code>alt</code> en imágenes.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;button</span> <span class="hl-attr">title</span>=<span class="hl-val">"Guardar documento"</span><span class="hl-tag">&gt;</span>
+    💾 Guardar
+<span class="hl-tag">&lt;/button&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="lang idioma lenguaje accessibility a11y localization">
+                <div class="tag-name">lang</div>
+                <div class="tag-desc">Idioma del contenido.</div>
+                <div class="tag-usage">Define el idioma del contenido del elemento. Esencial para accesibilidad y SEO. Hereda a los hijos.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;p</span> <span class="hl-attr">lang</span>=<span class="hl-val">"en"</span><span class="hl-tag">&gt;</span>This is English text<span class="hl-tag">&lt;/p&gt;</span>
+<span class="hl-tag">&lt;p</span> <span class="hl-attr">lang</span>=<span class="hl-val">"fr"</span><span class="hl-tag">&gt;</span>C'est du français<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="hidden ocultar mostrar toggle visibility display">
+                <div class="tag-name">hidden</div>
+                <div class="tag-desc">Oculta el elemento.</div>
+                <div class="tag-usage">Oculta el elemento del renderizado y accesibilidad. Equivalente a <code>display: none</code>. Toggle con JS para mostrar/ocultar.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">hidden</span><span class="hl-tag">&gt;</span>Este contenido no se ve<span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">hidden</span>=<span class="hl-val">"until-found"</span><span class="hl-tag">&gt;</span>Oculto hasta búsqueda<span class="hl-tag">&lt;/div&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="tabindex tabulacion navegacion teclado focus accesibilidad">
+                <div class="tag-name">tabindex</div>
+                <div class="tag-desc">Orden de tabulación.</div>
+                <div class="tag-usage">Controla el orden de foco con Tab. <code>0</code> = flujo natural, <code>-1</code> = foco por JS pero no Tab, <code>1+</code> = prioridad (evitar).</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">tabindex</span>=<span class="hl-val">"0"</span><span class="hl-tag">&gt;</span>Foco con Tab<span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">tabindex</span>=<span class="hl-val">"-1"</span><span class="hl-tag">&gt;</span>Foco solo por JS<span class="hl-tag">&lt;/div&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="draggable arrastrar drag drop dnd">
+                <div class="tag-name">draggable</div>
+                <div class="tag-desc">Elemento arrastrable.</div>
+                <div class="tag-usage">Hace que un elemento sea arrastrable. Usar con eventos <code>dragstart</code>, <code>dragover</code>, <code>drop</code>.</div>
+                <div class="tag-example"><span class="hl-tag">&lt;div</span> <span class="hl-attr">draggable</span>=<span class="hl-val">"true"</span><span class="hl-tag">&gt;</span>
+    Arrástrame a otra lista
+<span class="hl-tag">&lt;/div&gt;</span></div>
+            </div>
+
+        </div>
+
+        <!-- ==================== ETIQUETAS OBSOLETAS ==================== -->
+        <h2 class="section-title" data-section>Etiquetas Obsoletas</h2>
+        <div class="tags-grid">
+
+            <div class="tag-card" data-tags="font fuente color tamano size obsoleto deprecated">
+                <div class="tag-name">&lt;font&gt;</div>
+                <div class="tag-desc">Cambiar fuente, color o tamaño (OBSOLETO).</div>
+                <div class="tag-usage">No usar. Reemplazado por CSS: <code>font-family</code>, <code>color</code>, <code>font-size</code>. Presente en HTML 4, eliminado en HTML5.</div>
+                <div class="tag-example"><span class="hl-cmt">&lt;!-- ❌ NO USAR --&gt;</span>
+<span class="hl-tag">&lt;font</span> <span class="hl-attr">color</span>=<span class="hl-val">"red"</span> <span class="hl-attr">size</span>=<span class="hl-val">"5"</span><span class="hl-tag">&gt;</span>Texto<span class="hl-tag">&lt;/font&gt;</span>
+
+<span class="hl-cmt">&lt;!-- ✅ Usar CSS --&gt;</span>
+<span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span>=<span class="hl-val">"destacado"</span><span class="hl-tag">&gt;</span>Texto<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="center centrar alineacion obsoleto deprecated">
+                <div class="tag-name">&lt;center&gt;</div>
+                <div class="tag-desc">Centrar contenido (OBSOLETO).</div>
+                <div class="tag-usage">No usar. Reemplazado por CSS: <code>text-align: center</code> o <code>margin: auto</code>. Eliminado en HTML5.</div>
+                <div class="tag-example"><span class="hl-cmt">&lt;!-- ❌ NO USAR --&gt;</span>
+<span class="hl-tag">&lt;center&gt;</span>Texto centrado<span class="hl-tag">&lt;/center&gt;</span>
+
+<span class="hl-cmt">&lt;!-- ✅ Usar CSS --&gt;</span>
+<span class="hl-tag">&lt;p</span> <span class="hl-attr">style</span>=<span class="hl-val">"text-align: center"</span><span class="hl-tag">&gt;</span>Texto centrado<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="big grande tamano font obsoleto deprecated">
+                <div class="tag-name">&lt;big&gt;</div>
+                <div class="tag-desc">Aumentar tamaño de texto (OBSOLETO).</div>
+                <div class="tag-usage">No usar. Reemplazado por CSS: <code>font-size</code> o <code>em</code>. Eliminado en HTML5.</div>
+                <div class="tag-example"><span class="hl-cmt">&lt;!-- ❌ NO USAR --&gt;</span>
+<span class="hl-tag">&lt;big&gt;</span>Texto más grande<span class="hl-tag">&lt;/big&gt;</span>
+
+<span class="hl-cmt">&lt;!-- ✅ Usar CSS --&gt;</span>
+<span class="hl-tag">&lt;p</span> <span class="hl-attr">style</span>=<span class="hl-val">"font-size: 1.5em"</span><span class="hl-tag">&gt;</span>Texto más grande<span class="hl-tag">&lt;/p&gt;</span></div>
+            </div>
+
+            <div class="tag-card" data-tags="strike tachado strikethrough del obsoleto deprecated">
+                <div class="tag-name">&lt;strike&gt;</div>
+                <div class="tag-desc">Tachar texto (OBSOLETO).</div>
+                <div class="tag-usage">No usar. Reemplazado por <code>&lt;del&gt;</code> (borrado semántico) o <code>&lt;s&gt;</code> (ya no relevante) según el contexto.</div>
+                <div class="tag-example"><span class="hl-cmt">&lt;!-- ❌ NO USAR --&gt;</span>
+<span class="hl-tag">&lt;strike&gt;</span>Texto tachado<span class="hl-tag">&lt;/strike&gt;</span>
+
+<span class="hl-cmt">&lt;!-- ✅ Usar HTML5 --&gt;</span>
+<span class="hl-tag">&lt;s&gt;</span>Texto tachado<span class="hl-tag">&lt;/s&gt;</span> o <span class="hl-tag">&lt;del&gt;</span>Borrado<span class="hl-tag">&lt;/del&gt;</span></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const container = document.getElementById('container');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const cards = container.querySelectorAll('.tag-card');
+            const sections = container.querySelectorAll('[data-section]');
+
+            cards.forEach(card => {
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                const name = card.querySelector('.tag-name').textContent.toLowerCase();
+                const match = !query || tags.includes(query) || name.includes(query);
+                card.classList.toggle('hidden', !match);
+            });
+
+            sections.forEach(title => {
+                const grid = title.nextElementSibling;
+                if (!grid || !grid.classList.contains('tags-grid')) return;
+                const visibleCards = grid.querySelectorAll('.tag-card:not(.hidden)');
+                title.classList.toggle('hidden', visibleCards.length === 0);
+            });
+        });
+    </script>
+</body>
+</html>
