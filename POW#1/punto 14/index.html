@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        text-align: center;
+        background-color: #0a0a0a;
+      }
+
+      .menu-nav {
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 24px;
+        font-size: 20px;
+        font-family:
+          "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        color: #f5f5f5;
+        background: transparent;
+        border: 1px solid #444;
+        border-radius: 6px;
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+          border-color 0.25s ease,
+          background-color 0.25s ease,
+          transform 0.15s ease;
+      }
+
+      .btn:hover {
+        border-color: #f5f5f5;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .btn:active {
+        transform: scale(0.97);
+      }
+
+      .btn-solid {
+        color: #0a0a0a;
+        background-color: #f5f5f5;
+        border-color: #f5f5f5;
+      }
+
+      .btn-solid:hover {
+        background-color: #d4d4d4;
+        border-color: #d4d4d4;
+      }
+
+      .caja {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        width: fit-content;
+        padding: 1.5rem;
+        background-color: #141414;
+        border: 1px solid #444;
+        border-radius: 12px;
+        cursor: pointer;
+        transition:
+          transform 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .caja:hover {
+        transform: scale(1.06) translateY(-4px);
+        border-color: #f5f5f5;
+        box-shadow: 0 12px 30px rgba(245, 245, 245, 0.18);
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div
+        style="
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          position: relative;
+        "
+      >
+        <div
+          style="align-items: center; display: flex; justify-content: center"
+        >
+          <a href="">
+            <img
+              src="recursos/logodeportes.png"
+              alt="Deportes General Pico"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <div class="menu" style="position: absolute; right: 0; padding: 2rem">
+          <nav class="menu-nav">
+            <a class="btn" href="#login">Iniciar Sesion</a>
+            <a class="btn" href="#register">Registrarse</a>
+          </nav>
+        </div>
+      </div>
+      <hr />
+      <div
+        style="
+          align-items: center;
+          display: grid;
+          grid-auto-flow: column;
+          justify-content: center;
+          position: relative;
+          padding-top: 2rem;
+          gap: 5rem;
+          padding-bottom: 2rem;
+        "
+      >
+        <div class="caja">
+          <a href="">
+            <img
+              src="recursos\costa brava.png"
+              alt="Club Costa brava"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <div class="caja">
+          <a href="">
+            <img
+              src="recursos\atleticoycultural.png"
+              alt="Club Atletico y Cultural Argentino"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <div class="caja">
+          <a href="">
+            <img
+              src="recursos\ferro.png"
+              alt="Club Ferro Carril Oeste"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <div class="caja">
+          <a href="">
+            <img
+              src="recursos\independiente.png"
+              alt="Club Sportivo Independiente"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <div class="caja">
+          <a href="">
+            <img
+              src="recursos\picofutbol.png"
+              alt="Pico Foot Ball Club"
+              width="130"
+              loading="lazy"
+            />
+          </a>
+        </div>
+      </div>
+      <div>
+        <hr />
+        <div style="text-align: left; color: #f5f5f5">
+          Noticias
+          <div style="position: absolute; right: 0; padding: 2rem">
+            <hr
+              style="
+                width: 1px;
+                height: 200px;
+                margin: 0 auto;
+                border: none;
+                background-color: #444;
+              "
+            />
+          </div>
+          <hr />
+        </div>
+      </div>
+    </header>
+  </body>
+</html>
