@@ -30,16 +30,37 @@
       font-weight: 400;
       line-height: 1.5;
       color: #212529;
-      text-align: left;
+      text-align: center;
       font-family: 'Open Sans', sans-serif;
       outline: none;
       box-sizing: border-box;
       border-radius: 5px;
-      width: 100%;
-      float: left;
       border: 1px solid #e1e1e1;
       overflow: hidden;
       margin-bottom: 15px !important;
+      margin-left: auto;
+    }
+
+    .tabla-equipos table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tabla-equipos th,
+    .tabla-equipos td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 8px 12px;
+      white-space: nowrap;
+    }
+
+    .tabla-equipos th:nth-child(2),
+    .tabla-equipos td:nth-child(2) {
+      text-align: left;
+    }
+
+    .tabla-equipos td img {
+      vertical-align: middle;
     }
 
     .equipo-titulo {
@@ -281,24 +302,7 @@
           </table>
         </div>
       </div>
-      <div>
-        <hr />
-        <div style="text-align: left; color: #f5f5f5">
-          <h1 font-family= ">Noticias</h1>
-          <div style="position: absolute; right: 0; padding: 2rem">
-            <hr
-              style="
-                width: 1px;
-                height: 200px;
-                margin: 0 auto;
-                border: none;
-                background-color: #444;
-              "
-            />
-          </div>
-          <hr />
-        </div>
-      </div>
-    </header>
-  </body>
+    </div>
+  </div>
+</body>
 </html>
