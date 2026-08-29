@@ -1,6 +1,14 @@
     body {
+      margin: 0;
       text-align: center;
       background-color: #0a0a0a;
+    }
+   
+    .header-pf {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      position: relative;
     }
 
     .articulo {
@@ -16,7 +24,7 @@
       padding-top: 100px;
     }
 
-    .titulo { 
+    .titulo {
       color: #d4d4d4;
       font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     }
@@ -52,13 +60,16 @@
       font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
       margin: 0;
     }
+
     .fila-activa {
-      background-color: rgba(255, 255, 255, 0.15); 
+      background-color: rgba(255, 255, 255, 0.15);
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     }
+
     .tabla-equipos tbody tr:hover {
       background-color: rgba(255, 255, 255, 0.08);
-    } 
+    }
+
     .tabla-equipos {
       font-size: 1rem;
       font-weight: 400;
@@ -106,6 +117,33 @@
       margin: 0.6rem auto 0;
     }
 
+      .btn-pf {
+      display: inline-block;
+      padding: 10px 24px;
+      font-size: 20px;
+      font-family:
+        "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      color: #f5f5f5;
+      background: #444;
+      border: 1px solid #444;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        border-color 0.25s ease,
+        background-color 0.25s ease,
+        transform 0.15s ease;
+    }
+
+    .btn-pf:hover {
+      border-color: #181818;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-pf:active {
+      transform: scale(0.97);
+    }
+
     .btn {
       display: inline-block;
       padding: 10px 24px;
@@ -143,33 +181,35 @@
       background-color: #d4d4d4;
       border-color: #d4d4d4;
     }
+
     .btn-redondo {
-    position: absolute;
-    left: 0;
-    margin: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f5f5f5;
-    border: 1px solid #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease,
-      background-color 0.25s ease;
+      position: absolute;
+      left: 0;
+      margin: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      border: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.25s ease;
     }
 
     .btn-redondo:hover {
-    background-color: rgb(192, 56, 56);
-    transform: scale(1.06) translateY(-4px);
-    border-color: #f5f5f5;
-    box-shadow: 0 12px 30px rgba(245, 245, 245, 0.18);
-   }
+      background-color: rgb(192, 56, 56);
+      transform: scale(1.06) translateY(-4px);
+      border-color: #f5f5f5;
+      box-shadow: 0 12px 30px rgba(245, 245, 245, 0.18);
+    }
+
     .caja {
       display: flex;
       align-items: center;
@@ -186,10 +226,12 @@
         border-color 0.25s ease,
         box-shadow 0.25s ease;
     }
+
     .hr {
-    border: none;
-    border-top: 2px solid rgb(57, 57, 57);
-}
+      border: none;
+      border-top: 2px solid rgb(57, 57, 57);
+    }
+
     .caja:hover {
       transform: scale(1.06) translateY(-4px);
       border-color: #f5f5f5;
