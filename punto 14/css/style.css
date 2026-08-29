@@ -52,8 +52,13 @@
       font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
       margin: 0;
     }
-
-
+    .fila-activa {
+      background-color: rgba(255, 255, 255, 0.15); 
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .tabla-equipos tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    } 
     .tabla-equipos {
       font-size: 1rem;
       font-weight: 400;
