@@ -1,0 +1,77 @@
+/* ============================================================
+   stylecultural.css
+   TEMA del Club Atlético y Cultural Argentino.
+   Paleta: azules y blancos. Letra negra.
+   Cargar DESPUÉS de style-base.css.
+   ============================================================ */
+
+body {
+  background-color: #ffffff;
+}
+
+header {
+  background-color: #0033a0;
+}
+
+articulo,
+.articulo {
+  background-color: #f2f6ff;
+  border: 1px solid #0033a0;
+  color: #000000;
+}
+
+.articulo h2 {
+  color: #0033a0;
+}
+
+.titulo {
+  color: #0033a0;
+}
+
+.fila-activa {
+  background-color: rgba(0, 51, 160, 0.15);
+}
+
+.tabla-equipos tbody tr:hover {
+  background-color: rgba(0, 51, 160, 0.08);
+}
+
+.tabla-equipos {
+  color: #000000;
+  border: 1px solid #0033a0;
+}
+
+.equipo-titulo {
+  color: #0033a0;
+}
+
+.btn-pf,
+.btn {
+  color: #ffffff;
+  background: #0033a0;
+  border: 1px solid #0033a0;
+}
+
+.btn-pf:hover,
+.btn:hover {
+  border-color: #001a52;
+  background-color: #001a52;
+}
+
+.btn-pf:active,
+.btn:active {
+  transform: scale(0.97);
+}
+
+.caja {
+  background-color: #f2f6ff;
+  border: 1px solid #0033a0;
+}
+
+.caja:hover {
+  border-color: #0033a0;
+}
+
+.hr {
+  border-top-color: #0033a0;
+}

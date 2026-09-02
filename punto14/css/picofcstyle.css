@@ -1,0 +1,76 @@
+/* ============================================================
+   picofcstyle.css
+   TEMA del Pico Football Club.
+   Paleta: blanco y negro (igual que index). Letra blanca.
+   Cargar DESPUÉS de style-base.css.
+   ============================================================ */
+
+body {
+  background-color: #0a0a0a;
+}
+
+header {
+  background-color: #d4d4d4;
+}
+
+.articulo {
+  background-color: #141414;
+  border: 1px solid #444;
+  color: #d4d4d4;
+}
+
+.articulo h2 {
+  color: #ffffff;
+}
+
+.titulo {
+  color: #d4d4d4;
+}
+
+.fila-activa {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.tabla-equipos tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.tabla-equipos {
+  color: #f5f5f5;
+  border: 1px solid #e1e1e1;
+}
+
+.equipo-titulo {
+  color: #ffffff;
+}
+
+.btn,
+.btn-pf {
+  color: #f5f5f5;
+  background: #444;
+  border: 1px solid #444;
+}
+
+.btn:hover,
+.btn-pf:hover {
+  border-color: #181818;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn:active,
+.btn-pf:active {
+  transform: scale(0.97);
+}
+
+.caja {
+  background-color: #141414;
+  border: 1px solid #444;
+}
+
+.caja:hover {
+  border-color: #f5f5f5;
+}
+
+.hr {
+  border-top-color: rgb(57, 57, 57);
+}

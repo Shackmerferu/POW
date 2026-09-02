@@ -1,0 +1,76 @@
+/* ============================================================
+   stylecostabrava.css
+   TEMA del Club Costa Brava.
+   Paleta: rojo y blanco. Letra negra.
+   Cargar DESPUÉS de style-base.css.
+   ============================================================ */
+
+body {
+  background-color: #ffffff;
+}
+
+header {
+  background-color: #cc0000;
+}
+
+.articulo {
+  background-color: #fff2f2;
+  border: 1px solid #cc0000;
+  color: #000000;
+}
+
+.articulo h2 {
+  color: #cc0000;
+}
+
+.titulo {
+  color: #cc0000;
+}
+
+.fila-activa {
+  background-color: rgba(204, 0, 0, 0.15);
+}
+
+.tabla-equipos tbody tr:hover {
+  background-color: rgba(204, 0, 0, 0.08);
+}
+
+.tabla-equipos {
+  color: #000000;
+  border: 1px solid #cc0000;
+}
+
+.equipo-titulo {
+  color: #cc0000;
+}
+
+.btn-pf,
+.btn {
+  color: #ffffff;
+  background: #cc0000;
+  border: 1px solid #cc0000;
+}
+
+.btn-pf:hover,
+.btn:hover {
+  border-color: #8a0000;
+  background-color: #8a0000;
+}
+
+.btn-pf:active,
+.btn:active {
+  transform: scale(0.97);
+}
+
+.caja {
+  background-color: #fff2f2;
+  border: 1px solid #cc0000;
+}
+
+.caja:hover {
+  border-color: #cc0000;
+}
+
+.hr {
+  border-top-color: #cc0000;
+}
