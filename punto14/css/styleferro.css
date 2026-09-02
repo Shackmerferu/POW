@@ -1,0 +1,27 @@
+.btn-redondo:hover,
+.btn-redondo-enlace:hover {
+  background-color: #087f3f;
+}
+
+.btn-ferro {
+  background-color: #087f3f !important;
+  border-color: #087f3f !important;
+}
+
+.btn-ferro:hover {
+  background-color: #0a9a4d !important;
+  border-color: #0a9a4d !important;
+}
+
+.fila-activa {
+  background-color: rgba(8, 127, 63, 0.28);
+  box-shadow: 0 0 10px rgba(8, 127, 63, 0.4);
+}
+
+.tabla-equipos tbody tr:hover {
+  background-color: rgba(8, 127, 63, 0.18);
+}
+
+.articulo img.historia-imagen {
+  border: 2px solid #087f3f;
+}
