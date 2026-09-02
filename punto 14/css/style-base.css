@@ -1,0 +1,167 @@
+/* ============================================================
+   style-base.css
+   ESTRUCTURA / LAYOUT SOLO (sin colores ni temas).
+   Los estilos de color y diseño de cada equipo van en su propio
+   archivo de tema (stylecultural.css, stylecostabrava.css,
+   picofcstyle.css, ...) que se carga DESPUÉS de este.
+   ============================================================ */
+
+body {
+  margin: 0;
+  text-align: center;
+}
+
+.header-pf {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.articulo {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 12px;
+  padding: 1.5rem;
+  padding-top: 100px;
+}
+
+.articulo h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.titulo {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin: 0;
+}
+
+.fila-activa {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.tabla-equipos tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.tabla-equipos {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  outline: none;
+  box-sizing: border-box;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 15px !important;
+  margin-left: auto;
+}
+
+.tabla-equipos table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-equipos th,
+.tabla-equipos td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.tabla-equipos th:nth-child(2),
+.tabla-equipos td:nth-child(2) {
+  text-align: left;
+}
+
+.tabla-equipos td img {
+  vertical-align: middle;
+}
+
+.equipo-titulo {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 0.95rem;
+  max-width: 160px;
+  margin: 0.6rem auto 0;
+}
+
+.btn-pf,
+.btn {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 20px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.15s ease;
+}
+
+.btn-pf:active,
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-redondo {
+  position: absolute;
+  left: 0;
+  margin: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.btn-redondo:hover {
+  transform: scale(1.06) translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.btn-redondo-enlace {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.btn-redondo-enlace:hover {
+  transform: scale(1.06) translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: fit-content;
+  padding: 0.9rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.caja:hover {
+  transform: scale(1.06) translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.hr {
+  border: none;
+  border-top: 2px solid rgb(0, 0, 0);
+}
