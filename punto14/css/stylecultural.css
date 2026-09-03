@@ -1,135 +1,138 @@
-.btn-redondo {
-  position: absolute;
-  left: 0;
-  margin: 2rem;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  border: 1px solid #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
-}
-
-.btn-redondo:hover {
-  background-color: rgb(0, 42, 102);
-  transform: scale(1.06) translateY(-4px);
-  border-color: #f5f5f5;
-  box-shadow: 0 12px 30px rgba(245, 245, 245, 0.18);
-}
-
-.btn-redondo-enlace {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  border: 1px solid #444;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
-}
-
-.btn-redondo-enlace:hover {
-  background-color: rgb(0, 42, 102);
-  transform: scale(1.06) translateY(-4px);
-  border-color: #f5f5f5;
-  box-shadow: 0 12px 30px rgba(245, 245, 245, 0.18);
-}
-
-.fila-activa {
-  background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
 /* ============================================================
    stylecultural.css
    TEMA del Club Atlético y Cultural Argentino.
-   Paleta: azules y blancos. Letra negra.
-   Cargar DESPUÉS de style-base.css.
+   Paleta: azules y blancos. Cargar DESPUÉS de style.css.
    ============================================================ */
-
-body {
-  background-color: #0a0a0a;
-}
 
 header {
   background-color: #0033a0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-articulo,
+/* --- Back round button --- */
+.btn-redondo {
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btn-redondo:hover {
+  background-color: #f0f4ff;
+  border-color: #f0f4ff;
+}
+
+/* --- Buttons --- */
+.btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+}
+
+.btn:hover {
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-register {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #0033a0;
+}
+
+.btn-register:hover {
+  background-color: #eef3ff;
+  border-color: #eef3ff;
+}
+
+/* --- Back/Redes round links --- */
+.btn-redondo-enlace {
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btn-redondo-enlace:hover {
+  background-color: #f0f4ff;
+  border-color: #f0f4ff;
+}
+
+/* --- Historia del Club --- */
 .articulo {
-  background-color: #f2f6ff;
-  border: 1px solid #0033a0;
-  color: #000000;
+  background-color: #ffffff;
+  border: 1px solid #dfe6f5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  padding-top: 1.5rem;
+}
+
+.articulo h1 {
+  color: #0033a0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0;
 }
 
 .articulo h2 {
   color: #0033a0;
 }
 
-.titulo {
-  color: #0033a0;
+.articulo p {
+  color: #2a2f3a;
 }
 
-.fila-activa {
-  background-color: rgba(0, 51, 160, 0.15);
+.articulo img.historia-imagen {
+  border: 3px solid #0033a0;
+  box-shadow: 0 8px 24px rgba(0, 51, 160, 0.25);
+}
+
+/* --- Titulos de sección (Noticias) --- */
+.titulo {
+  color: #ffffff;
+}
+
+/* --- Tabla de Posiciones --- */
+.tabla-equipos {
+  color: #1a1f2b;
+  border: 1px solid #c9d4ea;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.tabla-equipos h1 {
+  color: #0033a0;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tabla-equipos thead th {
+  background-color: #0033a0;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.tabla-equipos tbody tr:nth-child(even) {
+  background-color: #f2f5fc;
 }
 
 .tabla-equipos tbody tr:hover {
-  background-color: rgba(0, 51, 160, 0.08);
+  background-color: #dce6fb;
 }
 
-.tabla-equipos {
-  color: #000000;
-  border: 1px solid #0033a0;
+/* --- Fila resaltada --- */
+.fila-activa {
+  background-color: #dce6fb !important;
+  box-shadow: inset 3px 0 0 #0033a0;
+}
+
+/* --- Equipos (tarjetas de inicio) --- */
+.caja {
+  background-color: #ffffff;
+  border: 1px solid #c9d4ea;
 }
 
 .equipo-titulo {
   color: #0033a0;
 }
 
-.btn-pf,
-.btn {
-  color: #ffffff;
-  background: #0033a0;
-  border: 1px solid #0033a0;
-}
-
-.btn-pf:hover,
-.btn:hover {
-  border-color: #001a52;
-  background-color: #001a52;
-}
-
-.btn-pf:active,
-.btn:active {
-  transform: scale(0.97);
-}
-
-.caja {
-  background-color: #f2f6ff;
-  border: 1px solid #0033a0;
-}
-
-.caja:hover {
-  border-color: #0033a0;
-}
-
+/* --- Divisor --- */
 .hr {
-  border-top-color: #0033a0;
+  border-top-color: #7a95d6;
 }
