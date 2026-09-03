@@ -11,12 +11,13 @@
 </head>
 
 <body>
-  <header>
+  <header><div>
+    <a href="index.html" class="btn-redondo">
+      <img src="recursos/boton_volver.png" alt="Volver al Home" width="25"  />
+    </a>
     <div class="header-pf">
       <div style="align-items: center; display: flex; justify-content: center">
-        <a href="http://localhost/facultad/POW/punto%2014">
-          <img src="recursos/picofutbol.png" alt="Club Pico Football Logo" width="130" loading="lazy" />
-        </a>
+        <img src="recursos/picofutbol.png" alt="Club Pico Football Logo" width="130" loading="lazy" />
       </div>
 
       <div class="menu" style="position: absolute; right: 0; padding: 2rem;">
@@ -26,15 +27,31 @@
         </nav>
       </div>
     </div>
+    </div>
     <hr class="hr" />
   </header>
-  <div class="caja">
-    <a href="">
-      <img src="recursos\picofutbol.png" alt="Pico Foot Ball Club" width="95" loading="lazy" />
-    </a>
-  </div>
-  <p class="equipo-titulo">Pico FootBall Club</p>
-  </div>
+  <div class="articulo" style="padding: 2rem">
+    <h1>Historia del Club</h1>
+    <div style="display: flex; gap: 1.5rem; align-items: flex-start">
+      <img src="recursos/picofootballfrente.webp" alt="edificioPicoFutbol" style="
+          width: 300px;
+          border-radius:10%;
+        " />
+      <div>
+        <p>
+          El 1 de abril de 1919, un grupo de jóvenes entusiastas del deporte y con un fuerte sentido de comunidad fundó
+          Pico Football Club en la ciudad de General Pico, La Pampa. La institución nació con el propósito de fomentar
+          la práctica del fútbol y generar un espacio de encuentro y crecimiento para la comunidad. Entre sus impulsores
+          se destacaron Mario Rudoni, Eduardo Rolero, Gabriel Pedrerol y otros visionarios que sentaron las bases de lo
+          que con el tiempo se convertiría en una institución emblema de la región. </p>
+          <p> Desde sus primeros años, Pico F.C. se consolidó como un referente deportivo en la zona. Su crecimiento fue
+          paralelo al desarrollo de General Pico, acompañando la evolución de la ciudad y fortaleciendo el sentido de
+          pertenencia de sus habitantes. El club se convirtió en un espacio de reunión donde el deporte no solo era una
+          actividad recreativa, sino también un medio para fortalecer valores como el esfuerzo, la disciplina y el
+          trabajo en equipo.
+        </p>
+      </div>
+    </div>
   </div>
   <div>
     <div
@@ -93,7 +110,7 @@
               <td><strong>5</strong></td>
               <td><strong>10</strong></td>
             </tr>
-            <tr>
+            <tr class="fila-activa">
               <td><strong>5</strong></td>
               <td><strong><img src="https://plataforma.iduo.com.ar/Panelcontenidos/Contenidos/1692964605.png"
                     width="32px">&nbsp;Pico Football Club</strong></td>
@@ -154,7 +171,30 @@
 
     </div>
   </div>
+  <footer style="background-color: #141414; border-top: 2px solid rgb(57, 57, 57); color: #d4d4d4; padding: 2rem; margin-top: 2rem; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; text-align: left;">
+      <div style="flex: 1; min-width: 220px;">
+        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem;">
+          <img src="recursos/picofutbol.png" alt="Logo Pico Futbol" width="45" />
+          <h3 style="color: #ffffff; margin: 0;">Pico Football Club</h3>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; line-height: 1.5;"> Pico Football Club fue fundado el 1 de abril de 1919 en la ciudad de General Pico, Provincia de La Pampa, a partir de la fusión entre Pico Athletic Club y Atlético Ferro Carril Oeste.</p>
+      </div>
+      <div style="min-width: 180px;">
+        <h4 style="color: #ffffff; margin: 0 0 0.6rem;">Contacto</h4>
+        <p style="margin: 0.3rem 0;">Calle 3 & Av. San Martín</p>
+        <p style="margin: 0.3rem 0;">sec.picofc@gmail.com</p>
+        <p style="margin: 0.3rem 0;">+54 9 2302 336388</p>
+      </div>
+      <nav style="min-width: 120px;">
+        <h4 style="color: #ffffff; margin: 0 0 0.6rem;">Redes</h4>
+        <a class="btn-redondo-enlace" href="https://www.instagram.com/csindependiente.ok/">
+          <img src="recursos/instagram.png" alt="Instagram" width="25" />
+        </a>
+      </nav>
+    </div>
+  </footer>
 </body>
 
 </html>
-document.querySelector("#info-sumatorneos > div")
+-->
