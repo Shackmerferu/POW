@@ -52,6 +52,6 @@
 }
 
 .fila-activa {
-  background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  background-color: rgba(224, 35, 35, 0.555);
+  box-shadow: 0 0 10px rgba(134, 23, 23, 0.493);
 }
