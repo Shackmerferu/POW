@@ -219,6 +219,9 @@
       justify-content: center;
       text-decoration: none;
       cursor: pointer;
+      border-color: #dadada;
+      border: 1px solid #dadada;
+      background-color: #dadada;
       transition:
         transform 0.25s ease,
         border-color 0.25s ease,

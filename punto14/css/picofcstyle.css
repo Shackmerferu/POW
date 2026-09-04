@@ -69,7 +69,9 @@ header {
 .hr {
   border-top-color: rgb(57, 57, 57);
 }
-
+.btn-redondo:hover{
+  background-color: #dadada;
+}
 .btn-redondo-enlace{
   background-color: #cacaca;
 }
