@@ -55,3 +55,17 @@
   background-color: rgba(224, 35, 35, 0.555);
   box-shadow: 0 0 10px rgba(134, 23, 23, 0.493);
 }
+
+.caja img {
+      width: 95px;
+      height: 95px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      filter: grayscale(100%);
+    }
+
+    .caja:hover {
+      border-color: #e73131;
+      box-shadow: 0 12px 30px rgba(231, 49, 49, 0.35);
+    }

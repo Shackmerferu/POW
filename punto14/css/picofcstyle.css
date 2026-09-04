@@ -4,7 +4,7 @@ body {
 }
 
 header {
-  background-color: #111111;
+  background-color: rgb(103, 6, 182, 0.35);
 }
 
 .articulo {
@@ -22,7 +22,7 @@ header {
 }
 
 .fila-activa {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(103, 6, 182, 0.35);
 }
 
 .tabla-equipos tbody tr:hover {
@@ -66,6 +66,19 @@ header {
   box-shadow: 0 12px 30px rgba(245, 245, 245, 0.25);
 }
 
+.caja img {
+      width: 95px;
+      height: 95px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      filter: grayscale(100%);
+    }
+
+    .caja:hover {
+      border-color: #400683;
+      box-shadow: 0 12px 30px rgba(103, 6, 182, 0.35);
+    }
 .hr {
   border-top-color: rgb(57, 57, 57);
 }

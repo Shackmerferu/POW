@@ -147,3 +147,17 @@ body{
 .hr {
   border-top-color: #7a95d6;
 }
+
+.caja img {
+      width: 95px;
+      height: 95px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      filter: grayscale(100%);
+    }
+
+    .caja:hover {
+      border-color: #2415f1;
+      box-shadow: 0 12px 30px #0033a0;
+    }
