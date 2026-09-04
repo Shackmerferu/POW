@@ -30,3 +30,16 @@
   display: block;
   margin: 0 auto;
 }
+.caja img {
+      width: 95px;
+      height: 95px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      filter: grayscale(100%);
+    }
+
+    .caja:hover {
+      border-color: #0d943a;
+      box-shadow: 0 12px 30px rgba(0, 124, 66, 0.35);
+    }
