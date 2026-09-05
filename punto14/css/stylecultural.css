@@ -87,10 +87,15 @@ body{
   border: 3px solid #0033a0;
   box-shadow: 0 8px 24px rgba(0, 51, 160, 0.25);
 }
-
+.articulo img.articulo-imagen {
+  width: 80%;
+  height: auto;
+  display: block;
+  padding-bottom: 2rem;
+}
 /* --- Titulos de sección (Noticias) --- */
 .titulo {
-  color: #ffffff;
+  color: #0033a0;
 }
 
 /* --- Tabla de Posiciones --- */

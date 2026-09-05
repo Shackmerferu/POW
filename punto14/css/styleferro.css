@@ -4,13 +4,15 @@
 }
 
 .btn-ferro {
-  background-color: #087f3f !important;
-  border-color: #087f3f !important;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #087f3f;
 }
 
 .btn-ferro:hover {
-  background-color: #0a9a4d !important;
-  border-color: #0a9a4d !important;
+  background-color: #f0f0f0;
+  border-color: #ffffff;
+  color: #087f3f;
 }
 
 .fila-activa {
@@ -42,4 +44,56 @@
     .caja:hover {
       border-color: #0d943a;
       box-shadow: 0 12px 30px rgba(0, 124, 66, 0.35);
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    header {
+      background-color: #087f3f;
+    }
+
+    .articulo {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      color: #000000;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .articulo h1,
+    .articulo h2 {
+      color: rgb(220, 40, 40);
+    }
+
+    .articulo p {
+      color: #000000;
+    }
+
+    .titulo,
+    .equipo-titulo {
+      color: rgb(220, 40, 40);
+    }
+
+    .caja {
+      background-color: #ffffff;
+      border: 1px solid #d9d9d9;
+    }
+
+    .hr {
+      border-top-color: #c8c8c8;
+    }
+
+    .tabla-equipos {
+      color: #000000;
+      border: 1px solid rgb(220, 40, 40);
+    }
+
+    .tabla-equipos h1 {
+      color: rgb(220, 40, 40);
+    }
+
+    .tabla-equipos tbody tr:hover td {
+      background-color: #e0e0e0;
     }

@@ -55,6 +55,11 @@
       font-size: 1.2rem;
     }
 
+    .articulo img {
+      display: block;
+      margin: 0 auto;
+    }
+
     .titulo {
       color: #d4d4d4;
       font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
