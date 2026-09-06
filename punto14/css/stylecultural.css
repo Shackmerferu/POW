@@ -68,10 +68,9 @@ body{
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
 }
 
-.articulo h1 {
+.articulo h1,
+.historia h1 {
   color: #0033a0;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   margin-top: 0;
 }
 
@@ -79,11 +78,13 @@ body{
   color: #0033a0;
 }
 
-.articulo p {
+.articulo p,
+.historia p {
   color: #2a2f3a;
 }
 
-.articulo img.historia-imagen {
+.articulo img.historia-imagen,
+.historia img.historia-imagen {
   border: 3px solid #0033a0;
   box-shadow: 0 8px 24px rgba(0, 51, 160, 0.25);
 }

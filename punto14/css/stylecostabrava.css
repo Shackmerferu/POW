@@ -56,7 +56,7 @@
 }
 
 .fila-activa {
-  background-color: rgba(224, 35, 35, 0.555);
+  background-color: rgba(241, 0, 0, 0.85);
   box-shadow: 0 0 10px rgba(134, 23, 23, 0.493);
 }
 
@@ -83,7 +83,8 @@
       background-color: rgb(220, 40, 40);
     }
 
-    .articulo {
+    .articulo,
+    .historia {
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
       color: #000000;
@@ -91,11 +92,14 @@
     }
 
     .articulo h1,
-    .articulo h2 {
+    .articulo h2,
+    .historia h1,
+    .historia h2 {
       color: rgb(220, 40, 40);
     }
 
-    .articulo p {
+    .articulo p,
+    .historia p {
       color: #000000;
     }
 

@@ -24,7 +24,8 @@
   background-color: rgba(8, 127, 63, 0.18);
 }
 
-.articulo img.historia-imagen {
+.articulo img.historia-imagen,
+.historia img.historia-imagen {
   border: 2px solid #087f3f;
 }
 
@@ -55,7 +56,8 @@
       background-color: #087f3f;
     }
 
-    .articulo {
+    .articulo,
+    .historia {
       background-color: #ffffff;
       border: 1px solid #e0e0e0;
       color: #000000;
@@ -63,11 +65,14 @@
     }
 
     .articulo h1,
-    .articulo h2 {
+    .articulo h2,
+    .historia h1,
+    .historia h2 {
       color: rgb(220, 40, 40);
     }
 
-    .articulo p {
+    .articulo p,
+    .historia p {
       color: #000000;
     }
 
