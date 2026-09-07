@@ -89,6 +89,11 @@ header {
   background-color: #6818A5;
 }
 
+.btn-pf.btn-pf-register {
+  color: #5A108F;
+  background: #ffffff;
+}
+
 .btn:active,
 .btn-pf:active {
   transform: scale(0.97);
