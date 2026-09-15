@@ -3,56 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trabajo Practico 3</title>
+    <title>Maquetación de Libro</title>
     <style>
+        /* Configuraciones generales para imitar el estilo del documento */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+            font-family: "Times New Roman", Times, serif;
+            color: #1a1a1a;
+            line-height: 1.5;
             margin: 0;
-            padding: 20px;
+            padding: 40px;
+            background-color: #ffffff;
         }
+
+        /* 1. EL CONTENEDOR PRINCIPAL (Usa Flexbox para partir la pantalla en 2) */
+        .contenedor-principal {
+            display: flex;
+            max-width: 1000px;
+            margin: 0 auto; /* Centra todo en el medio de la pantalla */
+            gap: 40px; /* Deja un hueco limpio entre la izquierda y la derecha */
+        }
+
+        /* 2. LA BARRA LATERAL IZQUIERDA */
+        .columna-izquierda {
+            flex: 0 0 250px; /* Le decimos: "No crezcas, no te achiques, quedate en 250px" */
+            margin-top: 55px; /* Empujamos los datos para abajo para que queden alineados con el texto, dejando libre el espacio al lado del título H1 */
+        }
+
+        .columna-izquierda h3 {
+            margin-top: 0;
+        }
+
+        .columna-izquierda ul {
+            padding-left: 20px;
+        }
+
+        .columna-izquierda li {
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        /* 3. EL CONTENIDO PRINCIPAL DERECHO */
+        .columna-derecha {
+            flex: 1; /* Le decimos: "Ocupá todo el espacio sobrante hacia la derecha" */
+        }
+
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
+            margin-top: 0;
+            font-size: 26px;
         }
-        p.sub {
-            text-align: center;
-            color: #777;
-            margin-bottom: 30px;
+
+        h3 {
+            font-size: 18px;
+            margin-top: 25px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
-            max-width: 400px;
-            margin: 0 auto;
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify; /* Hace que los textos queden rectos en los bordes como en un libro */
         }
-        li {
-            margin-bottom: 10px;
+
+        /* 4. EL SUB-DISEÑO DEL FINAL (Usa CSS Grid para las 3 columnas) */
+        .tres-columnas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Crea 3 columnas de exactamente el mismo tamaño (1 fracción c/u) */
+            gap: 20px; /* Separación entre las tres columnitas */
+            margin-top: 20px;
         }
-        a {
-            display: block;
-            padding: 12px 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            text-decoration: none;
-            color: #333;
-            border-radius: 6px;
-        }
-        a:hover {
-            background-color: #e9e9e9;
-            border-color: #999;
+
+        .tres-columnas p {
+            font-size: 14px;
+            margin: 0;
         }
     </style>
 </head>
 <body>
 
-    <h1>Trabajo Practico 3</h1>
-    <p class="sub">Selecciona un punto para verlo</p>
+    <!-- La caja envolvente -->
+    <div class="contenedor-principal">
+        
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="columna-izquierda">
+            <h3>Datos del libro</h3>
+            <ul>
+                <li><strong>Título:</strong> HTML & CSS: Curso práctico avanzado</li>
+                <li><strong>Autor:</strong> Sergio Luján Mora</li>
+                <li><strong>Editorial:</strong> Publicaciones Altaria</li>
+                <li><strong>Año de publicación:</strong> 2015</li>
+                <li><strong>ISBN:</strong> 978-84-944049-4-8</li>
+            </ul>
+        </div>
 
-    <ul>
-        <li><a href="index.html">Inicio</a></li>
-    </ul>
+        <!-- COLUMNA DERECHA -->
+        <div class="columna-derecha">
+            <h1>HTML & CSS: Curso práctico avanzado</h1>
+            
+            <h3>Descripción del libro</h3>
+            <p>Aunque los inicios de Internet se remontan a los años sesenta, no ha sido hasta los años noventa cuando, gracias a la Web, se ha extendido su uso por todo el mundo. En pocos años, la Web ha evolucionado enormemente: se ha pasado de páginas sencillas, con pocas imágenes y contenidos estáticos que eran visitadas por unos pocos usuarios a páginas complejas, con contenidos dinámicos que provienen de bases de datos y que son visitadas por miles de usuarios al mismo tiempo.</p>
+            
+            <p>Todas las páginas están internamente construidas con la misma tecnología, con el Lenguaje de marcas de hipertexto (Hypertext Markup Language, HTML) y con las Hojas de estilo en cascada (Cascading Style Sheets, CSS).</p>
+            
+            <p>Este libro es adecuado para cualquiera que tenga interés en aprender a desarrollar sus propias páginas web. No son necesarios conocimientos previos para aprender con este libro, lo único que es necesario es saber utilizar un ordenador y saber navegar por la Web.</p>
+            
+            <h3>Contenido del libro</h3>
+            <p>El contenido de este libro se estructura en tres apartados bien diferenciados:</p>
+
+            <!-- ACÁ SE ABRE LA GRILLA DE 3 COLUMNAS -->
+            <div class="tres-columnas">
+                <div>
+                    <p>En la primera parte del libro se trabajan conceptos generales que son necesarios para poder desarrollar páginas web: se explican conceptos de estructura física y estructura lógica (o estructura de navegación) de un sitio web. Se detalla cómo influye la estructura física en las URL o direcciones que se emplean a la hora de crear los enlaces de un sitio web. Pasando por el concepto de "estándar web", un término general que se emplea para referirse a los estándares que define su funcionamiento como HTML y CSS, empleados para el desarrollo de las páginas web en el lado del cliente.</p>
+                </div>
+                <div>
+                    <p>En la segunda parte se trabaja HTML. Partiendo de la estructura básica de una página web, se explican las etiquetas de HTML que se utilizan para definir el texto, los enlaces, las listas, las tablas, los formularios y los elementos multimedia.</p>
+                </div>
+                <div>
+                    <p>En la tercera y última parte se explica CSS, el lenguaje que se emplea para definir el formato y la presentación de una página web. Se explica cómo utilizar el color, cómo definir la presentación del texto, de las tablas y de los formularios; cómo realizar transformaciones y transiciones con el fin de diseñar una página web.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
