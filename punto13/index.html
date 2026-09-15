@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Punto 13 - Tablas</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			color: #222;
+			margin: 30px auto;
+			max-width: 900px;
+		}
+
+		h2 {
+			margin-top: 30px;
+			margin-bottom: 8px;
+		}
+
+		p {
+			margin-top: 0;
+		}
+
+		table {
+			border-collapse: collapse;
+			margin-bottom: 28px;
+			width: 100%;
+		}
+
+		th,
+		td {
+			border: 1px solid #777;
+			padding: 5px;
+		}
+
+		th {
+			text-align: center;
+			font-weight: normal;
+		}
+
+		td:nth-child(n+2) {
+			text-align: right;
+		}
+
+		.total-label {
+			text-align: center;
+		}
+
+		@media (max-width: 600px) {
+			body {
+				margin: 20px 10px;
+			}
+
+			table {
+				font-size: 14px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<h2>Refrigerios</h2>
+	<p>(Tabla 2: Estudio de costos refrigerio)</p>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Producto</th>
+				<th>Cantidad</th>
+				<th>Precio por<br>Unidad</th>
+				<th>Subtotal</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Jugo Delvalle</td>
+				<td>140</td>
+				<td>1.000</td>
+				<td>140.000</td>
+			</tr>
+			<tr>
+				<td>SixPac Gaseosa Postobon 4Lts</td>
+				<td>2</td>
+				<td>23.000</td>
+				<td>46.000</td>
+			</tr>
+			<tr>
+				<td>Papas Frito Lay 28 gr</td>
+				<td>140</td>
+				<td>700</td>
+				<td>98.000</td>
+			</tr>
+			<tr>
+				<td>Pastel Gansito</td>
+				<td>140</td>
+				<td>1.200</td>
+				<td>168.000</td>
+			</tr>
+			<tr>
+				<td>Cruasán con Queso Y Jamon</td>
+				<td>140</td>
+				<td>600</td>
+				<td>84.000</td>
+			</tr>
+			<tr>
+				<td>Cruasán con Queso</td>
+				<td>140</td>
+				<td>550</td>
+				<td>77.000</td>
+			</tr>
+			<tr>
+				<td>Panseroti</td>
+				<td>140</td>
+				<td>1.000</td>
+				<td>140.000</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Ingresos</h2>
+	<p>(Tabla 3: Ingresos para la realización del evento)</p>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Actividad</th>
+				<th>Ingresos</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Gestión en Cooperativa RIACHON LTDA.</td>
+				<td>150.000</td>
+			</tr>
+			<tr>
+				<td>Cuota Individual</td>
+				<td>230.000</td>
+			</tr>
+			<tr>
+				<td>Ingresos por Asistencia</td>
+				<td>27.000</td>
+			</tr>
+			<tr>
+				<td class="total-label">Total</td>
+				<td>407.000</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
