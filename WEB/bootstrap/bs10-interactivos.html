@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 10 · Componentes con JS · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html" selected>10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Componentes con JS</p>
+  <h1>Componentes que requieren el JavaScript de Bootstrap</h1>
+
+  <div class="alert">Todo esto necesita el <code>bootstrap.bundle.min.js</code> cargado antes de cerrar el <code>&lt;body&gt;</code>. Sin el JS, los componentes tienen el HTML pero no se animan ni cambian.</div>
+
+  <h2>El truco general: atributos data-bs-*</h2>
+  <p>La mayoría de los componentes se encienden con atributos en el HTML (sin escribir una línea de JS):</p>
+  <table>
+    <tr><th>Atributo</th><th>Componente</th><th>Valor que espera</th></tr>
+    <tr><td><code>data-bs-toggle</code></td><td>El que decide qué componente es</td><td><code>collapse</code>, <code>modal</code>, <code>dropdown</code>, <code>tooltip</code>, <code>popover</code>, <code>offcanvas</code>…</td></tr>
+    <tr><td><code>data-bs-target</code></td><td>A qué elemento apunta el botón</td><td>Un selector CSS, ej. <code>#mi-modal</code> o <code>.mi-menu</code></td></tr>
+    <tr><td><code>data-bs-dismiss</code></td><td>Cierra el componente</td><td><code>modal</code>, <code>alert</code>, <code>offcanvas</code></td></tr>
+    <tr><td><code>data-bs-ride</code></td><td>Arranca solo (carousel)</td><td><code>carousel</code></td></tr>
+    <tr><td><code>data-bs-bs-touch/…</code></td><td>Opciones por componente…</td><td>—</td></tr>
+  </table>
+
+  <h2>Collapse: mostrar / ocultar un bloque</h2>
+  <pre><code>&lt;button class="btn btn-primary" data-bs-toggle="collapse"
+        data-bs-target="#detalle"&gt;Ver detalle&lt;/button&gt;
+
+&lt;div class="collapse" id="detalle"&gt;El texto oculto acá.&lt;/div&gt;</code></pre>
+  <p>La clase <code>collapse</code> oculta el bloque; el botón con <code>data-bs-toggle="collapse"</code> + <code>data-bs-target="#id"</code> lo despliega y pliega. Si querés que arranque abierto, agregale también <code>show</code>. Variante <code>collapse-horizontal</code> para abrir en ancho.</p>
+
+  <h2>Acordeón: varias secciones que se turnan</h2>
+  <pre><code>&lt;div class="accordion" id="acordeon"&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header"&gt;
+      &lt;button class="accordion-button" data-bs-toggle="collapse"
+              data-bs-target="#seccion1"&gt;Pregunta 1&lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="seccion1" class="accordion-collapse collapse show"
+         data-bs-parent="#acordeon"&gt;
+      &lt;div class="accordion-body"&gt;Respuesta 1.&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>accordion</code></td><td>Contenedor (lleva el <code>id</code> que usan los hijos).</td></tr>
+    <tr><td><code>accordion-item</code> / <code>accordion-header</code> / <code>accordion-body</code></td><td>Partes de cada sección.</td></tr>
+    <tr><td><code>accordion-button</code></td><td>El encabezado clickeable con su flechita.</td></tr>
+    <tr><td><code>accordion-collapse collapse</code></td><td>El panel que se pliega.</td></tr>
+    <tr><td><code>data-bs-parent="#acordeon"</code></td><td>Al abrir una sección, cierra las otras.</td></tr>
+    <tr><td><code>accordion-flush</code></td><td>Sin bordes externos (para tarjetas).</td></tr>
+  </table>
+
+  <h2>Modal: la ventana emergente</h2>
+  <pre><code>&lt;button class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#miModal"&gt;Abrir modal&lt;/button&gt;
+
+&lt;div class="modal fade" id="miModal" tabindex="-1"&gt;
+  &lt;div class="modal-dialog modal-dialog-centered"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Título&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;Contenido del modal.&lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cerrar&lt;/button&gt;
+        &lt;button class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>modal</code> + <code>fade</code></td><td>Contenedor con animación de entrada.</td></tr>
+    <tr><td><code>modal-dialog</code></td><td>Da formato a la ventanita.</td></tr>
+    <tr><td><code>modal-dialog-centered</code> / <code>modal-dialog-scrollable</code></td><td>Centrada en pantalla / con scroll interno.</td></tr>
+    <tr><td><code>modal-lg</code> / <code>modal-sm</code> / <code>modal-fullscreen</code></td><td>Tamaños posibles del diálogo.</td></tr>
+    <tr><td><code>modal-header</code> / <code>modal-body</code> / <code>modal-footer</code></td><td>Las tres zonas.</td></tr>
+    <tr><td><code>data-bs-dismiss="modal"</code></td><td>Cierra el modal (la X y el botón Cerrar).</td></tr>
+  </table>
+
+  <h2>Carousel: el pase de imágenes</h2>
+  <pre><code>&lt;div id="carrusel" class="carousel slide" data-bs-ride="carousel"&gt;
+  &lt;div class="carousel-inner"&gt;
+    &lt;div class="carousel-item active"&gt;&lt;img src="a.png" class="d-block w-100" alt="…"&gt;&lt;/div&gt;
+    &lt;div class="carousel-item"&gt;&lt;img src="b.png" class="d-block w-100" alt="…"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="carousel-control-prev" data-bs-target="#carrusel" data-bs-slide="prev"&gt;
+    &lt;span class="carousel-control-prev-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class="carousel-control-next" data-bs-target="#carrusel" data-bs-slide="next"&gt;
+    &lt;span class="carousel-control-next-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase / atributo</th><th>Qué hace</th></tr>
+    <tr><td><code>carousel slide</code> + <code>data-bs-ride="carousel"</code></td><td>Activa el auto-deslizamiento.</td></tr>
+    <tr><td><code>carousel-inner</code> + <code>carousel-item active</code></td><td>Las diapositivas (la actual lleva <code>active</code>).</td></tr>
+    <tr><td><code>carousel-control-prev/next</code></td><td>Las flechas laterales.</td></tr>
+    <tr><td><code>carousel-indicators</code></td><td>Los puntitos de abajo.</td></tr>
+    <tr><td><code>carousel-caption</code></td><td>Leyenda sobre la imagen.</td></tr>
+  </table>
+
+  <h2>Tooltip y Popover: mini-cartelitos</h2>
+  <p>Son los únicos que necesitan una línea de JS para inicializarse (por rendimiento Bootstrap no los enciende solo).</p>
+  <pre><code>&lt;button class="btn btn-secondary" data-bs-toggle="tooltip"
+        title="Pequeña ayuda"&gt;Leyenda&lt;/button&gt;
+
+&lt;button class="btn btn-outline-secondary" data-bs-toggle="popover"
+        data-bs-title="Título del popover"
+        data-bs-content="Textito del popover"&gt;Más info&lt;/button&gt;
+
+&lt;script&gt;
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(el =&gt; new bootstrap.Tooltip(el));
+  document.querySelectorAll('[data-bs-toggle="popover"]')
+    .forEach(el =&gt; new bootstrap.Popover(el));
+&lt;/script&gt;</code></pre>
+
+  <h2>El resto del catálogo</h2>
+  <table>
+    <tr><th>Componente</th><th>Clases clave</th><th>Qué hace</th></tr>
+    <tr><td><code>offcanvas</code></td><td><code>offcanvas offcanvas-start</code> + <code>data-bs-toggle="offcanvas"</code></td><td>Panel que se desliza desde un lado (menú lateral).</td></tr>
+    <tr><td><code>toast</code></td><td><code>toast</code> + <code>data-bs-toggle="toast"</code></td><td>Notificación chica que aparece en una esquina.</td></tr>
+    <tr><td><code>scrollspy</code></td><td><code>data-bs-spy="scroll"</code> + <code>data-bs-target="#menu"</code></td><td>Marca en el menú la sección que estás viendo al hacer scroll.</td></tr>
+    <tr><td><code>dropdown</code> (ya visto)</td><td><code>data-bs-toggle="dropdown"</code></td><td>Menú desplegable.</td></tr>
+    <tr><td><code>tabs / pills</code> (ya visto)</td><td><code>data-bs-toggle="tab"</code></td><td>Cambia paneles al elegir pestañas.</td></tr>
+  </table>
+  <div class="tip">Regla clave: si el componente se pliega, abre, cierra o desliza, seguro necesita <code>data-bs-toggle</code> + <code>data-bs-target</code> (o <code>data-bs-dismiss</code>) y el bundle JS. Bootstrap no requiere jQuery.</div>
+
+  <div class="pager">
+    <a href="bs09-navegacion.html">← Bootstrap 9 · Navegación</a>
+    <a class="next" href="../index.html">Fin · Volver al inicio →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 10 · Guía de Tecnologías Web</footer>
+</body>
+</html>

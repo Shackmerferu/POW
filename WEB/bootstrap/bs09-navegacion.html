@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 9 · Navegación · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html" selected>9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Navegación</p>
+  <h1>Navegación: navbar, tabs, dropdowns, breadcrumb y paginación</h1>
+
+  <h2>Nav: la base de tabs y pills</h2>
+  <pre><code>&lt;ul class="nav nav-tabs"&gt;
+  &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="#"&gt;Perfil&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Cuenta&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="nav-item"&gt;&lt;a class="nav-link disabled" href="#"&gt;Bloqueado&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="nav nav-pills"&gt;…&lt;/ul&gt;       &lt;!-- igual, pero estilo pastilla --&gt;
+&lt;nav class="nav nav-fill"&gt;…&lt;/nav&gt;      &lt;!-- los items reparten el ancho --&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>nav</code></td><td>Base: fila de enlaces sin viñetas.</td></tr>
+    <tr><td><code>nav-item</code> + <code>nav-link</code></td><td>Cada enlace de la lista.</td></tr>
+    <tr><td><code>nav-tabs</code></td><td>Estilo pestañas.</td></tr>
+    <tr><td><code>nav-pills</code></td><td>Estilo pastillas.</td></tr>
+    <tr><td><code>nav-fill</code> / <code>nav-justified</code></td><td>Ancho iguale / ancho según contenido.</td></tr>
+    <tr><td><code>active</code> / <code>disabled</code></td><td>Item actual / inactivo.</td></tr>
+    <tr><td><code>data-bs-toggle="tab"</code></td><td>Convierte las pestañas en paneles que cambian (con el JS).</td></tr>
+  </table>
+
+  <h2>Navbar: la barra de navegación</h2>
+  <p>Es el componente más usado. Estructura típica con menú colapsable en celulares (por eso hace falta el JS de Bootstrap):</p>
+  <pre><code>&lt;nav class="navbar navbar-expand-lg navbar-dark bg-primary"&gt;
+  &lt;div class="container-fluid"&gt;
+    &lt;a class="navbar-brand" href="#"&gt;Mi Sitio&lt;/a&gt;
+    &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#menu"&gt;
+      &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;div class="collapse navbar-collapse" id="menu"&gt;
+      &lt;ul class="navbar-nav me-auto"&gt;
+        &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Productos&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>navbar</code></td><td>Base de la barra.</td></tr>
+    <tr><td><code>navbar-expand-lg</code></td><td>El menú se muestra en una fila desde <code>lg</code>; abajo de eso se colapsa. (También <code>-sm</code>, <code>-md</code>, <code>-xl</code>).</td></tr>
+    <tr><td><code>navbar-brand</code></td><td>El logo / nombre de la marca.</td></tr>
+    <tr><td><code>navbar-toggler</code> + <code>navbar-toggler-icon</code></td><td>El botón ☰ que abre el menú y su ícono.</td></tr>
+    <tr><td><code>collapse navbar-collapse</code></td><td>El bloque de enlaces que se pliega/despliega (con <code>data-bs-toggle="collapse"</code>).</td></tr>
+    <tr><td><code>navbar-nav</code></td><td>Los enlaces de la barra (normalmente con <code>me-auto</code> para empujarlos).</td></tr>
+    <tr><td><code>navbar-dark</code> / <code>navbar-light</code></td><td>Colores de textos para fondo oscuro / claro.</td></tr>
+    <tr><td><code>bg-primary</code>… o <code>bg-body-tertiary</code></td><td>Fondo de la barra.</td></tr>
+    <tr><td><code>fixed-top</code> / <code>sticky-top</code></td><td>Barra siempre visible.</td></tr>
+  </table>
+
+  <h2>Dropdowns: menú desplegable</h2>
+  <pre><code>&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"&gt;
+    Acciones
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Editar&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item active" href="#"&gt;Ver&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item text-danger" href="#"&gt;Eliminar&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>dropdown</code></td><td>Contenedor del menú.</td></tr>
+    <tr><td><code>dropdown-toggle</code> + <code>data-bs-toggle="dropdown"</code></td><td>El botón que abre/cierra y su flechita.</td></tr>
+    <tr><td><code>dropdown-menu</code></td><td>El panel desplegado.</td></tr>
+    <tr><td><code>dropdown-item</code></td><td>Cada opción.</td></tr>
+    <tr><td><code>dropdown-header</code> / <code>dropdown-divider</code></td><td>Título / línea separadora.</td></tr>
+    <tr><td><code>dropdown-menu-end</code></td><td>Alinea el menú a la derecha.</td></tr>
+  </table>
+
+  <h2>Breadcrumb y paginación</h2>
+  <pre><code>&lt;nav aria-label="breadcrumb"&gt;
+  &lt;ol class="breadcrumb"&gt;
+    &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="breadcrumb-item active" aria-current="page"&gt;Productos&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+
+&lt;nav&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item disabled"&gt;&lt;a class="page-link" href="#"&gt;«&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item active"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>breadcrumb</code> + <code>breadcrumb-item active</code></td><td>Miguita de pan: la ruta de dónde estás.</td></tr>
+    <tr><td><code>pagination</code></td><td>Lista de páginas.</td></tr>
+    <tr><td><code>page-item</code> + <code>page-link</code></td><td>Cada página (el <code>page-link</code> es la cajita clickeable).</td></tr>
+    <tr><td><code>pagination-lg</code> / <code>pagination-sm</code></td><td>Tamaños.</td></tr>
+    <tr><td><code>active</code> / <code>disabled</code></td><td>Página actual / link deshabilitado.</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="bs08-formularios.html">← Bootstrap 8 · Formularios</a>
+    <a class="next" href="bs10-interactivos.html">Siguiente: Bootstrap 10 · Componentes con JS →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 9 · Guía de Tecnologías Web</footer>
+</body>
+</html>

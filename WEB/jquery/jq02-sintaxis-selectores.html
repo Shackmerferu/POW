@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jQuery 2 · Sintaxis y selectores · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="jq02-sintaxis-selectores.html" selected>2 · Sintaxis y selectores</option>
+        <option value="jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Librerías jQuery / Sintaxis y selectores</p>
+  <h1>jQuery — uso, sintaxis y selectores</h1>
+  <p>Fuente: <code>Javascript_jquery_II.pdf</code></p>
+
+  <h2>¿Qué es jQuery?</h2>
+  <div class="card">
+    <p>jQuery es una <strong>biblioteca multiplataforma de JavaScript</strong>, fácil de aprender. Su propósito es <strong>facilitar el uso de JavaScript</strong>, simplificando cosas complicadas como las <strong>llamadas AJAX</strong> y la <strong>manipulación del DOM</strong>.</p>
+    <p><strong>Características:</strong> manipulación HTML/DOM, manipulación CSS, métodos de eventos HTML, efectos y animaciones, AJAX y utilidades.</p>
+    <p><strong>¿Por qué jQuery?</strong> Es probablemente la librería más popular y ampliable. La usan Google, Microsoft, IBM, Netflix, y gestores de contenido como <strong>WordPress</strong> y <strong>Joomla</strong>, y frameworks como Bootstrap y Material Design.</p>
+  </div>
+
+  <h2>Formas de usarla</h2>
+  <table>
+    <tr><th>Forma</th><th>Cómo</th></tr>
+    <tr>
+      <td>Descargando la librería e invocándola</td>
+      <td><pre style="margin:0">&lt;script src="jquery-3.5.1.min.js"&gt;&lt;/script&gt;</pre></td>
+    </tr>
+    <tr>
+      <td>Haciendo referencia a un CDN (ej. Google)</td>
+      <td><pre style="margin:0">&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"&gt;&lt;/script&gt;</pre></td>
+    </tr>
+    <tr>
+      <td>Usando gestores de paquetes</td>
+      <td><code>npm</code>, <code>yarn</code></td>
+    </tr>
+  </table>
+
+  <h2>Sintaxis básica</h2>
+  <pre><code>$(selector).action()</code></pre>
+  <ul>
+    <li><code>$</code> — signo para definir / acceder a jQuery.</li>
+    <li><code>(selector)</code> — "consulta (o busca)" elementos HTML.</li>
+    <li><code>.action()</code> — la acción jQuery a realizar sobre los elementos.</li>
+  </ul>
+
+  <h3>Ejemplos de la sintaxis</h3>
+  <pre><code>$(this).hide()        // oculta el elemento actual
+$("p").hide()         // oculta todos los elementos &lt;p&gt;
+$(".test").hide()     // oculta todos los elementos con class="test"
+$("#test").hide()     // oculta el elemento con id="test"</code></pre>
+
+  <h2>Función de preparación (Read y)</h2>
+  <p>Todos los métodos deben cargarse dentro de una función <strong>ready</strong> para evitar que los eventos se ejecuten antes de que termine la carga de la página.</p>
+  <pre><code>$(document).ready(function(){
+  // colocar aquí los métodos jQuery
+});
+
+// Método abreviado
+$(function(){
+  // colocar aquí los métodos jQuery
+});</code></pre>
+
+  <h2>Selectores</h2>
+  <div class="card">
+    <p>Los selectores son la parte <strong>más importante</strong> de jQuery: con <code>$(selector)</code> elegimos qué elementos se manipulan.</p>
+  </div>
+  <table>
+    <tr><th>Selector</th><th>Qué selecciona</th></tr>
+    <tr><td><code>$("*")</code></td><td>Todos los elementos de la página.</td></tr>
+    <tr><td><code>$(this)</code></td><td>El elemento actual.</td></tr>
+    <tr><td><code>$("p")</code></td><td>Todos los elementos <code>&lt;p&gt;</code>.</td></tr>
+    <tr><td><code>$("p.intro")</code></td><td>Los <code>&lt;p&gt;</code> con <code>class="intro"</code>.</td></tr>
+    <tr><td><code>$("#test")</code></td><td>El elemento con <code>id="test"</code>.</td></tr>
+    <tr><td><code>$(".test")</code></td><td>Los elementos con <code>class="test"</code>.</td></tr>
+    <tr><td><code>$("p:first")</code></td><td>El primer <code>&lt;p&gt;</code> de la página.</td></tr>
+    <tr><td><code>$("tr:odd")</code></td><td>Las filas impares de una tabla.</td></tr>
+  </table>
+
+  <h3>Ejemplo: ocultar párrafos con un botón</h3>
+  <pre><code>$(document).ready(function(){
+  $("button").click(function(){
+    $("p").hide();
+  });
+});</code></pre>
+
+  <div class="pager">
+    <a href="jq01-introduccion.html">← jQuery 1 · Librerías y Prototype</a>
+    <a class="next" href="jq03-eventos-efectos.html">Siguiente: jQuery 3 · Eventos y efectos →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · jQuery 2 · Guía de Tecnologías Web</footer>
+</body>
+</html>

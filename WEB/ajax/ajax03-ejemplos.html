@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX 3 · Aplicaciones · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax01-introduccion.html">1 · Introducción</option>
+        <option value="ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="ajax03-ejemplos.html" selected>3 · Aplicaciones</option>
+        <option value="ajax04-formularios.html">4 · Formularios</option>
+        <option value="ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / AJAX / Aplicaciones</p>
+  <h1>AJAX — Aplicaciones</h1>
+  <p>Fuente: <code>ajax_II.pdf</code></p>
+
+  <h2>La primera aplicación AJAX (Hola Mundo)</h2>
+  <div class="card">
+    <p>Una aplicación JavaScript descarga un archivo del servidor y muestra su contenido <strong>sin recargar la página</strong>. Toda aplicación AJAX se compone de <strong>cuatro grandes bloques</strong>:</p>
+    <ol>
+      <li><strong>Instanciar el objeto <code>XMLHttpRequest</code></strong> (siempre primero).</li>
+      <li><strong>Preparar la función de respuesta</strong> (con <code>onreadystatechange</code> u <code>onload</code>).</li>
+      <li><strong>Realizar la petición al servidor</strong> con <code>open()</code> y <code>send()</code>.</li>
+      <li><strong>Ejecutar la función de respuesta</strong> cuando llegan los datos.</li>
+    </ol>
+  </div>
+  <pre><code>&lt;script&gt;
+function cargar_documento() {
+  // 1. Instanciar el objeto
+  var xhttp = new XMLHttpRequest();
+  // 2. Preparar la función de respuesta
+  xhttp.onreadystatechange = function() {
+    // 4. Ejecutar la función de respuesta
+    if (this.readyState == 4 &amp;&amp; this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  // 3. Realizar la petición al servidor
+  xhttp.open("GET", "holamundo.txt", true);
+  xhttp.send();
+}
+&lt;/script&gt;</code></pre>
+
+  <h2>Ejemplo 1: un menú que carga contenido sin recargar</h2>
+  <p>Se construye una página <code>index.html</code> con un menú; al hacer clic en cada enlace, una función de AJAX carga el contenido de otro archivo dentro de un <code>&lt;div&gt;</code>, sin volver a cargar el menú.</p>
+
+  <h3>index.html</h3>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Asíncrono Javascript y XML&lt;/title&gt;
+  &lt;script language="JavaScript" type="text/javascript" src="js/codigo.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="menu"&gt;
+    &lt;a href="javascript:llamadasin('ejemplos/ej1.html', 'contenido');"&gt;Ejemplo 1&lt;/a&gt;
+    &lt;a href="javascript:llamadasin('ejemplos/ej2.html', 'contenido');"&gt;Ejemplo 2&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div id="contenido"&gt;
+    &lt;p&gt;En este div se cargará asíncronamente el contenido del ejemplo&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+  <h3>codigo.js — la función genérica <code>llamadasin()</code></h3>
+  <pre><code>function llamadasin(url, contenedor){
+  var pagina_requerida = false;
+  // comprueba el tipo de navegador y crea el objeto
+  if (window.XMLHttpRequest) {
+    pagina_requerida = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    try {
+      pagina_requerida = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+      try {
+        pagina_requerida = new ActiveXObject("Microsoft.XMLHTTP");
+      } catch (e2) { /* navegador sin soporte */ }
+    }
+  }
+  // prepara la función que pinta la página
+  pagina_requerida.onreadystatechange = function(){
+    pintapagina(pagina_requerida, contenedor);
+  };
+  // métodos open y send
+  pagina_requerida.open('GET', url, true);
+  pagina_requerida.send(null);
+}
+
+// función que presenta la información en el contenedor
+function pintapagina(pagina_requerida, contenedor){
+  if (pagina_requerida.readyState == 4 &amp;&amp;
+      (pagina_requerida.status == 200 || window.location.href.indexOf("http") == -1)) {
+    document.getElementById(contenedor).innerHTML = pagina_requerida.responseText;
+  }
+}</code></pre>
+
+  <div class="tip"><strong>Leer el ejemplo:</strong> observá cómo la función <code>llamadasin(url, contenedor)</code> es <em>adaptativa</em>: recibe tanto el archivo a pedir como el <code>div</code> donde se vuelca el resultado, así sirve para muchos enlaces sin duplicar código.</div>
+
+  <div class="pager">
+    <a href="ajax02-xmlhttprequest.html">← AJAX 2 · XMLHttpRequest</a>
+    <a class="next" href="ajax04-formularios.html">Siguiente: AJAX 4 · Formularios →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · AJAX 3 · Guía de Tecnologías Web</footer>
+</body>
+</html>

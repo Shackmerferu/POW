@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 7 · Tablas, tarjetas, listas · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html" selected>7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Tablas, tarjetas, listas</p>
+  <h1>Tablas, tarjetas, listas, progreso y spinners</h1>
+
+  <h2>Tablas: la clase table</h2>
+  <p>La clase base es <code>table</code> sobre el <code>&lt;table&gt;</code>. Después se le suman variantes.</p>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>table</code></td><td>Base: bordes, espaciado y tipografía de tabla.</td></tr>
+    <tr><td><code>table-striped</code></td><td>Cebra: filas alternadas con fondo gris.</td></tr>
+    <tr><td><code>table-hover</code></td><td>Resalta la fila al pasar el mouse.</td></tr>
+    <tr><td><code>table-bordered</code></td><td>Bordes en todas las celdas (por defecto los bordes son solo entre filas).</td></tr>
+    <tr><td><code>table-borderless</code></td><td>Sin bordes.</td></tr>
+    <tr><td><code>table-sm</code></td><td>Compacta: menos relleno en las celdas.</td></tr>
+    <tr><td><code>table-dark</code></td><td>Tabla en modo oscuro.</td></tr>
+    <tr><td><code>table-primary</code>…<code>table-dark</code></td><td>Colorea filas/columnas/celdas con un color de tema (se combina con <code>table-striped</code>).</td></tr>
+    <tr><td><code>table-active</code></td><td>Resalta una fila o celda con el gris de hover.</td></tr>
+    <tr><td><code>align-middle</code> / <code>align-top</code> / <code>align-bottom</code></td><td>Alineación vertical de celdas.</td></tr>
+    <tr><td><code>caption-top</code></td><td>Pone el <code>&lt;caption&gt;</code> arriba de la tabla.</td></tr>
+  </table>
+  <pre><code>&lt;table class="table table-striped table-hover"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;th&gt;Precio&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Libro&lt;/td&gt;&lt;td&gt;$ 25&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr class="table-success"&gt;&lt;td&gt;Curso&lt;/td&gt;&lt;td&gt;$ 99&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+  <div class="alert"><strong>Tabla responsiva:</strong> el scroll horizontal se logra envolviendo la tabla en un div <code>table-responsive</code> (o <code>table-responsive-md</code> para que recién sea responsiva desde md). La clase va en el contenedor, no en la tabla.</div>
+
+  <h2>Tarjetas: el contenedor de contenido</h2>
+  <pre><code>&lt;div class="card" style="max-width:320px"&gt;
+  &lt;img src="algo.png" class="card-img-top" alt="…"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Título de la tarjeta&lt;/h5&gt;
+    &lt;h6 class="card-subtitle mb-2 text-muted"&gt;Subtítulo&lt;/h6&gt;
+    &lt;p class="card-text"&gt;Descripción.&lt;/p&gt;
+    &lt;a class="btn btn-primary card-link" href="#"&gt;Ver&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>card</code></td><td>La base: caja con borde, radio y sombra leve.</td></tr>
+    <tr><td><code>card-body</code></td><td>Rellena el contenido con padding.</td></tr>
+    <tr><td><code>card-header</code> / <code>card-footer</code></td><td>Banda de arriba / abajo, con fondo gris.</td></tr>
+    <tr><td><code>card-title</code> / <code>card-subtitle</code></td><td>Título y subtítulo estilizados.</td></tr>
+    <tr><td><code>card-text</code></td><td>Párrafo del cuerpo (deja espacio al final).</td></tr>
+    <tr><td><code>card-link</code></td><td>Enlaces en fila, apilados a la izquierda.</td></tr>
+    <tr><td><code>card-img-top</code> / <code>card-img-bottom</code></td><td>Imagen pegada al borde superior / inferior.</td></tr>
+    <tr><td><code>card-img-overlay</code></td><td>Contenido dibujado <strong>encima</strong> de la imagen.</td></tr>
+    <tr><td><code>card-group</code></td><td>Varias tarjetas de la misma altura, pegadas.</td></tr>
+    <tr><td><code>h-100</code></td><td>Con <code>row-cols-*</code> y <code>g-*</code> arma grillas de tarjetas iguales.</td></tr>
+  </table>
+  <div class="tip">Tarjetas dentro de la grilla: <code>&lt;div class="row row-cols-1 row-cols-md-3 g-3"&gt;</code> y cada tarjeta dentro de su <code>&lt;div&gt;</code> con <code>h-100</code>. Se reparten solas.</div>
+
+  <h2>Listas: list-group</h2>
+  <pre><code>&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item active"&gt;Activo&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Item común&lt;/li&gt;
+  &lt;li class="list-group-item list-group-item-danger"&gt;Item destacado en rojo&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>list-group</code> + <code>list-group-item</code></td><td>Lista con borde estilo tarjeta.</td></tr>
+    <tr><td><code>active</code> / <code>disabled</code></td><td>Item marcado / deshabilitado.</td></tr>
+    <tr><td><code>list-group-item-action</code></td><td>Item clickeable (hover y foco).</td></tr>
+    <tr><td><code>list-group-item-{color}</code></td><td>Color de cada item (los 8 de tema).</td></tr>
+    <tr><td><code>list-group-flush</code></td><td>Sin bordes laterales (para meter dentro de cards).</td></tr>
+    <tr><td><code>list-group-horizontal</code> / <code>-horizontal-md</code></td><td>Items en fila.</td></tr>
+    <tr><td><code>list-group-numbered</code></td><td>Con numeración automática.</td></tr>
+  </table>
+
+  <h2>Barras de progreso y spinners</h2>
+  <pre><code>&lt;div class="progress"&gt;
+  &lt;div class="progress-bar bg-success" style="width:65%"&gt;65%&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="progress"&gt;
+  &lt;div class="progress-bar progress-bar-striped progress-bar-animated" style="width:40%"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="spinner-border text-primary" role="status"&gt;&lt;/div&gt;
+&lt;div class="spinner-grow text-danger" role="status"&gt;&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>progress</code></td><td>Riél gris de fondo.</td></tr>
+    <tr><td><code>progress-bar</code></td><td>Barra de relleno; el ancho se pone con <code>style="width:65%"</code>.</td></tr>
+    <tr><td><code>progress-bar-striped</code></td><td>Efecto rayado.</td></tr>
+    <tr><td><code>progress-bar-animated</code></td><td>Animación que corre las rayas.</td></tr>
+    <tr><td><code>progress-bar bg-*</code></td><td>Color de la barra (con <code>text-bg-*</code> queda contrastado).</td></tr>
+    <tr><td><code>spinner-border</code></td><td>Círculo girando (loading clásico).</td></tr>
+    <tr><td><code>spinner-grow</code></td><td>Círculo que pulsa creciendo.</td></tr>
+    <tr><td><code>spinner-border-sm</code> / <code>spinner-grow-sm</code></td><td>Versiones chicas (para meter dentro de botones).</td></tr>
+    <tr><td><code>text-*</code></td><td>Colorea el spinner.</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="bs06-componentes.html">← Bootstrap 6 · Botones, alertas y más</a>
+    <a class="next" href="bs08-formularios.html">Siguiente: Bootstrap 8 · Formularios →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 7 · Guía de Tecnologías Web</footer>
+</body>
+</html>

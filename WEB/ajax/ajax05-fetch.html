@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX 5 · Fetch API · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax01-introduccion.html">1 · Introducción</option>
+        <option value="ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="ajax04-formularios.html">4 · Formularios</option>
+        <option value="ajax05-fetch.html" selected>5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / AJAX / Fetch API</p>
+  <h1>Fetch API — el método moderno</h1>
+  <p>Fuente: <code>ajax_II.pdf</code></p>
+
+  <h2>¿Qué es <code>fetch()</code>?</h2>
+  <div class="card">
+    <p>Actualmente las llamadas asíncronas en JavaScript se hacen con el <strong>método moderno basado en promesas</strong>: la API <strong>Fetch</strong>, que permite descargar (obtener) datos de un servidor web.</p>
+    <ul>
+      <li><code>await fetch()</code> es la <strong>API moderna</strong> para obtener datos de un servidor HTTP.</li>
+      <li><code>XMLHttpRequest()</code> era la <strong>API heredada (antigua)</strong>; hoy se usa solo cuando hace falta un control estricto en la carga de información o muchas conexiones síncronas a la vez.</li>
+      <li>Fetch es <strong>más sencillo</strong> que XMLHttpRequest.</li>
+    </ul>
+  </div>
+
+  <h2>Cómo funciona</h2>
+  <ul>
+    <li>Se puede usar para cargar archivos de texto, datos <strong>JSON</strong>, imágenes y muchos otros recursos.</li>
+    <li>La descarga es <strong>asíncrona</strong>: JavaScript sigue ejecutándose mientras espera la respuesta del servidor.</li>
+    <li><code>fetch(archivo)</code> <strong>devuelve una promesa</strong> que se resuelve en un objeto <strong>Response</strong>.</li>
+  </ul>
+
+  <h2>Forma 1: con promesas (<code>.then()</code>)</h2>
+  <pre><code>// Versión larga
+fetch(file)
+  .then(function(response) {
+    return response.text();
+  })
+  .then(function(data) {
+    myDisplayer(data);
+  });
+
+// Versión con flechas (arrow functions)
+fetch(file)
+  .then(response =&gt; response.text())
+  .then(data =&gt; myDisplayer(data));</code></pre>
+
+  <h2>Forma 2: con función asincrónica (<code>async</code>/<code>await</code>)</h2>
+  <pre><code>async function loadText(file) {
+  const response = await fetch(file);
+  myDisplayer(await response.text());
+}
+// llamado a la función
+loadText("fetch.txt");</code></pre>
+
+  <h2>Propiedades/estado de la respuesta</h2>
+  <pre><code>async function loadText(file) {
+  const response = await fetch(file);
+  myDisplayer(response.ok);   // true si la respuesta fue correcta (status 200-299)
+}</code></pre>
+
+  <h2>Trabajar con datos JSON</h2>
+  <pre><code>async function loadCustomer() {
+  const response = await fetch("customer.json");
+  const customer = await response.json();
+  myDisplayer(customer.name);
+}
+loadCustomer();</code></pre>
+
+  <h2>¿Qué devuelve cada cosa?</h2>
+  <table>
+    <tr><th>Código</th><th>Qué hace</th></tr>
+    <tr><td><code>fetch(archivo)</code></td><td>Inicia la descarga y devuelve una <strong>promesa</strong>.</td></tr>
+    <tr><td><code>response.text()</code></td><td>Devuelve el contenido como <strong>texto</strong>.</td></tr>
+    <tr><td><code>response.json()</code></td><td>Convierte la respuesta en <strong>objeto JavaScript</strong> (JSON).</td></tr>
+    <tr><td><code>response.ok</code></td><td>Booleano que indica si la respuesta fue exitosa.</td></tr>
+    <tr><td><code>await</code></td><td>Detiene la ejecución de la función hasta que la promesa se resuelve (solo dentro de una función <code>async</code>).</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="ajax04-formularios.html">← AJAX 4 · Formularios</a>
+    <a class="next" href="../jquery/jq01-introduccion.html">Siguiente: jQuery 1 · Librerías y Prototype →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · AJAX 5 · Guía de Tecnologías Web</footer>
+</body>
+</html>

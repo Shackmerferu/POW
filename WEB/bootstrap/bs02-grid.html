@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 2 · Sistema de grilla · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+<option value="bs02-grid.html" selected>2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Sistema de grilla</p>
+  <h1>El sistema de grilla: layout con clases, no con CSS</h1>
+
+  <h2>¿Qué reemplaza?</h2>
+  <div class="card">
+    <p>En CSS normal, para poner dos columnas al lado escribís <code>display:flex</code> o <code>float</code>, <code>width</code>, <code>gap</code> y después ajustás los <strong>media queries</strong> para el celular. Bootstrap hace todo eso con <strong>tres clases</strong>: <code>container</code>, <code>row</code> y <code>col</code>.</p>
+    <div class="tip">El layout responsivo deja de ser código CSS propio y pasa a ser <strong>clases en el HTML</strong>. Tu hoja de estilos queda solo para el diseño (colores, tipografías, tarjetas), no para la estructura.</div>
+  </div>
+
+  <h2>La estructura básica</h2>
+  <pre><code>&lt;div class="container"&gt;          &lt;!-- centra y limita el ancho --&gt;
+  &lt;div class="row"&gt;               &lt;!-- fila: agrupa columnas --&gt;
+    &lt;div class="col"&gt;Izquierda&lt;/div&gt;
+    &lt;div class="col"&gt;Derecha&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <p>Las <code>col</code> se reparten el ancho de la fila <strong>equitativamente</strong> y, al achicar la pantalla, se apilan una debajo de otra.</p>
+
+  <h2>Controlar el ancho de cada columna</h2>
+  <p>La fila se divide en <strong>12 columnas</strong>. Con <code>col-N</code> elegís cuántas ocupa cada bloque.</p>
+  <pre><code>&lt;div class="row"&gt;
+  &lt;div class="col-sm-8"&gt;Contenido principal (8/12)&lt;/div&gt;
+  &lt;div class="col-sm-4"&gt;Barra lateral (4/12)&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué define</th><th>Ejemplo</th></tr>
+    <tr><td><code>col</code></td><td>Igual ancho automático.</td><td>Dos <code>col</code> = 50% y 50%.</td></tr>
+    <tr><td><code>col-6</code></td><td>Ancho fijo de 6 de 12 (mitad), siempre.</td><td>Usado en pantallas grandes.</td></tr>
+    <tr><td><code>col-md-6</code></td><td>6 de 12 en pantallas <strong>medianas o más</strong>.</td><td>En celular se apila solo.</td></tr>
+    <tr><td><code>col-sm-4</code></td><td>4 de 12 en pantallas <strong>pequeñas o más</strong>.</td><td>Layout de sidebar clásico.</td></tr>
+  </table>
+
+  <h2>Los breakpoints (puntos de corte)</h2>
+  <p>Son los umbrales de ancho de pantalla donde cambia el comportamiento. En tu CSS normal los escribirías como <code>@media (min-width: ...)</code>; acá van dentro del nombre de la clase.</p>
+  <table>
+    <tr><th>Sufijo</th><th>Pantalla</th><th>Ancho mínimo</th></tr>
+    <tr><td><code>-sm</code></td><td>Phone grande / tablet chica</td><td>576px</td></tr>
+    <tr><td><code>-md</code></td><td>Tablet</td><td>768px</td></tr>
+    <tr><td><code>-lg</code></td><td>Notebook</td><td>992px</td></tr>
+    <tr><td><code>-xl</code></td><td>Desktop</td><td>1200px</td></tr>
+  </table>
+  <div class="alert">El sufijo significa "a partir de este ancho y mayores". Sin sufijo (<code>col-6</code>) vale siempre; con sufijo (<code>col-md-6</code>) recién en <code>md</code> o más, y abajo de eso la columna ocupa todo el ancho.</div>
+
+  <h2>Comparando: CSS normal vs Bootstrap</h2>
+  <pre><code>/* CSS normal */                     /* Con Bootstrap */
+.row2{display:flex;gap:12px}         &lt;div class="row"&gt;…&lt;/div&gt;
+.row2 &gt; div{flex:1}
+@media(max-width:768px){             &lt;div class="col-md-6"&gt;…&lt;/div&gt;
+  .row2{flex-direction:column}
+}</code></pre>
+  <p>El resultado visual es el mismo, pero con Bootstrap <strong>no escribís nada en la hoja de estilos</strong>: los media queries y el flex los aporta el framework.</p>
+
+  <div class="pager">
+    <a href="bs01-incluir.html">← Bootstrap 1 · Incluir Bootstrap</a>
+    <a class="next" href="bs03-clases.html">Siguiente: Bootstrap 3 · Clases sobre tu CSS →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 2 · Guía de Tecnologías Web</footer>
+</body>
+</html>

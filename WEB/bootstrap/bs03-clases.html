@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 3 · Clases sobre tu CSS · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+<option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html" selected>3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Clases sobre tu CSS</p>
+  <h1>Clases de Bootstrap conviviendo con tu hoja de estilos</h1>
+
+  <h2>Bootstrap no es un reemplazo, es un complemento</h2>
+  <div class="card">
+    <p>Bootstrap aporta <strong>utilidades</strong> y <strong>componentes</strong> en forma de clases. Tu <code>styles.css</code> sigue haciendo lo de siempre: definir la identidad visual. Las dos cosas se mezclan en el mismo <code>class=""</code>.</p>
+    <pre><code>&lt;button class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+&lt;div class="card p-3 mt-2"&gt;Tarjeta de Bootstrap con tu tipografía&lt;/div&gt;</code></pre>
+    <div class="tip">En el mismo elemento podés poner una clase de Bootstrap (<code>card</code>) y una clase tuya (<code>tarjeta-destacada</code>): se aplican las dos.</div>
+  </div>
+
+  <h2>Utilidades: espaciados y alineación sin escribir CSS</h2>
+  <p>Los rellenos y márgenes que en CSS escribís como <code>padding: 16px</code> o <code>margin-top</code>, acá son clases con una fórmula: <code>&lt;propiedad&gt;&lt;lado&gt;-&lt;medida&gt;</code>.</p>
+  <table>
+    <tr><th>Clase</th><th>Equivale en CSS a</th></tr>
+    <tr><td><code>p-3</code></td><td><code>padding: 1rem</code> (los cuatro lados)</td></tr>
+    <tr><td><code>pt-2</code></td><td><code>padding-top: .5rem</code></td></tr>
+    <tr><td><code>mx-auto</code></td><td><code>margin: 0 auto</code> (centra horizontal)</td></tr>
+    <tr><td><code>mt-4</code></td><td><code>margin-top: 1.5rem</code></td></tr>
+    <tr><td><code>text-center</code></td><td><code>text-align: center</code></td></tr>
+    <tr><td><code>d-flex</code></td><td><code>display: flex</code></td></tr>
+  </table>
+  <p>Medidas disponibles: <code>0</code> (nada), <code>1</code> (.25rem), <code>2</code> (.5rem), <code>3</code> (1rem), <code>4</code> (1.5rem), <code>5</code> (3rem). Con los sufijos de breakpoint se vuelven responsive: <code>mt-md-4</code> aplica el margen recién en pantallas <code>md</code>.</p>
+
+  <h2>Componentes: plantillas con clases</h2>
+  <p>Bootstrap trae piezas completas: botones, alertas, tarjetas, menús (<code>navbar</code>), tablas, formularios… Se usan escribiendo el HTML con las clases indicadas.</p>
+  <pre><code>&lt;div class="alert alert-warning"&gt;Cuidado con este dato&lt;/div&gt;
+
+&lt;div class="card" style="max-width:300px"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Título&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Texto de la tarjeta.&lt;/p&gt;
+    &lt;a class="btn btn-outline-primary" href="#"&gt;Ver más&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <p>Esos estilos ya vienen escritos en <code>bootstrap.min.css</code>, como si fueran clases de tu propia hoja.</p>
+
+  <h2>Cómo sobrescribir un componente con tu CSS</h2>
+  <ol>
+    <li>Tus estilos van <strong>después</strong> del de Bootstrap en el <code>&lt;head&gt;</code> (mayor prioridad).</li>
+    <li>Usá una clase propia con <strong>igual o mayor especificidad</strong> que la de Bootstrap.</li>
+  </ol>
+  <pre><code>&lt;!-- Sobre una .btn de Bootstrap, tu .boton-redondo gana si va después --&gt;
+.boton-redondo{ border-radius: 50rem; }</code></pre>
+  <pre><code>&lt;button class="btn btn-primary boton-redondo"&gt;Guardar&lt;/button&gt;</code></pre>
+  <div class="alert">Si Bootstrap cambia algo que no querés, la forma limpia es <strong>una clase propia encima</strong>, no editar el archivo del framework (se pierde al actualizar).</div>
+
+  <h2>Resumen: la receta de uso</h2>
+  <ol>
+    <li><strong>Agregá</strong> <code>bootstrap.min.css</code> en el <code>&lt;head&gt;</code>, antes de tu <code>styles.css</code>.</li>
+    <li><strong>Aplicá</strong> clases de Bootstrap (grid, utilidades, componentes) en el HTML.</li>
+    <li><strong>Decorá</strong> con tu <code>styles.css</code>: colores, fuentes y detalles propios.</li>
+    <li><strong>Sobrescribí</strong> cuando haga falta con clases propias de igual especificidad.</li>
+  </ol>
+
+  <div class="pager">
+<a href="bs02-grid.html">← Bootstrap 2 · Sistema de grilla</a>
+    <a class="next" href="bs04-tipografia-colores.html">Siguiente: Bootstrap 4 · Tipografía y colores →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 3 · Guía de Tecnologías Web</footer>
+</body>
+</html>

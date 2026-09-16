@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX 1 · Introducción · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax01-introduccion.html" selected>1 · Introducción</option>
+        <option value="ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="ajax04-formularios.html">4 · Formularios</option>
+        <option value="ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / AJAX / Introducción</p>
+  <h1>Introducción a AJAX</h1>
+  <p>Fuente: <code>ajax_II.pdf</code></p>
+
+  <h2>¿Qué es AJAX?</h2>
+  <div class="card">
+    <p>AJAX es el acrónimo de <strong>Asynchronous JavaScript + XML</strong> ("JavaScript asíncrono + XML").</p>
+    <p><strong>AJAX no es una tecnología en sí mismo</strong> (no es un lenguaje de programación). Es una <em>técnica de desarrollo web</em> que une varias tecnologías independientes para crear <strong>aplicaciones interactivas (RIA — Rich Internet Applications)</strong>.</p>
+    <p>Estas aplicaciones se ejecutan en el <strong>cliente</strong> (el navegador del usuario) mientras se mantiene la comunicación <strong>asíncrona</strong> con el servidor en segundo plano. Así es posible cambiar el contenido de las páginas <strong>sin recargarlas</strong>, mejorando interactividad, velocidad y usabilidad.</p>
+  </div>
+
+  <h2>¿Qué tecnologías une AJAX?</h2>
+  <table>
+    <tr><th>Tecnología</th><th>Para qué se usa</th></tr>
+    <tr><td>XHTML y CSS</td><td>Crear una presentación basada en estándares.</td></tr>
+    <tr><td>DOM</td><td>Interacción y manipulación dinámica de la presentación.</td></tr>
+    <tr><td>XML, XSLT y JSON</td><td>Intercambio y manipulación de información (también texto plano).</td></tr>
+    <tr><td>XMLHttpRequest</td><td>Intercambio <strong>asíncrono</strong> de información con el servidor.</td></tr>
+    <tr><td>JavaScript</td><td>Une todas las demás tecnologías (ASP, PHP, etc.).</td></tr>
+  </table>
+
+  <h2>Cómo trabaja AJAX</h2>
+  <div class="card">
+    <ol>
+      <li>Ocurre un evento (click en un botón, selección, etc.).</li>
+      <li>Se crea el objeto AJAX (<code>XMLHttpRequest</code>).</li>
+      <li>Se envía una <strong>HttpRequest</strong> al servidor.</li>
+      <li>El servidor procesa la petición.</li>
+      <li>El servidor crea la respuesta y la envía <strong>en segundo plano</strong> al navegador.</li>
+      <li>JavaScript procesa lo recibido.</li>
+      <li>Se actualiza el contenido de la página.</li>
+    </ol>
+  </div>
+
+  <h2>Modelo tradicional vs Modelo AJAX</h2>
+  <table>
+    <tr><th>Modelo tradicional</th><th>Modelo AJAX</th></tr>
+    <tr>
+      <td>
+        <ul>
+          <li>Las acciones del usuario (click, cambiar un valor) disparan llamadas al servidor.</li>
+          <li>El servidor devuelve una <strong>nueva página HTML completa</strong>.</li>
+          <li>El usuario debe <strong>esperar a que se recargue</strong> la página con cada cambio.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Se crea una <strong>capa intermedia</strong> entre el usuario y el servidor.</li>
+          <li>El intercambio de datos con el servidor ocurre <strong>en segundo plano</strong>, sin cortar la interacción.</li>
+          <li>El usuario nunca ve una ventana vacía esperando la respuesta.</li>
+          <li>Las peticiones HTTP directas se sustituyen por peticiones JavaScript al elemento encargado de AJAX.</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <h2>Origen: el objeto XMLHttpRequest</h2>
+  <p>La historia de AJAX está ligada al objeto <code>XMLHttpRequest</code>, nacido alrededor del año 2000 con productos como <strong>Exchange 2000, Internet Explorer 5 y Outlook Web Access (OWA)</strong>. De la necesidad de no recargar formularios constantemente surgió la primera versión de lo que se llamó <em>XMLHTTP</em>.</p>
+
+  <h2>Consideraciones importantes</h2>
+  <ul>
+    <li><strong>Historial:</strong> las páginas creadas dinámicamente con AJAX no quedan registradas en el historial del navegador (el botón "Volver" no vuelve al estado anterior).</li>
+    <li><strong>SEO:</strong> los buscadores no siempre indexan contenido generado por JavaScript (Google indexa desde 2011, pero puede tardar).</li>
+    <li><strong>Dominios:</strong> la <strong>Same Origin Policy</strong> impide acceder entre dominios distintos; se soluciona con <strong>CORS</strong> (Cross-Origin Resource Sharing).</li>
+    <li><strong>Carga del servidor:</strong> AJAX puede aliviar la renderización del HTML dejándola en el cliente, pero muchas llamadas simultáneas pueden sobrecargar el servidor.</li>
+    <li><strong>Compatibilidad:</strong> puede no funcionar en móviles viejos, PDA o algunos lectores de pantalla (accesibilidad).</li>
+  </ul>
+
+  <div class="pager">
+    <a href="../js/js09-dom.html">← JavaScript 9 · DOM</a>
+    <a class="next" href="ajax02-xmlhttprequest.html">Siguiente: AJAX 2 · XMLHttpRequest →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · AJAX 1 · Guía de Tecnologías Web</footer>
+</body>
+</html>

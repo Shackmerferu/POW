@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 6 · Objetos · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html" selected>6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Objetos</p>
+  <h1>Objetos</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué es un objeto?</h2>
+  <div class="card">
+    <ul>
+      <li>Los objetos son <strong>variables que pueden almacenar valores y funciones</strong> (métodos).</li>
+      <li>Son uno de los conceptos más importantes de JavaScript.</li>
+      <li>Los objetos son <strong>colecciones de propiedades</strong>; las propiedades pueden modificarse, añadirse y eliminarse.</li>
+      <li>Existen objetos <strong>preconstruidos</strong> con funciones predefinidas (fecha/hora, matemáticas, etc.).</li>
+    </ul>
+  </div>
+
+  <h2>Crear un objeto personalizado con <code>new Object</code></h2>
+  <pre><code>&lt;SCRIPT&gt;
+var remera = new Object;
+remera.color = "roja";
+remera.size = 8;
+remera.type = "algodon";
+document.write(remera.color + "&lt;BR&gt;");
+document.write(remera.size + "&lt;BR&gt;");
+document.write(remera.type + "&lt;BR&gt;");
+&lt;/SCRIPT&gt;</code></pre>
+
+  <h2>Formas de declarar un objeto</h2>
+  <h3>Con literal de objeto</h3>
+  <pre><code>const car = { type: "Fiat", model: "500", color: "white" };
+// acceso: car.type, car.model, car.color</code></pre>
+
+  <h3>Declarar vacío y agregar propiedades después</h3>
+  <pre><code>const person = {};
+person.firstName = "John";
+person.lastName = "Doe";
+person.age = 50;
+person.eyeColor = "blue";</code></pre>
+
+  <h3>Con <code>new Object({...})</code></h3>
+  <pre><code>const person = new Object({
+  firstName: "John", lastName: "Doe", age: 50, eyeColor: "blue"
+});</code></pre>
+
+  <h2>Métodos dentro de un objeto</h2>
+  <p>Un método es una función guardada como propiedad. Dentro del método, <strong><code>this</code></strong> hace referencia al propio objeto.</p>
+  <pre><code>const person = {
+  firstName: "John",
+  lastName: "Doe",
+  id: 5566,
+  fullName: function() {
+    return this.firstName + " " + this.lastName;
+  },
+  getId: function() {
+    return this.id;
+  }
+};
+let number = person.getId();</code></pre>
+
+  <h2>Agregar un método después de creado el objeto</h2>
+  <pre><code>person.name = function () {
+  return (this.firstName + " " + this.lastName).toUpperCase();
+};</code></pre>
+
+  <h2>Objetos preconstruidos</h2>
+  <h3>Fecha/hora: <code>new Date()</code></h3>
+  <pre><code>&lt;SCRIPT&gt;
+var miDia = new Date();
+document.write(miDia + "&lt;BR&gt;");
+var x = miDia.toGMTString();
+document.write(x + "&lt;BR&gt;");
+&lt;/SCRIPT&gt;</code></pre>
+
+  <h3>Matemáticas: objeto <code>Math</code></h3>
+  <p>Constantes: <code>E</code>, <code>LN10</code>, <code>LN2</code>, <code>LOG10E</code>, <code>LOG2E</code>, <code>PI</code>, <code>SQRT1_2</code>, <code>SQRT2</code>.</p>
+  <p>Métodos: <code>abs()</code>, <code>acos()</code>, <code>atan()</code>, <code>atan2()</code>, <code>ceil()</code>, <code>cos()</code>, <code>exp()</code>, <code>floor()</code>, <code>log()</code>, <code>max()</code>, <code>min()</code>, <code>pow()</code>, <code>random()</code>, <code>round()</code>, <code>sin()</code>, <code>sqrt()</code>, <code>tan()</code>.</p>
+  <div class="tip"><strong>Útil:</strong> <code>Math.random()</code> devuelve un número aleatorio entre 0 y 1; <code>Math.max/min(a, b)</code> devuelven el mayor/menor entre dos valores.</div>
+
+  <div class="pager">
+    <a href="js05-arrays.html">← Arreglos</a>
+    <a class="next" href="js07-strings.html">Siguiente: Strings →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 6 · Guía de Tecnologías Web</footer>
+</body>
+</html>

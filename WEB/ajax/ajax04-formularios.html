@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX 4 · Formularios y validación · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax01-introduccion.html">1 · Introducción</option>
+        <option value="ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="ajax04-formularios.html" selected>4 · Formularios</option>
+        <option value="ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / AJAX / Formularios y validación</p>
+  <h1>AJAX con formularios y validación</h1>
+  <p>Fuente: <code>ajax_II.pdf</code></p>
+
+  <h2>¿Qué pasa con los formularios?</h2>
+  <div class="card">
+    <p>Tenemos que tomar <strong>cada campo del formulario</strong> (o las variables a evaluar) y <strong>concatenarlos</strong> de la forma <code>"variable=valor"</code> para poder enviarlos, sumando cada par con <code>&amp;</code>.</p>
+  </div>
+
+  <h3>Enviar los datos con el método POST</h3>
+  <pre><code>function cargarContenido() {
+  var t1, t2, contenedor;
+  contenedor = document.getElementById('contenedor');
+  t1 = document.getElementById('texto1').value;
+  t2 = document.getElementById('texto2').value;
+
+  var ajax = new XMLHttpRequest();
+  ajax.open("POST", "ejemploajax2.php", true);
+  ajax.onreadystatechange = function() {
+    if (ajax.readyState == 4) {
+      contenedor.innerHTML = ajax.responseText;
+    }
+  };
+  // Declara el tipo de contenido antes de enviar
+  ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  // Envía los datos concatenados variable=valor
+  ajax.send("t1=" + t1 + "&amp;t2=" + t2);
+}</code></pre>
+
+  <h3>Enviar variables con el método GET</h3>
+  <pre><code>// Los datos van en la URL: ?VARIABLE=VALOR
+ajax.open("GET", "ejemploajax2.php?VARIABLE=VALOR", true);
+// Se agregan más variables con &amp;variable=valor
+ajax.open("GET", "ejemploajax2.php?t1=hola&amp;t2=mundo", true);
+ajax.send();</code></pre>
+
+  <h2>Validación en vivo: chequear un nick sin enviar el formulario</h2>
+  <p>Se quiere comprobar la disponibilidad de un campo en una base de datos (ej. el <em>nickname</em> de un usuario) <strong>sin enviar el formulario</strong>. Se dispara con el evento <code>onkeyup</code>: cada vez que el usuario suelta una tecla se consulta al servidor.</p>
+  <pre><code>function comprobar_nick(str) {
+  if (str.length == 0) {
+    document.getElementById("mensaje").innerHTML = "";
+    return;
+  } else {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 &amp;&amp; this.status == 200) {
+        document.getElementById("mensaje").innerHTML = this.responseText;
+      }
+    };
+    // consulta al PHP que valida en la base de datos
+    xmlhttp.open("GET", "ajax_comprobar_nick.php?nickname=" + str, true);
+    xmlhttp.send();
+  }
+}</code></pre>
+  <pre><code>&lt;p&gt;Complete Datos:&lt;/p&gt;
+&lt;form&gt;
+  Primer Nombre:
+  &lt;input type="text" onkeyup="comprobar_nick(this.value)"&gt;
+  &lt;span id="mensaje"&gt;&lt;/span&gt;
+&lt;/form&gt;</code></pre>
+
+  <h2>Frameworks de AJAX</h2>
+  <div class="card">
+    <p>Existen muchos frameworks JavaScript que ya contemplan la creación y el uso de AJAX:</p>
+    <ul>
+      <li><strong>XAJAX</strong>: librería/framework de AJAX para <strong>PHP</strong>.</li>
+      <li><strong>Prototype.js</strong>, <strong>jQuery</strong>, <strong>Angular.js</strong>: librerías de cliente con sus propios métodos de AJAX.</li>
+    </ul>
+    <p>Usar un framework <strong>no condiciona</strong> a implementar tú mismo los mecanismos de AJAX o a migrar de framework.</p>
+  </div>
+
+  <div class="pager">
+    <a href="ajax03-ejemplos.html">← AJAX 3 · Aplicaciones</a>
+    <a class="next" href="ajax05-fetch.html">Siguiente: AJAX 5 · Fetch API →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · AJAX 4 · Guía de Tecnologías Web</footer>
+</body>
+</html>

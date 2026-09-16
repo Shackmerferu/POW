@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 3 · Control de flujo · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html" selected>3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Control de flujo</p>
+  <h1>Control de flujo</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>Sentencias condicionales</h2>
+  <h3>1. <code>if … else</code></h3>
+  <pre><code>if (condición a evaluar) {
+  // Bloque que se ejecuta si la condición es verdadera
+} else {
+  // Bloque que se ejecuta si la condición es falsa
+}</code></pre>
+
+  <h3>2. <code>if … else if … else</code></h3>
+  <p>Encadena varias condiciones hasta encontrar la verdadera.</p>
+  <pre><code>var color = "azul";
+if (color == "rojo") {
+  document.write("el color es rojo");
+  document.write("&lt;HR&gt;");
+} else if (color == "azul") {
+  document.write("el color es azul");
+} else {
+  document.write("el color no es ni rojo ni azul");
+}</code></pre>
+
+  <h3>3. <code>switch</code></h3>
+  <p>Compara una expresión con varios casos. Es útil cuando hay muchas alternativas.</p>
+
+  <h3>4. Operador ternario <code>condición ? valorSiVerdadero : valorSiFalso</code></h3>
+  <p>Es un <code>if…else</code> compacto en una sola línea.</p>
+
+  <h2>Bucles</h2>
+  <h3><code>for</code></h3>
+  <p>Crea un bucle con tres expresiones opcionales separadas por <code>;</code> y seguidas de un bloque de sentencias.</p>
+  <pre><code>for (var i = 0; i &lt;= 1000; i = i + 100) {
+  document.write(i + "&lt;BR&gt;");
+}</code></pre>
+
+  <h3><code>for … in</code></h3>
+  <p>Itera sobre todas las propiedades (índices) de un objeto o arreglo.</p>
+  <pre><code>var x;
+var misautos = new Array();
+misautos[0] = "Ferrari";
+misautos[1] = "Volvo";
+misautos[2] = "BMW";
+for (x in misautos) {
+  document.write(misautos[x] + "&lt;br /&gt;");
+}</code></pre>
+
+  <h3><code>while</code></h3>
+  <p>Ejecuta el bloque <strong>mientras</strong> la condición sea verdadera.</p>
+  <pre><code>var i = 0;
+while (i &lt;= 1000) {
+  document.write(i + "&lt;BR&gt;");
+  i = i + 100;
+}</code></pre>
+
+  <h2>Palabras reservadas útiles en bucles</h2>
+  <table>
+    <tr><th>Palabra</th><th>Qué hace</th></tr>
+    <tr><td><code>break</code></td><td>Termina (corta) el bucle actual y transfiere el control a la siguiente sentencia fuera del bucle.</td></tr>
+    <tr><td><code>continue</code></td><td>Termina la iteración actual y continúa el bucle con la próxima iteración.</td></tr>
+    <tr><td><code>comment</code></td><td>Anotaciones del autor para explicar el script (ignoradas por el intérprete).</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="js02-bases.html">← Bases y operadores</a>
+    <a class="next" href="js04-funciones.html">Siguiente: Funciones →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 3 · Guía de Tecnologías Web</footer>
+</body>
+</html>

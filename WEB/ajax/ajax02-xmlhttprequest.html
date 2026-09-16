@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX 2 · XMLHttpRequest · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax01-introduccion.html">1 · Introducción</option>
+        <option value="ajax02-xmlhttprequest.html" selected>2 · XMLHttpRequest</option>
+        <option value="ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="ajax04-formularios.html">4 · Formularios</option>
+        <option value="ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / AJAX / XMLHttpRequest</p>
+  <h1>El objeto XMLHttpRequest</h1>
+  <p>Fuente: <code>ajax_II.pdf</code></p>
+
+  <h2>¿Qué es?</h2>
+  <div class="card">
+    <p>Es el <strong>objeto clave</strong> de AJAX: permite realizar comunicaciones con el servidor <strong>en segundo plano</strong>, sin recargar la página. Su implementación depende de cada navegador.</p>
+  </div>
+
+  <h2>Crear el objeto (compatibilidad)</h2>
+  <pre><code>if (window.XMLHttpRequest) {
+  peticion_http = new XMLHttpRequest();          // navegadores que siguen estándares
+} else if (window.ActiveXObject) {
+  peticion_http = new ActiveXObject("Microsoft.XMLHTTP");  // navegadores obsoletos (IE viejos)
+}</code></pre>
+
+  <h2>Propiedades del objeto</h2>
+  <table>
+    <tr><th>Propiedad</th><th>Descripción</th></tr>
+    <tr><td><code>readyState</code></td><td>Valor entero que almacena el estado de la petición (0 a 4).</td></tr>
+    <tr><td><code>responseText</code></td><td>Contenido de la respuesta del servidor en forma de <strong>cadena de texto</strong>.</td></tr>
+    <tr><td><code>responseXML</code></td><td>Contenido de la respuesta en <strong>formato XML</strong>; se procesa como objeto DOM.</td></tr>
+    <tr><td><code>status</code></td><td>Código de estado HTTP: <code>200</code> correcto, <code>404</code> "No encontrado", <code>500</code> error de servidor, etc.</td></tr>
+    <tr><td><code>statusText</code></td><td>Estado HTTP como texto: "OK", "Not Found", "Internal Server Error", etc.</td></tr>
+  </table>
+
+  <h2>Valores de <code>readyState</code></h2>
+  <table>
+    <tr><th>Valor</th><th>Estado</th><th>Descripción</th></tr>
+    <tr><td>0</td><td>No inicializado</td><td>Objeto creado, pero no se invocó <code>open()</code>.</td></tr>
+    <tr><td>1</td><td>Cargando</td><td>Objeto creado, pero no se invocó <code>send()</code>.</td></tr>
+    <tr><td>2</td><td>Cargado</td><td>Se invocó <code>send()</code>, pero el servidor aún no respondió.</td></tr>
+    <tr><td>3</td><td>Interactivo</td><td>Se recibieron algunos datos (aún no se puede usar <code>responseText</code>).</td></tr>
+    <tr><td>4</td><td>Completo</td><td>Se recibieron <strong>todos</strong> los datos de la respuesta.</td></tr>
+  </table>
+
+  <h2>Procesar la respuesta: <code>onreadystatechange</code> vs <code>onload</code></h2>
+  <div class="card">
+    <ul>
+      <li><code>onreadystatechange</code>: propiedad que permite asignar la función que procesa la respuesta y <strong>conocer el estado</strong> de la llamada (revisar <code>readyState</code> y <code>status</code>).</li>
+      <li><code>onload</code>: solo contempla el estado <em>cargado</em>; no hay que revisar los estados intermedios.</li>
+    </ul>
+  </div>
+  <pre><code>peticion_http.onreadystatechange = muestraContenido;
+
+function muestraContenido() {
+  if (peticion_http.readyState == 4) {          // respuesta completa
+    if (peticion_http.status == 200) {          // respuesta correcta
+      alert(peticion_http.responseText);
+    }
+  }
+}
+
+// Con onload no hace falta preguntar los estados:
+function muestraContenido() {
+  alert(peticion_http.responseText);
+}</code></pre>
+
+  <h2>Realizar la petición: <code>open()</code> y <code>send()</code></h2>
+  <pre><code>peticion_http.open('GET', 'http://localhost/prueba.txt', true);
+peticion_http.send(null);</code></pre>
+  <table>
+    <tr><th>Método</th><th>Qué hace / parámetros</th></tr>
+    <tr><td><code>open(tipo, url, asíncrono)</code></td><td>Prepara la petición: <strong>tipo</strong> (GET/POST…), <strong>url</strong> solicitada y <strong>asíncrono</strong> (<code>true</code> = asíncrono, <code>false</code> = síncrono).</td></tr>
+    <tr><td><code>send(null)</code></td><td>Envía la petición. En GET simple va <code>null</code>; en POST lleva los datos.</td></tr>
+    <tr><td><code>setRequestHeader("Content-Type", "application/x-www-form-urlencoded")</code></td><td>Declara el tipo de contenido al enviar datos por POST.</td></tr>
+  </table>
+
+  <h2>GET vs POST</h2>
+  <table>
+    <tr><th>GET</th><th>POST</th></tr>
+    <tr><td>Es más simple y rápido; sirve en la mayoría de los casos.</td><td>Se usa cuando es necesario actualizar un archivo o una base de datos del lado del servidor.</td></tr>
+    <tr><td>Va con los datos en la URL: <code>?variable=valor</code>.</td><td>Envía grandes cantidades de datos (no tiene limitación de tamaño).</td></tr>
+    <tr><td>Los datos quedan visibles en la URL.</td><td>Más robusto y seguro para entrada del usuario (caracteres desconocidos).</td></tr>
+  </table>
+
+  <h2>Asíncrono: ¿<code>true</code> o <code>false</code>?</h2>
+  <div class="card">
+    <p><strong><code>true</code> (asíncrono):</strong> el código JavaScript <strong>no espera</strong> la respuesta del servidor y puede seguir ejecutando otros scripts mientras llega la respuesta. <span class="badge">Recomendado</span></p>
+    <p><strong><code>false</code> (síncrono):</strong> no se recomienda: si el servidor es lento, la ejecución del JavaScript se <strong>bloquea</strong> hasta que la respuesta esté lista (la función puede colgarse).</p>
+  </div>
+
+  <h2>Ejemplo completo: cargar archivo en un DIV</h2>
+  <pre><code>&lt;div id="demo"&gt;
+  &lt;h1&gt;AJAX cambiando el contenido de una página&lt;/h1&gt;
+  &lt;button type="button" onclick="cargar_documento()"&gt;Cargar archivo holamundo.txt&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function cargar_documento() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 &amp;&amp; this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "holamundo.txt", true);
+  xhttp.send();
+}
+&lt;/script&gt;</code></pre>
+
+  <div class="tip"><strong>Versión corta con <code>onload</code>:</strong></div>
+  <pre><code>function loadDoc() {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    document.getElementById("demo").innerHTML = this.responseText;
+  };
+  xhttp.open("GET", "holamundo.txt");
+  xhttp.send();
+}</code></pre>
+
+  <div class="pager">
+    <a href="ajax01-introduccion.html">← AJAX 1 · Introducción</a>
+    <a class="next" href="ajax03-ejemplos.html">Siguiente: AJAX 3 · Aplicaciones →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · AJAX 2 · Guía de Tecnologías Web</footer>
+</body>
+</html>

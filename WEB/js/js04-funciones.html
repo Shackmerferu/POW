@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 4 · Funciones · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html" selected>4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Funciones</p>
+  <h1>Funciones</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué son?</h2>
+  <div class="card">
+    <ul>
+      <li>Las funciones hacen "cualquier cosa", por ejemplo imprimir un mensaje de alerta.</li>
+      <li>Pueden <strong>tomar un dato</strong> (parámetros), <strong>manipularlo</strong> y <strong>retornar un valor</strong>.</li>
+      <li>Tras ser definidas quedan disponibles; se <strong>invocan</strong> a través de su nombre cuando se las necesita (por ejemplo, desde un evento).</li>
+    </ul>
+  </div>
+
+  <h2>Declaración y llamado</h2>
+  <pre><code>// Declaración
+function nombreFuncion() {
+  // Código de la función
+}
+
+// Llamado
+var x = nombreFuncion();</code></pre>
+
+  <h2>Ejemplo 1: función sin parámetros</h2>
+  <pre><code>&lt;SCRIPT&gt;
+function warning() {
+  document.write("&lt;DIV STYLE='color:red; text-align:center; font-size:32pt;'&gt;Warning!&lt;/DIV&gt;");
+  document.write("&lt;BR&gt;");
+  document.write("&lt;DIV STYLE='color:green; text-align:center; font-size:24pt;'&gt;Ud. ha sido avisado!&lt;/DIV&gt;");
+}
+var x = warning();
+&lt;/SCRIPT&gt;</code></pre>
+
+  <h2>Ejemplo 2: función con parámetros y retorno</h2>
+  <pre><code>&lt;SCRIPT&gt;
+function multiplicar(a, b) {
+  var producto = 0;
+  producto = a * b;
+  return producto;
+}
+var x = multiplicar(3, 5);
+document.write(x);   // muestra 15
+&lt;/SCRIPT&gt;</code></pre>
+
+  <h2>¿Qué hace cada parte?</h2>
+  <table>
+    <tr><th>Elemento</th><th>Qué significa</th></tr>
+    <tr><td><code>function multiplicar(a, b)</code></td><td>Declara la función llamada <code>multiplicar</code> que recibe dos parámetros: <code>a</code> y <code>b</code>.</td></tr>
+    <tr><td><code>var producto = 0;</code></td><td>Variable local que guarda el resultado de la operación.</td></tr>
+    <tr><td><code>return producto;</code></td><td>Entrega el valor calculado a quien llamó a la función.</td></tr>
+    <tr><td><code>var x = multiplicar(3, 5);</code></td><td>Invoca la función con los argumentos 3 y 5; el resultado queda guardado en <code>x</code>.</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="js03-control-flujo.html">← Control de flujo</a>
+    <a class="next" href="js05-arrays.html">Siguiente: Arreglos →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 4 · Guía de Tecnologías Web</footer>
+</body>
+</html>

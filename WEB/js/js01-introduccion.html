@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 1 · Introducción · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html" selected>1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Introducción</p>
+  <h1>Introducción a JavaScript</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué es JavaScript?</h2>
+  <div class="card">
+    <ul>
+      <li>Es un <strong>lenguaje compacto de "scripting"</strong> basado en objetos, pensado para desarrollar aplicaciones de Internet <strong>cliente–servidor</strong>.</li>
+      <li>Los scripts se <strong>embeben en un documento HTML</strong>: pueden colocarse tanto en la etiqueta <code>&lt;head&gt;</code> como dentro del <code>&lt;body&gt;</code>.</li>
+      <li>Puede <strong>reconocer y responder a eventos del usuario</strong> sin necesidad de conexión a la red, por ejemplo con validaciones de formularios.</li>
+    </ul>
+  </div>
+
+  <h2>Un poco de historia</h2>
+  <div class="card">
+    <p>Fue desarrollado originalmente por <strong>Brendan Eich</strong> para Netscape con el nombre <em>Mocha</em>, luego renombrado <em>LiveScript</em> y finalmente <strong>JavaScript</strong>.</p>
+    <p>Desde junio de 2015 se versiona cada año bajo el estándar <strong>ECMAScript</strong>. El estándar actual de referencia es ECMAScript 2026 (1 de junio de 2026).</p>
+  </div>
+
+  <h2>Características principales</h2>
+  <ul>
+    <li><strong>Interpretado:</strong> un intérprete incorporado en el navegador ejecuta el código, incluso código generado dinámicamente.</li>
+    <li><strong>Sintaxis similar a Java o C++</strong> que facilita la adaptación. <em>Diferencia:</em> el punto y coma (<code>;</code>) es opcional al final de cada sentencia.</li>
+    <li><strong>Basado en objetos</strong> pero sin clases propias: la herencia se logra a través de <em>prototipos</em>.</li>
+    <li>Usa una <strong>jerarquía de objetos encabezada por el navegador</strong> (el DOM).</li>
+    <li>Proporciona un conjunto de <strong>objetos predefinidos</strong> muy útiles.</li>
+    <li>Permite <strong>capturar y tratar eventos</strong> provocados por el usuario o por el navegador.</li>
+    <li>Es la base para incorporar otras tecnologías web como HTML dinámico, XML, y forma parte de <strong>AJAX</strong>.</li>
+  </ul>
+
+  <h2>Donde se ejecuta</h2>
+  <table>
+    <tr><th>Lado del cliente</th><th>Lado del servidor</th></tr>
+    <tr>
+      <td>
+        <ul>
+          <li>Se incluye en el documento HTML y se descarga con él.</li>
+          <li>Funciones y variables con el tag <code>&lt;script&gt;…&lt;/script&gt;</code>.</li>
+          <li>Es interpretado por la gran mayoría de los navegadores del mercado.</li>
+          <li>Accede a la ventana (<code>window</code>), a los formularios (<code>form</code>), a los enlaces (<code>links</code>)…</li>
+          <li>También puede crear <strong>HTML dinámico</strong>.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Inicialmente lo ejecutaba el servidor Netscape (LiveWire); hoy hay muchos más: <strong>Node.js</strong>, Jaxer, EJScript, RingoJS, AppengineJS.</li>
+          <li>Accede al estado del servidor (estado por usuario).</li>
+          <li>Maneja requerimientos HTTP concurrentes (chequeos de usuarios y dominios).</li>
+          <li>Accede a bases de datos invocando consultas SQL.</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <h2>Cómo se incluye en la página</h2>
+  <h3>1. Código embebido directamente</h3>
+  <pre><code>&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;SCRIPT language="JavaScript"&gt;
+      alert("Hola JavaScript");
+    &lt;/SCRIPT&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+    &lt;P&gt;Esto es un simple alerta JavaScript
+  &lt;/BODY&gt;
+&lt;/HTML&gt;</code></pre>
+
+  <h3>2. Código enlazado desde un archivo externo</h3>
+  <pre><code>&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;SCRIPT language="JavaScript" src="codigo.js"&gt;
+    &lt;/SCRIPT&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;</code></pre>
+
+  <div class="tip"><strong>Consejo:</strong> colocar los scripts en la parte inferior del <code>&lt;body&gt;</code> <b>mejora la velocidad de visualización</b>, porque la interpretación de los scripts relentiza la carga de la página.</div>
+
+  <h2>JavaScript vs Java</h2>
+  <table>
+    <tr><th>Java</th><th>JavaScript</th></tr>
+    <tr><td>Requiere compilación.</td><td>No requiere compilación: es interpretado por los navegadores.</td></tr>
+    <tr><td>Lenguaje pesado, potente y robusto, con gran control.</td><td>Ligero, ágil y poco robusto: no permite hacer de todo.</td></tr>
+    <tr><td>Orientación a objetos pura.</td><td>No es clasificable bajo un único paradigma.</td></tr>
+    <tr><td>Requiere un kit de desarrollo y máquina virtual Java.</td><td>Solo un navegador (para ver resultados) y un editor de texto.</td></tr>
+    <tr><td>Fuertemente tipado.</td><td>Débilmente tipado: las variables pueden cambiar de tipo en la ejecución.</td></tr>
+    <tr><td>Clases e instancias son entidades distintas; define clases con constructores.</td><td>Los objetos se definen con <em>funciones constructoras</em> y se crean con <code>new</code>.</td></tr>
+    <tr><td>Hereda propiedades por la cadena de clases; no agrega propiedades dinámicas.</td><td>Hereda por la cadena de <em>prototipos</em> y permite agregar/quitar propiedades en tiempo de ejecución.</td></tr>
+  </table>
+
+  <div class="pager">
+    <a href="../index.html">← Inicio</a>
+    <a class="next" href="js02-bases.html">Siguiente: Bases y operadores →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript I · Guía de Tecnologías Web</footer>
+</body>
+</html>

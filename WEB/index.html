@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Tecnologías Web · Índice</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js/js01-introduccion.html">1 · Introducción</option>
+        <option value="js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js/js04-funciones.html">4 · Funciones</option>
+        <option value="js/js05-arrays.html">5 · Arreglos</option>
+        <option value="js/js06-objetos.html">6 · Objetos</option>
+        <option value="js/js07-strings.html">7 · Strings</option>
+        <option value="js/js08-eventos.html">8 · Eventos</option>
+        <option value="js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <div class="hero">
+    <h1>Guía de Tecnologías Web</h1>
+    <p>Resumen de apuntes de <strong>Programación Orientada a la Web</strong> (Lic. G. Lafuente — Facultad de Ingeniería, UNLPam).
+    Cada tema incluye teoría, sintaxis, qué hace cada comando y ejemplos listos para leer sobre la marcha.</p>
+    <p>Elegí un tema desde el selector de arriba o navegá por las tarjetas de abajo.</p>
+  </div>
+
+  <section class="group">
+    <h2><span class="badge">JavaScript</span> El lenguaje</h2>
+    <div class="grid">
+      <a class="tile" href="js/js01-introduccion.html"><span class="num">Tema 1</span><span class="tt">Introducción a JavaScript</span><span class="ds">Qué es, historia, características, ejecución cliente/servidor, JS vs Java.</span></a>
+      <a class="tile" href="js/js02-bases.html"><span class="num">Tema 2</span><span class="tt">Bases y operadores</span><span class="ds">Salida, variables (var/let/const), tipos de datos y todos los operadores.</span></a>
+      <a class="tile" href="js/js03-control-flujo.html"><span class="num">Tema 3</span><span class="tt">Control de flujo</span><span class="ds">if/else, switch, ternario, for, for..in y while.</span></a>
+      <a class="tile" href="js/js04-funciones.html"><span class="num">Tema 4</span><span class="tt">Funciones</span><span class="ds">Declaración, parámetros, retorno y ejemplos.</span></a>
+      <a class="tile" href="js/js05-arrays.html"><span class="num">Tema 5</span><span class="tt">Arreglos (arrays)</span><span class="ds">Creación, longitud, índices y métodos (sort, push, pop, join…).</span></a>
+      <a class="tile" href="js/js06-objetos.html"><span class="num">Tema 6</span><span class="tt">Objetos</span><span class="ds">Objetos personalizados, métodos, objetos preconstruidos (Date, Math).</span></a>
+      <a class="tile" href="js/js07-strings.html"><span class="num">Tema 7</span><span class="tt">Strings</span><span class="ds">Métodos de cadenas y plantillas literales (template literals).</span></a>
+      <a class="tile" href="js/js08-eventos.html"><span class="num">Tema 8</span><span class="tt">Eventos</span><span class="ds">Modelo de eventos, gestores (onClick, onLoad…) y la palabra clave this.</span></a>
+      <a class="tile" href="js/js09-dom.html"><span class="num">Tema 9</span><span class="tt">DOM</span><span class="ds">Modelo de Objetos del Documento, el objeto window, selectores y manipulación de nodos.</span></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="badge">AJAX</span> Comunicación asíncrona</h2>
+    <div class="grid">
+      <a class="tile" href="ajax/ajax01-introduccion.html"><span class="num">Tema 1</span><span class="tt">Introducción a AJAX</span><span class="ds">Concepto, tecnologías, modelo tradicional vs AJAX, cómo trabaja, consideraciones.</span></a>
+      <a class="tile" href="ajax/ajax02-xmlhttprequest.html"><span class="num">Tema 2</span><span class="tt">El objeto XMLHttpRequest</span><span class="ds">Creación, propiedades (readyState, status), métodos, GET vs POST, síncrono vs asíncrono.</span></a>
+      <a class="tile" href="ajax/ajax03-ejemplos.html"><span class="num">Tema 3</span><span class="tt">Aplicaciones</span><span class="ds">La primera aplicación y un menú que carga contenido sin recargar la página.</span></a>
+      <a class="tile" href="ajax/ajax04-formularios.html"><span class="num">Tema 4</span><span class="tt">Formularios y validación</span><span class="ds">Enviar datos por POST/GET y validar un nick contra una base de datos.</span></a>
+      <a class="tile" href="ajax/ajax05-fetch.html"><span class="num">Tema 5</span><span class="tt">Fetch API (moderno)</span><span class="ds">La forma actual: promesas, async/await, JSON.</span></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="badge">jQuery</span> Librerías de JavaScript</h2>
+    <div class="grid">
+      <a class="tile" href="jquery/jq01-introduccion.html"><span class="num">Tema 1</span><span class="tt">Librerías y Prototype</span><span class="ds">Qué son las librerías JS: Prototype ($, $F, $$, $A…) y ejemplos.</span></a>
+      <a class="tile" href="jquery/jq02-sintaxis-selectores.html"><span class="num">Tema 2</span><span class="tt">Sintaxis y selectores</span><span class="ds">Formas de usar jQuery, $(selector).action() y todos los selectores.</span></a>
+      <a class="tile" href="jquery/jq03-eventos-efectos.html"><span class="num">Tema 3</span><span class="tt">Eventos y efectos</span><span class="ds">click, hide/show, fade, slide, animate, stop y encadenado.</span></a>
+      <a class="tile" href="jquery/jq04-html-css.html"><span class="num">Tema 4</span><span class="tt">HTML y CSS</span><span class="ds">text(), html(), val(), attr(), append/remove y métodos de estilo.</span></a>
+      <a class="tile" href="jquery/jq05-ajax.html"><span class="num">Tema 5</span><span class="tt">AJAX con jQuery</span><span class="ds">load(), get(), post(), ajax() con configuración completa y noConflict().</span></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2><span class="badge">Bootstrap</span> Framework CSS sobre tu hoja de estilos</h2>
+    <div class="grid">
+      <a class="tile" href="bootstrap/bs01-incluir.html"><span class="num">Tema 1</span><span class="tt">Incluir Bootstrap</span><span class="ds">Qué es, el CDN, dónde va la etiqueta link y el orden con tu styles.css.</span></a>
+      <a class="tile" href="bootstrap/bs02-grid.html"><span class="num">Tema 2</span><span class="tt">Sistema de grilla</span><span class="ds">Container, row, col, breakpoints: layout responsivo con clases en vez de CSS.</span></a>
+      <a class="tile" href="bootstrap/bs03-clases.html"><span class="num">Tema 3</span><span class="tt">Clases sobre tu CSS</span><span class="ds">Utilidades y componentes que conviven con los estilos propios del proyecto.</span></a>
+      <a class="tile" href="bootstrap/bs04-tipografia-colores.html"><span class="num">Tema 4</span><span class="tt">Tipografía y colores</span><span class="ds">h1–h6, display, text-*, fw-*, bg-*: texto y fondo con clases.</span></a>
+      <a class="tile" href="bootstrap/bs05-utilidades.html"><span class="num">Tema 5</span><span class="tt">Utilidades y layout</span><span class="ds">Espaciado p/m-*, d-*, flex, bordes, sombras, dimensiones y posición.</span></a>
+      <a class="tile" href="bootstrap/bs06-componentes.html"><span class="num">Tema 6</span><span class="tt">Botones, alertas y más</span><span class="ds">btn y variantes, alert, badge, img-fluid y componentes básicos.</span></a>
+      <a class="tile" href="bootstrap/bs07-tablas-tarjetas.html"><span class="num">Tema 7</span><span class="tt">Tablas, tarjetas, listas</span><span class="ds">table, card, list-group, progress y spinners estilizados.</span></a>
+      <a class="tile" href="bootstrap/bs08-formularios.html"><span class="num">Tema 8</span><span class="tt">Formularios</span><span class="ds">form-control, form-select, checks, input-group, validación y floating labels.</span></a>
+      <a class="tile" href="bootstrap/bs09-navegacion.html"><span class="num">Tema 9</span><span class="tt">Navegación</span><span class="ds">navbar, tabs y pills, dropdowns, breadcrumb y paginación.</span></a>
+      <a class="tile" href="bootstrap/bs10-interactivos.html"><span class="num">Tema 10</span><span class="tt">Componentes con JS</span><span class="ds">collapse, acordeón, modal, carousel, tooltip, popover y data-bs-*.</span></a>
+    </div>
+  </section>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Generado a partir de los PDFs ajax_II, Javascript_II y Javascript_jquery_II.</footer>
+</body>
+</html>
