@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabajo Práctico 3 — Guía de Referencia</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --texto: #212529;
+      --borde: #dee2e6;
+      --acento: #0d6efd;
+      --acento-oscuro: #0a58ca;
+      --amarillo: #fff3cd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+    .contenedor {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+    h1, h2, h3, h4 { line-height: 1.25; scroll-margin-top: 20px; }
+    h1 {
+      border-bottom: 3px solid var(--acento);
+      padding-bottom: 12px;
+      margin-top: 8px;
+    }
+    h2 {
+      margin-top: 48px;
+      padding: 8px 14px;
+      background: #e9ecef;
+      border-left: 6px solid var(--acento);
+      border-radius: 4px;
+    }
+    h3 { margin-top: 32px; color: var(--acento-oscuro); }
+    h4 { margin-top: 24px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    th, td {
+      border: 1px solid var(--borde);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: .95rem;
+    }
+    th { background: #eef2f7; font-weight: 600; }
+    thead th { background: var(--acento); color: #fff; }
+    tr:nth-child(even) td { background: #fcfcfd; }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      background: #eef0f2;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: .9em;
+    }
+    pre {
+      padding: 12px 14px;
+      overflow-x: auto;
+      border: 1px solid var(--borde);
+      background: #f6f8fa;
+      line-height: 1.5;
+    }
+    blockquote {
+      margin: 16px 0;
+      padding: 10px 16px;
+      background: var(--amarillo);
+      border-left: 5px solid #ffc107;
+      border-radius: 4px;
+    }
+    blockquote p { margin: 0; }
+    blockquote code { background: rgba(0,0,0,.08); }
+    details {
+      background: #fff;
+      border: 1px solid var(--borde);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 16px 0;
+    }
+    summary { cursor: pointer; font-weight: 600; }
+    .indice {
+      background: #fff;
+      border: 1px solid var(--borde);
+      border-radius: 6px;
+      padding: 16px 20px;
+    }
+    .indice ul { margin: 4px 0; }
+    .indice a { color: var(--acento); text-decoration: none; }
+    .indice a:hover { text-decoration: underline; }
+    hr { border: 0; border-top: 1px solid var(--borde); margin: 40px 0; }
+    .sub-cheatsheet { display: block; font-size: .9em; color: #6c757d; }
+    .detalle-lab {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--acento-oscuro);
+      background: #e7f1ff;
+      border: 1px solid #cfe2ff;
+      border-radius: 999px;
+      padding: 1px 8px;
+      margin: 1px 2px 1px 0;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--acento-oscuro);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 18px;
+    }
+    .topbar-titulo { font-weight: 700; font-size: .95rem; margin-right: 6px; white-space: nowrap; }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+    .topbar a {
+      color: #fff;
+      text-decoration: none;
+      font-size: .85rem;
+      opacity: .85;
+      border-bottom: 2px solid transparent;
+      padding: 2px 0;
+    }
+    .topbar a:hover { opacity: 1; border-bottom-color: #ffc107; }
+    .seccion-id {
+      display: inline-block;
+      min-width: 2rem;
+      text-align: center;
+      background: var(--acento);
+      color: #fff;
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+    .tabla-envoltorio { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    th, td { border: 1px solid var(--borde); padding: 10px 12px; text-align: left; vertical-align: top; font-size: .95rem; }
+    th { background: #eef2f7; font-weight: 600; }
+    thead th { background: var(--acento); color: #fff; }
+    tr:hover td { background: #f0f7ff; }
+    .indice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 8px 28px;
+    }
+    .indice-titulo { font-weight: 700; display: inline-block; padding: 2px 8px; border-radius: 4px; }
+    .indice-titulo.az { background: var(--acento); color: #fff !important; }
+    details > details, details li { scroll-margin-top: 80px; }
+    .volver-arriba {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 100;
+      background: var(--acento);
+      color: #fff;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .volver-arriba:hover { background: var(--acento-oscuro); }
+    @media (max-width: 900px) {
+      .indice-grid { grid-template-columns: 1fr; }
+      .topbar-inner { flex-direction: column; align-items: flex-start; gap: 4px; }
+    }
+    @media (max-width: 700px) {
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="topbar-titulo">TP3 — Chuleta</span>
+    <nav>
+      <a href="#resumen-rapido">Resumen rápido</a>
+      <a href="#javascript">1. JS</a>
+      <a href="#html">2. HTML</a>
+      <a href="#css">3. CSS</a>
+      <a href="#bootstrap">4. Bootstrap</a>
+      <a href="#resumen-tp">Usado en el TP3</a>
+    </nav>
+  </div>
+</header>
+<div class="contenedor">
+
+  <h1>Trabajo Práctico 3 — Guía de Referencia</h1>
+  <p>Programación Orientada a la Web.</p>
+  <p>Este documento es una <strong>chuleta / súper guía</strong> de todo lo que se usa en el TP3:
+  <strong>JavaScript</strong>, <strong>HTML</strong>, <strong>CSS</strong> y <strong>Bootstrap</strong>. Para cada función o clase figura:</p>
+  <ul>
+    <li><strong>Definición</strong>: qué hace (breve).</li>
+    <li><strong>Variantes</strong>: formas/flavors posibles.</li>
+    <li><strong>Cuándo usar</strong>: en qué caso conviene elegir una u otra.</li>
+  </ul>
+
+  <blockquote>
+    <p>Estado actual del código: solo <code>punto3</code>, <code>punto5</code> y <code>punto8</code> tienen contenido.<br>
+    Los demás puntos están por desarrollarse.</p>
+  </blockquote>
+
+  <hr>
+
+  <div class="indice">
+    <h3>Índice completo</h3>
+    <div class="indice-grid">
+      <div>
+        <a class="indice-titulo az" href="#javascript">1. JavaScript (JS)</a>
+        <ul>
+          <li><a href="#variables">1.1 Variables: var, let, const</a></li>
+          <li><a href="#tipos">1.2 Tipos de datos</a></li>
+          <li><a href="#operadores">1.3 Operadores</a></li>
+          <li><a href="#condicionales">1.4 Condicionales</a></li>
+          <li><a href="#bucles">1.5 Bucles</a></li>
+          <li><a href="#funciones">1.6 Funciones</a></li>
+          <li><a href="#strings">1.7 Strings (cadenas de texto)</a></li>
+          <li><a href="#arrays">1.8 Arrays (listas)</a></li>
+          <li><a href="#objetos">1.9 Objetos</a></li>
+          <li><a href="#dom">1.10 DOM (manipular la página)</a></li>
+          <li><a href="#eventos">1.11 Eventos</a></li>
+          <li><a href="#entrada-salida">1.12 Entrada, salida y conversión</a></li>
+          <li><a href="#objetos-nativos">1.13 Objetos nativos útiles</a></li>
+          <li><a href="#tiempo">1.14 Tiempo (temporizadores)</a></li>
+          <li><a href="#persistentes">1.15 Datos persistentes</a></li>
+        </ul>
+      </div>
+      <div>
+        <a class="indice-titulo az" href="#html">2. HTML</a>
+        <ul>
+          <li><a href="#estructura-base">2.1 Estructura base</a></li>
+          <li><a href="#contenedores">2.2 Contenedores y estructura</a></li>
+          <li><a href="#texto-h">2.3 Texto</a></li>
+          <li><a href="#listas-h">2.4 Listas</a></li>
+          <li><a href="#enlaces">2.5 Enlaces e imágenes</a></li>
+          <li><a href="#formularios">2.6 Formularios</a></li>
+          <li><a href="#tablas">2.7 Tablas y otros</a></li>
+        </ul>
+      </div>
+      <div>
+        <a class="indice-titulo az" href="#css">3. CSS</a>
+        <ul>
+          <li><a href="#selectores">3.1 Selectores</a></li>
+          <li><a href="#caja">3.2 Caja (box model) y dimensiones</a></li>
+          <li><a href="#layout">3.3 Display y layout</a></li>
+          <li><a href="#tipografia">3.4 Tipografía y colores</a></li>
+          <li><a href="#otros-css">3.5 Otros</a></li>
+        </ul>
+      </div>
+      <div>
+        <a class="indice-titulo az" href="#bootstrap">4. Bootstrap</a>
+        <ul>
+          <li><a href="#layout-bs">4.1 Layout: contenedores y la grilla de 12 columnas</a></li>
+          <li><a href="#espaciado">4.2 Espaciado (margin y padding)</a></li>
+          <li><a href="#flexbox-bs">4.3 Flexbox</a></li>
+          <li><a href="#colores">4.4 Colores de fondo y texto</a></li>
+          <li><a href="#tipografia-bs">4.5 Tipografía y alineación</a></li>
+          <li><a href="#bordes">4.6 Bordes y radius</a></li>
+          <li><a href="#imagenes">4.7 Imágenes y dimensiones</a></li>
+          <li><a href="#botones">4.8 Botones (clases de las "funciones" de Bootstrap, por si se suman al TP)</a></li>
+          <li><a href="#utilidades">4.9 Otras utilidades útiles</a></li>
+          <li><a href="#resumen-tp">4.10 Resumen de lo usado en el TP3</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2 id="resumen-rapido"><span class="seccion-id">0</span>Resumen rápido: ¿cuál elijo?</h2>
+  <blockquote>
+    <p>La versión corta de toda la guía. Las secciones de abajo explican el porqué de cada elección.</p>
+  </blockquote>
+  <table>
+    <thead>
+      <tr><th>Necesidad</th><th>Elegir</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Variable que cambia</td><td><code>let</code></td></tr>
+      <tr><td>Variable fija</td><td><code>const</code></td></tr>
+      <tr><td>Comparar valores</td><td><code>===</code> (nunca <code>==</code>)</td></tr>
+      <tr><td>Recorrer una lista</td><td><code>for...of</code> o <code>forEach</code></td></tr>
+      <tr><td>Transformar lista en otra</td><td><code>map</code></td></tr>
+      <tr><td>Filtrar una lista</td><td><code>filter</code></td></tr>
+      <tr><td>Buscar un elemento</td><td><code>find</code></td></tr>
+      <tr><td>Sumar/acumular</td><td><code>reduce</code></td></tr>
+      <tr><td>Mostrar texto/HTML</td><td><code>textContent</code> (seguro) / <code>innerHTML</code> (con HTML)</td></tr>
+      <tr><td>Reaccionar a un clic</td><td><code>addEventListener("click", fn)</code></td></tr>
+      <tr><td>Centrar un texto</td><td>Bootstrap <code>text-center</code></td></tr>
+      <tr><td>Separar columnas</td><td><code>row</code> + <code>col-*</code> + <code>g-*</code></td></tr>
+      <tr><td>Margen/padding</td><td><code>m-*</code> / <code>p-*</code> con <code>t/b/s/e/x/y</code> y <code>0..5</code></td></tr>
+      <tr><td>Imagen que no desborde</td><td><code>img-fluid</code></td></tr>
+      <tr><td>Imagen que cubra parejo</td><td><code>w-100 h-100 object-fit-cover</code> (con padre <code>d-flex</code>)</td></tr>
+      <tr><td>Alinear verticalmente</td><td><code>d-flex</code> + <code>align-items-center</code></td></tr>
+      <tr><td>Botón de color</td><td><code>btn btn-primary</code> (o <code>btn-outline-primary</code>)</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2 id="javascript"><span class="seccion-id">1</span>JavaScript (JS)</h2>
+
+  <h3 id="variables">1.1 Variables: <code>var</code>, <code>let</code>, <code>const</code></h3>
+  <table>
+    <thead><tr><th>Declaración</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>let</code></td>
+        <td><span class="detalle-lab">Definición</span> Declara una variable cuyo valor <strong>puede cambiar</strong>. Alcance de bloque <code>{ }</code>.<br><br><span class="detalle-lab">Variantes</span> <code>let nombre = valor;</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando el valor va a cambiar más adelante (contadores, acumuladores, datos de entrada).</td>
+      </tr>
+      <tr>
+        <td><code>const</code></td>
+        <td><span class="detalle-lab">Definición</span> Declara una <strong>constante</strong>: valor fijo que no se reasigna. Alcance de bloque.<br><br><span class="detalle-lab">Variantes</span> <code>const PI = 3.14;</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Por defecto</strong>. Siempre que el valor no necesite cambiarse (datos de config, referencias al DOM que no se reasignan).</td>
+      </tr>
+      <tr>
+        <td><code>var</code></td>
+        <td><span class="detalle-lab">Definición</span> Declara variable con alcance de <strong>función</strong> (no de bloque).<br><br><span class="detalle-lab">Variantes</span> <code>var x = 1;</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Evitar</strong>. Solo se encuentra en código viejo; <code>let</code>/<code>const</code> la reemplazan.</td>
+      </tr>
+    </tbody>
+  </table>
+  <blockquote><p>Regla práctica: usar <code>const</code> por defecto; si al escribir el código te das cuenta de que el valor cambia, recién ahí usá <code>let</code>.</p></blockquote>
+
+  <h3 id="tipos">1.2 Tipos de datos</h3>
+  <table>
+    <thead><tr><th>Tipo</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>string</code></td><td><span class="detalle-lab">Definición</span> Texto.<br><br><span class="detalle-lab">Variantes</span> <code>"hola"</code>, <code>'hola'</code>, <code>`hola ${nombre}`</code> (template literal)<br><br><span class="detalle-lab">Cuándo usar</span> Para palabras, nombres, mensajes. Las comillas simples o dobles son intercambiables; el template literal (crase) sirve para interpolar variables y texto en varias líneas.</td></tr>
+      <tr><td><code>number</code></td><td><span class="detalle-lab">Definición</span> Número (entero o decimal).<br><br><span class="detalle-lab">Variantes</span> <code>5</code>, <code>-2.5</code>, <code>0.1e2</code><br><br><span class="detalle-lab">Cuándo usar</span> Operaciones matemáticas, edades, precios.</td></tr>
+      <tr><td><code>boolean</code></td><td><span class="detalle-lab">Definición</span> <code>true</code> o <code>false</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Condiciones, estados (activo/inactivo), validaciones.</td></tr>
+      <tr><td><code>null</code></td><td><span class="detalle-lab">Definición</span> "Sin valor" a propósito.<br><br><span class="detalle-lab">Cuándo usar</span> Cuando querés decir que la variable existe pero está intencionalmente vacía.</td></tr>
+      <tr><td><code>undefined</code></td><td><span class="detalle-lab">Definición</span> Valor no asignado (automático).<br><br><span class="detalle-lab">Cuándo usar</span> Cuando una variable se declaró pero no se le dio valor todavía.</td></tr>
+      <tr><td><code>object</code></td><td><span class="detalle-lab">Definición</span> Colección de pares <code>clave: valor</code>.<br><br><span class="detalle-lab">Variantes</span> <code>{ nombre: "Ana", edad: 20 }</code><br><br><span class="detalle-lab">Cuándo usar</span> Agrupar datos relacionados de una misma entidad (un usuario, un producto).</td></tr>
+      <tr><td><code>array</code></td><td><span class="detalle-lab">Definición</span> Lista ordenada de valores.<br><br><span class="detalle-lab">Variantes</span> <code>[1, 2, 3]</code>, <code>["a", "b"]</code><br><br><span class="detalle-lab">Cuándo usar</span> Listas de elementos, datos en serie.</td></tr>
+      <tr><td><code>function</code></td><td><span class="detalle-lab">Definición</span> Bloque de código reutilizable.<br><br><span class="detalle-lab">Variantes</span> ver <a href="#funciones">1.6</a><br><br><span class="detalle-lab">Cuándo usar</span> Encapsular lógica que se repite.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="operadores">1.3 Operadores</h3>
+  <table>
+    <thead><tr><th>Operador</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td>Aritméticos</td><td><span class="detalle-lab">Definición</span> Hacen operaciones matemáticas.<br><br><span class="detalle-lab">Variantes</span> <code>+</code> (suma y concatenación), <code>-</code>, <code>*</code> (multiplicación), <code>/</code> (división), <code>%</code> (resto/módulo), <code>**</code> (potencia)<br><br><span class="detalle-lab">Cuándo usar</span> <code>%</code> es ideal para saber si un número es par o períodos (ej. vueltas); <code>**</code> en vez de <code>Math.pow</code>.</td></tr>
+      <tr><td>Comparación</td><td><span class="detalle-lab">Definición</span> Comparan valores y devuelven <code>boolean</code>.<br><br><span class="detalle-lab">Variantes</span> <code>==</code>, <code>===</code>, <code>!=</code>, <code>!==</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong><code>===</code> / <code>!==</code> siempre</strong> (comparan valor y tipo). <code>==</code> / <code>!=</code> convierten tipos implícitamente y provocan errores sutiles; evitarlos.</td></tr>
+      <tr><td>Lógicos</td><td><span class="detalle-lab">Definición</span> Combinan condiciones.<br><br><span class="detalle-lab">Variantes</span> <code>&amp;&amp;</code> (y), <code>||</code> (o), <code>!</code> (negación)<br><br><span class="detalle-lab">Cuándo usar</span> <code>&amp;&amp;</code> cuando TODAS deben cumplirse; <code>||</code> cuando basta una; <code>!</code> para invertir (ej. <code>if (!estado)</code>).</td></tr>
+      <tr><td>Asignación</td><td><span class="detalle-lab">Definición</span> Guardan un valor.<br><br><span class="detalle-lab">Variantes</span> <code>=</code>, <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>+=</code> es atajo de <code>a = a + b</code>; conviene para contadores y acumuladores.</td></tr>
+      <tr><td>Incremento</td><td><span class="detalle-lab">Definición</span> Suma o resta 1.<br><br><span class="detalle-lab">Variantes</span> <code>++</code>, <code>--</code> (prefijo <code>++i</code> o sufijo <code>i++</code>)<br><br><span class="detalle-lab">Cuándo usar</span> Contadores dentro de bucles.</td></tr>
+      <tr><td>Ternario</td><td><span class="detalle-lab">Definición</span> Condicional en una línea.<br><br><span class="detalle-lab">Variantes</span> <code>condicion ? valorSi : valorNo</code><br><br><span class="detalle-lab">Cuándo usar</span> Para asignar un valor simple según una condición (evitar si hay varias condiciones, queda ilegible).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="condicionales">1.4 Condicionales</h3>
+  <table>
+    <thead><tr><th>Estructura</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>if / else if / else</code></td><td><span class="detalle-lab">Definición</span> Ejecuta un bloque según una condición.<br><br><span class="detalle-lab">Variantes</span> <code>if (cond) {...}</code> / <code>else if (cond2) {...}</code> / <code>else {...}</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>El más usado</strong>. Cuando las condiciones son distintas entre sí o hay rangos/intervalos.</td></tr>
+      <tr><td><code>switch</code></td><td><span class="detalle-lab">Definición</span> Según el valor de una variable, ejecuta el caso que coincida.<br><br><span class="detalle-lab">Variantes</span> <code>case valor: ...; break; default: ...</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando una única variable se compara contra <strong>muchos valores fijos</strong> (ej. un menú 1-2-3). Más limpio que un <code>if</code> gigante.</td></tr>
+      <tr><td>Ternario</td><td><span class="detalle-lab">Definición</span> Ver <a href="#operadores">operador ternario</a>.<br><br><span class="detalle-lab">Cuándo usar</span> Solo para asignaciones simples de 2 caminos.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>En <code>switch</code> no olvidar el <code>break</code>, si no "cae" al siguiente <code>case</code>.</p></blockquote>
+
+  <h3 id="bucles">1.5 Bucles</h3>
+  <table>
+    <thead><tr><th>Bucle</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>for</code></td><td><span class="detalle-lab">Definición</span> Repite un número conocido de veces con un contador.<br><br><span class="detalle-lab">Variantes</span> <code>for (let i = 0; i &lt; n; i++)</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando sabés cuántas iteraciones querés, o recorrés usando índices.</td></tr>
+      <tr><td><code>for...of</code></td><td><span class="detalle-lab">Definición</span> Recorre los <strong>valores</strong> de un array/iterable.<br><br><span class="detalle-lab">Variantes</span> <code>for (const el of array)</code><br><br><span class="detalle-lab">Cuándo usar</span> La forma más simple de recorrer una lista sin usar índices.</td></tr>
+      <tr><td><code>for...in</code></td><td><span class="detalle-lab">Definición</span> Recorre las <strong>claves/propiedades</strong> de un objeto.<br><br><span class="detalle-lab">Variantes</span> <code>for (const clave in obj)</code><br><br><span class="detalle-lab">Cuándo usar</span> Iterar sobre propiedades de un objeto.</td></tr>
+      <tr><td><code>while</code></td><td><span class="detalle-lab">Definición</span> Repite mientras una condición sea verdadera.<br><br><span class="detalle-lab">Variantes</span> <code>while (cond) {...}</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando NO sabés cuántas veces se va a repetir (ej. mientras el usuario no acierte).</td></tr>
+      <tr><td><code>do...while</code></td><td><span class="detalle-lab">Definición</span> Igual que <code>while</code>, pero ejecuta <strong>al menos una vez</strong> (la condición se evalúa al final).<br><br><span class="detalle-lab">Variantes</span> <code>do {...} while (cond)</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando necesitás que el cuerpo corra sí o sí una vez.</td></tr>
+      <tr><td>Control</td><td><span class="detalle-lab">Variantes</span> <code>break</code> (corta el bucle), <code>continue</code> (salta a la siguiente iteración)<br><br><span class="detalle-lab">Cuándo usar</span> <code>break</code> para salir; <code>continue</code> para saltar un caso (ej. números pares).</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Riesgo: si la condición de <code>while</code> nunca se vuelve falsa, el bucle se ejecuta para siempre y congela la página.</p></blockquote>
+
+  <h3 id="funciones">1.6 Funciones</h3>
+  <table>
+    <thead><tr><th>Forma</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td>Declaración</td><td><span class="detalle-lab">Definición</span> Función "hoisted" (se puede llamar antes de definirla).<br><br><span class="detalle-lab">Variantes</span> <code>function sumar(a, b) { return a + b; }</code><br><br><span class="detalle-lab">Cuándo usar</span> La forma clásica; ideal para funciones del programa que se reutilizan.</td></tr>
+      <tr><td>Expresión</td><td><span class="detalle-lab">Definición</span> Función guardada en una variable.<br><br><span class="detalle-lab">Variantes</span> <code>const sumar = function (a, b) { return a + b; };</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando la función es parte de un valor o se pasa como argumento.</td></tr>
+      <tr><td>Arrow (flecha)</td><td><span class="detalle-lab">Definición</span> Sintaxis corta; <strong>no</strong> tiene su propio <code>this</code>.<br><br><span class="detalle-lab">Variantes</span> <code>const sumar = (a, b) =&gt; a + b;</code><br><br><span class="detalle-lab">Cuándo usar</span> Callbacks, funciones cortas, y en general la forma moderna preferida.</td></tr>
+      <tr><td>Parámetros</td><td><span class="detalle-lab">Definición</span> Entradas de la función.<br><br><span class="detalle-lab">Variantes</span> parámetros por <strong>defecto</strong> <code>(a, b = 0)</code>, resto <code>(...args)</code><br><br><span class="detalle-lab">Cuándo usar</span> Parámetros por defecto para valores opcionales; resto para aceptar N argumentos.</td></tr>
+      <tr><td><code>return</code></td><td><span class="detalle-lab">Definición</span> Devuelve un valor y corta la función.<br><br><span class="detalle-lab">Cuándo usar</span> Cuando la función debe producir un resultado para usarlo afuera.</td></tr>
+      <tr><td><code>this</code></td><td><span class="detalle-lab">Definición</span> Referencia al contexto que llama la función.<br><br><span class="detalle-lab">Cuándo usar</span> En arrow <code>this</code> hereda del entorno; en funciones normales depende de cómo se llama.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Una función sin <code>return</code> devuelve <code>undefined</code>.</p></blockquote>
+
+  <h3 id="strings">1.7 Strings (cadenas de texto)</h3>
+  <table>
+    <thead><tr><th>Método</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>length</code></td><td><span class="detalle-lab">Definición</span> Cantidad de caracteres (propiedad).<br><br><span class="detalle-lab">Cuándo usar</span> Límites de longitud (largos de password, etc.).</td></tr>
+      <tr><td><code>toUpperCase()</code> / <code>toLowerCase()</code></td><td><span class="detalle-lab">Definición</span> Texto en mayúsculas / minúsculas.<br><br><span class="detalle-lab">Cuándo usar</span> Normalizar entradas del usuario y compararlas.</td></tr>
+      <tr><td><code>includes(texto)</code></td><td><span class="detalle-lab">Definición</span> ¿Contiene el texto? Devuelve <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Búsquedas y validaciones simples.</td></tr>
+      <tr><td><code>startsWith(x)</code> / <code>endsWith(x)</code></td><td><span class="detalle-lab">Definición</span> ¿Empieza / termina con?<br><br><span class="detalle-lab">Cuándo usar</span> Validar prefijos (ej. <code>+54</code>) o extensiones.</td></tr>
+      <tr><td><code>slice(inicio, fin)</code></td><td><span class="detalle-lab">Definición</span> Extrae una parte <strong>sin modificar</strong> la original.<br><br><span class="detalle-lab">Variantes</span> <code>"hola".slice(0, 2)</code> → <code>"ho"</code><br><br><span class="detalle-lab">Cuándo usar</span> Cortar substrings; acepta índices negativos (cuenta desde el final).</td></tr>
+      <tr><td><code>substring(inicio, fin)</code></td><td><span class="detalle-lab">Definición</span> Igual que <code>slice</code> pero sin índices negativos.<br><br><span class="detalle-lab">Cuándo usar</span> Cuando no necesitás índices negativos (más predecible).</td></tr>
+      <tr><td><code>split(sep)</code></td><td><span class="detalle-lab">Definición</span> Convierte el string en un <strong>array</strong> separándolo por un separador.<br><br><span class="detalle-lab">Variantes</span> <code>"a,b".split(",")</code> → <code>["a","b"]</code><br><br><span class="detalle-lab">Cuándo usar</span> Pasó de texto a lista (ej. CSV).</td></tr>
+      <tr><td><code>join(sep)</code></td><td><span class="detalle-lab">Definición</span> Convierte un array en <strong>string</strong> uniéndolo (es el inverso de <code>split</code>).<br><br><span class="detalle-lab">Variantes</span> <code>["a","b"].join("-")</code> → <code>"a-b"</code><br><br><span class="detalle-lab">Cuándo usar</span> Mostrar listas formateadas. <em>(Método de array, ver <a href="#arrays">1.8</a>.)</em></td></tr>
+      <tr><td><code>replace(viejo, nuevo)</code> / <code>replaceAll()</code></td><td><span class="detalle-lab">Definición</span> Reemplaza la primera / todas las coincidencias.<br><br><span class="detalle-lab">Cuándo usar</span> Corregir datos; <code>replaceAll</code> para reemplazar todas.</td></tr>
+      <tr><td><code>trim()</code></td><td><span class="detalle-lab">Definición</span> Quita espacios en blanco de los extremos.<br><br><span class="detalle-lab">Variantes</span> <code>trimStart</code>, <code>trimEnd</code><br><br><span class="detalle-lab">Cuándo usar</span> Limpiar entradas de formularios antes de validar.</td></tr>
+      <tr><td><code>indexOf(texto)</code></td><td><span class="detalle-lab">Definición</span> Posición de la primera coincidencia (<code>-1</code> si no está).<br><br><span class="detalle-lab">Variantes</span> <code>indexOf</code>, <code>lastIndexOf</code><br><br><span class="detalle-lab">Cuándo usar</span> Buscar posición; para "existe" conviene <code>includes</code>.</td></tr>
+      <tr><td><code>charAt(i)</code></td><td><span class="detalle-lab">Definición</span> Carácter en la posición <code>i</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Acceder a un carácter puntual.</td></tr>
+      <tr><td><code>padStart(n, c)</code> / <code>padEnd()</code></td><td><span class="detalle-lab">Definición</span> Rellena con caracteres hasta una longitud.<br><br><span class="detalle-lab">Cuándo usar</span> Formatear con ceros adelante (ej. <code>"5".padStart(2,"0")</code> → <code>"05"</code>).</td></tr>
+      <tr><td>Template literal</td><td><span class="detalle-lab">Definición</span> String con variables incrustadas.<br><br><span class="detalle-lab">Variantes</span> <code>`Hola ${nombre}`</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Interpolación</strong>: la forma moderna de concatenar.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Alternativa vieja: concatenar con <code>+</code> (<code>"Hola " + nombre</code>). Funciona, pero el template literal es más legible.</p></blockquote>
+
+  <h3 id="arrays">1.8 Arrays (listas)</h3>
+  <table>
+    <thead><tr><th>Método</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>length</code></td><td><span class="detalle-lab">Definición</span> Cantidad de elementos (propiedad).<br><br><span class="detalle-lab">Cuándo usar</span> Recorridos y límites.</td></tr>
+      <tr><td><code>push(el)</code> / <code>pop()</code></td><td><span class="detalle-lab">Definición</span> Agrega / saca el elemento <strong>al final</strong>.<br><br><span class="detalle-lab">Cuándo usar</span> Pilas (stack) y acumular en orden.</td></tr>
+      <tr><td><code>unshift(el)</code> / <code>shift()</code></td><td><span class="detalle-lab">Definición</span> Agrega / saca el elemento <strong>al inicio</strong>.<br><br><span class="detalle-lab">Cuándo usar</span> Colas (queue); ojo: más lentos en listas largas.</td></tr>
+      <tr><td><code>indexOf(el)</code></td><td><span class="detalle-lab">Definición</span> Posición del elemento (<code>-1</code> si no existe).<br><br><span class="detalle-lab">Cuándo usar</span> Buscar índice. Para "¿existe?" usar <code>includes</code>.</td></tr>
+      <tr><td><code>includes(el)</code></td><td><span class="detalle-lab">Definición</span> ¿Existe el valor? <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Validar pertenencia.</td></tr>
+      <tr><td><code>join(sep)</code></td><td><span class="detalle-lab">Definición</span> Une todos los elementos en un string.<br><br><span class="detalle-lab">Cuándo usar</span> Formatear para mostrar.</td></tr>
+      <tr><td><code>slice(inicio, fin)</code></td><td><span class="detalle-lab">Definición</span> Devuelve una <strong>copia</strong> de una parte; no modifica el original.<br><br><span class="detalle-lab">Cuándo usar</span> Obtener sub-listas sin tocar el original.</td></tr>
+      <tr><td><code>splice(i, cant, ...elems)</code></td><td><span class="detalle-lab">Definición</span> <strong>Modifica</strong> el array: elimina y/o inserta elementos.<br><br><span class="detalle-lab">Cuándo usar</span> Editar el array en el lugar (agregar/quitar/insertar).</td></tr>
+      <tr><td><code>concat(arr)</code> / spread <code>[...a, ...b]</code></td><td><span class="detalle-lab">Definición</span> Junta arrays en uno nuevo.<br><br><span class="detalle-lab">Cuándo usar</span> Combinar listas. El spread es la forma moderna.</td></tr>
+      <tr><td><code>sort()</code> / <code>reverse()</code></td><td><span class="detalle-lab">Definición</span> Ordena / invierte el orden.<br><br><span class="detalle-lab">Variantes</span> <code>sort((a,b) =&gt; a - b)</code> para números<br><br><span class="detalle-lab">Cuándo usar</span> <code>sort()</code> por defecto ordena como texto (¡cuidado con números!); pasar función comparadora.</td></tr>
+      <tr><td><code>forEach(cb)</code></td><td><span class="detalle-lab">Definición</span> Ejecuta la función por cada elemento; devuelve <code>undefined</code>.<br><br><span class="detalle-lab">Cuándo usar</span> <strong>Solo recorrer</strong> y hacer algo (sin necesidad de resultado).</td></tr>
+      <tr><td><code>map(cb)</code></td><td><span class="detalle-lab">Definición</span> Crea un <strong>nuevo array</strong> con el resultado de transformar cada elemento.<br><br><span class="detalle-lab">Cuándo usar</span> Transformar una lista en otra (ej. doblar valores, extraer nombres).</td></tr>
+      <tr><td><code>filter(cb)</code></td><td><span class="detalle-lab">Definición</span> Nuevo array solo con los elementos que cumplen la condición.<br><br><span class="detalle-lab">Cuándo usar</span> Filtrar (ej. mayores de edad).</td></tr>
+      <tr><td><code>find(cb)</code></td><td><span class="detalle-lab">Definición</span> Primer elemento que cumple la condición (o <code>undefined</code>).<br><br><span class="detalle-lab">Cuándo usar</span> Buscar UN elemento puntual.</td></tr>
+      <tr><td><code>reduce(cb, inicial)</code></td><td><span class="detalle-lab">Definición</span> Reduce toda la lista a un único valor acumulado.<br><br><span class="detalle-lab">Cuándo usar</span> Sumar todo, promediar, contar.</td></tr>
+      <tr><td><code>some(cb)</code> / <code>every(cb)</code></td><td><span class="detalle-lab">Definición</span> ¿Alguno / todos cumplen la condición? <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Validaciones generales.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p><strong>Cómo elegir</strong>: <code>forEach</code> para efectos secundarios; <code>map</code> cuando querés la lista transformada; <code>filter</code> para quedarte con un subconjunto; <code>find</code> para uno solo; <code>reduce</code> para sumarizar.</p></blockquote>
+
+  <h3 id="objetos">1.9 Objetos</h3>
+  <table>
+    <thead><tr><th>Uso</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td>Creación</td><td><span class="detalle-lab">Definición</span> Literal con pares <code>clave: valor</code>.<br><br><span class="detalle-lab">Variantes</span> <code>const usu = { nombre: "Ana", edad: 20 };</code><br><br><span class="detalle-lab">Cuándo usar</span> Agrupar datos de una entidad.</td></tr>
+      <tr><td>Acceso</td><td><span class="detalle-lab">Definición</span> Leer una propiedad.<br><br><span class="detalle-lab">Variantes</span> <code>usu.nombre</code> (punto) o <code>usu["nombre"]</code> (corchete)<br><br><span class="detalle-lab">Cuándo usar</span> Punto es lo normal; corchete cuando la clave es dinámica o tiene espacios/guiones.</td></tr>
+      <tr><td>Modificación / alta</td><td><span class="detalle-lab">Definición</span> Cambiar o crear propiedades.<br><br><span class="detalle-lab">Variantes</span> <code>usu.edad = 21; usu.mail = "a@b.com";</code><br><br><span class="detalle-lab">Cuándo usar</span> Actualizar la información del objeto.</td></tr>
+      <tr><td><code>delete</code></td><td><span class="detalle-lab">Definición</span> Elimina una propiedad.<br><br><span class="detalle-lab">Variantes</span> <code>delete usu.mail;</code><br><br><span class="detalle-lab">Cuándo usar</span> Quitar datos.</td></tr>
+      <tr><td><code>Object.keys(o)</code></td><td><span class="detalle-lab">Definición</span> Array con las claves.<br><br><span class="detalle-lab">Variantes</span> <code>Object.keys(usu)</code> → <code>["nombre","edad"]</code><br><br><span class="detalle-lab">Cuándo usar</span> Recorrer nombres de propiedades.</td></tr>
+      <tr><td><code>Object.values(o)</code></td><td><span class="detalle-lab">Definición</span> Array con los valores.<br><br><span class="detalle-lab">Cuándo usar</span> Recorrer/contar valores.</td></tr>
+      <tr><td><code>Object.entries(o)</code></td><td><span class="detalle-lab">Definición</span> Array de pares <code>[clave, valor]</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Cuando necesitás clave y valor juntos.</td></tr>
+      <tr><td><code>for...in</code></td><td><span class="detalle-lab">Definición</span> Itera sobre las claves.<br><br><span class="detalle-lab">Cuándo usar</span> Recorrer propiedades manualmente.</td></tr>
+      <tr><td>Spread</td><td><span class="detalle-lab">Definición</span> Copia/merge de objetos.<br><br><span class="detalle-lab">Variantes</span> <code>{ ...a, ...b }</code><br><br><span class="detalle-lab">Cuándo usar</span> Crear otro objeto sin mutar el original (inmutabilidad).</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Los métodos de array (<code>map</code>, <code>filter</code>, etc.) no recorren objetos por defecto: convertí con <code>Object.entries()</code> y después <code>map()</code>, o usá <code>for...in</code>.</p></blockquote>
+
+  <h3 id="dom">1.10 DOM (manipular la página)</h3>
+
+  <h4>Selección de elementos</h4>
+  <table>
+    <thead><tr><th>Función</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>document.getElementById("id")</code></td><td><span class="detalle-lab">Definición</span> Devuelve el elemento con ese <code>id</code> (el más rápido).<br><br><span class="detalle-lab">Cuándo usar</span> A partir de un <code>id</code>.</td></tr>
+      <tr><td><code>document.getElementsByClassName("x")</code></td><td><span class="detalle-lab">Definición</span> Colección (HTMLCollection) de elementos con esa clase.<br><br><span class="detalle-lab">Cuándo usar</span> Todos los elementos de una clase (no usa selectores complejos).</td></tr>
+      <tr><td><code>document.getElementsByTagName("p")</code></td><td><span class="detalle-lab">Definición</span> Colección de elementos por etiqueta.<br><br><span class="detalle-lab">Cuándo usar</span> Todos los <code>&lt;p&gt;</code>, <code>&lt;li&gt;</code>, etc.</td></tr>
+      <tr><td><code>document.querySelector("selector")</code></td><td><span class="detalle-lab">Definición</span> Primer elemento que matchea un selector CSS.<br><br><span class="detalle-lab">Variantes</span> <code>"#id"</code>, <code>".clase"</code>, <code>"nav a"</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Importante</strong>: el selector es igual que en CSS; permite cualquier selector.</td></tr>
+      <tr><td><code>document.querySelectorAll("selector")</code></td><td><span class="detalle-lab">Definición</span> <strong>NodeList</strong> (parecido a array) con todos los que matchean.<br><br><span class="detalle-lab">Cuándo usar</span> Múltiples elementos; se puede recorrer con <code>forEach</code>.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p><strong>Cuál elegir</strong>: <code>querySelector</code>/<code>querySelectorAll</code> son los más flexibles y modernos (soporta selectores CSS completos). <code>getElementById</code> es ligeramente más rápido para casillas simples de <code>id</code>.</p></blockquote>
+
+  <h4>Leer y escribir contenido</h4>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>elemento.innerHTML</code></td><td><span class="detalle-lab">Definición</span> Lee/escribe <strong>HTML</strong> interno (parsea etiquetas).<br><br><span class="detalle-lab">Cuándo usar</span> Insertar estructuras HTML; <strong>no</strong> usarlo con datos del usuario sin sanear (riesgo XSS).</td></tr>
+      <tr><td><code>elemento.textContent</code></td><td><span class="detalle-lab">Definición</span> Lee/escribe <strong>texto plano</strong> (ignora etiquetas).<br><br><span class="detalle-lab">Cuándo usar</span> Texto seguro, es la opción recomendada por defecto.</td></tr>
+      <tr><td><code>input.value</code></td><td><span class="detalle-lab">Definición</span> Lee/escribe el <strong>valor</strong> de un input/textarea.<br><br><span class="detalle-lab">Cuándo usar</span> Obtener lo que el usuario escribió.</td></tr>
+      <tr><td><code>elemento.style.propiedad</code></td><td><span class="detalle-lab">Definición</span> Modifica el estilo en línea (camelCase).<br><br><span class="detalle-lab">Variantes</span> <code>el.style.color = "red"; el.style.display = "block";</code><br><br><span class="detalle-lab">Cuándo usar</span> Cambios de estilo directos en JS.</td></tr>
+      <tr><td><code>id</code>, <code>className</code></td><td><span class="detalle-lab">Definición</span> Atributos del elemento.<br><br><span class="detalle-lab">Cuándo usar</span> Leer/poner identificadores y clases.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Crear y quitar elementos</h4>
+  <table>
+    <thead><tr><th>Función</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>document.createElement("div")</code></td><td><span class="detalle-lab">Definición</span> Crea un nodo en memoria (aún no visible).<br><br><span class="detalle-lab">Cuándo usar</span> Construir elementos dinámicos.</td></tr>
+      <tr><td><code>document.createTextNode("texto")</code></td><td><span class="detalle-lab">Definición</span> Crea un nodo de texto.<br><br><span class="detalle-lab">Cuándo usar</span> Texto como nodo (alternativa segura a <code>innerHTML</code>).</td></tr>
+      <tr><td><code>padre.appendChild(hijo)</code></td><td><span class="detalle-lab">Definición</span> Inserta el hijo como último hijo.<br><br><span class="detalle-lab">Cuándo usar</span> Agregar un elemento al final del contenedor.</td></tr>
+      <tr><td><code>padre.append(...nodos)</code></td><td><span class="detalle-lab">Definición</span> Inserta varios nodos/strings al final.<br><br><span class="detalle-lab">Cuándo usar</span> Varios a la vez.</td></tr>
+      <tr><td><code>padre.prepend(nodo)</code></td><td><span class="detalle-lab">Definición</span> Inserta al inicio.<br><br><span class="detalle-lab">Cuándo usar</span> Agregar arriba de todo.</td></tr>
+      <tr><td><code>padre.insertBefore(nodo, ref)</code></td><td><span class="detalle-lab">Definición</span> Inserta antes de otro.<br><br><span class="detalle-lab">Cuándo usar</span> Posición específica.</td></tr>
+      <tr><td><code>padre.removeChild(hijo)</code></td><td><span class="detalle-lab">Definición</span> Elimina un hijo.<br><br><span class="detalle-lab">Cuándo usar</span> Remover un elemento puntual.</td></tr>
+      <tr><td><code>elemento.remove()</code></td><td><span class="detalle-lab">Definición</span> Se elimina a sí mismo del DOM.<br><br><span class="detalle-lab">Cuándo usar</span> La forma simple de borrar un elemento.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Atributos y clases CSS</h4>
+  <table>
+    <thead><tr><th>Función</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>el.setAttribute("x", val)</code> / <code>getAttribute("x")</code></td><td><span class="detalle-lab">Definición</span> Pone / lee un atributo.<br><br><span class="detalle-lab">Cuándo usar</span> Atributos que no tienen propiedad directa (<code>src</code>, <code>href</code>, <code>data-*</code>).</td></tr>
+      <tr><td><code>el.removeAttribute("x")</code></td><td><span class="detalle-lab">Definición</span> Quita un atributo.<br><br><span class="detalle-lab">Cuándo usar</span> Limpiar atributos.</td></tr>
+      <tr><td><code>el.classList.add("x")</code></td><td><span class="detalle-lab">Definición</span> Agrega una clase CSS.<br><br><span class="detalle-lab">Cuándo usar</span> Aplicar estilos predefinidos.</td></tr>
+      <tr><td><code>el.classList.remove("x")</code></td><td><span class="detalle-lab">Definición</span> Quita una clase.<br><br><span class="detalle-lab">Cuándo usar</span> Sacar estilos.</td></tr>
+      <tr><td><code>el.classList.toggle("x")</code></td><td><span class="detalle-lab">Definición</span> Alterna (agrega si falta, saca si está).<br><br><span class="detalle-lab">Cuándo usar</span> Interruptores (menú abierto/cerrado, modo dark).</td></tr>
+      <tr><td><code>el.classList.contains("x")</code></td><td><span class="detalle-lab">Definición</span> ¿Tiene la clase? <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Consultar estado antes de actuar.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Recorrer el DOM (navegar)</h4>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>el.parentNode</code> / <code>el.parentElement</code></td><td><span class="detalle-lab">Definición</span> Elemento padre.<br><br><span class="detalle-lab">Cuándo usar</span> Subir un nivel.</td></tr>
+      <tr><td><code>el.children</code></td><td><span class="detalle-lab">Definición</span> Hijos directos (HTMLCollection).<br><br><span class="detalle-lab">Cuándo usar</span> Recorrer hijos.</td></tr>
+      <tr><td><code>el.firstElementChild</code> / <code>lastElementChild</code></td><td><span class="detalle-lab">Definición</span> Primer / último hijo.<br><br><span class="detalle-lab">Cuándo usar</span> Accesos directos.</td></tr>
+      <tr><td><code>el.nextElementSibling</code> / <code>previousElementSibling</code></td><td><span class="detalle-lab">Definición</span> Hermano siguiente / anterior.<br><br><span class="detalle-lab">Cuándo usar</span> Moverse lateralmente.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="eventos">1.11 Eventos</h3>
+  <table>
+    <thead><tr><th>Forma</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>el.addEventListener("click", cb)</code></td><td><span class="detalle-lab">Definición</span> Adjunta la función cuando el evento ocurre. Permite varios listeners y se puede quitar con <code>removeEventListener</code>.<br><br><span class="detalle-lab">Cuándo usar</span> <strong>La recomendada</strong> (moderna, flexible).</td></tr>
+      <tr><td>Propiedades <code>el.onclick = cb</code></td><td><span class="detalle-lab">Definición</span> Forma corta; solo un handler por elemento.<br><br><span class="detalle-lab">Cuándo usar</span> Código simple; se sobrescribe si asignás dos veces.</td></tr>
+      <tr><td>Atributo <code>onclick="fn()"</code> en HTML</td><td><span class="detalle-lab">Definición</span> JS pegado en el HTML.<br><br><span class="detalle-lab">Cuándo usar</span> <strong>Evitar</strong>: mezcla lógica con estructura y expone funciones globales.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Eventos más usados</h4>
+  <table>
+    <thead><tr><th>Evento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>click</code></td><td><span class="detalle-lab">Dispara cuando</span> Se hace clic.<br><br><span class="detalle-lab">Cuándo usar</span> Botones, enlaces, tarjetas.</td></tr>
+      <tr><td><code>dblclick</code></td><td><span class="detalle-lab">Dispara cuando</span> Doble clic.<br><br><span class="detalle-lab">Cuándo usar</span> Acciones de edición.</td></tr>
+      <tr><td><code>mouseover</code> / <code>mouseout</code></td><td><span class="detalle-lab">Dispara cuando</span> Entra / sale el mouse (también en hijos).<br><br><span class="detalle-lab">Cuándo usar</span> Efectos hover.</td></tr>
+      <tr><td><code>mouseenter</code> / <code>mouseleave</code></td><td><span class="detalle-lab">Dispara cuando</span> Entra / sale el mouse (solo en el propio elemento).<br><br><span class="detalle-lab">Cuándo usar</span> Hover sin "parpadeo" por hijos.</td></tr>
+      <tr><td><code>keydown</code> / <code>keyup</code> / <code>keypress</code></td><td><span class="detalle-lab">Dispara cuando</span> Tecla presionada / soltada.<br><br><span class="detalle-lab">Cuándo usar</span> Atajos de teclado, capturar "Enter".</td></tr>
+      <tr><td><code>submit</code></td><td><span class="detalle-lab">Dispara cuando</span> Se envía un formulario.<br><br><span class="detalle-lab">Cuándo usar</span> Validar antes de enviar.</td></tr>
+      <tr><td><code>change</code></td><td><span class="detalle-lab">Dispara cuando</span> Un input cambia y pierde el foco.<br><br><span class="detalle-lab">Cuándo usar</span> Selects, checkboxes.</td></tr>
+      <tr><td><code>input</code></td><td><span class="detalle-lab">Dispara cuando</span> El valor cambia mientras se escribe.<br><br><span class="detalle-lab">Cuándo usar</span> Autocompletado, contador de caracteres, filtros en vivo.</td></tr>
+      <tr><td><code>focus</code> / <code>blur</code></td><td><span class="detalle-lab">Dispara cuando</span> Gana / pierde el foco.<br><br><span class="detalle-lab">Cuándo usar</span> Resaltar campos.</td></tr>
+      <tr><td><code>load</code></td><td><span class="detalle-lab">Dispara cuando</span> La página/recursos terminaron de cargar.<br><br><span class="detalle-lab">Cuándo usar</span> Inicializar al arrancar.</td></tr>
+      <tr><td><code>scroll</code></td><td><span class="detalle-lab">Dispara cuando</span> Se hace scroll.<br><br><span class="detalle-lab">Cuándo usar</span> Menús fijos, "scroll to top".</td></tr>
+    </tbody>
+  </table>
+
+  <h4>El objeto <code>event</code></h4>
+  <table>
+    <thead><tr><th>Propiedad / método</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>event.target</code></td><td><span class="detalle-lab">Definición</span> El elemento que disparó el evento (hasta un hijo dentro del que tiene el listener).<br><br><span class="detalle-lab">Cuándo usar</span> Delegación de eventos, detectar qué se tocó.</td></tr>
+      <tr><td><code>event.currentTarget</code></td><td><span class="detalle-lab">Definición</span> El elemento que tiene el listener.<br><br><span class="detalle-lab">Cuándo usar</span> Saber "de quién" es el listener.</td></tr>
+      <tr><td><code>event.preventDefault()</code></td><td><span class="detalle-lab">Definición</span> Cancela el comportamiento por defecto.<br><br><span class="detalle-lab">Cuándo usar</span> Evitar que un <code>&lt;a href="#"&gt;</code> navegue o que un <code>&lt;form&gt;</code> recargue la página.</td></tr>
+      <tr><td><code>event.stopPropagation()</code></td><td><span class="detalle-lab">Definición</span> Corta la propagación a los padres.<br><br><span class="detalle-lab">Cuándo usar</span> Evitar que el clic en un hijo también dispare el padre.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>En un evento <code>keydown</code>, <code>event.key</code> te devuelve la tecla (<code>"Enter"</code>, <code>"a"</code>, etc.).</p></blockquote>
+
+  <h3 id="entrada-salida">1.12 Entrada, salida y conversión</h3>
+  <table>
+    <thead><tr><th>Función</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>console.log(x)</code></td><td><span class="detalle-lab">Definición</span> Muestra en la consola del navegador (F12).<br><br><span class="detalle-lab">Variantes</span> <code>console.error</code>, <code>console.warn</code>, <code>console.table</code><br><br><span class="detalle-lab">Cuándo usar</span> Depurar mientras desarrollás; <strong>no</strong> es para mostrar al usuario final.</td></tr>
+      <tr><td><code>alert("texto")</code></td><td><span class="detalle-lab">Definición</span> Ventana emergente con un botón OK.<br><br><span class="detalle-lab">Cuándo usar</span> Avisos; molesta al usuario, evitar para uso normal.</td></tr>
+      <tr><td><code>confirm("pregunta")</code></td><td><span class="detalle-lab">Definición</span> Ventana con OK/Cancelar; devuelve <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Confirmar acciones destructivas (borrar, salir).</td></tr>
+      <tr><td><code>prompt("pregunta")</code></td><td><span class="detalle-lab">Definición</span> Ventana con campo de texto; devuelve <code>string</code> (o <code>null</code> si cancela).<br><br><span class="detalle-lab">Cuándo usar</span> Pedir un dato; obsoleto y poco estético, preferir inputs de formulario.</td></tr>
+      <tr><td><code>Number(x)</code></td><td><span class="detalle-lab">Definición</span> Convierte a número.<br><br><span class="detalle-lab">Variantes</span> <code>Number("5")</code> → <code>5</code>; <code>Number("5px")</code> → <code>NaN</code><br><br><span class="detalle-lab">Cuándo usar</span> Conversión estricta.</td></tr>
+      <tr><td><code>parseInt(x)</code> / <code>parseFloat(x)</code></td><td><span class="detalle-lab">Definición</span> Convierte a entero / decimal leyendo hasta el primer no numérico.<br><br><span class="detalle-lab">Variantes</span> <code>parseInt("5px")</code> → <code>5</code>; <code>parseFloat("5.5cm")</code> → <code>5.5</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando el string puede tener unidades o caracteres extras.</td></tr>
+      <tr><td><code>String(x)</code></td><td><span class="detalle-lab">Definición</span> Convierte a texto.<br><br><span class="detalle-lab">Variantes</span> <code>String(42)</code> → <code>"42"</code><br><br><span class="detalle-lab">Cuándo usar</span> Conversión explícita.</td></tr>
+      <tr><td><code>Boolean(x)</code></td><td><span class="detalle-lab">Definición</span> Convierte a verdadero/falso.<br><br><span class="detalle-lab">Variantes</span> <code>Boolean("")</code> → <code>false</code><br><br><span class="detalle-lab">Cuándo usar</span> Verdad de coerción (valores "falsy": <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>).</td></tr>
+      <tr><td><code>typeof x</code></td><td><span class="detalle-lab">Definición</span> Devuelve el tipo (<code>"string"</code>, <code>"number"</code>, ...).<br><br><span class="detalle-lab">Cuándo usar</span> Validar tipo de dato.</td></tr>
+      <tr><td><code>isNaN(x)</code></td><td><span class="detalle-lab">Definición</span> ¿No es un número válido? <code>boolean</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Verificar que el usuario ingresó un número.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="objetos-nativos">1.13 Objetos nativos útiles</h3>
+  <table>
+    <thead><tr><th>Objeto</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>Math</code></td><td><span class="detalle-lab">Funciones</span> <code>floor</code> (redondea abajo), <code>ceil</code> (arriba), <code>round</code> (normal), <code>random</code> (0 a 1), <code>max</code>, <code>min</code>, <code>abs</code>, <code>pow</code>, <code>sqrt</code><br><br><span class="detalle-lab">Cuándo usar</span> Números aleatorios (<code>Math.floor(Math.random() * n)</code>), redondeos, cálculos.</td></tr>
+      <tr><td><code>Date</code></td><td><span class="detalle-lab">Funciones</span> <code>new Date()</code>, <code>getFullYear()</code>, <code>getMonth()</code> (0-11), <code>getDate()</code>, <code>getDay()</code> (0=domingo), <code>getHours()</code>, <code>toLocaleDateString()</code>, <code>toLocaleTimeString()</code><br><br><span class="detalle-lab">Cuándo usar</span> Fechas y horas; (ojo: <code>getMonth()</code> empieza en 0).</td></tr>
+      <tr><td><code>JSON</code></td><td><span class="detalle-lab">Funciones</span> <code>JSON.stringify(obj)</code> (a texto), <code>JSON.parse(texto)</code> (a objeto)<br><br><span class="detalle-lab">Cuándo usar</span> Guardar/recuperar datos en <code>localStorage</code> o enviarlos.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="tiempo">1.14 Tiempo (temporizadores)</h3>
+  <table>
+    <thead><tr><th>Función</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>setTimeout(fn, ms)</code></td><td><span class="detalle-lab">Definición</span> Ejecuta <code>fn</code> una vez después de <code>ms</code> milisegundos.<br><br><span class="detalle-lab">Cuándo usar</span> Retardos puntuales (mostrar algo a los 3s).</td></tr>
+      <tr><td><code>setInterval(fn, ms)</code></td><td><span class="detalle-lab">Definición</span> Ejecuta <code>fn</code> cada <code>ms</code> repetidamente.<br><br><span class="detalle-lab">Cuándo usar</span> Relojes, contadores, animaciones periódicas.</td></tr>
+      <tr><td><code>clearTimeout(id)</code> / <code>clearInterval(id)</code></td><td><span class="detalle-lab">Definición</span> Cancelan el temporizador.<br><br><span class="detalle-lab">Cuándo usar</span> Detener el intervalo (guardar el <code>id</code> que devuelven).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="persistentes">1.15 Datos persistentes</h3>
+  <table>
+    <thead><tr><th>API</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>localStorage</code></td><td><span class="detalle-lab">Definición</span> Guarda datos (solo strings) y <strong>persisten</strong> al cerrar el navegador.<br><br><span class="detalle-lab">Cuándo usar</span> Preferencias, datos que deben sobrevivir.</td></tr>
+      <tr><td><code>sessionStorage</code></td><td><span class="detalle-lab">Definición</span> Igual pero <strong>solo por pestaña/sesión</strong>, se borra al cerrar.<br><br><span class="detalle-lab">Cuándo usar</span> Datos provisionales.</td></tr>
+      <tr><td>Uso</td><td><span class="detalle-lab">Definición</span> <code>localStorage.setItem("clave", valor)</code> / <code>.getItem("clave")</code> / <code>.removeItem("clave")</code><br><br><span class="detalle-lab">Cuándo usar</span> Guardar con <code>JSON.stringify</code>, leer con <code>JSON.parse</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2 id="html"><span class="seccion-id">2</span>HTML</h2>
+
+  <h3 id="estructura-base">2.1 Estructura base</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td><span class="detalle-lab">Definición</span> Declara HTML5.<br><br><span class="detalle-lab">Cuándo usar</span> Siempre, primera línea.</td></tr>
+      <tr><td><code>&lt;html&gt;</code></td><td><span class="detalle-lab">Definición</span> Elemento raíz.<br><br><strong>Variantes / atributos:</strong> <code>lang="es"</code><br><br><span class="detalle-lab">Cuándo usar</span> Siempre; <code>lang</code> ayuda a accesibilidad/SEO.</td></tr>
+      <tr><td><code>&lt;head&gt;</code></td><td><span class="detalle-lab">Definición</span> Metadatos (no visibles).<br><br><span class="detalle-lab">Cuándo usar</span> Parte superior del documento.</td></tr>
+      <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td><span class="detalle-lab">Definición</span> Codificación de caracteres.<br><br><span class="detalle-lab">Cuándo usar</span> Evita problemas con tildes/ñ.</td></tr>
+      <tr><td><code>&lt;meta name="viewport" ...&gt;</code></td><td><span class="detalle-lab">Definición</span> Viewport responsive para móviles.<br><br><strong>Variantes / atributos:</strong> <code>width=device-width, initial-scale=1.0</code><br><br><span class="detalle-lab">Cuándo usar</span> Necesario para diseño mobile.</td></tr>
+      <tr><td><code>&lt;title&gt;</code></td><td><span class="detalle-lab">Definición</span> Título de la pestaña.<br><br><span class="detalle-lab">Cuándo usar</span> Texto breve descriptivo.</td></tr>
+      <tr><td><code>&lt;link&gt;</code></td><td><span class="detalle-lab">Definición</span> Conecta recursos externos.<br><br><strong>Variantes / atributos:</strong> <code>rel="stylesheet" href="ruta.css"</code><br><br><span class="detalle-lab">Cuándo usar</span> Cargar CSS (y Bootstrap).</td></tr>
+      <tr><td><code>&lt;script&gt;</code></td><td><span class="detalle-lab">Definición</span> Carga/inserta JavaScript.<br><br><strong>Variantes / atributos:</strong> <code>src="archivo.js"</code> o código inline; <code>defer</code><br><br><span class="detalle-lab">Cuándo usar</span> Al final del <code>&lt;body&gt;</code> o con <code>defer</code> en <code>&lt;head&gt;</code>.</td></tr>
+      <tr><td><code>&lt;body&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenido visible.<br><br><span class="detalle-lab">Cuándo usar</span> Todo el contenido de la página.</td></tr>
+      <tr><td><code>&lt;style&gt;</code></td><td><span class="detalle-lab">Definición</span> CSS dentro del HTML (inline).<br><br><span class="detalle-lab">Cuándo usar</span> Solo para prototipos chicos; en proyectos se usa <code>&lt;link&gt;</code> a un <code>.css</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="contenedores">2.2 Contenedores y estructura</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;div&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenedor en <strong>bloque</strong>, sin significado semántico.<br><br><strong>Variantes / atributos:</strong> <code>class</code>, <code>id</code><br><br><span class="detalle-lab">Cuándo usar</span> Agrupar visualmente (grillas, tarjetas).</td></tr>
+      <tr><td><code>&lt;span&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenedor en <strong>línea</strong>, sin significado.<br><br><strong>Variantes / atributos:</strong> <code>class</code><br><br><span class="detalle-lab">Cuándo usar</span> Marcar fragmentos de una línea (ej. una palabra de color).</td></tr>
+      <tr><td><code>&lt;section&gt;</code></td><td><span class="detalle-lab">Definición</span> Sección semántica del contenido.<br><br><span class="detalle-lab">Cuándo usar</span> Dividir la página en temas.</td></tr>
+      <tr><td><code>&lt;article&gt;</code></td><td><span class="detalle-lab">Definición</span> Cada unidad independiente (una noticia, un post).<br><br><span class="detalle-lab">Cuándo usar</span> Contenido autónomo repetible.</td></tr>
+      <tr><td><code>&lt;header&gt;</code> / <code>&lt;footer&gt;</code></td><td><span class="detalle-lab">Definición</span> Encabezado / pie del documento o sección.<br><br><span class="detalle-lab">Cuándo usar</span> Zonas superior/inferior.</td></tr>
+      <tr><td><code>&lt;main&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenido principal único.<br><br><span class="detalle-lab">Cuándo usar</span> Contener el contenido central.</td></tr>
+      <tr><td><code>&lt;nav&gt;</code></td><td><span class="detalle-lab">Definición</span> Grupo de enlaces de navegación.<br><br><span class="detalle-lab">Cuándo usar</span> Menús, barras de navegación.</td></tr>
+      <tr><td><code>&lt;aside&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenido lateral relacionado.<br><br><span class="detalle-lab">Cuándo usar</span> Sidebars, publicidad.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="texto-h">2.3 Texto</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;h1&gt;</code> ... <code>&lt;h6&gt;</code></td><td><span class="detalle-lab">Definición</span> Títulos por jerarquía (h1 el más grande, h6 el menor).<br><br><span class="detalle-lab">Cuándo usar</span> <strong>Un solo <code>&lt;h1&gt;</code></strong> por página (importancia SEO); el resto por niveles.</td></tr>
+      <tr><td><code>&lt;p&gt;</code></td><td><span class="detalle-lab">Definición</span> Párrafo.<br><br><span class="detalle-lab">Cuándo usar</span> Bloques de texto.</td></tr>
+      <tr><td><code>&lt;strong&gt;</code></td><td><span class="detalle-lab">Definición</span> Texto <strong>en negrita</strong> con énfasis semántico.<br><br><span class="detalle-lab">Cuándo usar</span> Importancia real del contenido.</td></tr>
+      <tr><td><code>&lt;b&gt;</code></td><td><span class="detalle-lab">Definición</span> Negrita sin significado.<br><br><span class="detalle-lab">Cuándo usar</span> Solo visual (mejor <code>strong</code>).</td></tr>
+      <tr><td><code>&lt;em&gt;</code></td><td><span class="detalle-lab">Definición</span> Cursiva con énfasis semántico.<br><br><span class="detalle-lab">Cuándo usar</span> Enfatizar palabras.</td></tr>
+      <tr><td><code>&lt;mark&gt;</code></td><td><span class="detalle-lab">Definición</span> Resaltado tipo marcador.<br><br><span class="detalle-lab">Cuándo usar</span> Subrayar con color.</td></tr>
+      <tr><td><code>&lt;br&gt;</code></td><td><span class="detalle-lab">Definición</span> Salto de línea simple.<br><br><span class="detalle-lab">Cuándo usar</span> Evitar para separar bloques; usar margen/spacing.</td></tr>
+      <tr><td><code>&lt;hr&gt;</code></td><td><span class="detalle-lab">Definición</span> Línea divisoria horizontal.<br><br><span class="detalle-lab">Cuándo usar</span> Separar secciones.</td></tr>
+      <tr><td><code>&lt;blockquote&gt;</code></td><td><span class="detalle-lab">Definición</span> Cita en bloque.<br><br><span class="detalle-lab">Cuándo usar</span> Citas largas.</td></tr>
+      <tr><td><code>&lt;code&gt;</code></td><td><span class="detalle-lab">Definición</span> Texto como código.<br><br><span class="detalle-lab">Cuándo usar</span> Fragmentos de código en línea.</td></tr>
+      <tr><td><code>&lt;!-- comentario --&gt;</code></td><td><span class="detalle-lab">Definición</span> Comentario invisible.<br><br><span class="detalle-lab">Cuándo usar</span> Documentar el código.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="listas-h">2.4 Listas</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;ul&gt;</code></td><td><span class="detalle-lab">Definición</span> Lista <strong>desordenada</strong> (con viñetas).<br><br><span class="detalle-lab">Cuándo usar</span> Elementos sin orden.</td></tr>
+      <tr><td><code>&lt;ol&gt;</code></td><td><span class="detalle-lab">Definición</span> Lista <strong>ordenada</strong> (numerada).<br><br><span class="detalle-lab">Variantes</span> <code>start</code>, <code>reversed</code>, <code>type="A"/"a"/"i"</code><br><br><span class="detalle-lab">Cuándo usar</span> Pasos, rankings (hay orden).</td></tr>
+      <tr><td><code>&lt;li&gt;</code></td><td><span class="detalle-lab">Definición</span> Cada ítem de la lista.<br><br><span class="detalle-lab">Cuándo usar</span> Hijo directo de <code>ul</code>/<code>ol</code>.</td></tr>
+      <tr><td><code>&lt;dl&gt;</code> / <code>&lt;dt&gt;</code> / <code>&lt;dd&gt;</code></td><td><span class="detalle-lab">Definición</span> Lista de definiciones (término/descripción).<br><br><span class="detalle-lab">Cuándo usar</span> Glosarios, datos clave-valor.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="enlaces">2.5 Enlaces e imágenes</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;a&gt;</code></td><td><span class="detalle-lab">Definición</span> Enlace.<br><br><strong>Variantes / atributos:</strong> <code>href="url"</code> (destino), <code>target="_blank"</code> (nueva pestaña), <code>rel="noopener"</code> (seguridad)<br><br><span class="detalle-lab">Cuándo usar</span> Navegación; <code>href="#"</code> es placeholder (el <code>#</code> no navega a ningún lado).</td></tr>
+      <tr><td><code>&lt;img&gt;</code></td><td><span class="detalle-lab">Definición</span> Imagen.<br><br><strong>Variantes / atributos:</strong> <code>src</code> (ruta), <code>alt</code> (texto alternativo, obligatorio y descriptivo), <code>width</code>/<code>height</code>, <code>loading="lazy"</code><br><br><span class="detalle-lab">Cuándo usar</span> Mostrar imágenes; el <code>alt</code> mejora accesibilidad y SEO.</td></tr>
+      <tr><td><code>&lt;picture&gt;</code></td><td><span class="detalle-lab">Definición</span> Variante de imagen responsive (varias fuentes).<br><br><strong>Variantes / atributos:</strong> <code>&lt;source media=... srcset=...&gt;</code><br><br><span class="detalle-lab">Cuándo usar</span> Diferentes imágenes según pantalla.</td></tr>
+      <tr><td><code>&lt;figure&gt;</code> / <code>&lt;figcaption&gt;</code></td><td><span class="detalle-lab">Definición</span> Imagen + leyenda.<br><br><span class="detalle-lab">Cuándo usar</span> Imágenes con pie descriptivo.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="formularios">2.6 Formularios</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;form&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenedor de formulario.<br><br><strong>Variantes / atributos:</strong> <code>action</code> (a dónde envía), <code>method="GET"/"POST"</code>, <code>onsubmit</code> / evento <code>submit</code><br><br><span class="detalle-lab">Cuándo usar</span> Recolectar datos del usuario.</td></tr>
+      <tr><td><code>&lt;input&gt;</code></td><td><span class="detalle-lab">Definición</span> Campo de entrada.<br><br><strong>Variantes / atributos:</strong> <code>type</code> (<code>text</code>, <code>number</code>, <code>password</code>, <code>email</code>, <code>date</code>, <code>checkbox</code>, <code>radio</code>, <code>range</code>, <code>color</code>, <code>file</code>), <code>placeholder</code>, <code>required</code>, <code>min</code>/<code>max</code>, <code>value</code><br><br><span class="detalle-lab">Cuándo usar</span> Cada tipo según el dato: <code>number</code> para números, <code>email</code> valida formato, <code>checkbox/radio</code> para opciones.</td></tr>
+      <tr><td><code>&lt;label&gt;</code></td><td><span class="detalle-lab">Definición</span> Etiqueta de un campo.<br><br><strong>Variantes / atributos:</strong> <code>for="id_input"</code> conecta con el input (clic en la etiqueta enfoca el campo)<br><br><span class="detalle-lab">Cuándo usar</span> Accesibilidad: siempre vincular con <code>for</code>.</td></tr>
+      <tr><td><code>&lt;textarea&gt;</code></td><td><span class="detalle-lab">Definición</span> Área de texto multilínea.<br><br><strong>Variantes / atributos:</strong> <code>rows</code>, <code>cols</code>, <code>placeholder</code><br><br><span class="detalle-lab">Cuándo usar</span> Comentarios, descripciones largas.</td></tr>
+      <tr><td><code>&lt;select&gt;</code> / <code>&lt;option&gt;</code></td><td><span class="detalle-lab">Definición</span> Lista desplegable.<br><br><strong>Variantes / atributos:</strong> <code>&lt;option value="x"&gt;</code>; <code>&lt;select multiple&gt;</code><br><br><span class="detalle-lab">Cuándo usar</span> Elegir una opción de muchas.</td></tr>
+      <tr><td><code>&lt;button&gt;</code></td><td><span class="detalle-lab">Definición</span> Botón.<br><br><strong>Variantes / atributos:</strong> <code>type="submit"</code> (envía el form), <code>type="button"</code> (no envía, para JS), <code>type="reset"</code><br><br><span class="detalle-lab">Cuándo usar</span> En formularios usar <code>type="submit"</code>; para acciones JS usar <code>type="button"</code>.</td></tr>
+      <tr><td><code>fieldset</code> / <code>legend</code></td><td><span class="detalle-lab">Definición</span> Agrupa campos con título.<br><br><span class="detalle-lab">Cuándo usar</span> Formularios largos por secciones.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="tablas">2.7 Tablas y otros</h3>
+  <table>
+    <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;table&gt;</code></td><td><span class="detalle-lab">Definición</span> Tabla.<br><br><span class="detalle-lab">Variantes</span> Combinar con <code>&lt;caption&gt;</code> (título)<br><br><span class="detalle-lab">Cuándo usar</span> Datos tabulares.</td></tr>
+      <tr><td><code>&lt;thead&gt;</code> / <code>&lt;tbody&gt;</code> / <code>&lt;tfoot&gt;</code></td><td><span class="detalle-lab">Definición</span> Cabecera / cuerpo / pie de tabla.<br><br><span class="detalle-lab">Cuándo usar</span> Separar encabezados del cuerpo.</td></tr>
+      <tr><td><code>&lt;tr&gt;</code></td><td><span class="detalle-lab">Definición</span> Fila.<br><br><span class="detalle-lab">Cuándo usar</span> Filas.</td></tr>
+      <tr><td><code>&lt;th&gt;</code> / <code>&lt;td&gt;</code></td><td><span class="detalle-lab">Definición</span> Celda de cabecera / celda de dato.<br><br><span class="detalle-lab">Variantes</span> <code>colspan</code>, <code>rowspan</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>th</code> para títulos de columna (negrita).</td></tr>
+      <tr><td><code>&lt;iframe&gt;</code></td><td><span class="detalle-lab">Definición</span> Contenido embebido (otra página/video).<br><br><span class="detalle-lab">Variantes</span> <code>src</code>, <code>width</code>, <code>height</code>, <code>title</code><br><br><span class="detalle-lab">Cuándo usar</span> Videos de YouTube, mapas.</td></tr>
+      <tr><td><code>data-atributos</code></td><td><span class="detalle-lab">Definición</span> Atributos personalizados <code>data-*</code>.<br><br><span class="detalle-lab">Variantes</span> <code>data-id="5"</code>, leídos con <code>el.dataset.id</code><br><br><span class="detalle-lab">Cuándo usar</span> Guardar info extra en elementos para JS.</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2 id="css"><span class="seccion-id">3</span>CSS</h2>
+
+  <h3 id="selectores">3.1 Selectores</h3>
+  <table>
+    <thead><tr><th>Selector</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>elemento</code></td><td><span class="detalle-lab">Definición</span> Todas las etiquetas de ese tipo.<br><br><span class="detalle-lab">Variantes</span> <code>p</code>, <code>div</code>, <code>nav</code><br><br><span class="detalle-lab">Cuándo usar</span> Estilos generales de una etiqueta (resets, base).</td></tr>
+      <tr><td><code>.clase</code></td><td><span class="detalle-lab">Definición</span> Todos los elementos con esa clase.<br><br><span class="detalle-lab">Variantes</span> <code>.contenedor</code><br><br><span class="detalle-lab">Cuándo usar</span> Estilo reutilizable; la más común.</td></tr>
+      <tr><td><code>#id</code></td><td><span class="detalle-lab">Definición</span> El único elemento con ese id.<br><br><span class="detalle-lab">Cuándo usar</span> Estilo único; se prefiere clase para reutilizar.</td></tr>
+      <tr><td><code>A B</code></td><td><span class="detalle-lab">Definición</span> <code>B</code> <strong>descendiente</strong> de <code>A</code> (cualquier nivel).<br><br><span class="detalle-lab">Variantes</span> <code>nav a</code><br><br><span class="detalle-lab">Cuándo usar</span> Estilizar todo un árbol (todos los <code>a</code> dentro de <code>nav</code>).</td></tr>
+      <tr><td><code>A &gt; B</code></td><td><span class="detalle-lab">Definición</span> <code>B</code> <strong>hijo directo</strong> de <code>A</code>.<br><br><span class="detalle-lab">Variantes</span> <code>ul &gt; li</code><br><br><span class="detalle-lab">Cuándo usar</span> Solo el primer nivel.</td></tr>
+      <tr><td><code>A, B</code></td><td><span class="detalle-lab">Definición</span> Agrupa selectores (mismo estilo).<br><br><span class="detalle-lab">Variantes</span> <code>h1, h2</code><br><br><span class="detalle-lab">Cuándo usar</span> Aplicar el mismo bloque a varios.</td></tr>
+      <tr><td><code>:hover</code></td><td><span class="detalle-lab">Definición</span> Cuando el mouse está encima (pseudo-clase).<br><br><span class="detalle-lab">Variantes</span> <code>a:hover</code><br><br><span class="detalle-lab">Cuándo usar</span> Efectos interactivos.</td></tr>
+      <tr><td><code>:first-child</code> / <code>:last-child</code></td><td><span class="detalle-lab">Definición</span> Primer / último hijo.<br><br><span class="detalle-lab">Variantes</span> <code>li:first-child</code><br><br><span class="detalle-lab">Cuándo usar</span> Bordes, espacios según posición.</td></tr>
+      <tr><td><code>:nth-child(n)</code></td><td><span class="detalle-lab">Definición</span> Enésimo hijo.<br><br><span class="detalle-lab">Variantes</span> <code>nth-child(2)</code>, <code>nth-child(odd)</code><br><br><span class="detalle-lab">Cuándo usar</span> Pares/impares, posiciones.</td></tr>
+      <tr><td><code>::before</code> / <code>::after</code></td><td><span class="detalle-lab">Definición</span> Pseudo-elementos que se insertan antes/después.<br><br><span class="detalle-lab">Variantes</span> <code>contenido:""</code><br><br><span class="detalle-lab">Cuándo usar</span> Decoraciones (iconos, separadores).</td></tr>
+      <tr><td><code>[atributo]</code></td><td><span class="detalle-lab">Definición</span> Elementos con ese atributo.<br><br><span class="detalle-lab">Variantes</span> <code>input[type="text"]</code><br><br><span class="detalle-lab">Cuándo usar</span> Selectividad por atributos.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="caja">3.2 Caja (box model) y dimensiones</h3>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>width</code> / <code>height</code></td><td><span class="detalle-lab">Definición</span> Ancho / alto del contenido.<br><br><span class="detalle-lab">Variantes</span> valores en <code>px</code>, <code>%</code>, <code>rem</code>, <code>vw/vh</code><br><br><span class="detalle-lab">Cuándo usar</span> Tamaños puntuales; <code>%</code> para responsive.</td></tr>
+      <tr><td><code>max-width</code></td><td><span class="detalle-lab">Definición</span> Ancho máximo (no supera aunque <code>width</code> lo pida).<br><br><span class="detalle-lab">Cuándo usar</span> Contenedores que nunca desbordan (ej. leer fácil en pantallas grandes).</td></tr>
+      <tr><td><code>min-height</code> / <code>min-width</code></td><td><span class="detalle-lab">Definición</span> Mínimos.<br><br><span class="detalle-lab">Cuándo usar</span> Zonas que no deben achicarse.</td></tr>
+      <tr><td><code>padding</code></td><td><span class="detalle-lab">Definición</span> Espacio interno (dentro del borde).<br><br><span class="detalle-lab">Variantes</span> <code>padding</code>, <code>padding-top/right/bottom/left</code>; atajo <code>1rem 2rem</code> (arriba/abajo, izq/der)<br><br><span class="detalle-lab">Cuándo usar</span> Separar el contenido del borde.</td></tr>
+      <tr><td><code>margin</code></td><td><span class="detalle-lab">Definición</span> Espacio externo (fuera del borde).<br><br><span class="detalle-lab">Variantes</span> <code>margin</code>, individuales, <code>margin: auto</code> (centrar bloque)<br><br><span class="detalle-lab">Cuándo usar</span> Separar un elemento de los demás; <code>auto</code> centra horizontalmente bloques con <code>width</code>.</td></tr>
+      <tr><td><code>border</code></td><td><span class="detalle-lab">Definición</span> Borde.<br><br><span class="detalle-lab">Variantes</span> <code>border</code>, <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code>, <code>border-left</code>, atajo <code>1px solid #000</code> (grosor estilo color)<br><br><span class="detalle-lab">Cuándo usar</span> Delimitar o resaltar cajas.</td></tr>
+      <tr><td><code>border-radius</code></td><td><span class="detalle-lab">Definición</span> Esquinas redondeadas.<br><br><span class="detalle-lab">Variantes</span> px, <code>%</code> (círculo con 50%)<br><br><span class="detalle-lab">Cuándo usar</span> Tarjetas suaves, botones pill, círculos.</td></tr>
+      <tr><td><code>box-sizing</code></td><td><span class="detalle-lab">Definición</span> Cómo se calcula el tamaño.<br><br><span class="detalle-lab">Variantes</span> <code>content-box</code> (por defecto), <code>border-box</code> (incluye padding+borde en width)<br><br><span class="detalle-lab">Cuándo usar</span> <strong><code>border-box</code> recomendado por defecto</strong> para evitar que padding agrande las cajas.</td></tr>
+      <tr><td><code>box-shadow</code></td><td><span class="detalle-lab">Definición</span> Sombras.<br><br><span class="detalle-lab">Variantes</span> <code>offset-x offset-y blur color</code><br><br><span class="detalle-lab">Cuándo usar</span> Elevar elementos (profundidad).</td></tr>
+      <tr><td><code>overflow</code></td><td><span class="detalle-lab">Definición</span> Qué pasa con el contenido que desborda.<br><br><span class="detalle-lab">Variantes</span> <code>visible</code>, <code>hidden</code>, <code>scroll</code>, <code>auto</code><br><br><span class="detalle-lab">Cuándo usar</span> Cortar contenido o hacer scroll interno.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="layout">3.3 Display y layout</h3>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>display</code></td><td><span class="detalle-lab">Definición</span> Cómo se muestra el elemento.<br><br><span class="detalle-lab">Variantes</span> <code>block</code> (ocupa toda la línea), <code>inline</code> (en la línea), <code>inline-block</code>, <code>flex</code>, <code>grid</code>, <code>none</code> (oculta)<br><br><span class="detalle-lab">Cuándo usar</span> <code>flex</code> para layouts en una dimensión; <code>grid</code> para grillas en dos; <code>none</code> para ocultar.</td></tr>
+      <tr><td><code>flex-direction</code></td><td><span class="detalle-lab">Definición</span> Dirección del eje principal.<br><br><span class="detalle-lab">Variantes</span> <code>row</code> (default), <code>column</code>, <code>row-reverse</code>, <code>column-reverse</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>column</code> para apilar verticalmente (como en el <code>nav</code> del punto 5).</td></tr>
+      <tr><td><code>justify-content</code></td><td><span class="detalle-lab">Definición</span> Alinea en el <strong>eje principal</strong>.<br><br><span class="detalle-lab">Variantes</span> <code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>space-between</code> para separar con espacios iguales (usado en <code>.contenedor</code>).</td></tr>
+      <tr><td><code>align-items</code></td><td><span class="detalle-lab">Definición</span> Alinea en el <strong>eje transversal</strong> (por elemento).<br><br><span class="detalle-lab">Variantes</span> <code>stretch</code> (default), <code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>baseline</code><br><br><span class="detalle-lab">Cuándo usar</span> Centrar verticalmente los hijos; <code>.contenido</code> usa <code>flex-start</code>.</td></tr>
+      <tr><td><code>align-content</code></td><td><span class="detalle-lab">Definición</span> Alinea varias líneas en el eje transversal.<br><br><span class="detalle-lab">Variantes</span> Iguales que <code>align-items</code><br><br><span class="detalle-lab">Cuándo usar</span> Solo con flex-wrap y varias líneas.</td></tr>
+      <tr><td><code>flex-wrap</code></td><td><span class="detalle-lab">Definición</span> ¿Los hijos pasan a otra línea o se comprimen?<br><br><span class="detalle-lab">Variantes</span> <code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code><br><br><span class="detalle-lab">Cuándo usar</span> Layouts responsive que deben acomodarse.</td></tr>
+      <tr><td><code>gap</code></td><td><span class="detalle-lab">Definición</span> Espacio <strong>entre</strong> hijos flex/grid (no crea márgenes por fuera).<br><br><span class="detalle-lab">Variantes</span> <code>gap</code>, <code>row-gap</code>, <code>column-gap</code><br><br><span class="detalle-lab">Cuándo usar</span> Separación limpia de los ítems (usado en <code>.contenedor</code>: <code>gap: 30px</code>).</td></tr>
+      <tr><td><code>flex</code></td><td><span class="detalle-lab">Definición</span> Atajo <code>flex: grow shrink basis</code>.<br><br><span class="detalle-lab">Variantes</span> <code>flex: 1;</code> (crece)<br><br><span class="detalle-lab">Cuándo usar</span> Repartir el espacio sobrante.</td></tr>
+      <tr><td><code>order</code></td><td><span class="detalle-lab">Definición</span> Cambia el orden visual de los hijos flex.<br><br><span class="detalle-lab">Variantes</span> número<br><br><span class="detalle-lab">Cuándo usar</span> Reordenar sin tocar el HTML.</td></tr>
+      <tr><td><code>position</code></td><td><span class="detalle-lab">Definición</span> Posicionamiento.<br><br><span class="detalle-lab">Variantes</span> <code>static</code>, <code>relative</code>, <code>absolute</code>, <code>fixed</code>, <code>sticky</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>relative</code> como ancla; <code>absolute</code> relativo al padre; <code>fixed</code> fijo a la pantalla; <code>sticky</code> pega al hacer scroll.</td></tr>
+      <tr><td><code>float</code></td><td><span class="detalle-lab">Definición</span> Elemento a la izquierda/derecha (viejo).<br><br><span class="detalle-lab">Variantes</span> <code>left</code>, <code>right</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Evitar</strong>; usar flex/grid.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="tipografia">3.4 Tipografía y colores</h3>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>font-family</code></td><td><span class="detalle-lab">Definición</span> Familia tipográfica.<br><br><span class="detalle-lab">Variantes</span> <code>Arial, sans-serif</code> (lista en cascada)<br><br><span class="detalle-lab">Cuándo usar</span> Usar una familia base + <code>sans-serif</code> como respaldo.</td></tr>
+      <tr><td><code>font-size</code></td><td><span class="detalle-lab">Definición</span> Tamaño de la letra.<br><br><span class="detalle-lab">Variantes</span> <code>px</code>, <code>rem</code>, <code>em</code>, <code>%</code><br><br><span class="detalle-lab">Cuándo usar</span> <code>rem</code> escala con el tamaño raíz (accesible); <code>px</code> fijo.</td></tr>
+      <tr><td><code>font-weight</code></td><td><span class="detalle-lab">Definición</span> Grosor.<br><br><span class="detalle-lab">Variantes</span> <code>normal</code> (400), <code>bold</code> (700), <code>bolder</code>, <code>lighter</code>, número 100-900<br><br><span class="detalle-lab">Cuándo usar</span> Enfasis de texto.</td></tr>
+      <tr><td><code>font-style</code></td><td><span class="detalle-lab">Definición</span> Estilo.<br><br><span class="detalle-lab">Variantes</span> <code>normal</code>, <code>italic</code><br><br><span class="detalle-lab">Cuándo usar</span> Cursivas.</td></tr>
+      <tr><td><code>text-align</code></td><td><span class="detalle-lab">Definición</span> Alineación del texto.<br><br><span class="detalle-lab">Variantes</span> <code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code><br><br><span class="detalle-lab">Cuándo usar</span> Centrar títulos, justificar párrafos largos.</td></tr>
+      <tr><td><code>text-decoration</code></td><td><span class="detalle-lab">Definición</span> Decoración.<br><br><span class="detalle-lab">Variantes</span> <code>none</code> (saca el subrayado de los enlaces), <code>underline</code>, <code>line-through</code><br><br><span class="detalle-lab">Cuándo usar</span> Quitar el subrayado de <code>&lt;a&gt;</code> (usado en <code>nav a</code>).</td></tr>
+      <tr><td><code>text-transform</code></td><td><span class="detalle-lab">Definición</span> Capitalización automática.<br><br><span class="detalle-lab">Variantes</span> <code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code><br><br><span class="detalle-lab">Cuándo usar</span> Poner en mayúsculas sin editar el texto.</td></tr>
+      <tr><td><code>text-shadow</code></td><td><span class="detalle-lab">Definición</span> Sombra del texto.<br><br><span class="detalle-lab">Variantes</span> <code>x y blur color</code><br><br><span class="detalle-lab">Cuándo usar</span> Títulos llamativos.</td></tr>
+      <tr><td><code>color</code></td><td><span class="detalle-lab">Definición</span> Color del texto.<br><br><span class="detalle-lab">Variantes</span> nombres, <code>#hex</code>, <code>rgb()</code>, <code>rgba()</code>, <code>hsl()</code><br><br><span class="detalle-lab">Cuándo usar</span> Texto; usar contraste suficiente.</td></tr>
+      <tr><td><code>background-color</code></td><td><span class="detalle-lab">Definición</span> Color de fondo.<br><br><span class="detalle-lab">Variantes</span> igual que <code>color</code><br><br><span class="detalle-lab">Cuándo usar</span> Fondos (usado en <code>.contenedor</code>: amarillo).</td></tr>
+      <tr><td><code>background-image</code></td><td><span class="detalle-lab">Definición</span> Imagen de fondo.<br><br><span class="detalle-lab">Variantes</span> <code>url(...)</code>, <code>background-size</code>, <code>background-position</code><br><br><span class="detalle-lab">Cuándo usar</span> Fondos decorativos.</td></tr>
+      <tr><td><code>opacity</code></td><td><span class="detalle-lab">Definición</span> Transparencia (0 a 1).<br><br><span class="detalle-lab">Variantes</span> <code>0.5</code><br><br><span class="detalle-lab">Cuándo usar</span> Atenuar elementos.</td></tr>
+      <tr><td><code>line-height</code></td><td><span class="detalle-lab">Definición</span> Altura de línea.<br><br><span class="detalle-lab">Variantes</span> <code>1.5</code> sin unidad (recomendado), o <code>px</code><br><br><span class="detalle-lab">Cuándo usar</span> Legibilidad de párrafos.</td></tr>
+      <tr><td><code>letter-spacing</code> / <code>word-spacing</code></td><td><span class="detalle-lab">Definición</span> Espaciado entre letras / palabras.<br><br><span class="detalle-lab">Variantes</span> px/tem<br><br><span class="detalle-lab">Cuándo usar</span> Títulos espaciados.</td></tr>
+      <tr><td><code>white-space</code></td><td><span class="detalle-lab">Definición</span> Manejo de espacios y saltos.<br><br><span class="detalle-lab">Variantes</span> <code>nowrap</code> (no corta línea), <code>pre</code>, <code>normal</code><br><br><span class="detalle-lab">Cuándo usar</span> Evitar que un texto se parta (usado en <code>nav a</code>).</td></tr>
+      <tr><td><code>text-overflow</code> + <code>overflow</code></td><td><span class="detalle-lab">Definición</span> "..." cuando el texto desborda.<br><br><span class="detalle-lab">Variantes</span> <code>ellipsis</code><br><br><span class="detalle-lab">Cuándo usar</span> Títulos largos truncados.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="otros-css">3.5 Otros</h3>
+  <table>
+    <thead><tr><th>Propiedad</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>list-style</code></td><td><span class="detalle-lab">Definición</span> Viñetas/listas.<br><br><span class="detalle-lab">Variantes</span> <code>none</code>, <code>disc</code>, <code>square</code>, <code>decimal</code><br><br><span class="detalle-lab">Cuándo usar</span> Sacar viñetas a <code>&lt;ul&gt;</code> (usado en <code>nav ul</code>).</td></tr>
+      <tr><td><code>cursor</code></td><td><span class="detalle-lab">Definición</span> Cursor del mouse.<br><br><span class="detalle-lab">Variantes</span> <code>pointer</code>, <code>default</code>, <code>grab</code><br><br><span class="detalle-lab">Cuándo usar</span> Cursor de mano en elementos clicables.</td></tr>
+      <tr><td><code>visibility</code></td><td><span class="detalle-lab">Definición</span> Oculta pero conserva el espacio.<br><br><span class="detalle-lab">Variantes</span> <code>visible</code>, <code>hidden</code><br><br><span class="detalle-lab">Cuándo usar</span> Alternativa a <code>display:none</code> cuando no querés que se mueva el layout.</td></tr>
+      <tr><td><code>z-index</code></td><td><span class="detalle-lab">Definición</span> Orden de apilamiento.<br><br><span class="detalle-lab">Variantes</span> número<br><br><span class="detalle-lab">Cuándo usar</span> Superponer capas (menús flotantes).</td></tr>
+      <tr><td><code>transition</code></td><td><span class="detalle-lab">Definición</span> Animación suave entre estados.<br><br><span class="detalle-lab">Variantes</span> <code>property duration easing</code><br><br><span class="detalle-lab">Cuándo usar</span> Hover con transición en vez de salto seco.</td></tr>
+      <tr><td><code>animation</code> / <code>@keyframes</code></td><td><span class="detalle-lab">Definición</span> Animaciones complejas.<br><br><span class="detalle-lab">Cuándo usar</span> Movimientos, cargas.</td></tr>
+      <tr><td>Media queries</td><td><span class="detalle-lab">Definición</span> CSS por tamaño de pantalla.<br><br><span class="detalle-lab">Variantes</span> <code>@media (max-width: 768px) {...}</code><br><br><span class="detalle-lab">Cuándo usar</span> Diseño responsive adaptando estilos.</td></tr>
+      <tr><td><code>!important</code></td><td><span class="detalle-lab">Definición</span> Fuerza la prioridad máxima.<br><br><span class="detalle-lab">Cuándo usar</span> <strong>Evitar</strong>: rompe la cascada; solo como último recurso.</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2 id="bootstrap"><span class="seccion-id">4</span>Bootstrap</h2>
+  <p>Bootstrap se carga con el <strong>CDN</strong> (solo CSS en el TP3):</p>
+<pre>&lt;link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/&gt;</pre>
+  <p>En el TP3 se usan: <code>punto3/index.html</code> y <code>punto8/index.html</code>.</p>
+
+  <h3 id="layout-bs">4.1 Layout: contenedores y la grilla de 12 columnas</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>container</code></td><td><span class="detalle-lab">Definición</span> Contenedor centrado con ancho máximo adaptado a la pantalla y márgenes laterales.<br><br><span class="detalle-lab">Variantes</span> <code>container-fluid</code> (ancho completo), <code>container-sm/md/lg/xl/xxl</code> (ancho máximo según breakpoint)<br><br><span class="detalle-lab">Cuándo usar</span> Páginas normales; <code>container</code> es lo que usan los puntos 3 y 8.</td></tr>
+      <tr><td><code>row</code></td><td><span class="detalle-lab">Definición</span> Fila de la grilla = contenedor flex; los hijos directos deben ser <code>col</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Siempre que armes una grilla; los <code>col</code> van dentro de <code>row</code>.</td></tr>
+      <tr><td><code>row-cols-2</code></td><td><span class="detalle-lab">Definición</span> Cada fila divide el espacio en <strong>2 columnas iguales por fila</strong> sin escribir <code>col</code> en cada hijo.<br><br><span class="detalle-lab">Variantes</span> <code>row-cols-1/2/3/4/5/6</code>, <code>row-cols-md-3</code> (solo desde cierto breakpoint)<br><br><span class="detalle-lab">Cuándo usar</span> Cuando todos los ítems ocupan el mismo tamaño (punto 3 usa <code>row-cols-2</code>).</td></tr>
+      <tr><td><code>col</code></td><td><span class="detalle-lab">Definición</span> Columna que reparte el espacio disponible en partes iguales junto a las demás.<br><br><span class="detalle-lab">Cuándo usar</span> Grilla automática e igualitaria.</td></tr>
+      <tr><td><code>col-md-4</code></td><td><span class="detalle-lab">Definición</span> Columna de <strong>4 de las 12</strong> partes en pantallas <code>≥ md</code> (768px); debajo de eso apila (ocupa 100%).<br><br><span class="detalle-lab">Variantes</span> <code>col-{breakpoint}-{1..12}</code>: <code>sm</code> (576), <code>md</code> (768), <code>lg</code> (992), <code>xl</code> (1200), <code>xxl</code> (1400); <code>col-6</code> sin breakpoint aplica siempre<br><br><span class="detalle-lab">Cuándo usar</span> Cuando querés controlar proporciones. <code>col-md-4</code> = 3 por fila (usado en punto 8). 12 puede dividirse en 12/6/4/3/2.</td></tr>
+      <tr><td><code>g-0</code></td><td><span class="detalle-lab">Definición</span> Elimina el <strong>gutter</strong> (espacio entre columnas).<br><br><span class="detalle-lab">Variantes</span> <code>g-1..g-5</code> (tamaño), <code>gx-*</code> (horizontal), <code>gy-*</code> (vertical), <code>g-md-3</code> (por breakpoint)<br><br><span class="detalle-lab">Cuándo usar</span> <code>g-0</code> cuando las columnas van pegadas (imágenes consecutivas del punto 8); <code>g-4</code> cuando querés separación.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Regla de la grilla: la suma de columnas en una fila da 12 (<code>col-md-4</code> x3 = 12). Combiná <code>col-6 col-md-4</code> para distintas proporciones según el tamaño de pantalla (responsive).</p></blockquote>
+
+  <h3 id="espaciado">4.2 Espaciado (margin y padding)</h3>
+  <p>Sistema <code>{propiedad}{lado}-{tamaño}</code> con tamaños de <code>0</code> a <code>5</code> (multiplicador de 0.25rem: 0=0, 1=0.25rem, 2=0.5rem, 3=1rem, 4=1.5rem, 5=3rem) y <code>auto</code>.</p>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>mt-5</code></td><td><span class="detalle-lab">Definición</span> Margen superior grande (3rem).<br><br><span class="detalle-lab">Variantes</span> <code>mt-0..5</code>, <code>mt-auto</code><br><br><span class="detalle-lab">Cuándo usar</span> <strong>Margin top</strong>: separar del elemento de arriba (punto 8).</td></tr>
+      <tr><td><code>mt-4</code></td><td><span class="detalle-lab">Definición</span> Margen superior 1.5rem.<br><br><span class="detalle-lab">Cuándo usar</span> Mayor margen top que <code>mt-3</code> (punto 3).</td></tr>
+      <tr><td><code>mt-3</code></td><td><span class="detalle-lab">Definición</span> Margen superior 1rem.<br><br><span class="detalle-lab">Cuándo usar</span> Margen top estándar (punto 8, pie).</td></tr>
+      <tr><td><code>mx-3</code></td><td><span class="detalle-lab">Definición</span> Margen horizontal (izq+der) de 1rem.<br><br><span class="detalle-lab">Variantes</span> <code>mx-0..5</code>, <code>mx-auto</code> (centra el bloque); laterales <code>ms-*</code> (start) y <code>me-*</code> (end)<br><br><span class="detalle-lab">Cuándo usar</span> <code>mx-auto</code> es la forma de centrar; <code>mx-3</code> separa de los lados (punto 3).</td></tr>
+      <tr><td><code>my-*</code></td><td><span class="detalle-lab">Definición</span> Margen vertical (arriba+abajo).<br><br><span class="detalle-lab">Variantes</span> <code>my-0..5</code><br><br><span class="detalle-lab">Cuándo usar</span> Separación vertical sin distinguir lado.</td></tr>
+      <tr><td><code>p-4</code></td><td><span class="detalle-lab">Definición</span> Padding de 1.5rem en los 4 lados.<br><br><span class="detalle-lab">Variantes</span> <code>p-0..5</code><br><br><span class="detalle-lab">Cuándo usar</span> Aire interno por igual (punto 8, carteles).</td></tr>
+      <tr><td><code>py-2</code></td><td><span class="detalle-lab">Definición</span> Padding vertical (arriba+abajo) de 0.5rem.<br><br><span class="detalle-lab">Variantes</span> <code>py-0..5</code><br><br><span class="detalle-lab">Cuándo usar</span> Alto del banner (punto 3).</td></tr>
+      <tr><td><code>py-3</code></td><td><span class="detalle-lab">Definición</span> Padding vertical de 1rem.<br><br><span class="detalle-lab">Cuándo usar</span> Aire vertical del punto 3.</td></tr>
+      <tr><td><code>px-*</code> / <code>pt-*</code> / <code>pb-*</code></td><td><span class="detalle-lab">Definición</span> Padding horizontal / arriba / abajo.<br><br><span class="detalle-lab">Variantes</span> <code>px-0..5</code>, etc.<br><br><span class="detalle-lab">Cuándo usar</span> Control por lado.</td></tr>
+    </tbody>
+  </table>
+  <blockquote><p>Lados: <code>t</code> (top), <code>b</code> (bottom), <code>s</code> (start/izquierda), <code>e</code> (end/derecha), <code>x</code> (horizontal), <code>y</code> (vertical).</p></blockquote>
+
+  <h3 id="flexbox-bs">4.3 Flexbox</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>d-flex</code></td><td><span class="detalle-lab">Definición</span> Activa <code>display: flex</code>.<br><br><span class="detalle-lab">Variantes</span> <code>d-inline-flex</code>, <code>d-flex</code> con breakpoint <code>d-md-flex</code>; control de display: <code>d-none</code> (oculta), <code>d-block</code>, <code>d-inline</code>, <code>d-grid</code><br><br><span class="detalle-lab">Cuándo usar</span> Cuando sus hijos deben alinearse/distribuirse (usado en las columnas del punto 8).</td></tr>
+      <tr><td><code>flex-column</code></td><td><span class="detalle-lab">Definición</span> Eje principal vertical (<code>flex-direction: column</code>).<br><br><span class="detalle-lab">Variantes</span> <code>flex-row</code> (default), <code>flex-row-reverse</code>, <code>flex-column-reverse</code><br><br><span class="detalle-lab">Cuándo usar</span> Apilar verticalmente el contenido del cartel (punto 8).</td></tr>
+      <tr><td><code>justify-content-center</code></td><td><span class="detalle-lab">Definición</span> Centra los hijos en el <strong>eje principal</strong>.<br><br><span class="detalle-lab">Variantes</span> <code>justify-content-start/end/center/space-between/space-around/space-evenly</code><br><br><span class="detalle-lab">Cuándo usar</span> Centrar horizontalmente en un flex row (punto 8); <code>space-between</code> separa hijos con espacio igual.</td></tr>
+      <tr><td><code>align-items-center</code></td><td><span class="detalle-lab">Definición</span> Centra los hijos en el <strong>eje transversal</strong>.<br><br><span class="detalle-lab">Variantes</span> <code>align-items-start/end/center/baseline/stretch</code><br><br><span class="detalle-lab">Cuándo usar</span> Centrar verticalmente dentro de un <code>d-flex</code> (punto 8) para que el contenido quede a la altura de las imágenes.</td></tr>
+      <tr><td><code>flex-grow-*</code> / <code>flex-shrink-*</code> / <code>flex-fill</code></td><td><span class="detalle-lab">Definición</span> Cómo crecen/encogen los hijos.<br><br><span class="detalle-lab">Variantes</span> <code>flex-grow-0/1</code><br><br><span class="detalle-lab">Cuándo usar</span> Repartir espacio.</td></tr>
+      <tr><td><code>flex-wrap</code></td><td><span class="detalle-lab">Definición</span> Permite que los hijos pasen a otra línea.<br><br><span class="detalle-lab">Variantes</span> <code>flex-nowrap</code>, <code>flex-wrap-reverse</code><br><br><span class="detalle-lab">Cuándo usar</span> Grillas flexibles.</td></tr>
+      <tr><td><code>align-self-*</code></td><td><span class="detalle-lab">Definición</span> Alinea UN hijo en el eje transversal.<br><br><span class="detalle-lab">Variantes</span> <code>align-self-center/end/...</code><br><br><span class="detalle-lab">Cuándo usar</span> Ajustar un solo elemento.</td></tr>
+      <tr><td><code>order-*</code></td><td><span class="detalle-lab">Definición</span> Orden visual de los hijos.<br><br><span class="detalle-lab">Variantes</span> <code>order-0..5</code>, <code>order-first/last</code><br><br><span class="detalle-lab">Cuándo usar</span> Reordenar sin tocar HTML.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="colores">4.4 Colores de fondo y texto</h3>
+
+  <h4>Fondo (<code>bg-*</code>)</h4>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>bg-dark</code></td><td><span class="detalle-lab">Definición</span> Fondo oscuro (gris casi negro).<br><br><span class="detalle-lab">Cuándo usar</span> Cartel negro "Our Programs" (punto 8) y banner "SABINA Y SERRAT" (punto 3).</td></tr>
+      <tr><td><code>bg-warning</code></td><td><span class="detalle-lab">Definición</span> Fondo amarillo/ámbar (color de alerta).<br><br><span class="detalle-lab">Cuándo usar</span> Cartel "Indoor Sports" (punto 8).</td></tr>
+      <tr><td><code>bg-danger</code></td><td><span class="detalle-lab">Definición</span> Fondo rojo (peligro/error).<br><br><span class="detalle-lab">Cuándo usar</span> Cartel "Yoga Classes" (punto 8).</td></tr>
+      <tr><td>—</td><td><span class="detalle-lab">Definición</span> Otras variantes: <code>bg-primary</code> (azul Bootstrap), <code>bg-secondary</code> (gris), <code>bg-success</code> (verde), <code>bg-info</code> (celeste), <code>bg-light</code> (blanco apenas gris), <code>bg-white</code>, <code>bg-transparent</code>, <code>bg-gradient</code> (degradado sutil)<br><br><span class="detalle-lab">Cuándo usar</span> Semántica: <code>success</code> para éxitos, <code>danger</code> para errores/borrar, <code>warning</code> para avisos, <code>primary</code> para acciones principales.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Texto (<code>text-*</code>)</h4>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>text-white</code></td><td><span class="detalle-lab">Definición</span> Texto blanco (encima de fondos oscuros).<br><br><span class="detalle-lab">Cuándo usar</span> Sobre <code>bg-dark</code>/<code>bg-danger</code> (puntos 3 y 8).</td></tr>
+      <tr><td><code>text-dark</code></td><td><span class="detalle-lab">Definición</span> Texto oscuro (encima de fondos claros).<br><br><span class="detalle-lab">Cuándo usar</span> Sobre <code>bg-warning</code> (punto 8).</td></tr>
+      <tr><td><code>text-secondary</code></td><td><span class="detalle-lab">Definición</span> Gris secundario de Bootstrap.<br><br><span class="detalle-lab">Cuándo usar</span> Subtítulos y aclaraciones ("We will help...", "Images from Freepik", punto 8).</td></tr>
+      <tr><td>—</td><td><span class="detalle-lab">Definición</span> Variantes de color: <code>text-primary</code>, <code>text-success</code>, <code>text-warning</code>, <code>text-danger</code>, <code>text-info</code>, <code>text-light</code>, <code>text-black</code>, <code>text-muted</code>; con fondo se usa <code>text-bg-*</code>.<br><br><span class="detalle-lab">Cuándo usar</span> Usar igual semántica que los <code>bg-*</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="tipografia-bs">4.5 Tipografía y alineación</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>text-center</code></td><td><span class="detalle-lab">Definición</span> Texto centrado.<br><br><span class="detalle-lab">Variantes</span> <code>text-start</code> (izq), <code>text-end</code> (der), <code>text-justify</code><br><br><span class="detalle-lab">Cuándo usar</span> Centrar títulos y bloques (punto 3 y 8); en breakpoints <code>text-md-center</code>.</td></tr>
+      <tr><td><code>text-start</code></td><td><span class="detalle-lab">Definición</span> Texto alineado a la izquierda.<br><br><span class="detalle-lab">Cuándo usar</span> Carteles de texto (punto 8).</td></tr>
+      <tr><td><code>text-uppercase</code></td><td><span class="detalle-lab">Definición</span> Todo en mayúsculas.<br><br><span class="detalle-lab">Variantes</span> <code>text-lowercase</code>, <code>text-capitalize</code><br><br><span class="detalle-lab">Cuándo usar</span> Títulos "SABINA Y SERRAT" (punto 3).</td></tr>
+      <tr><td><code>fw-bold</code></td><td><span class="detalle-lab">Definición</span> Texto en negrita.<br><br><span class="detalle-lab">Variantes</span> <code>fw-normal</code>, <code>fw-light</code>, <code>fw-bolder</code>, <code>fw-semibold</code><br><br><span class="detalle-lab">Cuándo usar</span> Destacar títulos (punto 3).</td></tr>
+      <tr><td><code>fst-italic</code></td><td><span class="detalle-lab">Definición</span> Cursiva.<br><br><span class="detalle-lab">Variantes</span> <code>fst-normal</code><br><br><span class="detalle-lab">Cuándo usar</span> Enfatizar.</td></tr>
+      <tr><td><code>small</code></td><td><span class="detalle-lab">Definición</span> Texto más chico (85%).<br><br><span class="detalle-lab">Variantes</span> <code>fs-1..fs-6</code> (tamaños), <code>&lt;small&gt;</code><br><br><span class="detalle-lab">Cuándo usar</span> Aclaraciones y pies (punto 8).</td></tr>
+      <tr><td><code>lh-*</code></td><td><span class="detalle-lab">Definición</span> Altura de línea.<br><br><span class="detalle-lab">Variantes</span> <code>lh-1</code>, <code>lh-sm</code>, <code>lh-base</code>, <code>lh-lg</code><br><br><span class="detalle-lab">Cuándo usar</span> Legibilidad.</td></tr>
+      <tr><td><code>text-truncate</code></td><td><span class="detalle-lab">Definición</span> Corta con "..." cuando desborda.<br><br><span class="detalle-lab">Cuándo usar</span> Títulos largos.</td></tr>
+      <tr><td><code>text-wrap</code> / <code>text-nowrap</code></td><td><span class="detalle-lab">Definición</span> Controla el salto de línea.<br><br><span class="detalle-lab">Cuándo usar</span> Evitar cortes de texto.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="bordes">4.6 Bordes y radius</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>border</code></td><td><span class="detalle-lab">Definición</span> Borde de 1px gris en los 4 lados.<br><br><span class="detalle-lab">Variantes</span> <code>border-0</code> (sin borde), <code>border-top/end/bottom/start</code> (solo un lado)<br><br><span class="detalle-lab">Cuándo usar</span> Marco de cajas (punto 3 recuadra las noticias).</td></tr>
+      <tr><td><code>border-dark</code></td><td><span class="detalle-lab">Definición</span> Color del borde oscuro.<br><br><span class="detalle-lab">Variantes</span> Colores: <code>border-primary/secondary/success/danger/warning/info/light/dark/white</code>; grosor <code>border-1..5</code><br><br><span class="detalle-lab">Cuándo usar</span> Borde oscuro definido (punto 3).</td></tr>
+      <tr><td><code>rounded</code></td><td><span class="detalle-lab">Definición</span> Esquinas redondeadas.<br><br><span class="detalle-lab">Variantes</span> <code>rounded-0/1/2/3/4/5</code>, <code>rounded-circle</code> (círculo), <code>rounded-pill</code> (píldora), <code>rounded-top/...</code><br><br><span class="detalle-lab">Cuándo usar</span> Tarjetas suaves, avatares circulares.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="imagenes">4.7 Imágenes y dimensiones</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>img-fluid</code></td><td><span class="detalle-lab">Definición</span> Imagen responsive: <code>max-width: 100%; height: auto</code> (nunca desborda el contenedor).<br><br><span class="detalle-lab">Cuándo usar</span> Base para toda imagen (punto 8).</td></tr>
+      <tr><td><code>img-thumbnail</code></td><td><span class="detalle-lab">Definición</span> Marco tipo miniatura.<br><br><span class="detalle-lab">Cuándo usar</span> Galerías.</td></tr>
+      <tr><td><code>rounded-circle</code></td><td><span class="detalle-lab">Definición</span> Imagen circular.<br><br><span class="detalle-lab">Cuándo usar</span> Avatares.</td></tr>
+      <tr><td><code>w-100</code></td><td><span class="detalle-lab">Definición</span> <code>width: 100%</code> (llena todo el ancho del contenedor).<br><br><span class="detalle-lab">Cuándo usar</span> Que la imagen ocupe toda la columna (punto 8).</td></tr>
+      <tr><td><code>h-100</code></td><td><span class="detalle-lab">Definición</span> <code>height: 100%</code> (llena todo el alto del padre flex).<br><br><span class="detalle-lab">Cuándo usar</span> Que la imagen tenga el mismo alto que el cartel contiguo (punto 8, con <code>d-flex</code> en el padre).</td></tr>
+      <tr><td><code>object-fit-cover</code></td><td><span class="detalle-lab">Definición</span> La imagen cubre el área recortando sin deformarse (<code>object-fit</code>).<br><br><span class="detalle-lab">Cuándo usar</span> Con <code>w-100 h-100</code> para que las fotos se vean parejas aunque tengan distinta proporción (punto 8).</td></tr>
+      <tr><td>Otras utilidades</td><td><span class="detalle-lab">Cuándo usar</span> Tamaños <code>w-25/50/75</code>, <code>mw-100</code> (máximo), <code>vh-100</code> (alto del viewport), <code>ratio</code> (aspect ratio de iframes/videos).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="botones">4.8 Botones (clases de las "funciones" de Bootstrap, por si se suman al TP)</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>btn</code></td><td><span class="detalle-lab">Definición</span> Base de todo botón de Bootstrap (debe acompañar a una variante).<br><br><span class="detalle-lab">Cuándo usar</span> <strong>Siempre</strong> junto con un color/estilo.</td></tr>
+      <tr><td><code>btn-primary</code> ... <code>btn-dark</code></td><td><span class="detalle-lab">Definición</span> Color de fondo del botón.<br><br><span class="detalle-lab">Variantes</span> <code>btn-primary</code>, <code>btn-secondary</code>, <code>btn-success</code>, <code>btn-danger</code>, <code>btn-warning</code>, <code>btn-info</code>, <code>btn-light</code>, <code>btn-dark</code>, <code>btn-link</code><br><br><span class="detalle-lab">Cuándo usar</span> Mismo criterio semántico que los <code>bg-*</code>: 1 acción principal por página (<code>primary</code>), <code>danger</code> para borrar, <code>success</code> para confirmar.</td></tr>
+      <tr><td><code>btn-outline-*</code></td><td><span class="detalle-lab">Definición</span> Botón transparente con borde de color.<br><br><span class="detalle-lab">Variantes</span> <code>btn-outline-primary</code>, etc.<br><br><span class="detalle-lab">Cuándo usar</span> Botones secundarios/menos protagonistas.</td></tr>
+      <tr><td><code>btn-sm</code> / <code>btn-lg</code></td><td><span class="detalle-lab">Definición</span> Tamaño chico / grande.<br><br><span class="detalle-lab">Cuándo usar</span> Corregir el tamaño según contexto.</td></tr>
+      <tr><td><code>btn-block</code> / <code>d-grid</code> + <code>gap</code></td><td><span class="detalle-lab">Definición</span> Botón de ancho completo.<br><br><span class="detalle-lab">Cuándo usar</span> CTA de ancho total.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="utilidades">4.9 Otras utilidades útiles</h3>
+  <table>
+    <thead><tr><th>Clase</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><code>shadow</code></td><td><span class="detalle-lab">Definición</span> Sombra suave.<br><br><span class="detalle-lab">Variantes</span> <code>shadow-sm</code>, <code>shadow</code>, <code>shadow-lg</code>, <code>shadow-none</code><br><br><span class="detalle-lab">Cuándo usar</span> Elevar tarjetas/modales.</td></tr>
+      <tr><td><code>opacity-*</code></td><td><span class="detalle-lab">Definición</span> Transparencia.<br><br><span class="detalle-lab">Variantes</span> <code>opacity-25/50/75/100</code><br><br><span class="detalle-lab">Cuándo usar</span> Atenuar.</td></tr>
+      <tr><td><code>position-*</code></td><td><span class="detalle-lab">Definición</span> Posicionamiento.<br><br><span class="detalle-lab">Variantes</span> <code>position-relative/absolute/fixed/sticky</code><br><br><span class="detalle-lab">Cuándo usar</span> Botones flotantes, encabezados fijos.</td></tr>
+      <tr><td><code>sticky-top</code></td><td><span class="detalle-lab">Definición</span> Elemento que "se pega" arriba al hacer scroll.<br><br><span class="detalle-lab">Variantes</span> <code>sticky-bottom</code><br><br><span class="detalle-lab">Cuándo usar</span> Barras de navegación que quedan visibles.</td></tr>
+      <tr><td><code>fixed-top</code> / <code>fixed-bottom</code></td><td><span class="detalle-lab">Definición</span> Fijo sobre la pantalla.<br><br><span class="detalle-lab">Cuándo usar</span> Headers/footers fijos.</td></tr>
+      <tr><td><code>invisible</code> / <code>visible</code></td><td><span class="detalle-lab">Definición</span> Oculta/muestra sin afectar el espacio.<br><br><span class="detalle-lab">Cuándo usar</span> Alternativa a <code>d-none</code>.</td></tr>
+      <tr><td><code>overflow-*</code></td><td><span class="detalle-lab">Definición</span> Control del scroll interno.<br><br><span class="detalle-lab">Variantes</span> <code>overflow-auto/hidden/visible</code><br><br><span class="detalle-lab">Cuándo usar</span> Recortar cajas.</td></tr>
+      <tr><td><code>text-break</code></td><td><span class="detalle-lab">Definición</span> Corta palabras largas.<br><br><span class="detalle-lab">Cuándo usar</span> URLs largas.</td></tr>
+      <tr><td><code>me-*</code> (<code>margin-end</code>)</td><td><span class="detalle-lab">Definición</span> Separa a la izquierda del siguiente.<br><br><span class="detalle-lab">Cuándo usar</span> Espaciado entre botones/elementos en fila.</td></tr>
+      <tr><td><code>user-select-*</code></td><td><span class="detalle-lab">Definición</span> Permite/prohíbe seleccionar texto.<br><br><span class="detalle-lab">Variantes</span> <code>user-select-none</code><br><br><span class="detalle-lab">Cuándo usar</span> Elementos tipo "toolbar".</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="resumen-tp">4.10 Resumen de lo usado en el TP3</h3>
+  <table>
+    <thead><tr><th>Punto</th><th>Clases de Bootstrap usadas</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>punto3</strong></td>
+        <td><code>container</code>, <code>text-center</code>, <code>mt-4</code>, <code>row</code>, <code>row-cols-2</code>, <code>g-4</code>, <code>col</code>, <code>border</code>, <code>border-dark</code>, <code>py-3</code>, <code>mx-3</code>, <code>py-2</code>, <code>bg-dark</code>, <code>text-white</code>, <code>text-uppercase</code>, <code>fw-bold</code></td>
+      </tr>
+      <tr>
+        <td><strong>punto8</strong></td>
+        <td><code>container</code>, <code>mt-5</code>, <code>text-center</code>, <code>text-secondary</code>, <code>row</code>, <code>g-0</code>, <code>col-md-4</code>, <code>d-flex</code>, <code>flex-column</code>, <code>justify-content-center</code>, <code>align-items-center</code>, <code>img-fluid</code>, <code>w-100</code>, <code>h-100</code>, <code>object-fit-cover</code>, <code>bg-dark</code>, <code>bg-warning</code>, <code>bg-danger</code>, <code>text-white</code>, <code>text-dark</code>, <code>p-4</code>, <code>text-start</code>, <code>small</code>, <code>mt-3</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<a class="volver-arriba" href="#" title="Volver arriba">↑ Volver arriba</a>
+</body>
+</html>
