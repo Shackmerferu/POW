@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 2 · Bases y operadores · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html" selected>2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Bases y operadores</p>
+  <h1>Bases, variables y operadores</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>Formas de mostrar contenido (salida)</h2>
+  <table>
+    <tr><th>Método</th><th>¿Qué hace?</th></tr>
+    <tr><td><code>document.write("texto"+"&lt;BR&gt;")</code></td><td>Escribe directamente en la página (borra el contenido actual de la página si se ejecuta tras cargar).</td></tr>
+    <tr><td><code>console.log("texto")</code></td><td>Muestra en la consola del navegador (ideal para depurar).</td></tr>
+    <tr><td><code>window.alert()</code></td><td>Abre una ventana de mensaje con un botón Aceptar.</td></tr>
+    <tr><td><code>innerHTML</code> / <code>innerText</code></td><td>Escribe <strong>dentro</strong> de un elemento de la página.</td></tr>
+  </table>
+  <pre><code>&lt;SCRIPT&gt;
+  document.write("Hola Mundo" + "&lt;BR&gt;");
+  document.write("&lt;B&gt;Hola JavaScript&lt;/B&gt;");
+&lt;/SCRIPT&gt;</code></pre>
+  <ul>
+    <li>El texto puede ir entre comillas simples o dobles.</li>
+    <li>Los tags HTML embebidos en el texto son interpretados por el navegador. <code>&lt;B&gt;</code>… pone el texto en negrita.</li>
+    <li>Para <em>mostrar</em> los tags como texto se usan <strong>caracteres de escape</strong>: <code>&amp;lt;</code> = <code>&lt;</code>, <code>&amp;gt;</code> = <code>&gt;</code>.</li>
+  </ul>
+
+  <h2>Comentarios</h2>
+  <pre><code>// Esta es una línea de comentario
+/* Este es un comentario
+   multilínea */</code></pre>
+  <p>Los comentarios son ignorados por el intérprete y sirven para documentar el código.</p>
+
+  <h2>Variables: <code>var</code>, <code>let</code> y <code>const</code></h2>
+  <table>
+    <tr><th>Forma</th><th>Qué hace</th></tr>
+    <tr><td><code>var x</code></td><td>Define una variable con ámbito global o de función.</td></tr>
+    <tr><td><code>let x = 5</code></td><td>Variable con valor variable. No puede <em>redeclararse</em>; si se usa dentro de un bloque <code>{ }</code> no puede accederse fuera de él.</td></tr>
+    <tr><td><code>const PI = 3.14</code></td><td>Constante con valor fijo. No puede redefinirse (<code>PI = 3</code> es inválido).</td></tr>
+    <tr><td><code>x = 2</code> (sin n-ada declaración)</td><td>Se asigna un valor sin declarar: la variable queda global.</td></tr>
+  </table>
+  <div class="alert warn"><strong>Ojo:</strong> <code>let</code> y <code>const</code> se agregaron en ES2015; no funcionan en navegadores muy antiguos que no contemplen ese estándar.</div>
+
+  <h3>Redefinir ≠ reasignar</h3>
+  <pre><code>let x = 4;
+let x = 54;   // ERROR: se está REDEFINIENDO (no es válido)
+
+let x = 4;
+x = 54;       // OK: se está REASIGNANDO el valor (sin usar let)</code></pre>
+
+  <h3>Ámbito en bloques</h3>
+  <p><code>var</code> (o una variable sin declarar) es global en el documento o en la función. <code>let</code> y <code>const</code> pueden limitarse a un bloque <code>{ }</code>:</p>
+  <pre><code>let x = 5;
+{
+  let x = 5;   // este x vive solo dentro del bloque
+  ...
+}
+// al finalizar el bloque, x vale 5 (el del exterior)</code></pre>
+
+  <h2>Tipos de datos</h2>
+  <ul>
+    <li><strong>Cadena de caracteres</strong> (string): <code>"Hola JavaScript"</code>, <code>'Hola JavaScript'</code></li>
+    <li><strong>Números</strong> (number): <code>1</code>, <code>5</code>, <code>3.14</code>, <code>65000</code></li>
+    <li><strong>Booleanos</strong> (boolean): <code>true</code>, <code>false</code></li>
+  </ul>
+  <h3>Reglas de las variables</h3>
+  <ul>
+    <li>JavaScript distingue mayúsculas/minúsculas: <code>PEPE</code>, <code>Pepe</code> y <code>pepe</code> son variables <strong>distintas</strong>.</li>
+    <li>Deben comenzar con una <strong>letra o subrayado</strong> (<code>_</code>); luego letras, números o subrayados.</li>
+    <li>JS <strong>no es tipado</strong>: las variables no declaran tipo y la conversión es automática.</li>
+    <li>Conviene inicializar indicando el tipo para clarificar: <code>var nombre = ""</code>, <code>var año = 0</code>, <code>var vive = true</code>.</li>
+    <li>Una variable puede ser <strong>reasignada</strong> con otro tipo: <code>var dato = 0; dato = "hola mundo";</code> es válido.</li>
+  </ul>
+
+  <h2>Operadores</h2>
+  <table>
+    <tr><th>Categoría</th><th>Operador</th><th>Qué hace</th></tr>
+    <tr><td>Strings</td><td><code>+</code></td><td>Concatenación de cadenas: <code>"Hola" + " Mundo"</code> → <code>"Hola Mundo"</code></td></tr>
+    <tr><td rowspan="5">Numéricos</td><td><code>+</code></td><td>Suma</td></tr>
+    <tr><td><code>-</code></td><td>Resta</td></tr>
+    <tr><td><code>*</code></td><td>Multiplicación</td></tr>
+    <tr><td><code>/</code></td><td>División</td></tr>
+    <tr><td><code>%</code></td><td>Módulo (resto de la división)</td></tr>
+    <tr><td rowspan="2">Incrementales</td><td><code>++</code></td><td>Incrementa en 1: <code>y = x++</code>, <code>++x</code>, <code>y = x + 1</code></td></tr>
+    <tr><td><code>--</code></td><td>Decrementa en 1: <code>y = x--</code>, <code>--x</code>, <code>y = x - 1</code></td></tr>
+    <tr><td rowspan="6">Igualdad / comparación</td><td><code>==</code></td><td>Es igual a</td></tr>
+    <tr><td><code>!=</code></td><td>No es igual</td></tr>
+    <tr><td><code>&gt;</code></td><td>Mayor que</td></tr>
+    <tr><td><code>&gt;=</code></td><td>Mayor o igual que</td></tr>
+    <tr><td><code>&lt;</code></td><td>Menor que</td></tr>
+    <tr><td><code>&lt;=</code></td><td>Menor o igual que</td></tr>
+    <tr><td rowspan="3">Lógicos</td><td><code>&amp;&amp;</code></td><td>AND lógico (y)</td></tr>
+    <tr><td><code>||</code></td><td>OR lógico (o)</td></tr>
+    <tr><td><code>!</code></td><td>NOT (negación)</td></tr>
+  </table>
+
+  <h2>Respetando el contenido de las variables</h2>
+  <p>Aunque JS no es tipado, hay que respetar qué contiene cada variable. La conversión automática puede dar resultados sorprendentes:</p>
+  <pre><code>var r = 2;   r = r + 5;     // r = 7      (suma)
+var r = "2"; r = r + 5;     // r = "25"   (concatenación de un string y un entero)
+var r = "2"; r = r * 5;     // r = 10     (aunque sea string, el * fuerza multiplicación)
+var r = "2"; r = r - 5 + r; // r = -32    (resta y luego concatena)
+var r = "ra" + 16;          // r = ra16
+var r = 2 * 3 + "ra";       // r = 6ra</code></pre>
+
+  <div class="pager">
+    <a href="js01-introduccion.html">← Introducción</a>
+    <a class="next" href="js03-control-flujo.html">Siguiente: Control de flujo →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 2 · Guía de Tecnologías Web</footer>
+</body>
+</html>

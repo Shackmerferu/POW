@@ -1,0 +1,73 @@
+:root{
+  --bg:#fafafa;
+  --card:#ffffff;
+  --text:#1f2328;
+  --muted:#6b7280;
+  --accent:#4f46e5;
+  --accent-soft:#eef2ff;
+  --border:#e5e7eb;
+  --code:#0f172a;
+  --code-text:#e2e8f0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+.container{max-width:900px;margin:0 auto;padding:0 18px}
+
+/* ---- Header / navegación ---- */
+header.top{position:sticky;top:0;background:rgba(255,255,255,.93);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);z-index:10}
+.nav{display:flex;align-items:center;gap:14px;padding:10px 0;flex-wrap:wrap}
+.nav .brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.nav .brand:hover{text-decoration:underline}
+.nav select{flex:1;min-width:220px;max-width:360px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;color:var(--text)}
+.nav .roots{font-size:13px;color:var(--muted)}
+
+main{padding:30px 0 20px}
+.crumb{color:var(--muted);font-size:13px;margin:0 0 2px}
+h1{font-size:30px;margin:6px 0 4px;letter-spacing:-.3px}
+h2{font-size:21px;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--border)}
+h2:first-of-type{border-top:none;margin-top:8px;padding-top:0}
+h3{font-size:16px;margin:22px 0 8px;color:#111827}
+p{color:#374151}
+
+code{background:var(--accent-soft);color:#3730a3;padding:2px 6px;border-radius:5px;font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code);color:var(--code-text);padding:16px 18px;border-radius:10px;overflow-x:auto;font-size:13.5px;line-height:1.6;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+pre code{background:none;color:inherit;padding:0;font-size:inherit}
+pre em,pre .c{color:#94a3b8;font-style:normal}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:14px 0}
+.badge{display:inline-block;font-size:11px;letter-spacing:.6px;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);padding:3px 10px;border-radius:999px;font-weight:600;vertical-align:middle}
+.kbd{background:#111827;color:#fff;border-radius:5px;padding:1px 7px;font-family:ui-monospace,Consolas,monospace;font-size:.85em}
+
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;background:#fff}
+th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:#f3f4f6;font-weight:600}
+tr:nth-child(even) td{background:#fafbfc}
+
+.alert{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.alert.warn{border-color:#d97706;background:#fffbeb}
+.tip{border-left:4px solid #059669;background:#ecfdf5;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+
+ul,ol{margin:8px 0 8px 22px;padding:0}
+li{margin:4px 0}
+strong{color:#111827}
+
+/* ---- Grid del index ---- */
+.hero{text-align:left;padding:34px 0 8px}
+.hero p{max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:6px 0 10px}
+.group{margin:22px 0}
+.group h2{padding-top:0;border-top:none;margin-bottom:12px}
+.tile{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;color:var(--text);display:block;transition:box-shadow .15s,border-color .15s}
+.tile:hover{box-shadow:0 6px 18px rgba(79,70,229,.12);border-color:var(--accent)}
+.tile .num{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+.tile .tt{font-weight:600;font-size:15.5px;color:#111827}
+.tile .ds{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+/* ---- Pager ---- */
+.pager{display:flex;justify-content:space-between;gap:10px;margin:52px 0 10px}
+.pager a{text-decoration:none;color:var(--accent);border:1px solid var(--border);padding:10px 16px;border-radius:8px;background:#fff;font-size:14px;max-width:46%}
+.pager a:hover{border-color:var(--accent);background:var(--accent-soft)}
+.pager .next{margin-left:auto;text-align:right}
+
+footer{padding:8px 0 34px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);margin-top:18px}

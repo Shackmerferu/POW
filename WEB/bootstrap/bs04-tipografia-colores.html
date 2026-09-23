@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 4 · Tipografía y colores · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html" selected>4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Tipografía y colores</p>
+  <h1>Tipografía y colores: clases para texto y fondo</h1>
+
+  <h2>Tamaños de título: h1–h6 y display</h2>
+  <p>Las etiquetas <code>&lt;h1&gt;</code>…<code>&lt;h6&gt;</code> ya vienen con tamaños definidos, y podés aplicar ese mismo tamaño a cualquier elemento con las clases <code>h1</code>…<code>h6</code>. Para encabezados mucho más grandes está la familia <code>display</code>.</p>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>&lt;h1&gt;…&lt;/h6&gt;</code> o <code>class="h1"…"h6"</code></td><td>Los 6 niveles de título ya estilizados (2.5rem → 1rem).</td></tr>
+    <tr><td><code>display-1</code> … <code>display-6</code></td><td>Títulos gigantes de encabezado (5rem → 2.5rem).</td></tr>
+    <tr><td><code>lead</code></td><td>Párrafo destacado, más grande y claro.</td></tr>
+    <tr><td><code>small</code> o <code>&lt;small&gt;</code></td><td>Texto chico (85% del tamaño).</td></tr>
+    <tr><td><code>mark</code> o <code>&lt;mark&gt;</code></td><td>Texto con resaltado amarillo.</td></tr>
+    <tr><td><code>&lt;abbr title="…"&gt;</code></td><td>Abreviatura con subrayado punteado y tooltip nativo.</td></tr>
+  </table>
+
+  <h2>Alineación, mayúsculas y cortes</h2>
+  <table>
+    <tr><th>Clase</th><th>Equivale en CSS a</th></tr>
+    <tr><td><code>text-start</code></td><td><code>text-align: left</code></td></tr>
+    <tr><td><code>text-center</code></td><td><code>text-align: center</code></td></tr>
+    <tr><td><code>text-end</code></td><td><code>text-align: right</code></td></tr>
+    <tr><td><code>text-uppercase</code></td><td><code>text-transform: uppercase</code></td></tr>
+    <tr><td><code>text-lowercase</code></td><td><code>text-transform: lowercase</code></td></tr>
+    <tr><td><code>text-capitalize</code></td><td><code>text-transform: capitalize</code></td></tr>
+    <tr><td><code>text-truncate</code></td><td>Corta con "…" cuando el texto desborda (necesita ancho fijo).</td></tr>
+    <tr><td><code>text-wrap</code> / <code>text-nowrap</code></td><td>Permite / evita el salto de línea.</td></tr>
+    <tr><td><code>text-break</code></td><td>Rompe palabras largas (URLs) para que no desborden.</td></tr>
+    <tr><td><code>text-decoration-none</code></td><td>Sin subrayado (muy usado en enlaces).</td></tr>
+    <tr><td><code>text-decoration-underline</code> / <code>-line-through</code></td><td>Subrayado / tachado.</td></tr>
+  </table>
+  <div class="tip">La alineación y casi todo lo de texto acepta prefijos de breakpoint: <code>text-sm-center</code>, <code>text-md-end</code>, etc. Igual que las columnas: aplica desde ese ancho en adelante.</div>
+
+  <h2>Peso, estilo y altura de línea</h2>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>fw-bold</code></td><td>Grasa (<code>font-weight: 700</code>).</td></tr>
+    <tr><td><code>fw-bolder</code> / <code>fw-semibold</code> / <code>fw-normal</code> / <code>fw-light</code> / <code>fw-lighter</code></td><td>Los demás pesos disponibles (900 / 600 / 400 / 300 / 200).</td></tr>
+    <tr><td><code>fst-italic</code> / <code>fst-normal</code></td><td>Activa / quita la cursiva.</td></tr>
+    <tr><td><code>font-monospace</code></td><td>Usa la familia de fuente monoespaciada.</td></tr>
+    <tr><td><code>lh-1</code> / <code>lh-sm</code> / <code>lh-base</code> / <code>lh-lg</code></td><td>Alturas de línea: 1, chica, base y grande.</td></tr>
+    <tr><td><code>text-reset</code></td><td>Hereda el color del padre (sirve para enlaces en los footer).</td></tr>
+  </table>
+
+  <h2>Colores de texto: text-*</h2>
+  <p>Bootstrap define <strong>8 colores de tema</strong> <code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>light</code> y <code>dark</code>. Sirven para texto, fondo y muchos componentes.</p>
+  <pre><code>&lt;p class="text-success"&gt;Todo guardado correctamente&lt;/p&gt;
+&lt;p class="text-danger"&gt;El dato es obligatorio&lt;/p&gt;
+&lt;p class="text-primary"&gt;Enlace y texto destacado&lt;/p&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Color</th><th>Clase</th><th>Color</th></tr>
+    <tr><td><code>text-primary</code></td><td>Indigo (accent)</td><td><code>text-muted</code></td><td>Gris atenuado</td></tr>
+    <tr><td><code>text-secondary</code></td><td>Gris</td><td><code>text-body</code></td><td>Color de texto normal</td></tr>
+    <tr><td><code>text-success</code></td><td>Verde</td><td><code>text-body-secondary</code></td><td>Texto secundario</td></tr>
+    <tr><td><code>text-danger</code></td><td>Rojo</td><td><code>text-white</code></td><td>Blanco</td></tr>
+    <tr><td><code>text-warning</code></td><td>Amarillo</td><td><code>text-black</code></td><td>Negro</td></tr>
+    <tr><td><code>text-info</code></td><td>Cian</td><td><code>text-white-50</code> / <code>text-black-50</code></td><td>Con 50% de transparencia</td></tr>
+    <tr><td><code>text-light</code></td><td>Claro</td><td><code>text-opacity-25</code>…<code>-75</code></td><td>Más transparencia sobre un text-*</td></tr>
+    <tr><td><code>text-dark</code></td><td>Oscuro</td><td><code>link-*</code> (ej. <code>link-success</code>)</td><td>Color + hover de un enlace</td></tr>
+  </table>
+
+  <h2>Colores de fondo: bg-*</h2>
+  <pre><code>&lt;div class="bg-warning p-2"&gt;Caja con fondo amarillo&lt;/div&gt;
+&lt;div class="bg-dark text-white p-2"&gt;Caja oscura con texto blanco&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué define</th></tr>
+    <tr><td><code>bg-primary/…/bg-dark</code></td><td>Los 8 colores de tema como fondo.</td></tr>
+    <tr><td><code>bg-white</code> / <code>bg-black</code></td><td>Fondo blanco / negro fijo.</td></tr>
+    <tr><td><code>bg-transparent</code></td><td>Sin fondo (transparente).</td></tr>
+    <tr><td><code>bg-body</code> / <code>bg-body-secondary</code></td><td>El color de fondo del <code>body</code> y su secundario.</td></tr>
+    <tr><td><code>bg-gradient</code></td><td>Agrega un degradado lineal al color.</td></tr>
+    <tr><td><code>bg-opacity-25/50/75</code></td><td>Fondo del color con …% de opacidad.</td></tr>
+  </table>
+  <div class="alert">Para <strong>fondo con texto legible</strong> existe la combinación <code>text-bg-*</code> (ej. <code>text-bg-danger</code>): pinta el fondo de danger y el texto de un color que contraste solo. Ideal para badges y alertas.</div>
+
+  <h2>Citas y listas</h2>
+  <pre><code>&lt;blockquote class="blockquote"&gt;
+  &lt;p&gt;La cita va acá.&lt;/p&gt;
+  &lt;footer class="blockquote-footer"&gt;Autor famoso en &lt;cite&gt;su libro&lt;/cite&gt;&lt;/footer&gt;
+&lt;/blockquote&gt;
+
+&lt;ul class="list-unstyled"&gt;        &lt;!-- sin viñetas ni margen --&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul class="list-inline"&gt;          &lt;!-- elementos en línea, para menús --&gt;
+  &lt;li class="list-inline-item"&gt;Uno&lt;/li&gt;
+  &lt;li class="list-inline-item"&gt;Dos&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+  <div class="pager">
+    <a href="bs03-clases.html">← Bootstrap 3 · Clases sobre tu CSS</a>
+    <a class="next" href="bs05-utilidades.html">Siguiente: Bootstrap 5 · Utilidades y layout →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 4 · Guía de Tecnologías Web</footer>
+</body>
+</html>

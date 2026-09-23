@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 7 · Strings · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html" selected>7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Strings</p>
+  <h1>Strings (cadenas de caracteres)</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué es un string?</h2>
+  <div class="card">
+    <p>Un string es <strong>cero o más caracteres encerrados entre comillas</strong> (simples o dobles). Tiene un conjunto de métodos que se le pueden aplicar.</p>
+    <pre><code>var cad  = "esto es una cadena";
+var cad2 = "";      // string vacío
+var cad3 = 'hola';
+var length = text.length;   // cantidad de caracteres</code></pre>
+  </div>
+
+  <h2>Métodos de manipulación</h2>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th></tr>
+    <tr><td><code>length</code></td><td>Cantidad de caracteres de la cadena.</td></tr>
+    <tr><td><code>slice()</code></td><td>Extrae parte de la cadena según posición (inicio, fin).</td></tr>
+    <tr><td><code>substring()</code> / <code>substr()</code></td><td>Extraen subcadenas.</td></tr>
+    <tr><td><code>replace()</code> / <code>replaceAll()</code></td><td>Reemplazan (la primera / todas) las ocurrencias de un texto.</td></tr>
+    <tr><td><code>toUpperCase()</code> / <code>toLowerCase()</code></td><td>Pasa la cadena a mayúsculas o minúsculas.</td></tr>
+    <tr><td><code>concat()</code></td><td>Concatena cadenas.</td></tr>
+    <tr><td><code>trim()</code> / <code>trimStart()</code> / <code>trimEnd()</code></td><td>Eliminan los espacios en blanco (de los extremos, principio o final).</td></tr>
+    <tr><td><code>padStart()</code> / <code>padEnd()</code></td><td>Rellenan la cadena con caracteres hasta un largo dado.</td></tr>
+    <tr><td><code>charAt()</code> / <code>charCodeAt()</code></td><td>Devuelven el carácter, o su código, en una posición.</td></tr>
+    <tr><td><code>split()</code></td><td>Divide la cadena en un arreglo según un separador.</td></tr>
+  </table>
+
+  <h2>Métodos de búsqueda</h2>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th></tr>
+    <tr><td><code>indexOf()</code> / <code>lastIndexOf()</code></td><td>Devuelve la posición (índice) de la primera / última aparición de un texto.</td></tr>
+    <tr><td><code>search()</code></td><td>Busca un texto y devuelve su posición.</td></tr>
+    <tr><td><code>match()</code> / <code>matchAll()</code></td><td>Obtienen las coincidencias con una expresión regular.</td></tr>
+    <tr><td><code>includes()</code></td><td>Devuelve <code>true</code> si la cadena contiene el texto indicado.</td></tr>
+    <tr><td><code>startsWith()</code> / <code>endsWith()</code></td><td>Devuelven <code>true</code> si la cadena comienza / termina con el texto indicado.</td></tr>
+  </table>
+
+  <h2>Template literals (plantillas literales)</h2>
+  <p>Usan <strong>comillas invertidas</strong> (backticks `` `` ``) para definir la cadena.</p>
+  <ul>
+    <li>Permiten incluir comillas dentro del texto sin escaparlas.</li>
+    <li>Permiten escribir <strong>string en varias líneas</strong>.</li>
+    <li>Permiten <strong>interpolar variables y expresiones</strong> con <code>${…}</code>.</li>
+  </ul>
+  <pre><code>var nombre = `el nombre es "pep"`;
+var texto = `esto es
+un texto`;   // con comillas dobles esto no es posible
+
+let nombre = "Juan";
+let apellido = "Perez";
+let saludar = `mi nombre es ${nombre} ${apellido}`;
+
+let price = 10;
+let VAT = 0.25;
+let total = `Total: ${(price * (1 + VAT)).toFixed(2)}`;  // "Total: 12.50"</code></pre>
+
+  <div class="pager">
+    <a href="js06-objetos.html">← Objetos</a>
+    <a class="next" href="js08-eventos.html">Siguiente: Eventos →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 7 · Guía de Tecnologías Web</footer>
+</body>
+</html>

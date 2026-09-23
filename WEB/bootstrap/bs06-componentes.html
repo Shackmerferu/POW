@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 6 · Botones, alertas y más · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html" selected>6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html">8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Botones, alertas y más</p>
+  <h1>Componentes: botones, alertas, badges e imágenes</h1>
+
+  <h2>Botones: la clase btn</h2>
+  <p>Todo botón lleva <code>btn</code> + <strong>un color</strong>. Sin la clase <code>btn</code> no se ve como botón.</p>
+  <pre><code>&lt;button class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+&lt;a href="#" class="btn btn-outline-danger"&gt;Eliminar&lt;/a&gt;</code></pre>
+  <table>
+    <tr><th>Clase de color</th><th>Qué hace</th></tr>
+    <tr><td><code>btn-primary</code> / <code>btn-secondary</code> / <code>btn-success</code> / <code>btn-danger</code></td><td>Botón relleno con ese color de tema.</td></tr>
+    <tr><td><code>btn-warning</code> / <code>btn-info</code> / <code>btn-light</code> / <code>btn-dark</code></td><td>Rellenos restantes del tema.</td></tr>
+    <tr><td><code>btn-outline-primary</code> … <code>btn-outline-dark</code></td><td>Botón con borde del color, fondo transparente (se rellena al hover).</td></tr>
+    <tr><td><code>btn-link</code></td><td>Botón que parece un enlace normal.</td></tr>
+  </table>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>btn-lg</code> / <code>btn-sm</code></td><td>Tamaño grande / chico.</td></tr>
+    <tr><td><code>btn-block</code> (no existe en BS5)</td><td>Ya no se usa: para ancho completo se usa <code>d-grid gap-2</code> en el padre.</td></tr>
+    <tr><td><code>active</code></td><td>Estado "presionado" visual.</td></tr>
+    <tr><td><code>disabled</code> (o el atributo <code>disabled</code>)</td><td>Deshabilitado: no se puede clickear.</td></tr>
+  </table>
+  <div class="tip">La <code>btn</code> además trae el <strong>hover</strong>, el <strong>foco</strong> y el <strong>estado activo</strong> ya resueltos. Eso que en CSS normal parece chico, en Bootstrap es parte de la clase.</div>
+
+  <h3>Agrupar botones: btn-group</h3>
+  <pre><code>&lt;div class="btn-group"&gt;
+  &lt;button class="btn btn-outline-primary"&gt;Día&lt;/button&gt;
+  &lt;button class="btn btn-outline-primary"&gt;Semana&lt;/button&gt;
+  &lt;button class="btn btn-outline-primary"&gt;Mes&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  <p><code>btn-group</code> junta varios botones pegados; <code>btn-group-vertical</code> los apila. <code>btn-toolbar</code> agrupa varios grupos en una barra.</p>
+
+  <h2>Alertas: avisos de una sola línea</h2>
+  <pre><code>&lt;div class="alert alert-warning" role="alert"&gt;Cuidado con este dato&lt;/div&gt;
+
+&lt;div class="alert alert-danger alert-dismissible" role="alert"&gt;
+  No se pudo guardar.
+  &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>alert alert-primary</code>…<code>alert-dark</code></td><td>Los 8 colores de tema como aviso.</td></tr>
+    <tr><td><code>alert-link</code></td><td>Enlace interno que combina con el color de la alerta.</td></tr>
+    <tr><td><code>alert-heading</code></td><td>Título dentro de la alerta (<code>&lt;h4&gt;</code>).</td></tr>
+    <tr><td><code>alert-dismissible</code> + <code>btn-close</code></td><td>Agrega la "X" para cerrar (necesita el JS de Bootstrap).</td></tr>
+  </table>
+
+  <h2>Badges: etiquetas de etiquetas</h2>
+  <pre><code>&lt;h4&gt;Nuevos mensajes &lt;span class="badge text-bg-danger rounded-pill"&gt;3&lt;/span&gt;&lt;/h4&gt;
+&lt;span class="badge text-bg-success"&gt;En stock&lt;/span&gt;</code></pre>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>badge</code></td><td>La base: pastilla chica redondeada.</td></tr>
+    <tr><td><code>text-bg-primary</code>…<code>text-bg-dark</code></td><td>Color de fondo + texto con contraste (reemplaza al viejo <code>badge-*</code>).</td></tr>
+    <tr><td><code>rounded-pill</code></td><td>La convierte en pastilla totalmente ovalada.</td></tr>
+    <tr><td><code>position-absolute top-0 start-100 translate-middle</code></td><td>Para colgarla de una esquina de un botón o ícono (notificación).</td></tr>
+  </table>
+
+  <h2>Imágenes y figuras</h2>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>img-fluid</code></td><td><code>max-width: 100%; height: auto</code> — la imagen nunca desborda y escala.</td></tr>
+    <tr><td><code>img-thumbnail</code></td><td>Borde + relleno, como una foto polaroid.</td></tr>
+    <tr><td><code>rounded</code>, <code>rounded-circle</code></td><td>Esquinas redondeadas / circular (para avatares).</td></tr>
+    <tr><td><code>float-start</code> / <code>float-end</code></td><td>Texto alrededor de la imagen.</td></tr>
+  </table>
+  <pre><code>&lt;figure class="figure"&gt;
+  &lt;img src="foto.png" class="figure-img img-fluid rounded" alt="…"&gt;
+  &lt;figcaption class="figure-caption"&gt;La leyenda de la foto.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+
+  <div class="pager">
+    <a href="bs05-utilidades.html">← Bootstrap 5 · Utilidades y layout</a>
+    <a class="next" href="bs07-tablas-tarjetas.html">Siguiente: Bootstrap 7 · Tablas, tarjetas, listas →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 6 · Guía de Tecnologías Web</footer>
+</body>
+</html>

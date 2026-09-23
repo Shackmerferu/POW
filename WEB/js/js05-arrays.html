@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 5 · Arreglos · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html" selected>5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Arreglos</p>
+  <h1>Arreglos (arrays)</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué son?</h2>
+  <div class="card">
+    <p>Los arreglos son útiles para <strong>crear, ordenar y manipular listas</strong>, generalmente combinándolos con bucles para recorrerlos.</p>
+  </div>
+
+  <h2>Creación de un arreglo</h2>
+  <pre><code>var nombreArray = new Array();       // arreglo vacío
+var nombreArray = new Array(10);     // arreglo con espacio para 10 ítems
+var gatos = new Array(4);
+gatos[0] = "Tom";
+gatos[1] = "Lucas";
+gatos[2] = "Adam";
+gatos[3] = "Luis";
+
+// También se puede crear con los valores directamente:
+var gatos = new Array("Tom", "Lucas", "Adam", "Luis");</code></pre>
+
+  <h2>Propiedades y métodos</h2>
+  <table>
+    <tr><th>Elemento</th><th>Qué hace</th></tr>
+    <tr><td><code>nombreArray.length</code></td><td>Devuelve la longitud (cantidad de elementos) del arreglo.</td></tr>
+    <tr><td><code>sort()</code></td><td>Ordena los elementos.</td></tr>
+    <tr><td><code>reverse()</code></td><td>Invierte el orden de los elementos.</td></tr>
+    <tr><td><code>pop()</code></td><td>Quita el último elemento del arreglo.</td></tr>
+    <tr><td><code>push()</code></td><td>Agrega un elemento al final del arreglo.</td></tr>
+    <tr><td><code>join()</code></td><td>Une los elementos en una cadena separada por un carácter indicado.</td></tr>
+    <tr><td><code>toString()</code></td><td>Convierte el arreglo a texto.</td></tr>
+  </table>
+
+  <div class="alert"><strong>Extensión de un arreglo:</strong> si se necesita más espacio, se reasigna un nuevo tamaño mediante asignación directa al índice siguiente.</div>
+
+  <div class="pager">
+    <a href="js04-funciones.html">← Funciones</a>
+    <a class="next" href="js06-objetos.html">Siguiente: Objetos →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 5 · Guía de Tecnologías Web</footer>
+</body>
+</html>

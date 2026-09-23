@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 9 · DOM · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html">8 · Eventos</option>
+        <option value="js09-dom.html" selected>9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / DOM</p>
+  <h1>DOM — Modelo de Objetos del Documento</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué es el DOM?</h2>
+  <div class="card">
+    <ul>
+      <li>Es una <strong>API</strong> (interfaz de programación) que proporciona un conjunto estándar de objetos para representar documentos <strong>HTML y XML</strong>, y una interfaz estándar para <strong>acceder y manipular</strong> su contenido, estructura y estilo.</li>
+      <li>El responsable del DOM es el <strong>World Wide Web Consortium (W3C)</strong>.</li>
+      <li>Permite que programas como JavaScript agregen, cambien o eliminen contenido dinámicamente.</li>
+    </ul>
+  </div>
+
+  <h2>Jerarquía de objetos del navegador</h2>
+  <pre><code>window
+   + history
+   + location
+   + document
+      + anchor / applet / area / image / link / plugin
+      + form
+         + button / checkbox / fileUpload / hidden / password
+         + radio / reset / select (+ options) / submit / text / textarea
+   + frame</code></pre>
+  <p>Los descendientes de un objeto son <strong>propiedades</strong> de ese objeto, y se accede con puntos:</p>
+  <pre><code>document.title = "un simple documento";
+document.myform.length = 5;
+document.anchors[0].name;
+document.forms[0].method;
+document.forms[0].elements[1].value;
+document.links[0].href;</code></pre>
+
+  <h2>El objeto <code>window</code></h2>
+  <div class="card">
+    <p>Es el <strong>objeto padre</strong> de todos los objetos del navegador.</p>
+    <h3>Propiedades principales</h3>
+    <table>
+      <tr><th>Propiedad</th><th>Qué contiene / hace</th></tr>
+      <tr><td><code>closed</code></td><td>Booleano: <code>true</code> si la ventana está cerrada.</td></tr>
+      <tr><td><code>frames</code></td><td>Array con los frames de la ventana (<code>frames[0]</code>, <code>frames[1]</code>…).</td></tr>
+      <tr><td><code>history</code></td><td>Array con las URLs visitadas (el historial).</td></tr>
+      <tr><td><code>location</code></td><td>URL de la barra de direcciones.</td></tr>
+      <tr><td><code>self</code> / <code>window</code></td><td>Nombres alternativos de la ventana actual.</td></tr>
+      <tr><td><code>top</code></td><td>Ventana de nivel superior.</td></tr>
+      <tr><td><code>parent</code></td><td>Ventana que contiene el frameset (o null si no hay).</td></tr>
+      <tr><td><code>opener</code></td><td>Ventana que abrió la actual (si se usó <code>open()</code>).</td></tr>
+      <tr><td><code>name</code> / <code>status</code></td><td>Nombre de la ventana / texto de la barra de estado.</td></tr>
+    </table>
+    <h3>Métodos principales</h3>
+    <table>
+      <tr><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>alert(mensaje)</code></td><td>Cuadro de diálogo con un botón Aceptar.</td></tr>
+      <tr><td><code>confirm(mensaje)</code></td><td>Cuadro con Aceptar/Cancelar; devuelve <code>true</code> o <code>false</code>.</td></tr>
+      <tr><td><code>prompt(mensaje, texto_defecto)</code></td><td>Caja de texto donde el usuario escribe una respuesta.</td></tr>
+      <tr><td><code>open(url, nombre, características)</code></td><td>Abre una URL en una ventana nueva (toolbar, width, height, left, top…).</td></tr>
+      <tr><td><code>close()</code></td><td>Cierra la ventana actual.</td></tr>
+      <tr><td><code>setTimeout(expr, ms)</code></td><td>Ejecuta la expresión después de los milisegundos indicados.</td></tr>
+      <tr><td><code>setInterval(expr, ms)</code></td><td>Ejecuta la expresión cada X milisegundos.</td></tr>
+      <tr><td><code>clearTimeout(id)</code> / <code>clearInterval(id)</code></td><td>Cancelan un timeout/interval programado.</td></tr>
+      <tr><td><code>scrollBy(x, y)</code> / <code>scrollTo(x, y)</code></td><td>Desplazan la ventana/scroll.</td></tr>
+      <tr><td><code>moveTo(x, y)</code> / <code>moveBy(x, y)</code></td><td>Mueven la ventana.</td></tr>
+    </table>
+  </div>
+
+  <h2>Acceso directo a los nodos (selectores)</h2>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th><th>Devuelve</th></tr>
+    <tr><td><code>getElementById("id")</code></td><td>Busca por <code>id</code> (único). <strong>El más usado.</strong></td><td>1 elemento</td></tr>
+    <tr><td><code>getElementsByTagName("p")</code></td><td>Busca por etiqueta HTML.</td><td>Colección</td></tr>
+    <tr><td><code>getElementsByName("nombre")</code></td><td>Busca por atributo <code>name</code>.</td><td>Colección</td></tr>
+    <tr><td><code>getElementsByClassName("clase")</code></td><td>Busca por clase CSS.</td><td>Colección</td></tr>
+    <tr><td><code>querySelector("p")</code></td><td>Devuelve el <strong>primer</strong> elemento que coincide con un selector CSS (tag, <code>.clase</code>, <code>#id</code>…).</td><td>1 elemento</td></tr>
+    <tr><td><code>querySelectorAll("p.intro")</code></td><td>Devuelve <strong>todos</strong> los elementos que coinciden con un selector CSS.</td><td>Lista</td></tr>
+  </table>
+
+  <pre><code>// Por id
+var cabecera = document.getElementById("encabezado");
+
+// Por etiqueta (recorriendo todos los párrafos)
+var parrafos = document.getElementsByTagName("p");
+var primerParrafo = parrafos[0];
+for (var i = 0; i &lt; parrafos.length; i++) {
+  var parrafo = parrafos[i];
+}
+
+// Por clase
+const x = document.querySelectorAll("p.intro");
+document.getElementById("demo").innerHTML = x[0].innerHTML;
+
+// querySelector: primer elemento que coincida
+document.querySelector("p").style.backgroundColor = "red";</code></pre>
+
+  <h2>Crear elementos nuevos</h2>
+  <pre><code>// Crear nodo de tipo Element
+var parrafo = document.createElement("p");
+// Crear nodo de tipo Text
+var contenido = document.createTextNode("Hola Mundo!");
+// Añadir el Text como hijo del Element
+parrafo.appendChild(contenido);
+// Añadir el Element como hijo del body
+document.body.appendChild(parrafo);</code></pre>
+
+  <h2>Eliminar nodos</h2>
+  <p><code>removeChild()</code> debe invocarse desde el <strong>padre</strong> del nodo. La forma segura es usar <code>nodoHijo.parentNode</code>:</p>
+  <pre><code>var parrafo = document.getElementById("sacame");
+parrafo.parentNode.removeChild(parrafo);</code></pre>
+
+  <h2>Acceder y modificar atributos</h2>
+  <pre><code>// Obtener el valor de un atributo
+var imagen = document.getElementById("fender");
+alert(imagen.getAttribute("src"));       // "stratocaster.jpg"
+
+// Cambiar el valor de un atributo
+imagen.setAttribute("src", "GuittarraElectrica.jpg");</code></pre>
+
+  <h2><code>innerHTML</code> y <code>style</code></h2>
+  <div class="card">
+    <p><strong><code>innerHTML</code></strong> accede y cambia el contenido (HTML) dentro de un elemento. Es muy usado en librerías como jQuery.</p>
+    <p>Diferencia con <code>document.write</code>: <code>document.write</code> escribe en la página <strong>borrando su contenido actual</strong>, mientras que <code>innerHTML</code> muestra el contenido <strong>dentro de un elemento</strong> sin borrar la página.</p>
+  </div>
+  <pre><code>&lt;p id="demo"&gt;&lt;/p&gt;
+&lt;script&gt;
+document.getElementById("demo").innerHTML = 5 + 6;   // muestra 11
+&lt;/script&gt;</code></pre>
+  <pre><code>// Modificar estilos CSS desde JavaScript
+document.getElementById("intro").style.color = "#fff";
+document.getElementById("intro").style.backgroundColor = "#f58220";  // naranja
+var brandColor = document.getElementById("intro").style.backgroundColor;</code></pre>
+
+  <h2>Agregar eventos modernos: <code>addEventListener()</code></h2>
+  <pre><code>&lt;button id="myBtn"&gt;Apretar&lt;/button&gt;
+&lt;p id="demo"&gt;&lt;/p&gt;
+&lt;script&gt;
+document.getElementById("myBtn").addEventListener("click", displayDate);
+function displayDate() {
+  document.getElementById("demo").innerHTML = Date();
+}
+&lt;/script&gt;</code></pre>
+  <div class="tip"><strong>Ventaja:</strong> permite agregar varios manejadores al mismo elemento y no sobreescribe los existentes (a diferencia de <code>onclick="…"</code> en el HTML).</div>
+
+  <div class="pager">
+    <a href="js08-eventos.html">← Eventos</a>
+    <a class="next" href="../ajax/ajax01-introduccion.html">Siguiente: AJAX 1 · Introducción →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 9 · Guía de Tecnologías Web</footer>
+</body>
+</html>

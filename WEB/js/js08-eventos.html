@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript 8 · Eventos · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="js01-introduccion.html">1 · Introducción</option>
+        <option value="js02-bases.html">2 · Bases y operadores</option>
+        <option value="js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="js04-funciones.html">4 · Funciones</option>
+        <option value="js05-arrays.html">5 · Arreglos</option>
+        <option value="js06-objetos.html">6 · Objetos</option>
+        <option value="js07-strings.html">7 · Strings</option>
+        <option value="js08-eventos.html" selected>8 · Eventos</option>
+        <option value="js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / JavaScript / Eventos</p>
+  <h1>Eventos y gestores de eventos</h1>
+  <p>Fuente: <code>Javascript_II.pdf</code></p>
+
+  <h2>¿Qué es un evento?</h2>
+  <div class="card">
+    <p>Un evento es una acción que ocurre sobre la página: mover el mouse, clickear, escribir una tecla, enviar un formulario, etc. Los eventos suceden a <strong>tres niveles</strong>:</p>
+    <ol>
+      <li>A nivel del <strong>documento HTML</strong>.</li>
+      <li>A nivel de un <strong>formulario individual</strong>.</li>
+      <li>A nivel de un <strong>elemento</strong> de un formulario.</li>
+    </ol>
+    <p>Cada evento es gestionado por un <strong>gestor (manejador) de eventos</strong>: una sección de código JavaScript.</p>
+  </div>
+
+  <h2>Sintaxis: gestores como atributos HTML</h2>
+  <pre><code>&lt;BODY onLoad="cargarfuncion()" onUnload="descargarfuncion()"&gt;</code></pre>
+  <pre><code>&lt;FORM name="nombre_del_formulario" onSubmit="función_o_sentencia"&gt;
+  &lt;INPUT type="button" name="mycheck" value="HA!" onClick="alert('Te he dicho que no me aprietes')"&gt;</code></pre>
+  <pre><code>&lt;H2 onclick="funcionClick()"&gt;Cliquéame&lt;/H2&gt;
+
+&lt;!-- Se puede poner una función o varias instrucciones --&gt;
+&lt;INPUT type="text" onChange="if(parseInt(this.value) &lt;= 5) { alert('Ponga un número mayor que 5.'); }"&gt;</code></pre>
+
+  <h2>La palabra clave <code>this</code></h2>
+  <p><strong><code>this</code></strong> hace referencia al objeto que produjo el evento. Permite acceder a los atributos de esa marca, por ejemplo su <code>value</code>:</p>
+  <pre><code>&lt;input type="text" onChange="checaCampo(this)"&gt;</code></pre>
+
+  <h2>Cambiar el comportamiento de un enlace (<code>return</code>)</h2>
+  <p>Antes de la función va <code>return</code>, para devolverle el resultado <code>true</code>/<code>false</code> a la etiqueta:</p>
+  <pre><code>&lt;a href="mi_pagina.html" onclick="return confirm('Ud. quiere ir a mi_pagina.html?');"&gt;ir a mi página&lt;/a&gt;
+&lt;a href="mi_pagina.html" onclick="return confirmar();"&gt;ir a mi página&lt;/a&gt;</code></pre>
+
+  <h2>Principales gestores de eventos</h2>
+  <table>
+    <tr><th>Evento</th><th>Manejador</th><th>Cuándo se ejecuta</th></tr>
+    <tr><td>Abort</td><td><code>onAbort</code></td><td>El usuario aborta la carga de una imagen.</td></tr>
+    <tr><td>Blur</td><td><code>onBlur</code></td><td>Un elemento (o ventana/frame) pierde el foco.</td></tr>
+    <tr><td>Change</td><td><code>onChange</code></td><td>Un select, text o textarea pierde el foco con su valor modificado.</td></tr>
+    <tr><td>Click</td><td><code>onClick</code></td><td>Un objeto es clicado.</td></tr>
+    <tr><td>Double Click</td><td><code>onDblClick</code></td><td>El usuario hace doble clic sobre un elemento o enlace.</td></tr>
+    <tr><td>Mouse Over</td><td><code>onMouseOver</code></td><td>El puntero del mouse se mueve sobre un objeto o área.</td></tr>
+    <tr><td>Focus</td><td><code>onFocus</code></td><td>Un elemento gana el foco.</td></tr>
+    <tr><td>Key Down / Press / Up</td><td><code>onKeyDown</code>/<code>onKeyPress</code>/<code>onKeyUp</code></td><td>Se presiona/libera una tecla.</td></tr>
+    <tr><td>Load</td><td><code>onLoad</code></td><td>La página (o un objeto) termina de cargarse.</td></tr>
+    <tr><td>Unload</td><td><code>onUnload</code></td><td>La página se cierra o se abandona.</td></tr>
+    <tr><td>Mouse Down / Up / Out / Move</td><td><code>onMouseDown</code>/<code>onMouseUp</code>/<code>onMouseOut</code>/<code>onMouseMove</code></td><td>Acciones del mouse sobre un elemento.</td></tr>
+    <tr><td>Reset</td><td><code>onReset</code></td><td>Se reinicia un formulario.</td></tr>
+    <tr><td>Submit</td><td><code>onSubmit</code></td><td>Se envía un formulario.</td></tr>
+    <tr><td>Select</td><td><code>onSelect</code></td><td>Se selecciona texto de un campo.</td></tr>
+    <tr><td>Resize</td><td><code>onResize</code></td><td>Se redimensiona la ventana.</td></tr>
+    <tr><td>Error</td><td><code>onError</code></td><td>Ocurre un error al cargar un elemento.</td></tr>
+  </table>
+
+  <h2>Ejemplo: validar un campo antes de enviar el formulario</h2>
+  <pre><code>&lt;script&gt;
+function validateForm() {
+  var x = document.forms["myForm"]["fname"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+}
+&lt;/script&gt;
+
+&lt;form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"&gt;
+  Name: &lt;input type="text" name="fname"&gt;
+  &lt;input type="submit" value="Submit"&gt;
+&lt;/form&gt;</code></pre>
+  <div class="tip"><strong>Actualidad:</strong> hoy la mayoría de estas validaciones se resuelven con <strong>HTML5</strong> usando el atributo <code>required</code>, evitando escribir ese código JS.</div>
+
+  <h2>Ejemplo: cambiar imagen con <code>onMouseOver</code> / <code>onMouseOut</code></h2>
+  <pre><code>&lt;a href="#" onMouseOver="document.the_image.src='stuff/js_on.gif';"
+           onMouseOut="document.the_image.src='stuff/js_off.gif';"&gt;
+  &lt;img src="stuff/js_des.gif" name="the_image" border="0"&gt;&lt;/a&gt;</code></pre>
+
+  <h2>Ejemplo: <code>onLoad</code> y <code>onUnload</code></h2>
+  <pre><code>&lt;body onLoad="alert('Bienvenido!');" onUnload="alert('Adios!');"&gt;
+  &lt;h1&gt;Página efusiva&lt;/h1&gt;</code></pre>
+
+  <div class="pager">
+    <a href="js07-strings.html">← Strings</a>
+    <a class="next" href="js09-dom.html">Siguiente: DOM →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · JavaScript 8 · Guía de Tecnologías Web</footer>
+</body>
+</html>

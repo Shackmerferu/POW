@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap 8 · Formularios · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="../jquery/jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="../jquery/jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="../jquery/jq03-eventos-efectos.html">3 · Eventos y efectos</option>
+        <option value="../jquery/jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="../jquery/jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="bs08-formularios.html" selected>8 · Formularios</option>
+        <option value="bs09-navegacion.html">9 · Navegación</option>
+        <option value="bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Bootstrap / Formularios</p>
+  <h1>Formularios: todos los controles estilizados</h1>
+
+  <h2>La estructura básica</h2>
+  <p>Tres clases cubren el 90%: <code>form-label</code> para el rótulo, <code>form-control</code> para la caja, y <code>form-text</code> para la ayuda.</p>
+  <pre><code>&lt;form&gt;
+  &lt;label for="email" class="form-label"&gt;Correo&lt;/label&gt;
+  &lt;input type="email" class="form-control" id="email" placeholder="vos@mail.com"&gt;
+  &lt;div class="form-text"&gt;Nunca compartiremos tu correo.&lt;/div&gt;
+&lt;/form&gt;</code></pre>
+  <div class="tip">La clase <code>form-control</code> es la que "arregla" cualquier <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code> y <code>&lt;textarea&gt;</code>. Sin ella los controles se ven con el estilo feo del navegador.</div>
+
+  <h2>Tipos de campo y sus clases</h2>
+  <table>
+    <tr><th>Campo</th><th>Clase</th></tr>
+    <tr><td><code>&lt;input type="text | password | email | number | date …"&gt;</code></td><td><code>form-control</code></td></tr>
+    <tr><td><code>&lt;textarea rows="…"&gt;</code></td><td><code>form-control</code> (los <code>rows</code> van en el HTML).</td></tr>
+    <tr><td><code>&lt;select&gt;</code> (desplegable)</td><td><code>form-select</code></td></tr>
+    <tr><td><code>&lt;input type="range"&gt;</code> (slider)</td><td><code>form-range</code> (con <code>min</code>, <code>max</code>, <code>step</code>)</td></tr>
+    <tr><td><code>&lt;input type="file"&gt;</code></td><td><code>form-control</code> (ya viene estilizado)</td></tr>
+    <tr><td>Grupo de checkbox / radio</td><td><code>form-check</code></td></tr>
+    <tr><td>Switch (interruptor)</td><td><code>form-check form-switch</code></td></tr>
+  </table>
+
+  <h2>Checkbox, radio y switch</h2>
+  <pre><code>&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="acepto"&gt;
+  &lt;label class="form-check-label" for="acepto"&gt;Acepto los términos&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div class="form-check form-switch"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="modo"&gt;
+  &lt;label class="form-check-label" for="modo"&gt;Modo oscuro&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="radio" name="grupo" id="a"&gt;
+  &lt;label class="form-check-label" for="a"&gt;Opción A&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  <p>La cajita / botoncito es <code>form-check-input</code> y el texto <code>form-check-label</code>. <code>form-check-inline</code> los deja en fila en vez de apilados. Las radios comparten el mismo <code>name</code> para que se seleccione solo una.</p>
+
+  <h2>Input group: rótulos y botones pegados al campo</h2>
+  <pre><code>&lt;div class="input-group"&gt;
+  &lt;span class="input-group-text"&gt;$&lt;/span&gt;
+  &lt;input type="text" class="form-control" aria-label="Precio"&gt;
+  &lt;button class="btn btn-outline-secondary"&gt;Verificar&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  <p><code>input-group</code> une el campo con <code>input-group-text</code> (prefijo/sufijo) y hasta botones, sin espacios.</p>
+
+  <h2>Tamaños, estados y validación</h2>
+  <table>
+    <tr><th>Clase</th><th>Qué hace</th></tr>
+    <tr><td><code>form-control-lg</code> / <code>form-control-sm</code></td><td>Cajas grandes / chicas (igual con <code>form-select-lg</code>).</td></tr>
+    <tr><td><code>disabled</code> / <code>readonly</code></td><td>Campo inactivo / de solo lectura (atributos HTML).</td></tr>
+    <tr><td><code>is-invalid</code></td><td>Borde rojo, marca el error.</td></tr>
+    <tr><td><code>is-valid</code></td><td>Borde verde, marca que pasó.</td></tr>
+    <tr><td><code>invalid-feedback</code></td><td>El mensaje de error debajo del campo (se activa con <code>is-invalid</code>).</td></tr>
+    <tr><td><code>valid-feedback</code></td><td>El mensaje de éxito.</td></tr>
+  </table>
+  <pre><code>&lt;div&gt;
+  &lt;label class="form-label"&gt;Usuario&lt;/label&gt;
+  &lt;input class="form-control is-invalid"&gt;
+  &lt;div class="invalid-feedback"&gt;El usuario ya está en uso.&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;form class="needs-validation" novalidate&gt;
+  &lt;!-- Bootstrap valida el formulario solo con un pequeño JS --&gt;
+  &lt;input class="form-control" required&gt;
+&lt;/form&gt;</code></pre>
+
+  <h2>Floating labels: la etiqueta flotante</h2>
+  <pre><code>&lt;div class="form-floating"&gt;
+  &lt;input type="email" class="form-control" id="mail" placeholder="nombre@mail.com"&gt;
+  &lt;label for="mail"&gt;Correo&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  <p>La etiqueta vive <strong>dentro</strong> del campo y "flota" arriba cuando el campo tiene texto. Requiere el atributo <code>placeholder</code> para que funcione.</p>
+
+  <div class="pager">
+    <a href="bs07-tablas-tarjetas.html">← Bootstrap 7 · Tablas, tarjetas, listas</a>
+    <a class="next" href="bs09-navegacion.html">Siguiente: Bootstrap 9 · Navegación →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · Bootstrap 8 · Guía de Tecnologías Web</footer>
+</body>
+</html>

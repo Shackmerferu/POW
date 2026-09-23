@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jQuery 3 · Eventos y efectos · Guía Web</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; Guía Web</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a un tema…</option>
+      <optgroup label="JavaScript">
+        <option value="../js/js01-introduccion.html">1 · Introducción</option>
+        <option value="../js/js02-bases.html">2 · Bases y operadores</option>
+        <option value="../js/js03-control-flujo.html">3 · Control de flujo</option>
+        <option value="../js/js04-funciones.html">4 · Funciones</option>
+        <option value="../js/js05-arrays.html">5 · Arreglos</option>
+        <option value="../js/js06-objetos.html">6 · Objetos</option>
+        <option value="../js/js07-strings.html">7 · Strings</option>
+        <option value="../js/js08-eventos.html">8 · Eventos</option>
+        <option value="../js/js09-dom.html">9 · DOM</option>
+      </optgroup>
+      <optgroup label="AJAX">
+        <option value="../ajax/ajax01-introduccion.html">1 · Introducción</option>
+        <option value="../ajax/ajax02-xmlhttprequest.html">2 · XMLHttpRequest</option>
+        <option value="../ajax/ajax03-ejemplos.html">3 · Aplicaciones</option>
+        <option value="../ajax/ajax04-formularios.html">4 · Formularios</option>
+        <option value="../ajax/ajax05-fetch.html">5 · Fetch API</option>
+      </optgroup>
+      <optgroup label="Librerías jQuery">
+        <option value="jq01-introduccion.html">1 · Librerías y Prototype</option>
+        <option value="jq02-sintaxis-selectores.html">2 · Sintaxis y selectores</option>
+        <option value="jq03-eventos-efectos.html" selected>3 · Eventos y efectos</option>
+        <option value="jq04-html-css.html">4 · HTML y CSS</option>
+        <option value="jq05-ajax.html">5 · AJAX</option>
+      </optgroup>
+      <optgroup label="Bootstrap">
+        <option value="../bootstrap/bs01-incluir.html">1 · Incluir Bootstrap</option>
+        <option value="../bootstrap/bs02-grid.html">2 · Sistema de grilla</option>
+        <option value="../bootstrap/bs03-clases.html">3 · Clases sobre tu CSS</option>
+        <option value="../bootstrap/bs04-tipografia-colores.html">4 · Tipografía y colores</option>
+        <option value="../bootstrap/bs05-utilidades.html">5 · Utilidades y layout</option>
+        <option value="../bootstrap/bs06-componentes.html">6 · Botones, alertas y más</option>
+        <option value="../bootstrap/bs07-tablas-tarjetas.html">7 · Tablas, tarjetas, listas</option>
+        <option value="../bootstrap/bs08-formularios.html">8 · Formularios</option>
+        <option value="../bootstrap/bs09-navegacion.html">9 · Navegación</option>
+        <option value="../bootstrap/bs10-interactivos.html">10 · Componentes con JS</option>
+      </optgroup>
+    </select>
+
+  </div>
+</header>
+<main>
+<div class="container">
+  <p class="crumb"><a href="../index.html">Inicio</a> / Librerías jQuery / Eventos y efectos</p>
+  <h1>jQuery — Eventos y efectos</h1>
+  <p>Fuente: <code>Javascript_jquery_II.pdf</code></p>
+
+  <h2>Eventos</h2>
+  <div class="card">
+    <p>Todas las acciones que el usuario realiza sobre la página pueden capturarse por eventos:</p>
+    <ul>
+      <li>Eventos del <strong>mouse</strong>.</li>
+      <li>Eventos del <strong>teclado</strong>.</li>
+      <li>Eventos ante la acción de los <strong>formularios</strong>.</li>
+      <li>Eventos de la <strong>ventana del navegador</strong>.</li>
+    </ul>
+  </div>
+
+  <h3>Capturar y responder a un evento</h3>
+  <pre><code>$("p").click();       // captura el clic de un párrafo
+
+// Definir qué sucede cuando ocurre el evento
+$("p").click(function(){
+  // acciones aquí
+  $(this).hide();      // oculta el párrafo cliqueado
+});</code></pre>
+
+  <h2>Efectos</h2>
+  <h3>1. <code>hide()</code> y <code>show()</code></h3>
+  <p>Ocultan o muestran los elementos seleccionados.</p>
+  <pre><code>$("#hide").click(function(){
+  $("p").hide();
+});
+$("#show").click(function(){
+  $("p").show();
+});</code></pre>
+
+  <h3>2. Fade (desvanecido)</h3>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th></tr>
+    <tr><td><code>fadeIn()</code></td><td>Desvanece el elemento desde transparente hasta visible.</td></tr>
+    <tr><td><code>fadeOut()</code></td><td>Desvanece hasta que queda invisible.</td></tr>
+    <tr><td><code>fadeToggle()</code></td><td>Alterna entre fadeIn y fadeOut.</td></tr>
+    <tr><td><code>fadeTo()</code></td><td>Desvanece hasta una opacidad determinada.</td></tr>
+  </table>
+
+  <h3>3. Slide (deslizamiento)</h3>
+  <table>
+    <tr><th>Método</th><th>Qué hace</th></tr>
+    <tr><td><code>slideDown()</code></td><td>Desliza el elemento hacia abajo (revela).</td></tr>
+    <tr><td><code>slideUp()</code></td><td>Desliza hacia arriba (oculta).</td></tr>
+    <tr><td><code>slideToggle()</code></td><td>Combina los dos efectos anteriores.</td></tr>
+  </table>
+
+  <h3>4. Animaciones: <code>animate()</code></h3>
+  <pre><code>$(selector).animate({params}, speed, callback);</code></pre>
+  <ul>
+    <li><code>{params}</code> — propiedades CSS a animar.</li>
+    <li><code>speed</code> — velocidad del efecto.</li>
+    <li><code>callback</code> — función que se ejecuta cuando termina la animación.</li>
+  </ul>
+
+  <h3>5. <code>stop()</code></h3>
+  <p>Frena las animaciones o efectos en curso.</p>
+
+  <h3>6. Devoluciones de llamada (callback functions)</h3>
+  <pre><code>$(selector).hide(speed, callback);</code></pre>
+  <p>Los callbacks permiten que el script se ejecute <strong>paso a paso</strong>: la función de retorno recién corre cuando termina el efecto anterior.</p>
+
+  <h3>7. Encadenado (chaining)</h3>
+  <p>Con jQuery se pueden <strong>encadenar acciones/métodos</strong> en una misma línea para ejecutar varios efectos seguidos.</p>
+
+  <div class="pager">
+    <a href="jq02-sintaxis-selectores.html">← jQuery 2 · Sintaxis y selectores</a>
+    <a class="next" href="jq04-html-css.html">Siguiente: jQuery 4 · HTML y CSS →</a>
+  </div>
+</div>
+</main>
+<footer class="container">Resumen de apuntes · jQuery 3 · Guía de Tecnologías Web</footer>
+</body>
+</html>

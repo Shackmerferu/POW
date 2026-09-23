@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .card-glass {
+            background: rgba(255, 255, 255, .6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .7);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .25);
+        }
+
+        #inputMessage {
+            resize: none;
+            overflow-y: auto;
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container py-5">
+        <div class="row g-5 justify-content-center align-items-start">
+
+            <!-- Columna izquierda: info de contacto -->
+            <div class="col-lg-6">
+                <h2 class="text-uppercase fw-bold fs-6 text-primary mb-2 text-gradient">Hablemos</h2>
+                <h1 class="display-4 fw-bolder">
+                    ¿Tienes una idea? <br>
+                    <span class="text-gradient">Contactame</span>
+                </h1>
+                <p class="lead text-secondary lh-lg mt-3 mb-4 ">
+                    Si necesitas contactarme para realizar algo en comun aca te dejo mis datos como un formulario para
+                    dejar todo lo necesario.
+                </p>
+
+                <ul class="list-unstyled vstack gap-4">
+                    <li class="d-flex align-items-center gap-3">
+                        <span
+                            class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary p-3 fs-5">
+                            <i class="fa-solid fa-envelope text-gradient"></i>
+                        </span>
+                        <div>
+                            <p class="text-secondary small fw-medium mb-1">Envíanos un correo</p>
+                            <a href="mailto:contacto@doudev.com.ar" class="fw-bold text-decoration-none link-primary text-gradient">
+                                contacto&#64;titocalderon.com.ar
+                            </a>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <span
+                            class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary p-3 fs-5">
+                            <i class="fa-brands fa-instagram text-gradient"></i>
+                        </span>
+                        <div>
+                            <p class="text-secondary small fw-medium mb-1">Síguenos</p>
+                            <a href="https://instagram.com/titocalderon" target="_blank"
+                                class="fw-bold text-decoration-none link-primary text-gradient">
+                                &#64;Tito_Calderon123
+                            </a>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <span
+                            class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary p-3 fs-5">
+                            <i class="fa fa-map-marker text-gradient"></i>
+                        </span>
+                        <div>
+                            <p class="text-secondary small fw-medium mb-1">Ubicacion</p>
+                            <a href="https://maps.app.goo.gl/1f5ehuphEiZbHH8t8" target="_blank"
+                                class="fw-bold text-decoration-none link-primary text-gradient">
+                                Calle 9 y 110 n473
+                            </a>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <span
+                            class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary bg-opacity-10 text-primary p-3 fs-5">
+                            <i class="fa-solid fa-phone text-gradient"></i>
+                        </span>
+                        <div>
+                            <p class="text-secondary small fw-medium mb-1 text-gradient"> Llamanos</p>
+                            <a href=" tel:+5492302422780"> +54 9 2302 422780 </a>
+                        </div>
+                    </li>
+            </div>
+
+            <!-- Columna derecha: formulario -->
+            <div class="col-lg-6">
+                <div class="card-glass rounded-4 p-4 p-md-5">
+                    <form id="contactForm" novalidate>
+                        <div class="mb-3">
+                            <label for="inputName" class="form-label fw-semibold">Tu Nombre</label>
+                            <input type="text" id="inputName" name="name" class="form-control form-control-lg"
+                                placeholder="Ej: Juan Pérez">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label fw-semibold">Correo Electrónico</label>
+                            <input type="email" id="inputEmail" name="email" class="form-control form-control-lg"
+                               placeholder="tucorreo&#64;ejemplo.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputSubject" class="form-label fw-semibold">Asunto</label>
+                            <input type="text" id="inputSubject" name="subject" class="form-control form-control-lg"
+                                placeholder="Consulta sobre desarrollo...">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="inputMessage" class="form-label fw-semibold">Mensaje</label>
+                            <textarea id="inputMessage" name="message" rows="4" class="form-control"
+                                placeholder="Cuéntanos más sobre tu idea..."></textarea>
+                        </div>
+
+                        <button type="submit" id="btnSubmit" href="timer.html " 
+                            class="btn btn-primary btn-lg w-100 d-inline-flex align-items-center justify-content-center gap-2 ">
+                            <span id="btnText" class=" text-blank" >Enviar</span> 
+                        </button>
+
+                        <div class="alert alert-success d-none mt-3 mb-0" role="alert">
+                            <i class="fa-solid fa-check-circle me-2"></i>¡Mensaje enviado con éxito! Te contactaremos
+                            pronto.
+                        </div>
+                        <div class="alert alert-danger d-none mt-3 mb-0" role="alert">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>Hubo un error al enviar. Por favor
+                            intenta nuevamente.
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        const form = document.getElementById('contactForm');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const btnText = document.getElementById('btnText');
+        const msgSuccess = document.querySelector('.alert-success');
+        const msgError = document.querySelector('.alert-danger');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            msgSuccess.classList.add('d-none');
+            msgError.classList.add('d-none');
+
+            btnSubmit.disabled = true;
+            btnText.textContent = 'Enviando...';
+
+            setTimeout(() => {
+                btnSubmit.disabled = false;
+                btnText.textContent = 'Enviar';
+
+                if (Math.random() > 0.3) {
+                    msgSuccess.classList.remove('d-none');
+                    form.reset();
+                    setTimeout(() => window.location.href = 'timer.html', 2000);
+                } else {
+                    msgError.classList.remove('d-none');
+                }
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>
