@@ -15,34 +15,52 @@
         </div>
         <div class="bg-secondary-subtle border border-black border-opacity-25 rounded-3 p-3 text-end mb-4 overflow-hidden"
             style="box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);">
-            <small id="operacion" class="d-block text-secondary" style="min-height: 1.2em; white-space: nowrap;"></small>
+            <small id="operacion" class="d-block text-secondary"
+                style="min-height: 1.2em; white-space: nowrap;"></small>
             <span id="pantalla" class="d-block fs-1 fw-light text-body-emphasis" style="word-break: break-all;">0</span>
         </div>
         <div class="row g-2">
             <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="limpiar('')">CE</button></div>
             <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="limpiar('C')">C</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="cambiarsigno()">&plusmn;</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="calcularPorcentaje()">%</button></div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="cambiarsigno()">&plusmn;</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="calcularPorcentaje()">%</button>
+            </div>
 
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('7')">7</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('8')">8</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('9')">9</button></div>
-            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('/')">÷</button></div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('7')">7</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('8')">8</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('9')">9</button>
+            </div>
+            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('/')">÷</button>
+            </div>
 
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('4')">4</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('5')">5</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('6')">6</button></div>
-            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('*')">×</button></div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('4')">4</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('5')">5</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('6')">6</button>
+            </div>
+            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('*')">×</button>
+            </div>
 
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('1')">1</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('2')">2</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('3')">3</button></div>
-            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('-')">-</button></div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('1')">1</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('2')">2</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('3')">3</button>
+            </div>
+            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('-')">-</button>
+            </div>
 
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('0')">0</button></div>
-            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('.')">.</button></div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('0')">0</button>
+            </div>
+            <div class="col-3"><button class="btn btn-light fw-medium w-100" onclick="agregarNumero('.')">.</button>
+            </div>
             <div class="col-3"><button class="btn btn-primary fw-medium w-100" onclick="calcular()">=</button></div>
-            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('+')">+</button></div>
+            <div class="col-3"><button class="btn btn-dark fw-medium w-100" onclick="elegirOperacion('+')">+</button>
+            </div>
         </div>
     </div>
 
@@ -50,6 +68,7 @@
         let opac = '0';
         let opan = '';
         let operacion = undefined;
+        let modoPorcentaje = false;
 
         function redondear(valor) {
             if (typeof valor !== 'number' || !isFinite(valor)) return valor;
@@ -67,6 +86,7 @@
         }
 
         function elegirOperacion(op) {
+            if (modoPorcentaje) return;
             if (opac === '0') return;
             if (opac === '') {
                 operacion = op;
@@ -89,70 +109,81 @@
             const ant = parseFloat(opan);
             const act = parseFloat(opac);
 
-            if (isNaN(ant) || isNaN(act)) return;
+            if (isNaN(ant)) return;
 
-            switch (operacion) {
-                case '+':
-                    res = ant + act;
-                    break;
-                case '-':
-                    res = ant - act;
-                    break;
-                case '*':
-                    res = ant * act;
-                    break;
-                case '/':
-                    res = (act === 0) ? 'infinity' : ant / act;
-                    break;
-                default:
-                    return;
-            }
-
-            if (typeof res === 'number') res = redondear(res);
-            opac = res.toString();
-            operacion = undefined;
-            opan = '';
-            actualizarPantalla();
-        }
-
-        function limpiar(tipo) {
-            opac = '0';
-            if (tipo === 'C') {
-                opan = '';
-                operacion = undefined;
-            }
-            actualizarPantalla();
-        }
-
-        function cambiarsigno() {
-            if (opac === '0' || opac === '') return;
-            opac = redondear(parseFloat(opac) * -1).toString();
-            actualizarPantalla();
-        }
-
-        function calcularPorcentaje() {
-            if (opac === '0') return;
-            opac = redondear(parseFloat(opac) / 100).toString();
-            actualizarPantalla();
-        }
-
-        function actualizarPantalla() {
-            document.getElementById('pantalla').innerText = opac;
-
-            if (operacion !== undefined) {
-                let simbolo = operacion;
-                if (simbolo === '/') simbolo = '÷';
-                if (simbolo === '*') simbolo = '×';
-
-                const mostrarOp = opan !== '' && !isNaN(parseFloat(opan))
-                    ? redondear(parseFloat(opan)).toString()
-                    : opan;
-
-                document.getElementById('operacion').innerText = `${mostrarOp} ${simbolo}`;
+            if (operacion === '%') {
+                if (opac === '' || isNaN(act)) return;
+                res = redondear(ant * act / 100);
             } else {
-                document.getElementById('operacion').innerText = '';
+                if (isNaN(act)) return;
+                switch (operacion) {
+                    case '+':
+                        res = ant + act;
+                        break;
+                    case '-':
+                        res = ant - act;
+                        break;
+                    case '*':
+                        res = ant * act;
+                        break;
+                    case '/':
+                        res = (act === 0) ? 'infinity' : ant / act;
+                        break;
+                    default:
+                        return;
+                }
+
+                if (typeof res === 'number') res = redondear(res);
+                opac = res.toString();
+                operacion = undefined;
+                opan = '';
+                modoPorcentaje = false;
+                actualizarPantalla();
             }
-        }
+
+            function limpiar(tipo) {
+                opac = '0';
+                if (tipo === 'C') {
+                    opan = '';
+                    operacion = undefined;
+                    modoPorcentaje = false;
+                }
+                actualizarPantalla();
+            }
+
+            function cambiarsigno() {
+                if (opac === '0' || opac === '') return;
+                opac = redondear(parseFloat(opac) * -1).toString();
+                actualizarPantalla();
+            }
+
+            function calcularPorcentaje() {
+                if (modoPorcentaje) return;
+                if (opac === '' || isNaN(parseFloat(opac))) return;
+                opan = opac;
+                operacion = '%';
+                modoPorcentaje = true;
+                opac = '';
+                actualizarPantalla();
+            }
+
+            function actualizarPantalla() {
+                document.getElementById('pantalla').innerText = opac;
+
+                if (operacion !== undefined) {
+                    let simbolo = operacion;
+                    if (simbolo === '/') simbolo = '÷';
+                    if (simbolo === '*') simbolo = '×';
+
+                    const mostrarOp = opan !== '' && !isNaN(parseFloat(opan))
+                        ? redondear(parseFloat(opan)).toString()
+                        : opan;
+
+                    document.getElementById('operacion').innerText = `${mostrarOp} ${simbolo}`;
+                } else {
+                    document.getElementById('operacion').innerText = '';
+                }
+            }
     </script>
 
 </body>
