@@ -132,14 +132,15 @@
                     default:
                         return;
                 }
+            }
 
-                if (typeof res === 'number') res = redondear(res);
-                opac = res.toString();
-                operacion = undefined;
-                opan = '';
-                modoPorcentaje = false;
-                actualizarPantalla();
-            }}
+            if (typeof res === 'number') res = redondear(res);
+            opac = res.toString();
+            operacion = undefined;
+            opan = '';
+            modoPorcentaje = false;
+            actualizarPantalla();
+        }
 
             function limpiar(tipo) {
                 opac = '0';
