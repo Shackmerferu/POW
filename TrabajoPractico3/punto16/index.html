@@ -46,12 +46,12 @@ for (let i = 0; i < inputStr.length; i++) {
 }
             
             if (cuil.length !== 11 || isNaN(cuil)) {
-                mostrarError("Ingrese un CUIL/CUIT válido de 11 números.");
+                mostrarError("Ingrese un CUIL/CUIT válido.");
                 return;
             }
 
             const tiposValidos = ["20", "23", "24", "27", "30", "33", "34"];
-            const tipoIngresado = cuil.substring(0, 2); // Agarra los primeros 2 números
+            const tipoIngresado = cuil.substring(0, 2); 
             
             if (!tiposValidos.includes(tipoIngresado)) {
                 mostrarError("El tipo (primeros 2 números) no es válido.");
@@ -83,9 +83,9 @@ for (let i = 0; i < inputStr.length; i++) {
             const digitoIngresado = parseInt(cuil[10]);
 
             if (digitoCalculado === digitoIngresado) {
-                mostrarExito("¡Verdadero! El número es correcto.");
+                mostrarExito(" El número es válido.");
             } else {
-                mostrarError("Falso. El dígito verificador no coincide.");
+                mostrarError("El número es inválido.");
             }
         }
 
