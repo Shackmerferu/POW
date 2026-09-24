@@ -37,21 +37,30 @@
 
 <body>
 
-    <main class="container py-5 ">
+    <main class="container py-5">
         <div class="row g-5 justify-content-center align-items-center">
             <div class="col-11 col-lg mx-auto">
                 <div>
                     <div class="card-glass rounded-4 p-4 p-lg-5 text-center">
-                        <a href="index.html" class="btn btn-dark btn-lg rounded-pill px-4 py-2 shadow-sm ">
-                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                        </a>
-                        <div class=" text-dark text-center h1 fw-bolder">
-                            Lo estaremos contactando!
+                        
+                        <!-- NUEVA ESTRUCTURA FLEX: Alinea el botón y el título en la misma línea -->
+                        <div class="d-flex align-items-center position-relative mb-4">
+                            <div class="position-absolute start-0">
+                                <a href="index.html" class="btn btn-dark btn-lg rounded-pill px-4 py-2 shadow-sm">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <div class="text-dark h1 fw-bolder w-100 m-0">
+                                Lo estaremos contactando!
+                            </div>
                         </div>
-                        <div class=" text-dark text-center h1 fw-bolder">
+
+                        <!-- El contador se mantiene centrado abajo -->
+                        <div class="text-dark text-center h1 fw-bolder mt-4">
                             Nuestra web lleva activa desde: <br>
-                            <span id="contador"></span>
+                            <span id="contador" class="text-gradient"></span>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -70,7 +79,7 @@
             const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
             const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-            document.getElementById('contador').innerHTML = `${dias} Dias - ${horas} Horas - ${minutos} Minutos - ${segundos} Segundos`;
+            document.getElementById('contador').innerHTML = `${dias} Días - ${horas} Horas - ${minutos} Minutos - ${segundos} Segundos`;
         }
         actualizarContador();
         setInterval(actualizarContador, 1000);
