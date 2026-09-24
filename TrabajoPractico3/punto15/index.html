@@ -63,7 +63,8 @@
                         </span>
                         <div>
                             <p class="text-secondary small fw-medium mb-1">Envíanos un correo</p>
-                            <a href="mailto:contacto@doudev.com.ar" class="fw-bold text-decoration-none link-primary text-gradient">
+                            <a href="mailto:contacto@doudev.com.ar"
+                                class="fw-bold text-decoration-none link-primary text-gradient">
                                 contacto&#64;titocalderon.com.ar
                             </a>
                         </div>
@@ -113,30 +114,34 @@
                         <div class="mb-3">
                             <label for="inputName" class="form-label fw-semibold">Tu Nombre</label>
                             <input type="text" id="inputName" name="name" class="form-control form-control-lg"
-                                placeholder="Ej: Juan Pérez">
+                                placeholder="Ej: Juan Pérez" required minlength="3">
+                            <div class="invalid-feedback">Por favor, ingresa tu nombre (mínimo 3 caracteres).</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="inputEmail" class="form-label fw-semibold">Correo Electrónico</label>
                             <input type="email" id="inputEmail" name="email" class="form-control form-control-lg"
-                               placeholder="tucorreo&#64;ejemplo.com">
+                                placeholder="tucorreo@ejemplo.com" required>
+                            <div class="invalid-feedback">Por favor, ingresa un correo electrónico válido.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="inputSubject" class="form-label fw-semibold">Asunto</label>
                             <input type="text" id="inputSubject" name="subject" class="form-control form-control-lg"
-                                placeholder="Consulta sobre desarrollo...">
+                                placeholder="Consulta sobre desarrollo..." required>
+                            <div class="invalid-feedback">Por favor, ingresa un asunto.</div>
                         </div>
 
                         <div class="mb-4">
                             <label for="inputMessage" class="form-label fw-semibold">Mensaje</label>
                             <textarea id="inputMessage" name="message" rows="4" class="form-control"
-                                placeholder="Cuéntanos más sobre tu idea..."></textarea>
+                                placeholder="Cuéntanos más sobre tu idea..." required minlength="10"></textarea>
+                            <div class="invalid-feedback">Por favor, escribe un mensaje (mínimo 10 caracteres).</div>
                         </div>
 
-                        <button type="submit" id="btnSubmit" href="timer.html " 
-                            class="btn btn-primary btn-lg w-100 d-inline-flex align-items-center justify-content-center gap-2 ">
-                            <span id="btnText" class=" text-blank" >Enviar</span> 
+                        <button type="submit" id="btnSubmit"
+                            class="btn btn-primary btn-lg w-100 d-inline-flex align-items-center justify-content-center gap-2">
+                            <span id="btnText" class="text-blank">Enviar</span>
                         </button>
 
                         <div class="alert alert-success d-none mt-3 mb-0" role="alert">
@@ -166,6 +171,14 @@
 
         form.addEventListener('submit', e => {
             e.preventDefault();
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            form.classList.remove('was-validated');
             msgSuccess.classList.add('d-none');
             msgError.classList.add('d-none');
 
@@ -179,13 +192,16 @@
                 if (Math.random() > 0.3) {
                     msgSuccess.classList.remove('d-none');
                     form.reset();
-                    setTimeout(() => window.location.href = 'timer.html', 2000);
+                    setTimeout(() => {
+                        window.location.href = 'timer.html';
+                    }, 2000);
                 } else {
                     msgError.classList.remove('d-none');
                 }
             }, 1500);
         });
     </script>
+
 </body>
 
 </html>
