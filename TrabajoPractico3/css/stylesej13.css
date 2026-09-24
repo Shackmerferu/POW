@@ -83,12 +83,12 @@ body {
 }
 
 .btn-func {
-    background: #e5e7eb;
+    background: #d1d5db;
     color: #374151;
 }
 
 .btn-num {
-    background: #f7f7f9;
+    background: #e5e7eb;
     color: #111827;
 }
 
@@ -98,6 +98,6 @@ body {
 }
 
 .btn-equal {
-    background: #2563eb;
+    background: #a99bc9;
     color: #fff;
 }
