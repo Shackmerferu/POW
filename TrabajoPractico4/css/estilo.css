@@ -1,0 +1,62 @@
+/* Estilos compartidos por las actividades del TP4 (lo demas lo aporta Bootstrap). */
+
+body {
+    background-color: #f5f5f5;
+}
+
+.volver {
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.numero {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+}
+
+/* Efecto visual llamativo al acertar el numero. */
+@keyframes pulso {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.pulso {
+    animation: pulso 0.45s ease-out;
+}
+
+/* Pelota deMarvel sin imagen disponible. */
+.avatar-vacio {
+    width: 100%;
+    height: 220px;
+    background-color: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.avatar-mini {
+    width: 46px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #e9ecef;
+}
+
+.descripcion {
+    max-height: 220px;
+    overflow: auto;
+    white-space: pre-line;
+}
