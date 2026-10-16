@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP4 - Actividad 3: API de Rick and Morty</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/estilo.css">
+</head>
+
+<body class="bg-body-tertiary">
+
+    <div class="container py-4">
+        <a href="../index.html" class="volver text-secondary d-inline-block mb-3">&larr; Volver</a>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+            <div>
+                <h1 class="h4 mb-1">API de Rick and Morty</h1>
+                <p class="text-secondary small mb-0">Listado de personajes, b&uacute;squeda, detalle y episodios desde
+                    <code>rickandmortyapi.com</code>.
+                </p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <form id="formularioBusqueda" class="row g-2">
+                    <div class="col-12 col-md-9">
+                        <input type="search" id="busqueda" class="form-control" placeholder="Buscar por nombre (ej: Rick, Morty)"
+                            autocomplete="off">
+                    </div>
+                    <div class="col-12 col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-dark w-100">Buscar</button>
+                        <button id="limpiarBusqueda" type="button" class="btn btn-outline-secondary">Limpiar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="estado" class="text-center py-4 d-none">
+            <div class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></div>
+            <span id="estadoTexto" class="text-secondary small">Cargando...</span>
+        </div>
+
+        <div id="error" class="alert alert-danger small d-none" role="alert"></div>
+
+        <div id="personajes" class="row g-3"></div>
+
+        <div id="paginacion" class="d-none d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4">
+            <small id="resumen" class="text-secondary"></small>
+            <div class="btn-group btn-group-sm">
+                <button id="anterior" type="button" class="btn btn-outline-secondary">&larr; Anteriores</button>
+                <button id="siguiente" type="button" class="btn btn-outline-secondary">Siguientes &rarr;</button>
+            </div>
+        </div>
+
+        <p id="creditos" class="text-center text-secondary small mt-4 mb-0">
+            Datos provistos por <a href="https://rickandmortyapi.com/" target="_blank" rel="noopener">Rick and Morty API</a>
+        </p>
+    </div>
+
+    <div class="modal fade" id="modalPersonaje" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="tituloModal" class="modal-title">Personaje</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <div id="imagenModal"></div>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <ul class="list-unstyled small mb-3" id="infoModal"></ul>
+                            <h6 class="small text-uppercase text-secondary mb-2">Episodios (<span id="totalEpisodios">0</span>)</h6>
+                            <div id="panelEpisodios" class="small"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/almacen.js"></script>
+    <script>
+        var BASE = 'https://rickandmortyapi.com/api';
+        var paginaActual = 1;
+        var totalPaginas = 0;
+        var ultimoFiltro = '';
+        var modal = new bootstrap.Modal(document.getElementById('modalPersonaje'));
+
+        var contenedor = document.getElementById('personajes');
+        var bloqueEstado = document.getElementById('estado');
+        var textoEstado = document.getElementById('estadoTexto');
+        var bloqueError = document.getElementById('error');
+        var bloquePaginacion = document.getElementById('paginacion');
+
+        document.getElementById('formularioBusqueda').addEventListener('submit', function (evento) {
+            evento.preventDefault();
+            ultimoFiltro = document.getElementById('busqueda').value.trim();
+            paginaActual = 1;
+            cargarPersonajes();
+        });
+
+        document.getElementById('limpiarBusqueda').addEventListener('click', function () {
+            document.getElementById('busqueda').value = '';
+            ultimoFiltro = '';
+            paginaActual = 1;
+            cargarPersonajes();
+        });
+
+        document.getElementById('anterior').addEventListener('click', function () {
+            if (paginaActual > 1) {
+                paginaActual--;
+                cargarPersonajes();
+            }
+        });
+
+        document.getElementById('siguiente').addEventListener('click', function () {
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                cargarPersonajes();
+            }
+        });
+
+        cargarPersonajes();
+
+        async function cargarPersonajes() {
+            ocultarError();
+            bloquePaginacion.classList.add('d-none');
+            contenedor.innerHTML = '';
+
+            mostrarCargando(true);
+
+            try {
+                var url = BASE + '/character/?page=' + paginaActual;
+                if (ultimoFiltro !== '') {
+                    url += '&name=' + encodeURIComponent(ultimoFiltro);
+                }
+
+                var respuesta = await fetch(url);
+
+                if (!respuesta.ok) {
+                    if (respuesta.status === 404) {
+                        contenedor.innerHTML = '<p class="text-secondary">No hay resultados para ese filtro.</p>';
+                        totalPaginas = 0;
+                        return;
+                    }
+                    throw new Error('Error ' + respuesta.status);
+                }
+
+                var datos = await respuesta.json();
+                totalPaginas = datos.info.pages;
+                paginaActual = paginaActual;
+
+                pintarPersonajes(datos.results);
+                pintarPaginacion(datos.info);
+            } catch (error) {
+                mostrarError(error.message);
+                contenedor.innerHTML = '';
+            } finally {
+                mostrarCargando(false);
+            }
+        }
+
+        async function abrirPersonaje(id) {
+            try {
+                mostrarCargando(true, 'Cargando detalle...');
+                var respuesta = await fetch(BASE + '/character/' + id);
+                if (!respuesta.ok) {
+                    throw new Error('Error ' + respuesta.status);
+                }
+                var personaje = await respuesta.json();
+
+                document.getElementById('tituloModal').textContent = personaje.name;
+                document.getElementById('imagenModal').innerHTML = '<img src="' + escapar(personaje.image) + '" class="img-fluid rounded w-100" alt="' + escapar(personaje.name) + '">';
+                document.getElementById('infoModal').innerHTML = ''
+                    + '<li><strong>Estado:</strong> ' + escapar(personaje.status) + '</li>'
+                    + '<li><strong>Especie:</strong> ' + escapar(personaje.species) + '</li>'
+                    + (personaje.type ? '<li><strong>Tipo:</strong> ' + escapar(personaje.type) + '</li>' : '')
+                    + '<li><strong>G&eacute;nero:</strong> ' + escapar(personaje.gender) + '</li>'
+                    + '<li><strong>Origen:</strong> ' + escapar(personaje.origin.name) + '</li>'
+                    + '<li><strong>Ubicaci&oacute;n:</strong> ' + escapar(personaje.location.name) + '</li>'
+                    + '<li><strong>Creado:</strong> ' + new Date(personaje.created).toLocaleDateString('es-ES') + '</li>';
+
+                var episodios = personaje.episode;
+                document.getElementById('totalEpisodios').textContent = episodios.length;
+                document.getElementById('panelEpisodios').innerHTML = '<p class="text-secondary small">Cargando episodios...</p>';
+
+                bootstrap.Tab.getOrCreateInstance(document.getElementById('pestanaComics')).show();
+                modal.show();
+
+                cargarEpisodios(episodios);
+            } catch (error) {
+                mostrarError(error.message);
+            } finally {
+                mostrarCargando(false);
+            }
+        }
+
+        async function cargarEpisodios(urls) {
+            try {
+                if (urls.length === 0) {
+                    document.getElementById('panelEpisodios').innerHTML = '<p class="text-secondary small mb-0">Sin episodios.</p>';
+                    return;
+                }
+
+                var ids = urls.map(function (u) {
+                    var partes = u.split('/');
+                    return partes[partes.length - 1];
+                }).join(',');
+
+                var respuesta = await fetch(BASE + '/episode/' + ids);
+                if (!respuesta.ok) {
+                    throw new Error('Error ' + respuesta.status);
+                }
+                var datos = await respuesta.json();
+
+                var lista = Array.isArray(datos) ? datos : [datos];
+                var html = '<ul class="list-unstyled mb-0">';
+                for (var i = 0; i < lista.length; i++) {
+                    var ep = lista[i];
+                    html += '<li class="border-bottom py-1">'
+                        + '<div class="fw-semibold small">' + escapar(ep.name) + ' - <span class="text-secondary">' + escapar(ep.episode) + '</span></div>'
+                        + '<div class="text-secondary" style="font-size: 0.75rem;">Emitido: ' + new Date(ep.air_date).toLocaleDateString('es-ES') + '</div>'
+                        + '</li>';
+                }
+                document.getElementById('panelEpisodios').innerHTML = html + '</ul>';
+            } catch (error) {
+                document.getElementById('panelEpisodios').innerHTML = '<p class="text-danger small mb-0">' + escapar(error.message) + '</p>';
+            }
+        }
+
+        function pintarPersonajes(personajes) {
+            if (!personajes || personajes.length === 0) {
+                contenedor.innerHTML = '<p class="text-secondary">No hay resultados para ese filtro.</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < personajes.length; i++) {
+                var p = personajes[i];
+                html += '<div class="col-6 col-md-4 col-lg-3">'
+                    + '<div class="card shadow-sm h-100">'
+                    + '<img src="' + escapar(p.image) + '" class="card-img-top img-fluid" alt="' + escapar(p.name) + '">'
+                    + '<div class="card-body p-2">'
+                    + '<div class="small fw-semibold text-truncate" title="' + escapar(p.name) + '">' + escapar(p.name) + '</div>'
+                    + '<div class="text-secondary" style="font-size:0.75rem;">' + escapar(p.species) + ' - ' + escapar(p.status) + '</div>'
+                    + '<button type="button" class="btn btn-sm btn-outline-dark w-100 mt-2" onclick="abrirPersonaje(' + p.id + ')">Ver detalle</button>'
+                    + '</div></div></div>';
+            }
+            contenedor.innerHTML = html;
+        }
+
+        function pintarPaginacion(info) {
+            if (!info || info.count === 0) {
+                bloquePaginacion.classList.add('d-none');
+                return;
+            }
+
+            var desde = ((info.prev ? paginaActual - 1 : paginaActual) * 1);
+            if (info.prev) desde = paginaActual - 1;
+            var count = info.count;
+            var pages = info.pages;
+            var actual = paginaActual;
+
+            var mostradoDesde = (actual - 1) * 20 + 1;
+            var mostradoHasta = Math.min(actual * 20, count);
+
+            document.getElementById('resumen').textContent = 'Mostrando ' + mostradoDesde + ' - ' + mostradoHasta + ' de ' + count + ' resultados';
+            document.getElementById('anterior').disabled = actual <= 1;
+            document.getElementById('siguiente').disabled = actual >= pages;
+            bloquePaginacion.classList.remove('d-none');
+        }
+
+        function mostrarCargando(activo, texto) {
+            textoEstado.textContent = texto || 'Cargando...';
+            bloqueEstado.classList.toggle('d-none', !activo);
+        }
+
+        function mostrarError(texto) {
+            bloqueError.textContent = texto;
+            bloqueError.classList.remove('d-none');
+        }
+
+        function ocultarError() {
+            bloqueError.classList.add('d-none');
+        }
+
+        function escapar(texto) {
+            return String(texto).replace(/[&<>"]/g, function (caracter) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[caracter];
+            });
+        }
+    </script>
+
+</body>
+
+</html>
