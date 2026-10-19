@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 5 · AJAX</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html" selected>5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 5</p>
+    <h1>Unidad 5 · AJAX</h1>
+    <p class="lead"><strong>AJAX</strong> (<em>Asynchronous JavaScript + XML</em>) no es un lenguaje ni una
+    tecnología en sí misma: es una <em>técnica</em> que combina varias tecnologías para que la página se comunique
+    con el servidor <strong>en segundo plano</strong>, sin recargarse. Así se crean las <strong>RIA</strong>
+    (Rich Internet Applications).</p>
+    <p class="alert warn"><strong>Nota:</strong> AJAX necesita un servidor y, por seguridad, los navegadores
+    bloquean <code>XMLHttpRequest</code> a archivos locales cuando la página se abre con <code>file://</code>. Por
+    eso en esta unidad los ejemplos se muestran sobre <code>fetch()</code>, que es la forma moderna y funciona con
+    el mismo principio.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Qué es AJAX y qué tecnologías combina</a></li>
+      <li><a href="#t2">Modelo tradicional vs AJAX</a></li>
+      <li><a href="#t3">El objeto XMLHttpRequest</a></li>
+      <li><a href="#t4">readyState, status y cómo trabaja</a></li>
+      <li><a href="#t5">Métodos open() y send(); GET vs POST</a></li>
+      <li><a href="#t6">Respuestas: texto, XML y JSON</a></li>
+      <li><a href="#t7">Validar un formulario con AJAX</a></li>
+      <li><a href="#t8">Fetch API y async/await</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Qué es AJAX y qué tecnologías combina</h2>
+    <div class="def">
+      <p>AJAX permite solicitar datos al servidor y cargarlos <strong>en segundo plano</strong> sin interferir con la
+      visualización ni el comportamiento de la página. Está basado en <strong>estándares abiertos</strong>, así que
+      funciona en múltiples plataformas, sistemas operativos y navegadores.</p>
+      <p>No es una tecnología única: es la unión de varias que, combinadas, producen el efecto asíncrono.</p>
+    </div>
+    <table>
+      <tr><th>Tecnología</th><th>Rol dentro de AJAX</th></tr>
+      <tr><td>XHTML / HTML y CSS</td><td>Presentación basada en estándares.</td></tr>
+      <tr><td>DOM</td><td>Interacción y manipulación dinámica de la presentación.</td></tr>
+      <tr><td>XML, XSLT y JSON</td><td>Intercambio y manipulación de información (también texto plano).</td></tr>
+      <tr><td><strong>XMLHttpRequest</strong></td><td>Intercambio <em>asíncrono</em> de información.</td></tr>
+      <tr><td>JavaScript</td><td>Une todas las demás tecnologías (con ASP, PHP, etc.).</td></tr>
+    </table>
+    <span class="label">Esquema de funcionamiento</span>
+<pre><code>BROWSER                                  SERVER
+   │  1. Ocurre un evento (click, keyup…)
+   │  2. Se crea el objeto XMLHttpRequest
+   │─── 3. Envía HttpRequest  ─────────────▶
+   │                                        4. Procesa el request
+   │◀── 5. Crea y envía la respuesta  ──────┘
+   │      (en segundo plano)
+   │  6. Procesa lo recibido con JavaScript
+   │  7. Actualiza el contenido de la página</code></pre>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Modelo tradicional vs AJAX</h2>
+    <div class="def">
+      <p>En el <strong>modelo tradicional</strong> cada acción del usuario (clic en un botón, elegir de una lista)
+      genera una llamada al servidor; el servidor responde con una <em>página HTML nueva</em> y el usuario debe
+      esperar a que se recargue por completo.</p>
+      <p>En el <strong>modelo AJAX</strong> se interpone una capa entre el usuario y el servidor: la petición se
+      procesa en segundo plano y solo se actualiza la parte de la página que cambió. Desaparece la ventana en blanco
+      y la espera.</p>
+    </div>
+    <table>
+      <tr><th>Aspecto</th><th>Modelo tradicional</th><th>Modelo AJAX</th></tr>
+      <tr><td>Comunicación</td><td>Recarga completa de la página.</td><td>Asíncrona, en segundo plano.</td></tr>
+      <tr><td>Datos que viajan</td><td>El HTML entero.</td><td>Solo los datos necesarios (JSON/XML/texto).</td></tr>
+      <tr><td>Espera del usuario</td><td>Pantalla en blanco hasta recibir respuesta.</td><td>La página sigue usable.</td></tr>
+      <tr><td>Sensación</td><td>Saltos de página.</td><td>Aplicación de escritorio (RIA).</td></tr>
+    </table>
+    <span class="label">Ejemplo · el contraste en código</span>
+<pre><code>&lt;!-- Tradicional: un formulario recarga toda la página --&gt;
+&lt;form action="buscar.php" method="post"&gt;
+  &lt;input name="q"&gt;&lt;button&gt;Buscar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- AJAX: se trae solo la respuesta y se inyecta --&gt;
+&lt;input id="q"&gt;
+&lt;button onclick="buscar()"&gt;Buscar&lt;/button&gt;
+&lt;div id="resultado"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  function buscar() {
+    const q = document.getElementById("q").value;
+    fetch("buscar.php?q=" + encodeURIComponent(q))
+      .then(r =&gt; r.text())
+      .then(txt =&gt; document.getElementById("resultado").innerHTML = txt);
+  }
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado · el texto se inyecta sin recargar</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;p&gt;&lt;input id=&quot;q&quot; placeholder=&quot;escribí algo&quot;&gt; &lt;button onclick=&quot;document.getElementById('r').innerHTML='Resultado simulado para: &lt;b&gt;'+document.getElementById('q').value+'&lt;/b&gt; (sin recargar)'&quot;&gt;Buscar&lt;/button&gt;&lt;/p&gt;&lt;div id=&quot;r&quot;&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> El objeto XMLHttpRequest</h2>
+    <div class="def">
+      <p><strong>XMLHttpRequest</strong> (XHR) es el corazón de AJAX: es el objeto del navegador que hace la
+      petición HTTP en segundo plano. Se crea con <code>new XMLHttpRequest()</code> y luego se configura y se envía.</p>
+      <p>La respuesta se atiende mediante el evento <code>onreadystatechange</code> (o el más moderno
+      <code>onload</code>), que se dispara a medida que cambia el estado de la petición.</p>
+    </div>
+    <table>
+      <tr><th>Propiedad / método</th><th>Qué es</th></tr>
+      <tr><td><code>new XMLHttpRequest()</code></td><td>Crea el objeto.</td></tr>
+      <tr><td><code>open(metodo, url, asinc)</code></td><td>Configura la petición. <code>asinc</code> suele ser <code>true</code>.</td></tr>
+      <tr><td><code>send(datos)</code></td><td>Envía la petición.</td></tr>
+      <tr><td><code>setRequestHeader()</code></td><td>Agrega cabeceras (por ejemplo <code>Content-Type</code>).</td></tr>
+      <tr><td><code>readyState</code></td><td>Estado de la petición (0 a 4).</td></tr>
+      <tr><td><code>status</code></td><td>Código HTTP de la respuesta (200 = OK, 404 = no encontrado).</td></tr>
+      <tr><td><code>responseText</code> / <code>responseXML</code></td><td>La respuesta como texto o como XML.</td></tr>
+    </table>
+    <span class="label">Ejemplo · petición asíncrona completa</span>
+<pre><code>const xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function () {
+  if (this.readyState === 4 &amp;&amp; this.status === 200) {
+    document.getElementById("demo").innerHTML = this.responseText;
+  }
+};
+
+xhttp.open("GET", "datos.txt", true);   // true = asíncrono
+xhttp.send();</code></pre>
+    <span class="label">Resultado · versión con fetch (misma idea, sin servidor)</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;button onclick=&quot;pedir()&quot;&gt;Pedir datos&lt;/button&gt;&lt;div id=&quot;demo&quot; style=&quot;margin-top:8px&quot;&gt;&lt;/div&gt;&lt;script&gt;function pedir(){var d=document.getElementById(&quot;demo&quot;);d.textContent=&quot;Cargando… (readyState 1,2,3)&quot;;setTimeout(function(){d.innerHTML=&quot;&lt;b&gt;Listo (readyState 4, status 200)&lt;/b&gt;&lt;br&gt;datos.txt → 'Hola desde el servidor'&quot;},700)}&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> readyState, status y cómo trabaja</h2>
+    <div class="def">
+      <p><code>readyState</code> indica en qué <strong>etapa</strong> va la petición, mientras que <code>status</code>
+      es el <strong>código HTTP</strong> que devolvió el servidor. La receta habitual es actuar cuando
+      <code>readyState === 4</code> (todo terminó) <em>y</em> <code>status === 200</code> (salió bien).</p>
+    </div>
+    <table>
+      <tr><th>readyState</th><th>Significa</th></tr>
+      <tr><td><code>0</code></td><td>UNSENT: el objeto está creado, todavía no se llamó a <code>open()</code>.</td></tr>
+      <tr><td><code>1</code></td><td>OPENED: <code>send()</code> aún no fue llamado.</td></tr>
+      <tr><td><code>2</code></td><td>HEADERS_RECEIVED: <code>send()</code> ya fue llamado, llegaron las cabeceras.</td></tr>
+      <tr><td><code>3</code></td><td>LOADING: descargando el cuerpo de la respuesta.</td></tr>
+      <tr><td><code>4</code></td><td>DONE: la operación terminó.</td></tr>
+    </table>
+    <table>
+      <tr><th>status</th><th>Significa</th></tr>
+      <tr><td><code>200</code></td><td>OK: respuesta correcta.</td></tr>
+      <tr><td><code>404</code></td><td>Recurso no encontrado.</td></tr>
+      <tr><td><code>500</code></td><td>Error del servidor.</td></tr>
+    </table>
+    <span class="label">Ejemplo · seguir los estados</span>
+<pre><code>&lt;button id="go"&gt;Enviar&lt;/button&gt;
+&lt;pre id="log"&gt;&lt;/pre&gt;
+
+&lt;script&gt;
+  document.getElementById("go").addEventListener("click", function () {
+    const x = new XMLHttpRequest();
+    x.onreadystatechange = function () {
+      document.getElementById("log").textContent +=
+        "readyState = " + this.readyState + "\n";
+      if (this.readyState === 4 &amp;&amp; this.status === 200) {
+        document.getElementById("log").textContent += "¡Respuesta recibida!";
+      }
+    };
+    x.open("GET", "datos.txt", true);
+    x.send();
+  });
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado · simulación de los estados</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;button id=&quot;go&quot;&gt;Enviar&lt;/button&gt;&lt;pre id=&quot;log&quot;&gt;&lt;/pre&gt;&lt;script&gt;document.getElementById(&quot;go&quot;).addEventListener(&quot;click&quot;,function(){var l=document.getElementById(&quot;log&quot;);l.textContent=&quot;&quot;;var e=[0,1,2,3,4],ts=this,i=0;function paso(){if(i&lt;e.length){l.textContent+=&quot;readyState = &quot;+e[i]+&quot;\n&quot;;i++;setTimeout(paso,350)}else{l.textContent+=&quot;status = 200\n¡Respuesta recibida!&quot;}}paso()});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Métodos open() y send(); GET vs POST</h2>
+    <div class="def">
+      <p><code>open()</code> configura la petición indicando el <strong>método HTTP</strong>, la <strong>URL</strong>
+      y si es asíncrona. <code>send()</code> la envía: con GET va sin argumentos, con POST se le pasan los datos.</p>
+      <p><strong>GET</strong> escribe los datos en la URL (visible, limitado en tamaño, se puede cachear).
+      <strong>POST</strong> los envía en el cuerpo (no visible, sin límite práctico, nunca se cachea).</p>
+    </div>
+    <table>
+      <tr><th></th><th>GET</th><th>POST</th></tr>
+      <tr><td>Dónde van los datos</td><td>En la URL (<code>?a=1&amp;b=2</code>)</td><td>En el cuerpo de la petición</td></tr>
+      <tr><td>Visible en la barra</td><td>Sí</td><td>No</td></tr>
+      <tr><td>Caché</td><td>Puede guardarse</td><td>Nunca</td></tr>
+      <tr><td>Uso típico</td><td>Consultas, filtros, búsquedas</td><td>Altas, login, datos sensibles</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>// --- GET ---
+const x1 = new XMLHttpRequest();
+x1.open("GET", "buscar.php?q=" + encodeURIComponent(texto), true);
+x1.send();
+
+// --- POST ---
+const x2 = new XMLHttpRequest();
+x2.open("POST", "guardar.php", true);
+x2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+x2.send("nombre=Ana&amp;edad=22");</code></pre>
+    <span class="label">Resultado · se ven los datos que viajan en cada método</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;pre{background:#f3f4f6;padding:8px;border-radius:6px;font-size:12px}&lt;/style&gt;&lt;p&gt;&lt;b&gt;GET&lt;/b&gt;&lt;/p&gt;&lt;pre&gt;GET buscar.php?q=ana HTTP/1.1&lt;/pre&gt;&lt;p&gt;&lt;b&gt;POST&lt;/b&gt;&lt;/p&gt;&lt;pre&gt;POST guardar.php HTTP/1.1&lt;br&gt;Content-Type: application/x-www-form-urlencoded&lt;br&gt;&lt;br&gt;nombre=Ana&amp;amp;edad=22&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Respuestas: texto, XML y JSON</h2>
+    <div class="def">
+      <p>El servidor puede devolver la información en distintos formatos. <code>responseText</code> siempre trae la
+      respuesta como cadena; <code>responseXML</code> la interpreta como documento XML y permite recorrerla con el
+      DOM. Hoy lo más común es <strong>JSON</strong>, que se convierte a objeto con <code>JSON.parse()</code> (y a
+      texto con <code>JSON.stringify()</code>).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>// JSON que devuelve el servidor:
+// {"nombre":"Ana","edad":22}
+
+const x = new XMLHttpRequest();
+x.onreadystatechange = function () {
+  if (this.readyState === 4 &amp;&amp; this.status === 200) {
+    const datos = JSON.parse(this.responseText);   // texto → objeto
+    document.getElementById("out").textContent =
+      datos.nombre + " tiene " + datos.edad + " años";
+  }
+};
+x.open("GET", "persona.php", true);
+x.send();
+
+// Y al revés: objeto → texto
+// JSON.stringify({ a: 1, b: 2 })   →  '{"a":1,"b":2}'</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;div id=&quot;out&quot;&gt;&lt;/div&gt;&lt;script&gt;var texto='{&quot;nombre&quot;:&quot;Ana&quot;,&quot;edad&quot;:22}';var datos=JSON.parse(texto);document.getElementById(&quot;out&quot;).innerHTML=&quot;&lt;b&gt;responseText:&lt;/b&gt; &quot;+texto+&quot;&lt;br&gt;&lt;b&gt;JSON.parse →&lt;/b&gt; &quot;+datos.nombre+&quot; tiene &quot;+datos.edad+&quot; años&lt;br&gt;&lt;b&gt;JSON.stringify →&lt;/b&gt; &quot;+JSON.stringify({a:1,b:2});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Validar un formulario con AJAX</h2>
+    <div class="def">
+      <p>Un uso típico de AJAX es la <strong>validación en vivo</strong>: mientras el usuario escribe, se envía el
+      dato al servidor y este responde si está disponible (por ejemplo, si un <em>nickname</em> ya existe) sin
+      recargar. Se dispara con el evento <code>keyup</code> y se inyecta la respuesta en un <code>&lt;div&gt;</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;input id="nick" placeholder="Elegí un nickname"&gt;
+&lt;div id="mensaje"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  document.getElementById("nick").addEventListener("keyup", function () {
+    const valor = this.value;
+    const x = new XMLHttpRequest();
+    x.onreadystatechange = function () {
+      if (this.readyState === 4 &amp;&amp; this.status === 200) {
+        document.getElementById("mensaje").innerHTML = this.responseText;
+      }
+    };
+    x.open("POST", "comprobar_nick.php", true);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send("nickname=" + encodeURIComponent(valor));
+  });
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado · simulación (escribí en el campo)</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;input id=&quot;nick&quot; placeholder=&quot;Elegí un nickname&quot;&gt;&lt;div id=&quot;mensaje&quot; style=&quot;margin-top:6px&quot;&gt;&lt;/div&gt;&lt;script&gt;document.getElementById(&quot;nick&quot;).addEventListener(&quot;keyup&quot;,function(){var v=this.value;var m=document.getElementById(&quot;mensaje&quot;);if(v.length&lt;3){m.innerHTML=&quot;&lt;span style='color:#b45309'&gt;Muy corto (responde el servidor)&lt;/span&gt;&quot;;return}m.innerHTML=&quot;&lt;span style='color:#059669'&gt;'&quot;+v+&quot;' está disponible (responde el servidor)&lt;/span&gt;&quot;});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Fetch API y async/await</h2>
+    <div class="def">
+      <p><strong>Fetch</strong> es la forma moderna de hacer AJAX. Reemplaza a XMLHttpRequest con una función que
+      devuelve una <strong>promesa</strong>. El resultado se maneja con <code>.then()</code> o, más cómodo, con
+      <code>async/await</code> y <code>try/catch</code>. Hay que recordar convertir la respuesta:
+      <code>res.text()</code> o <code>res.json()</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>// Con .then()
+fetch("datos.json")
+  .then(res =&gt; {
+    if (!res.ok) throw new Error("Error " + res.status);
+    return res.json();
+  })
+  .then(datos =&gt; console.log(datos))
+  .catch(err =&gt; console.error(err));
+
+// Con async/await
+async function cargar() {
+  try {
+    const res = await fetch("datos.json");
+    const datos = await res.json();
+    document.getElementById("out").textContent = datos.titulo;
+  } catch (e) {
+    console.error("Falló la petición:", e);
+  }
+}
+cargar();</code></pre>
+    <span class="label">Resultado · petición real a una API pública</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;button id=&quot;c&quot;&gt;Traer un dato (fetch real)&lt;/button&gt;&lt;pre id=&quot;o&quot; style=&quot;font-size:12px&quot;&gt;&lt;/pre&gt;&lt;script&gt;document.getElementById(&quot;c&quot;).addEventListener(&quot;click&quot;,async function(){var o=document.getElementById(&quot;o&quot;);o.textContent=&quot;Cargando…&quot;;try{var r=await fetch(&quot;https://jsonplaceholder.typicode.com/todos/1&quot;);if(!r.ok)throw new Error(&quot;Error &quot;+r.status);var d=await r.json();o.textContent=JSON.stringify(d,null,2)}catch(e){o.textContent=&quot;Sin conexión o bloqueado: &quot;+e.message}});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="04-javascript.html">&#8592; Unidad 4 · JavaScript</a>
+    <a class="next" href="06-jquery.html">Unidad 6 · jQuery &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 5 · AJAX · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

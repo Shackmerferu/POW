@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 7 · PHP</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html" selected>7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 7</p>
+    <h1>Unidad 7 · PHP</h1>
+    <p class="lead"><strong>PHP</strong> (PHP: Hypertext Preprocessor) es un lenguaje de <em>scripting del lado
+    del servidor</em>: el código se ejecuta en el servidor y al navegador le llega solo el HTML resultante. Es la
+    contraparte natural de AJAX: AJAX pide los datos, PHP los genera (normalmente desde una base de datos MySQL).</p>
+    <p class="alert warn"><strong>Nota:</strong> PHP no se puede ejecutar en el navegador. En esta unidad cada
+    ejemplo muestra el código y, debajo, el <em>resultado que produciría</em> el servidor (XAMPP + Apache). Para
+    probarlo de verdad, guardá el archivo en <code>htdocs</code> y abrilo como
+    <code>http://localhost/archivo.php</code>.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Qué es PHP y cómo se ejecuta</a></li>
+      <li><a href="#t2">Sintaxis, echo y tipos de datos</a></li>
+      <li><a href="#t3">Variables y superglobales</a></li>
+      <li><a href="#t4">Operadores y control de flujo</a></li>
+      <li><a href="#t5">Funciones</a></li>
+      <li><a href="#t6">Arrays y strings</a></li>
+      <li><a href="#t7">Formularios: GET y POST</a></li>
+      <li><a href="#t8">Archivos, cookies y sesiones</a></li>
+      <li><a href="#t9">Programación orientada a objetos</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Qué es PHP y cómo se ejecuta</h2>
+    <div class="def">
+      <p>PHP es un lenguaje <strong>interpretado</strong> y de <strong>código abierto</strong> pensado para la web.
+      Se <em>incrusta</em> dentro del HTML entre las marcas <code>&lt;?php … ?&gt;</code>. Cuando el navegador pide la
+      página, el servidor (Apache) ejecuta el PHP y envía al cliente <strong>solo el HTML ya generado</strong>: el
+      usuario nunca ve el código fuente.</p>
+      <p>Para trabajar localmente se usa un paquete como <strong>XAMPP</strong>, que instala Apache, PHP y MySQL. Los
+      archivos van en la carpeta <code>htdocs</code> y se accede por <code>http://localhost/…</code>.</p>
+    </div>
+    <table>
+      <tr><th>Archivo</th><th>Función</th></tr>
+      <tr><td><code>htdocs/</code></td><td>Raíz de los sitios (equivalente al “www”).</td></tr>
+      <tr><td><code>index.php</code></td><td>Se carga por defecto al entrar a una carpeta.</td></tr>
+      <tr><td><code>php.ini</code></td><td>Configuración de PHP (límites, extensiones).</td></tr>
+    </table>
+    <span class="label">Ejemplo · hola.php</span>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;h1&gt;&lt;?php echo "Hola desde PHP"; ?&gt;&lt;/h1&gt;
+  &lt;p&gt;Fecha del servidor: &lt;?php echo date("d/m/Y"); ?&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <span class="label">Resultado · lo que el servidor le envía al navegador</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px&quot;&gt;&lt;h1&gt;Hola desde PHP&lt;/h1&gt;&lt;p&gt;Fecha del servidor: &lt;b&gt;19/10/2026&lt;/b&gt;&lt;/p&gt;&lt;small style=&quot;color:#6b7280&quot;&gt;El navegador solo recibe HTML; el código PHP ya se ejecutó.&lt;/small&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Sintaxis, echo y tipos de datos</h2>
+    <div class="def">
+      <p>Las sentencias terminan en <code>;</code> y las variables empiezan con <code>$</code>. Para mostrar algo en
+      pantalla se usa <code>echo</code> o <code>print</code>. Los comentarios son iguales que en C/JS:
+      <code>//</code>, <code>#</code> o <code>/* … */</code>.</p>
+      <p>PHP es de <strong>tipado débil</strong> (la variable no se declara con tipo, lo toma del valor), aunque
+      admite declaraciones de tipo opcionales.</p>
+    </div>
+    <table>
+      <tr><th>Tipo de dato</th><th>Ejemplo</th></tr>
+      <tr><td><code>string</code></td><td><code>$n = "Ana";</code></td></tr>
+      <tr><td><code>int</code></td><td><code>$e = 22;</code></td></tr>
+      <tr><td><code>float</code></td><td><code>$p = 3.14;</code></td></tr>
+      <tr><td><code>bool</code></td><td><code>$ok = true;</code></td></tr>
+      <tr><td><code>array</code></td><td><code>$v = [1, 2, 3];</code></td></tr>
+      <tr><td><code>object</code></td><td><code>new Persona()</code></td></tr>
+      <tr><td><code>null</code></td><td><code>$x = null;</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $nombre = "Ana";
+  $edad   = 22;
+  $precio = 99.5;
+  $activo = true;
+
+  echo "Hola, $nombre";      // las dobles comillas interpretan variables
+  echo 'Hola, $nombre';      // las simples NO
+  echo "Edad: " . $edad;     // concatenación con punto
+  print "Precio: $precio";
+
+  echo gettype($precio);     // "double"
+  # comentario
+  /* comentario
+     de varias líneas */
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Hola, Ana&lt;br&gt;Hola, $nombre&lt;br&gt;Edad: 22&lt;br&gt;Precio: 99.5&lt;br&gt;double&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Variables y superglobales</h2>
+    <div class="def">
+      <p>El <strong>ámbito</strong> decide dónde “vive” una variable. Las variables declaradas fuera de una función
+      son <strong>globales</strong> y no se ven dentro de las funciones salvo que se declaren con
+      <code>global</code> o se acceda por <code>$GLOBALS</code>. Las declaradas dentro de una función son
+      <strong>locales</strong>. <code>static</code> conserva el valor entre llamadas.</p>
+      <p>PHP trae <strong>superglobales</strong>: arrays disponibles en cualquier parte del script.</p>
+    </div>
+    <table>
+      <tr><th>Superglobal</th><th>Contiene</th></tr>
+      <tr><td><code>$_GET</code></td><td>Datos enviados por la URL (método GET).</td></tr>
+      <tr><td><code>$_POST</code></td><td>Datos enviados por un formulario (método POST).</td></tr>
+      <tr><td><code>$_REQUEST</code></td><td>GET + POST + COOKIE.</td></tr>
+      <tr><td><code>$_SERVER</code></td><td>Info del servidor y de la petición.</td></tr>
+      <tr><td><code>$_FILES</code></td><td>Archivos subidos.</td></tr>
+      <tr><td><code>$_SESSION</code> / <code>$_COOKIE</code></td><td>Sesión / cookies.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $contador = 0;
+
+  function incrementar() {
+    static $veces = 0;   // conserva el valor entre llamadas
+    $veces++;
+    global $contador;    // accede a la variable global
+    $contador++;
+    return $veces;
+  }
+
+  echo incrementar();  // 1
+  echo incrementar();  // 2
+  echo $contador;      // 2
+
+  echo $_SERVER['PHP_SELF'];        // ruta del script
+  echo $_SERVER['REQUEST_METHOD'];  // GET o POST
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;1&lt;br&gt;2&lt;br&gt;2&lt;br&gt;/unidades/07-php.php&lt;br&gt;GET&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Operadores y control de flujo</h2>
+    <div class="def">
+      <p>Los operadores son casi los mismos que en JavaScript: aritméticos, de asignación, comparación
+      (<code>==</code>, <code>===</code>), lógicos (<code>&amp;&amp;</code>, <code>||</code>, <code>and</code>,
+      <code>or</code>) y el <strong>ternario</strong>. Para el control de flujo: <code>if / elseif / else</code>,
+      <code>switch</code> y los bucles <code>for</code>, <code>while</code>, <code>do…while</code> y
+      <code>foreach</code> (propio de arrays).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $nota = 8;
+
+  if ($nota &gt;= 7) {
+    echo "Aprobado";
+  } elseif ($nota &gt;= 4) {
+    echo "Recuperatorio";
+  } else {
+    echo "Libre";
+  }
+
+  switch ($nota) {
+    case 10: echo "Sobresaliente"; break;
+    case 8:
+    case 9:  echo "Distinguido";   break;
+    default: echo "Bueno";
+  }
+
+  for ($i = 1; $i &lt;= 3; $i++) { echo "for: $i "; }
+
+  $j = 0;
+  while ($j &lt; 2) { echo "while: $j "; $j++; }
+
+  $color = ($nota &gt;= 7) ? "verde" : "rojo";
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Aprobado&lt;br&gt;Distinguido&lt;br&gt;for: 1 for: 2 for: 3 &lt;br&gt;while: 0 while: 1 &lt;br&gt;color = verde&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Funciones</h2>
+    <div class="def">
+      <p>Una <strong>función</strong> agrupa código reutilizable y puede recibir parámetros y devolver un valor con
+      <code>return</code>. Los parámetros pueden tener <strong>valor por defecto</strong> y se puede declarar el
+      <strong>tipo</strong> devuelto (a partir de PHP 7).</p>
+      <p>PHP también admite funciones anónimas (<em>closures</em>) y funciones con número variable de argumentos
+      (<code>...$args</code>).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  // Función con tipo y valor por defecto
+  function saludar(string $nombre = "invitado"): string {
+    return "Hola, $nombre";
+  }
+  echo saludar("Ana");     // Hola, Ana
+  echo saludar();          // Hola, invitado
+
+  // Con return implícito / paso por referencia
+  function duplicar(&amp;$n) { $n *= 2; }
+  $x = 5;
+  duplicar($x);
+  echo $x;                 // 10
+
+  // Función anónima
+  $doble = function ($n) { return $n * 2; };
+  echo $doble(4);          // 8
+
+  // Argumentos variables
+  function sumar(...$nums) { return array_sum($nums); }
+  echo sumar(1, 2, 3, 4);  // 10
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Hola, Ana&lt;br&gt;Hola, invitado&lt;br&gt;10&lt;br&gt;8&lt;br&gt;10&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Arrays y strings</h2>
+    <div class="def">
+      <p>PHP tiene <strong>arrays indexados</strong> (por número) y <strong>asociativos</strong> (por clave), y
+      ambos pueden anidarse. Los recorridos se hacen con <code>foreach</code>. Para las cadenas hay funciones de
+      largo, corte, búsqueda y reemplazo, y el operador <code>.</code> concatena.</p>
+    </div>
+    <table>
+      <tr><th>Función de array</th><th>Qué hace</th></tr>
+      <tr><td><code>count($a)</code></td><td>Cantidad de elementos.</td></tr>
+      <tr><td><code>array_push()</code> / <code>array_pop()</code></td><td>Agrega al final / quita el último.</td></tr>
+      <tr><td><code>sort()</code> / <code>rsort()</code></td><td>Ordena ascendente / descendente.</td></tr>
+      <tr><td><code>implode(sep, $a)</code></td><td>Une el array en un string.</td></tr>
+      <tr><td><code>array_keys()</code> / <code>array_values()</code></td><td>Las claves / los valores.</td></tr>
+      <tr><td><code>in_array(x, $a)</code></td><td>¿Existe el valor?</td></tr>
+    </table>
+    <table>
+      <tr><th>Función de string</th><th>Qué hace</th></tr>
+      <tr><td><code>strlen($s)</code></td><td>Largo.</td></tr>
+      <tr><td><code>strtoupper()</code> / <code>strtolower()</code></td><td>Mayúsculas / minúsculas.</td></tr>
+      <tr><td><code>substr($s, ini, n)</code></td><td>Extrae un tramo.</td></tr>
+      <tr><td><code>str_replace()</code></td><td>Reemplaza.</td></tr>
+      <tr><td><code>explode(sep, $s)</code></td><td>String → array.</td></tr>
+      <tr><td><code>trim($s)</code></td><td>Quita espacios extremos.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $frutas = ["pera", "manzana", "uva"];          // indexado
+  $persona = ["nombre" =&gt; "Ana", "edad" =&gt; 22];  // asociativo
+
+  echo $frutas[0];              // pera
+  echo count($frutas);          // 3
+  array_push($frutas, "kiwi");
+  echo implode(", ", $frutas);  // pera, manzana, uva, kiwi
+
+  foreach ($persona as $clave =&gt; $valor) {
+    echo "$clave: $valor ";
+  }
+
+  // Strings
+  $t = "  Hola Mundo  ";
+  echo strlen($t);              // 14
+  echo trim($t);                // "Hola Mundo"
+  echo strtoupper($t);          // "  HOLA MUNDO  "
+  echo substr($t, 2, 4);        // "Hola"
+  echo str_replace("Mundo", "PHP", $t);
+  print_r(explode(" ", trim($t)));
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="tall" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7;white-space:pre-wrap&quot;&gt;pera
+3
+pera, manzana, uva, kiwi
+nombre: Ana edad: 22 
+14
+Hola Mundo
+  HOLA MUNDO  
+Hola
+  Hola PHP  
+Array
+(
+    [0] =&amp;gt; Hola
+    [1] =&amp;gt; Mundo
+)&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Formularios: GET y POST</h2>
+    <div class="def">
+      <p>El formulario HTML envía los datos al script PHP indicado en <code>action</code>, usando el método
+      <code>GET</code> o <code>POST</code>. PHP los recibe en la superglobal correspondiente. Con
+      <code>$_GET</code> los datos viajan en la URL (visibles); con <code>$_POST</code> van en el cuerpo (más
+      adecuado para contraseñas y altas).</p>
+      <p>Dentro del mismo archivo se puede detectar el envío con
+      <code>if ($_SERVER["REQUEST_METHOD"] == "POST")</code>, el patrón “formulario y proceso en la misma página”.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;!-- formulario.html --&gt;
+&lt;form action="procesar.php" method="post"&gt;
+  &lt;label&gt;Nombre:&lt;/label&gt;
+  &lt;input type="text" name="nombre"&gt;
+  &lt;label&gt;Correo:&lt;/label&gt;
+  &lt;input type="email" name="correo"&gt;
+  &lt;button&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;?php  // procesar.php
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nombre = htmlspecialchars($_POST["nombre"]);   // sanitizar
+    $correo = filter_var($_POST["correo"], FILTER_VALIDATE_EMAIL);
+
+    if ($correo) {
+      echo "Gracias $nombre, te contactaremos a $correo";
+    } else {
+      echo "El correo no es válido";
+    }
+  }
+?&gt;</code></pre>
+    <span class="label">Resultado · enviando el formulario</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="mid" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px&quot;&gt;&lt;form onsubmit=&quot;event.preventDefault();this.nextElementSibling.textContent='Gracias '+this.nombre.value+', te contactaremos a '+this.correo.value&quot; action=&quot;#&quot; method=&quot;post&quot;&gt;&lt;label&gt;Nombre:&lt;/label&gt; &lt;input type=&quot;text&quot; name=&quot;nombre&quot; value=&quot;Ana&quot;&gt; &lt;label&gt;Correo:&lt;/label&gt; &lt;input type=&quot;email&quot; name=&quot;correo&quot; value=&quot;ana@mail.com&quot;&gt; &lt;button&gt;Enviar&lt;/button&gt;&lt;/form&gt;&lt;p style=&quot;color:#059669&quot;&gt;&lt;/p&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Archivos, cookies y sesiones</h2>
+    <div class="def">
+      <p>PHP puede <strong>leer y escribir archivos</strong> del servidor con <code>fopen</code>,
+      <code>fwrite</code>, <code>fclose</code>, o de una sola vez con <code>file_get_contents</code> y
+      <code>file_put_contents</code>.</p>
+      <p>Para <strong>mantener estado</strong> entre páginas se usan <strong>cookies</strong> (se guardan en el
+      navegador del usuario) y <strong>sesiones</strong> (se guardan en el servidor y se identifican con una cookie
+      de sesión). Con <code>session_start()</code> se abre la sesión y se lee/escribe <code>$_SESSION</code>. Las
+      sesiones son la base de un <em>login</em>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  // --- Archivos ---
+  file_put_contents("log.txt", "Nueva visita\n", FILE_APPEND);
+  $contenido = file_get_contents("log.txt");
+  echo $contenido;
+
+  // --- Cookies ---
+  setcookie("usuario", "ana", time() + 3600);   // 1 hora
+  echo $_COOKIE["usuario"] ?? "";
+
+  // --- Sesiones ---
+  session_start();
+  $_SESSION["nombre"] = "Ana";
+  $_SESSION["tipo_usuario"] = "admin";
+
+  // --- Login simple ---
+  if ($_POST["usuario"] == "ana" &amp;&amp; $_POST["clave"] == "1234") {
+    $_SESSION["logueado"] = true;
+    header("Location: home.php");    // redirige
+  } else {
+    header("Location: index.php");
+  }
+?&gt;</code></pre>
+    <span class="label">Resultado · flujo del login</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="mid" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7;white-space:pre-wrap&quot;&gt;Nueva visita
+Nueva visita
+Nueva visita
+
+usuario (cookie) = ana
+$_SESSION['nombre'] = Ana
+$_SESSION['tipo_usuario'] = admin
+
+credenciales OK  →  HTTP 302  Location: home.php
+credenciales MAL →  HTTP 302  Location: index.php&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Programación orientada a objetos</h2>
+    <div class="def">
+      <p>PHP soporta <strong>POO</strong>: <code>class</code> define un molde con propiedades y métodos;
+      <code>new</code> crea los objetos. La <strong>visibilidad</strong> puede ser <code>public</code>,
+      <code>protected</code> o <code>private</code>. El constructor es <code>__construct()</code> y
+      <code>$this</code> es el objeto actual.</p>
+      <p>Se puede <strong>heredar</strong> con <code>extends</code> y aplicar <strong>interfaces</strong>
+      (<code>implements</code>) y <strong>traits</strong> (<code>use</code>) para reutilizar código entre clases
+      no relacionadas.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  class Persona {
+    public string $nombre;
+    protected int $edad;
+
+    public function __construct(string $nombre, int $edad) {
+      $this-&gt;nombre = $nombre;
+      $this-&gt;edad   = $edad;
+    }
+
+    public function saludar(): string {
+      return "Hola, soy {$this-&gt;nombre}";
+    }
+  }
+
+  class Alumno extends Persona {          // herencia
+    private string $legajo;
+
+    public function __construct($n, $e, $legajo) {
+      parent::__construct($n, $e);        // llama al constructor padre
+      $this-&gt;legajo = $legajo;
+    }
+
+    public function saludar(): string {   // sobrescritura
+      return parent::saludar() . " (legajo $this-&gt;legajo)";
+    }
+  }
+
+  $p = new Persona("Ana", 22);
+  echo $p-&gt;saludar();                     // Hola, soy Ana
+
+  $a = new Alumno("Luis", 20, "1234");
+  echo $a-&gt;saludar();                     // Hola, soy Luis (legajo 1234)
+
+  // Trait (reutilización de métodos)
+  trait Saludable { public function bien() { return "Todo bien"; } }
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Hola, soy Ana&lt;br&gt;Hola, soy Luis (legajo 1234)&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="06-jquery.html">&#8592; Unidad 6 · jQuery</a>
+    <a class="next" href="../index.html">Volver al índice de unidades &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 7 · PHP · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

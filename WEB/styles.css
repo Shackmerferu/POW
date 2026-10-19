@@ -64,6 +64,35 @@ strong{color:#111827}
 .tile .tt{font-weight:600;font-size:15.5px;color:#111827}
 .tile .ds{font-size:13.5px;color:var(--muted);margin-top:4px}
 
+/* ---- Página de unidad ---- */
+.unit-head h1{font-size:28px}
+.unit-head p.lead{max-width:680px;color:#374151}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin:18px 0 8px}
+.toc h2{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border:none;padding:0;margin:0 0 8px}
+.toc ol{columns:2;column-gap:26px;margin:0 0 0 20px}
+.toc li{margin:3px 0;font-size:14px}
+.toc a{color:var(--accent);text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.top-link{font-size:12.5px;color:var(--muted);text-decoration:none;float:right;margin-top:4px}
+.top-link:hover{color:var(--accent)}
+
+.topic{margin:44px 0 0;padding-top:22px;border-top:2px solid var(--border)}
+.topic > h2{font-size:22px;margin:0 0 4px;border:none;padding:0;letter-spacing:-.2px}
+.topic > h2 .n{color:var(--accent);font-weight:700;margin-right:6px}
+.def{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 16px;margin:12px 0}
+.def p{margin:0}
+.def p + p{margin-top:8px}
+.def strong{color:#3730a3}
+.label{display:block;font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:18px 0 6px}
+
+/* Vista previa: iframe que ejecuta de verdad el ejemplo */
+.preview{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;margin:8px 0 4px}
+.preview .bar{background:#f3f4f6;border-bottom:1px solid var(--border);padding:5px 12px;font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.preview iframe{display:block;width:100%;border:0;background:#fff}
+.preview iframe.tall{height:230px}
+.preview iframe.mid{height:170px}
+.preview iframe.short{height:110px}
+
 /* ---- Pager ---- */
 .pager{display:flex;justify-content:space-between;gap:10px;margin:52px 0 10px}
 .pager a{text-decoration:none;color:var(--accent);border:1px solid var(--border);padding:10px 16px;border-radius:8px;background:#fff;font-size:14px;max-width:46%}

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 4 · JavaScript</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html" selected>4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 4</p>
+    <h1>Unidad 4 · JavaScript</h1>
+    <p class="lead"><strong>JavaScript</strong> es un lenguaje <em>interpretado</em>, basado en objetos, embebido en el
+    documento HTML. Es el único lenguaje que corre en el navegador: permite responder a eventos del usuario sin
+    conectarse a la red, validar formularios y modificar el HTML dinámicamente. Es la base de AJAX.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Qué es y cómo se incluye</a></li>
+      <li><a href="#t2">Variables y tipos de datos</a></li>
+      <li><a href="#t3">Operadores</a></li>
+      <li><a href="#t4">Control de flujo</a></li>
+      <li><a href="#t5">Bucles</a></li>
+      <li><a href="#t6">Funciones</a></li>
+      <li><a href="#t7">Arreglos</a></li>
+      <li><a href="#t8">Objetos</a></li>
+      <li><a href="#t9">Strings</a></li>
+      <li><a href="#t10">Entrada y salida</a></li>
+      <li><a href="#t11">Eventos</a></li>
+      <li><a href="#t12">DOM</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Qué es y cómo se incluye</h2>
+    <div class="def">
+      <p>JavaScript fue creado por <strong>Brendan Eich</strong> en Netscape (se llamó <em>Mocha</em>, después
+      <em>LiveScript</em> y finalmente JavaScript). Se estandariza como <strong>ECMAScript</strong>. Su sintaxis es
+      parecida a Java o C++, pero <em>no</em> es lo mismo que Java: no implementa clases ni herencia clásica (la
+      herencia se hace por <strong>prototipos</strong>).</p>
+      <p>Se ejecuta del <strong>lado del cliente</strong> (en el navegador) y también del lado del servidor
+      (<strong>Node.js</strong>). Se incluye con la etiqueta <code>&lt;script&gt;</code> en el
+      <code>&lt;head&gt;</code> o en el <code>&lt;body&gt;</code>, o en un archivo externo.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;head&gt;
+  &lt;script&gt;
+    // Código embebido
+    console.log("JavaScript en el head");
+  &lt;/script&gt;
+  &lt;!-- O un archivo externo --&gt;
+  &lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p id="msg"&gt;&lt;/p&gt;
+  &lt;script&gt;
+    document.getElementById("msg").textContent = "JavaScript ejecutándose en el body";
+  &lt;/script&gt;
+&lt;/body&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;p id=&quot;msg&quot;&gt;&lt;/p&gt;&lt;script&gt;document.getElementById(&quot;msg&quot;).textContent=&quot;JavaScript ejecutándose en el body&quot;;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Variables y tipos de datos</h2>
+    <div class="def">
+      <p>Una <strong>variable</strong> es un nombre que apunta a un valor. Se declara con <code>var</code> (ámbito
+      de función, se usa poco hoy), <code>let</code> (ámbito de bloque y reasignable) o <code>const</code> (ámbito de
+      bloque, no se reasigna).</p>
+      <p>JavaScript es de <strong>tipado débil</strong>: la misma variable puede cambiar de tipo, y el tipo se
+      controla con <code>typeof</code>.</p>
+    </div>
+    <table>
+      <tr><th>Tipo</th><th>Ejemplo</th></tr>
+      <tr><td><code>number</code></td><td><code>let n = 42;</code> (enteros y decimales)</td></tr>
+      <tr><td><code>string</code></td><td><code>let s = "hola";</code></td></tr>
+      <tr><td><code>boolean</code></td><td><code>let ok = true;</code></td></tr>
+      <tr><td><code>undefined</code></td><td>Declarada sin valor</td></tr>
+      <tr><td><code>null</code></td><td>Ausencia de valor intencional</td></tr>
+      <tr><td><code>object</code></td><td>Arreglos, objetos, <code>Date</code>…</td></tr>
+      <tr><td><code>function</code></td><td>Una función es un valor</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>let nombre = "Ana";        // string
+const edad = 22;           // number (constante)
+var activo = true;         // boolean
+let nada;                  // undefined
+let vacio = null;          // null
+
+console.log(typeof nombre);  // "string"
+console.log(typeof edad);    // "number"
+console.log(typeof activo);  // "boolean"
+
+// tipado débil: cambia de tipo
+let x = 10;
+x = "ahora soy texto";</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa · mirá la consola del navegador</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;out&quot;&gt;&lt;/div&gt;&lt;script&gt;let nombre=&quot;Ana&quot;,edad=22,activo=true;document.getElementById(&quot;out&quot;).innerHTML=&quot;nombre: &quot;+typeof nombre+&quot;&lt;br&gt;edad: &quot;+typeof edad+&quot;&lt;br&gt;activo: &quot;+typeof activo;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Operadores</h2>
+    <div class="def">
+      <p>Los operadores se agrupan según lo que hacen. Es clave distinguir <code>==</code> (compara solo el valor,
+      hace conversión de tipo) de <code>===</code> (compara valor <em>y</em> tipo), y recordar que
+      <code>+</code> sirve tanto para sumar como para <strong>concatenar</strong> texto.</p>
+    </div>
+    <table>
+      <tr><th>Grupo</th><th>Operadores</th></tr>
+      <tr><td>Aritméticos</td><td><code>+ - * / % ++ -- **</code></td></tr>
+      <tr><td>Asignación</td><td><code>= += -= *= /= %=</code></td></tr>
+      <tr><td>Comparación</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td></tr>
+      <tr><td>Identidad</td><td><code>===</code> / <code>!==</code> (comparan tipo y valor)</td></tr>
+      <tr><td>Lógicos</td><td><code>&amp;&amp;</code> (y), <code>||</code> (o), <code>!</code> (no)</td></tr>
+      <tr><td>Ternario</td><td><code>condición ? valorSi : valorNo</code></td></tr>
+      <tr><td>Tipo</td><td><code>typeof</code>, <code>instanceof</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>let a = 7, b = 2;
+console.log(a + b);   // 9
+console.log(a % b);   // 1  (resto)
+console.log(a ** b);  // 49 (potencia)
+
+console.log("7" == 7);   // true  (compara solo el valor)
+console.log("7" === 7);  // false (distinto tipo)
+
+let edad = 20;
+let acceso = (edad >= 18) ? "mayor" : "menor";   // ternario</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var a=7,b=2,r=[];r.push(&quot;a+b = &quot;+(a+b));r.push(&quot;a%b = &quot;+(a%b));r.push(&quot;a**b = &quot;+(a**b));r.push(&quot;'7'==7 → &quot;+(&quot;7&quot;==7));r.push(&quot;'7'===7 → &quot;+(&quot;7&quot;===7));document.getElementById(&quot;o&quot;).innerHTML=r.join(&quot;&lt;br&gt;&quot;);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Control de flujo</h2>
+    <div class="def">
+      <p>Las estructuras condicionales permiten ejecutar código solo si se cumple una condición. <code>if / else
+      if / else</code> es lo más general; <code>switch</code> es cómodo cuando se compara la misma variable contra
+      muchos valores; y el operador ternario es un <code>if</code> de una sola línea.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>let nota = 8;
+
+if (nota >= 7) {
+  console.log("Aprobado");
+} else if (nota >= 4) {
+  console.log("Recuperatorio");
+} else {
+  console.log("Libre");
+}
+
+let dia = 3;
+switch (dia) {
+  case 1: console.log("Lunes"); break;
+  case 2: console.log("Martes"); break;
+  default: console.log("Otro día");
+}
+
+let estado = (nota >= 7) ? "OK" : "NO";</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var out=&quot;&quot;;var nota=8;if(nota&gt;=7){out+=&quot;Aprobado&lt;br&gt;&quot;}else if(nota&gt;=4){out+=&quot;Recuperatorio&lt;br&gt;&quot;}else{out+=&quot;Libre&lt;br&gt;&quot;}var dia=3;switch(dia){case 1:out+=&quot;Lunes&quot;;break;case 2:out+=&quot;Martes&quot;;break;default:out+=&quot;Otro día&quot;;}out+=&quot;&lt;br&gt;ternario: &quot;+((nota&gt;=7)?&quot;OK&quot;:&quot;NO&quot;);document.getElementById(&quot;o&quot;).innerHTML=out;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Bucles</h2>
+    <div class="def">
+      <p>Los bucles repiten un bloque varias veces. <code>for</code> se usa cuando se conoce la cantidad de
+      iteraciones; <code>while</code> mientras la condición sea verdadera; <code>do…while</code> garantiza al menos
+      una ejecución; y <code>for…of</code> / <code>for…in</code> recorren colecciones y objetos.</p>
+    </div>
+    <table>
+      <tr><th>Bucle</th><th>Cuándo usarlo</th></tr>
+      <tr><td><code>for (let i=0; i&lt;n; i++)</code></td><td>Cantidad de repeticiones conocida.</td></tr>
+      <tr><td><code>while (cond)</code></td><td>Mientras se cumpla una condición.</td></tr>
+      <tr><td><code>do {…} while (cond)</code></td><td>Al menos una vuelta siempre.</td></tr>
+      <tr><td><code>for (const v of arr)</code></td><td>Recorrer valores de un arreglo.</td></tr>
+      <tr><td><code>for (const k in obj)</code></td><td>Recorrer claves de un objeto.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>for (let i = 1; i &lt;= 3; i++) {
+  console.log("for:", i);
+}
+
+let j = 0;
+while (j &lt; 3) { console.log("while:", j); j++; }
+
+let k = 0;
+do { console.log("do-while:", k); k++; } while (k &lt; 2);
+
+const frutas = ["manzana", "pera"];
+for (const f of frutas) console.log("of:", f);
+
+const persona = { nombre: "Ana", edad: 22 };
+for (const clave in persona) console.log("in:", clave, persona[clave]);</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var out=&quot;&quot;;for(var i=1;i&lt;=3;i++){out+=&quot;for: &quot;+i+&quot;&lt;br&gt;&quot;}var j=0;while(j&lt;3){out+=&quot;while: &quot;+j+&quot; | &quot;;j++;}out+=&quot;&lt;br&gt;&quot;;var fr=[&quot;manzana&quot;,&quot;pera&quot;];for(var idx=0;idx&lt;fr.length;idx++){out+=&quot;of: &quot;+fr[idx]+&quot;&lt;br&gt;&quot;;}document.getElementById(&quot;o&quot;).innerHTML=out;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Funciones</h2>
+    <div class="def">
+      <p>Una <strong>función</strong> agrupa código reutilizable. Puede recibir <strong>parámetros</strong> y
+      devolver un valor con <code>return</code>. Si no devuelve nada, retorna <code>undefined</code>. Hay funciones
+      declaradas, expresadas (asignadas a una variable), flecha (<em>arrow</em>) y funciones anónimas
+      (<em>callbacks</em>).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>// Declarada
+function saludar(nombre) {
+  return "Hola, " + nombre;
+}
+
+// Expresada
+const sumar = function (a, b) { return a + b; };
+
+// Flecha (arrow function)
+const multiplicar = (a, b) =&gt; a * b;
+
+// Parámetros con valor por defecto
+function potencia(base, exp = 2) { return base ** exp; }
+
+console.log(saludar("Ana"));    // Hola, Ana
+console.log(sumar(2, 3));       // 5
+console.log(multiplicar(4, 5)); // 20
+console.log(potencia(3));       // 9</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;function saludar(n){return &quot;Hola, &quot;+n}const sumar=function(a,b){return a+b};const multiplicar=(a,b)=&gt;a*b;function potencia(base,exp){return Math.pow(base,exp||2)}document.getElementById(&quot;o&quot;).innerHTML=saludar(&quot;Ana&quot;)+&quot;&lt;br&gt;&quot;+sumar(2,3)+&quot;&lt;br&gt;&quot;+multiplicar(4,5)+&quot;&lt;br&gt;&quot;+potencia(3);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Arreglos</h2>
+    <div class="def">
+      <p>Un <strong>arreglo</strong> (<em>array</em>) es una lista ordenada de valores a la que se accede por
+      <strong>índice</strong>, empezando en <code>0</code>. Su cantidad de elementos está en la propiedad
+      <code>length</code>. Trae muchísimos métodos útiles para agregar, quitar, buscar y transformar.</p>
+    </div>
+    <table>
+      <tr><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>push()</code> / <code>pop()</code></td><td>Agrega / quita al final.</td></tr>
+      <tr><td><code>unshift()</code> / <code>shift()</code></td><td>Agrega / quita al principio.</td></tr>
+      <tr><td><code>length</code></td><td>Cantidad de elementos.</td></tr>
+      <tr><td><code>join(sep)</code></td><td>Une los elementos en un string.</td></tr>
+      <tr><td><code>sort()</code>, <code>reverse()</code></td><td>Ordena / invierte.</td></tr>
+      <tr><td><code>indexOf(x)</code></td><td>Posición de un valor (-1 si no está).</td></tr>
+      <tr><td><code>slice(a,b)</code>, <code>splice()</code></td><td>Copia un tramo / modifica el original.</td></tr>
+      <tr><td><code>map</code>, <code>filter</code>, <code>forEach</code></td><td>Recorrer y transformar.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>const frutas = ["pera", "manzana", "uva"];
+
+console.log(frutas[0]);        // "pera"
+console.log(frutas.length);    // 3
+
+frutas.push("kiwi");           // agrega al final
+frutas.unshift("banana");      // agrega al principio
+console.log(frutas.join(", ")); // banana, pera, manzana, uva, kiwi
+
+console.log(frutas.indexOf("uva"));  // 3
+
+const mayus = frutas.map(f =&gt; f.toUpperCase());
+const largos = frutas.filter(f =&gt; f.length &gt; 4);
+
+frutas.sort();
+console.log(frutas.reverse());</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var f=[&quot;pera&quot;,&quot;manzana&quot;,&quot;uva&quot;];var r=[];r.push(&quot;f[0] = &quot;+f[0]);r.push(&quot;length = &quot;+f.length);f.push(&quot;kiwi&quot;);f.unshift(&quot;banana&quot;);r.push(&quot;join = &quot;+f.join(&quot;, &quot;));r.push(&quot;indexOf('uva') = &quot;+f.indexOf(&quot;uva&quot;));r.push(&quot;map → &quot;+f.map(function(x){return x.toUpperCase()}).join(&quot;, &quot;));r.push(&quot;filter largo&gt;4 → &quot;+f.filter(function(x){return x.length&gt;4}).join(&quot;, &quot;));document.getElementById(&quot;o&quot;).innerHTML=r.join(&quot;&lt;br&gt;&quot;);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Objetos</h2>
+    <div class="def">
+      <p>Un <strong>objeto</strong> agrupa datos en pares <code>clave: valor</code>. Se accede con
+      <code>objeto.clave</code> (notación de punto) o <code>objeto["clave"]</code> (corchetes). Si un valor es una
+      función, se llama <strong>método</strong> y dentro de él <code>this</code> apunta al propio objeto.</p>
+      <p>JavaScript incluye objetos preconstruidos muy usados: <code>Math</code> (matemática), <code>Date</code>
+      (fechas), <code>JSON</code>, <code>Array</code>, <code>String</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>const persona = {
+  nombre: "Ana",
+  edad: 22,
+  saludar: function () {           // método
+    return "Hola, soy " + this.nombre;
+  }
+};
+
+console.log(persona.nombre);        // "Ana"
+console.log(persona["edad"]);       // 22
+console.log(persona.saludar());     // "Hola, soy Ana"
+persona.ciudad = "General Pico";    // se agrega una propiedad
+
+// Objetos preconstruidos
+console.log(Math.max(3, 9, 5));             // 9
+console.log(Math.round(4.6));               // 5
+const hoy = new Date();
+console.log(hoy.getFullYear());</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var p={nombre:&quot;Ana&quot;,edad:22,saludar:function(){return &quot;Hola, soy &quot;+this.nombre}};var r=[];r.push(p.nombre);r.push(p[&quot;edad&quot;]);r.push(p.saludar());p.ciudad=&quot;General Pico&quot;;r.push(&quot;ciudad = &quot;+p.ciudad);r.push(&quot;Math.max(3,9,5) = &quot;+Math.max(3,9,5));r.push(&quot;Math.round(4.6) = &quot;+Math.round(4.6));r.push(&quot;año = &quot;+(new Date()).getFullYear());document.getElementById(&quot;o&quot;).innerHTML=r.join(&quot;&lt;br&gt;&quot;);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Strings</h2>
+    <div class="def">
+      <p>Las cadenas (<em>strings</em>) se escriben entre comillas simples, dobles o <em>backticks</em>. Todas tienen
+      la propiedad <code>length</code> y un gran conjunto de métodos. Los <strong>template literals</strong>
+      (backticks) permiten insertar variables con <code>${…}</code> y escribir varias líneas.</p>
+    </div>
+    <table>
+      <tr><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>length</code></td><td>Cantidad de caracteres.</td></tr>
+      <tr><td><code>toUpperCase()</code> / <code>toLowerCase()</code></td><td>Cambia mayúsculas/minúsculas.</td></tr>
+      <tr><td><code>indexOf(x)</code></td><td>Posición de un texto (-1 si no está).</td></tr>
+      <tr><td><code>slice(a,b)</code></td><td>Extrae un tramo.</td></tr>
+      <tr><td><code>replace(a,b)</code></td><td>Reemplaza la primera aparición.</td></tr>
+      <tr><td><code>split(sep)</code></td><td>Parte el string y devuelve un arreglo.</td></tr>
+      <tr><td><code>trim()</code></td><td>Quita espacios al inicio y al final.</td></tr>
+      <tr><td><code>charAt(i)</code></td><td>El carácter en esa posición.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>const nombre = "Ana";
+const txt = "  Hola Mundo  ";
+
+console.log(txt.length);              // 14
+console.log(txt.trim());              // "Hola Mundo"
+console.log(txt.toUpperCase());
+console.log(txt.indexOf("Mundo"));    // 7
+console.log(txt.slice(2, 6));         // "Hola"
+console.log(txt.replace("Mundo", "JS"));
+console.log("a,b,c".split(","));      // ["a","b","c"]
+
+// Template literal
+console.log(`Hola ${nombre}, tenés ${nombre.length} letras.`);</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;div id=&quot;o&quot;&gt;&lt;/div&gt;&lt;script&gt;var nombre=&quot;Ana&quot;;var t=&quot;  Hola Mundo  &quot;;var r=[];r.push(&quot;length = &quot;+t.length);r.push(&quot;trim() = '&quot;+t.trim()+&quot;'&quot;);r.push(&quot;toUpperCase = &quot;+t.toUpperCase());r.push(&quot;indexOf(Mundo) = &quot;+t.indexOf(&quot;Mundo&quot;));r.push(&quot;slice(2,6) = &quot;+t.slice(2,6));r.push(&quot;replace = &quot;+t.replace(&quot;Mundo&quot;,&quot;JS&quot;));r.push(&quot;split = &quot;+&quot;a,b,c&quot;.split(&quot;,&quot;).join(&quot; | &quot;));r.push(&quot;template = Hola &quot;+nombre+&quot;, tenés &quot;+nombre.length+&quot; letras.&quot;);document.getElementById(&quot;o&quot;).innerHTML=r.join(&quot;&lt;br&gt;&quot;);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t10">
+    <a class="top-link" href="#t10">&#8593; volver al índice</a>
+    <h2><span class="n">10.</span> Entrada y salida</h2>
+    <div class="def">
+      <p>JavaScript tiene varias formas de comunicarse con el usuario: <code>alert()</code> (ventana de aviso),
+      <code>prompt()</code> (pide un dato), <code>confirm()</code> (sí/no), y <code>console.log()</code> para
+      depurar. Para escribir en la página se usa el DOM (<code>innerHTML</code>, <code>textContent</code>).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;p id="resultado"&gt;&lt;/p&gt;
+&lt;button onclick="saludar()"&gt;Ejecutar&lt;/button&gt;
+
+&lt;script&gt;
+  function saludar() {
+    const nom = prompt("¿Cómo te llamás?");
+    if (confirm("¿Seguro que es " + nom + "?")) {
+      document.getElementById("resultado").textContent = "Hola, " + nom;
+      console.log("Saludo mostrado");
+    }
+  }
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado · hacé clic en el botón</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;p id=&quot;res&quot;&gt;&lt;/p&gt;&lt;button onclick=&quot;var n=prompt('¿Cómo te llamás?');if(confirm('¿Seguro que es '+n+'?')){document.getElementById('res').textContent='Hola, '+n}&quot;&gt;Ejecutar&lt;/button&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t11">
+    <a class="top-link" href="#t11">&#8593; volver al índice</a>
+    <h2><span class="n">11.</span> Eventos</h2>
+    <div class="def">
+      <p>Un <strong>evento</strong> es una acción del usuario o del navegador (clic, tecla, carga de la página…).
+      JavaScript puede <em>capturarlo</em> de dos formas: con un <strong>atributo</strong> en la etiqueta
+      (<code>onclick="..."</code>) o, mejor, asignando un <strong>gestor de eventos</strong> con
+      <code>addEventListener</code>. Dentro del manejador, <code>this</code> es el elemento que disparó el evento.</p>
+    </div>
+    <table>
+      <tr><th>Evento</th><th>Cuándo ocurre</th></tr>
+      <tr><td><code>onclick</code></td><td>Al hacer clic.</td></tr>
+      <tr><td><code>onmouseover</code> / <code>onmouseout</code></td><td>Entrar / salir con el mouse.</td></tr>
+      <tr><td><code>onchange</code></td><td>Al cambiar el valor de un campo.</td></tr>
+      <tr><td><code>onsubmit</code></td><td>Al enviar un formulario.</td></tr>
+      <tr><td><code>onkeyup</code> / <code>onkeypress</code></td><td>Al soltar / presionar una tecla.</td></tr>
+      <tr><td><code>onload</code></td><td>Al terminar de cargar la página.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;button id="b"&gt;Clickeame&lt;/button&gt;
+&lt;p id="salida"&gt;Sin cambios&lt;/p&gt;
+
+&lt;script&gt;
+  const b = document.getElementById("b");
+  const s = document.getElementById("salida");
+
+  // Gestor de eventos (recomendado)
+  b.addEventListener("click", function () {
+    s.textContent = "¡Clic detectado!";
+  });
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;button id=&quot;b&quot;&gt;Clickeame&lt;/button&gt;&lt;p id=&quot;s&quot;&gt;Sin cambios&lt;/p&gt;&lt;script&gt;document.getElementById(&quot;b&quot;).addEventListener(&quot;click&quot;,function(){document.getElementById(&quot;s&quot;).textContent=&quot;¡Clic detectado!&quot;});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t12">
+    <a class="top-link" href="#t12">&#8593; volver al índice</a>
+    <h2><span class="n">12.</span> DOM</h2>
+    <div class="def">
+      <p>El <strong>DOM</strong> (Document Object Model) es la representación en forma de <em>árbol de objetos</em>
+      que el navegador hace del HTML. JavaScript lo usa para <em>leer</em> y <em>modificar</em> la página en
+      caliente: cambiar textos, estilos, atributos, agregar o quitar elementos.</p>
+      <p>Seleccionar elementos es el primer paso: <code>getElementById</code>, <code>querySelector</code>,
+      <code>getElementsByClassName</code>. Modificar: <code>innerHTML</code>, <code>textContent</code>,
+      <code>style</code>, <code>setAttribute</code>, <code>classList</code>,
+      <code>createElement</code>, <code>appendChild</code>, <code>remove</code>.</p>
+    </div>
+    <table>
+      <tr><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>getElementById(id)</code></td><td>Un elemento por su id.</td></tr>
+      <tr><td><code>querySelector(sel)</code></td><td>El primer elemento que coincide con el selector CSS.</td></tr>
+      <tr><td><code>querySelectorAll(sel)</code></td><td>Todos los que coinciden.</td></tr>
+      <tr><td><code>element.innerHTML</code></td><td>HTML interno (interpreta etiquetas).</td></tr>
+      <tr><td><code>element.textContent</code></td><td>Texto interno (no interpreta HTML).</td></tr>
+      <tr><td><code>element.style.prop</code></td><td>Cambia un estilo en línea.</td></tr>
+      <tr><td><code>classList.add/remove/toggle</code></td><td>Administra clases.</td></tr>
+      <tr><td><code>document.createElement()</code></td><td>Crea un nodo nuevo.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;div id="caja"&gt;Contenido original&lt;/div&gt;
+&lt;button id="go"&gt;Transformar&lt;/button&gt;
+
+&lt;script&gt;
+  const caja = document.getElementById("caja");
+
+  document.getElementById("go").addEventListener("click", function () {
+    caja.textContent = "Texto cambiado por el DOM";   // cambia el texto
+    caja.style.color = "crimson";                     // cambia el estilo
+    caja.classList.add("resaltado");                  // agrega una clase
+
+    const nuevo = document.createElement("p");        // crea un nodo
+    nuevo.textContent = "Párrafo creado con createElement";
+    caja.appendChild(nuevo);                          // lo inserta
+  });
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;.resaltado{background:#fffbeb;padding:8px;border-radius:6px}&lt;/style&gt;&lt;div id=&quot;caja&quot;&gt;Contenido original&lt;/div&gt;&lt;button id=&quot;go&quot;&gt;Transformar&lt;/button&gt;&lt;script&gt;var c=document.getElementById(&quot;caja&quot;);document.getElementById(&quot;go&quot;).addEventListener(&quot;click&quot;,function(){c.textContent=&quot;Texto cambiado por el DOM&quot;;c.style.color=&quot;crimson&quot;;c.classList.add(&quot;resaltado&quot;);var n=document.createElement(&quot;p&quot;);n.textContent=&quot;Párrafo creado con createElement&quot;;c.appendChild(n)});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="03-bootstrap.html">&#8592; Unidad 3 · Bootstrap</a>
+    <a class="next" href="05-ajax.html">Unidad 5 · AJAX &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 4 · JavaScript · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

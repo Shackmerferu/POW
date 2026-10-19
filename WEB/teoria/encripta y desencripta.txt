@@ -1,0 +1,88 @@
+
+//funciones
+
+function encrypt($string, $key) {
+   $result = '';
+   for($i=0; $i<strlen($string); $i++) {
+      $char = substr($string, $i, 1);
+      $keychar = substr($key, ($i % strlen($key))-1, 1);
+      $char = chr(ord($char)+ord($keychar));
+      $result.=$char;
+   }
+   return base64_encode($result);
+   
+  
+   
+}
+function decrypt($string, $key) {
+   $result = '';
+   $string = base64_decode($string);
+   for($i=0; $i<strlen($string); $i++) {
+      $char = substr($string, $i, 1);
+      $keychar = substr($key, ($i % strlen($key))-1, 1);
+      $char = chr(ord($char)-ord($keychar));
+      $result.=$char;
+   }
+   return $result;
+}
+
+___________________________________________________________________________________
+///prueba
+
+$usuario="negrotita";//datos del formulario
+$password="nico2016";//datos del fromulario
+$salt = substr ($usuario, 0, 3);
+
+  $cadena_encriptada = encrypt($password,$salt);
+ print($cadena_encriptada);
+ $cadena_desencriptada = decrypt($cadena_encriptada,"neg");
+ print("<br>".$cadena_desencriptada);
+
+
+
+_______________________________________________________________________________________
+
+LoGIN
+
+<?php 
+   session_start();
+   include("variables.php");
+   $usuario=$_REQUEST['usuario'];
+   $password=$_REQUEST['password'];
+   $conexion = mysql_connect ("$servidor", "$usuario_db", "$password_db")
+   		or die ("No se puede conectar con el servidor");
+		//print($base_datos);
+	$salt = substr ($usuario, 0, 3);
+	/* crypt es una función que encripta un string dado ($usuario) a partir de un substring
+	($salt) que lo toma como semilla de encriptación en este caso son dos caracteres*/
+	  $password = encrypt($password, $salt);
+	mysql_select_db("$base_datos")
+	    	or die ("No se puede seleccionar la base de datos");
+	$instruccion = "select * from usuarios where usuario='$usuario' and password='$password'";
+	$consulta = mysql_query ($instruccion, $conexion)
+	         or die ("Fallo en la consulta");
+	$nfilas=mysql_num_rows($consulta);
+	
+	if($nfilas>0)
+	   {
+	      $resultado=mysql_fetch_array($consulta);
+		  $id_usuario=$resultado['id_usuario'];
+	   	  $apellido=$resultado['apellido'];
+		  $nombre=$resultado['nombre'];
+		  $_SESSION['apellido']=$apellido;
+		  $_SESSION['tipo_usuario']=$resultado['tipo'];
+		  $_SESSION['nombre']=$nombre;
+		  $_SESSION['id_usuario']=$id_usuario;
+		  $usuario_l=$apellido.",".$nombre;
+		  $_SESSION['usuario_l']=$usuario_l;
+		  mysql_close($conexion);
+		 
+		 header("location:home.php");
+		 }
+		else
+		 {mysql_close($conexion);
+		  header("location:index.php");
+		 }
+		
+	
+ ?>

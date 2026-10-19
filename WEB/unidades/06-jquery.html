@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 6 · jQuery</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html" selected>6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 6</p>
+    <h1>Unidad 6 · jQuery</h1>
+    <p class="lead"><strong>jQuery</strong> es una <em>biblioteca</em> (librería) multiplataforma de JavaScript
+    orientada a simplificar el trabajo con el DOM, los eventos, los efectos y AJAX. Su lema es “escribir menos, hacer
+    más”: lo que en JavaScript puro son varias líneas, en jQuery es una. Se usa la biblioteca completa o <em>CDN</em>.</p>
+    <p class="alert warn"><strong>Nota:</strong> las vistas previas de esta unidad cargan jQuery por CDN, así que
+    ejecutan código real. Sin conexión, verás el HTML sin la interacción.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Librerías en JavaScript y Prototype</a></li>
+      <li><a href="#t2">Qué es jQuery y cómo incluirlo</a></li>
+      <li><a href="#t3">Sintaxis y función ready()</a></li>
+      <li><a href="#t4">Selectores</a></li>
+      <li><a href="#t5">Eventos</a></li>
+      <li><a href="#t6">Efectos y animaciones</a></li>
+      <li><a href="#t7">Manipulación de HTML y CSS</a></li>
+      <li><a href="#t8">AJAX con jQuery</a></li>
+      <li><a href="#t9">noConflict()</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Librerías en JavaScript y Prototype</h2>
+    <div class="def">
+      <p>La aparición de JavaScript dio lugar a una gran variedad de <strong>frameworks</strong> o
+      <strong>librerías</strong> que facilitan manipular el DOM desde el cliente o trabajar del lado del servidor.</p>
+      <p><strong>Prototype.js</strong> fue la referencia inicial de AJAX e inspiró a jQuery. Su característica más
+      conocida es la función <code>$()</code> (llamada <em>función dólar</em>), que es un atajo a
+      <code>document.getElementById()</code>.</p>
+    </div>
+    <table>
+      <tr><th>Librería</th><th>Dónde corre</th></tr>
+      <tr><td>Prototype.js, jQuery, AngularJS, lightbox, W3.js</td><td>Del lado del <strong>cliente</strong>.</td></tr>
+      <tr><td>Node.js</td><td>Del lado del <strong>servidor</strong>.</td></tr>
+    </table>
+    <table>
+      <tr><th>Atajo de Prototype</th><th>Equivalente en JavaScript</th></tr>
+      <tr><td><code>$("primero")</code></td><td><code>document.getElementById("primero")</code></td></tr>
+      <tr><td><code>$F("municipio")</code></td><td><code>document.getElementById("municipio").value</code></td></tr>
+      <tr><td><code>$$("div p")</code></td><td>Elementos según selectores CSS.</td></tr>
+      <tr><td><code>$A() / $H() / $R()</code></td><td>Convierte a array / crea array asociativo / crea un rango.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>// Con JavaScript puro
+const elemento = document.getElementById("primero");
+const valor = document.getElementById("municipio").value;
+
+// Con Prototype
+const elemento2 = $("primero");
+const valor2 = $F("municipio");
+const parrafos = $$("div p");     // selectores CSS
+const lista = $A(document.getElementsByTagName("li"));</code></pre>
+    <span class="label">Resultado · el mismo atajo emulado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;input id=&quot;municipio&quot; value=&quot;General Pico&quot;&gt;&lt;div id=&quot;primero&quot; style=&quot;margin-top:6px&quot;&gt;&lt;/div&gt;&lt;script&gt;function $(id){return document.getElementById(id)}function $F(id){return document.getElementById(id).value}document.getElementById(&quot;primero&quot;).textContent=&quot;$F('municipio') = &quot;+$F(&quot;municipio&quot;);&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Qué es jQuery y cómo incluirlo</h2>
+    <div class="def">
+      <p>jQuery simplifica las tareas complicadas de JavaScript: <strong>manipulación HTML/DOM</strong>,
+      <strong>CSS</strong>, <strong>eventos</strong>, <strong>efectos y animaciones</strong>, <strong>AJAX</strong> y
+      <strong>utilidades</strong>. Es la biblioteca más popular y la más extensible; la usan Google, Microsoft, IBM,
+      Netflix y gestores de contenidos como WordPress o Joomla, además de frameworks como Bootstrap.</p>
+      <p>Se incluye de tres maneras: descargando el archivo, por CDN, o con gestores de paquetes (npm, yarn).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;!-- 1. Archivo descargado --&gt;
+&lt;script src="jquery-3.5.1.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. CDN (Google) — la más cómoda --&gt;
+&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 3. Gestor de paquetes --&gt;
+&lt;!-- npm install jquery --&gt;</code></pre>
+    <span class="label">Resultado · comprobar que jQuery cargó</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;div id=&quot;v&quot;&gt;Cargando jQuery…&lt;/div&gt;&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;script&gt;document.getElementById(&quot;v&quot;).textContent = window.jQuery ? &quot;jQuery cargado, versión &quot;+jQuery.fn.jquery : &quot;jQuery NO cargado (sin conexión)&quot;;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Sintaxis y función ready()</h2>
+    <div class="def">
+      <p>Toda la biblioteca gira alrededor de <code>$(selector).accion()</code>: el <code>$</code> accede a jQuery,
+      el <code>(selector)</code> busca los elementos HTML y <code>.accion()</code> hace algo con ellos.</p>
+      <p>Los métodos deben colocarse dentro de <code>$(document).ready()</code> para que los eventos se enganchen
+      <strong>después</strong> de que la página terminó de cargar. Existe una forma abreviada: <code>$(function(){…})</code>.</p>
+    </div>
+    <table>
+      <tr><th>Código</th><th>Acción</th></tr>
+      <tr><td><code>$(this).hide()</code></td><td>Oculta el elemento actual.</td></tr>
+      <tr><td><code>$("p").hide()</code></td><td>Oculta todos los <code>&lt;p&gt;</code>.</td></tr>
+      <tr><td><code>$(".test").hide()</code></td><td>Oculta los elementos con <code>class="test"</code>.</td></tr>
+      <tr><td><code>$("#test").hide()</code></td><td>Oculta el elemento con <code>id="test"</code>.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  $(document).ready(function () {
+    $("#btn").click(function () {
+      $("p").hide();
+    });
+  });
+
+  // Forma abreviada
+  $(function () {
+    // aquí van los métodos
+  });
+&lt;/script&gt;
+
+&lt;button id="btn"&gt;Ocultar párrafos&lt;/button&gt;
+&lt;p&gt;Párrafo 1&lt;/p&gt;&lt;p&gt;Párrafo 2&lt;/p&gt;</code></pre>
+    <span class="label">Resultado · clic en el botón</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;button id=&quot;btn&quot;&gt;Ocultar párrafos&lt;/button&gt;&lt;p&gt;Párrafo 1&lt;/p&gt;&lt;p&gt;Párrafo 2&lt;/p&gt;&lt;script&gt;$(function(){$(&quot;#btn&quot;).click(function(){$(&quot;p&quot;).hide()})});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Selectores</h2>
+    <div class="def">
+      <p>Los selectores son la parte más importante de jQuery: son los mismos de CSS, más algunos propios de la
+      biblioteca (posición, filtros). Se pueden combinar y encadenar.</p>
+    </div>
+    <table>
+      <tr><th>Selector</th><th>Selecciona</th></tr>
+      <tr><td><code>$("*")</code></td><td>Todos los elementos.</td></tr>
+      <tr><td><code>$(this)</code></td><td>El elemento actual.</td></tr>
+      <tr><td><code>$("p.intro")</code></td><td>Los <code>&lt;p&gt;</code> con <code>class="intro"</code>.</td></tr>
+      <tr><td><code>$("p:first")</code></td><td>El primer <code>&lt;p&gt;</code>.</td></tr>
+      <tr><td><code>$("tr:odd")</code></td><td>Las filas impares de una tabla.</td></tr>
+      <tr><td><code>$("#id")</code></td><td>El elemento con ese id.</td></tr>
+      <tr><td><code>$(".clase")</code></td><td>Los elementos con esa clase.</td></tr>
+      <tr><td><code>$(this).children()</code></td><td>Los hijos del elemento actual.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>$(document).ready(function () {
+  $("button").click(function () {
+    $("p").hide();          // oculta todos los párrafos
+  });
+  $("tr:odd").css("background-color", "#eef2ff");   // filas impares
+});
+
+&lt;table&gt;
+  &lt;tr&gt;&lt;td&gt;Fila 1&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Fila 2&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Fila 3&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;table border=&quot;1&quot; style=&quot;border-collapse:collapse&quot;&gt;&lt;tr&gt;&lt;td&gt;Fila 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Fila 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Fila 3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;script&gt;$(function(){$(&quot;tr:odd&quot;).css(&quot;background-color&quot;,&quot;#eef2ff&quot;)});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Eventos</h2>
+    <div class="def">
+      <p>Todas las acciones del usuario pueden ser capturadas por eventos: del <strong>mouse</strong>, del
+      <strong>teclado</strong>, de los <strong>formularios</strong> y de la <strong>ventana del navegador</strong>.
+      Primero se “engancha” el evento al selector y luego se le pasa una <strong>función</strong> con lo que debe
+      hacer.</p>
+    </div>
+    <table>
+      <tr><th>Evento</th><th>Cuándo</th></tr>
+      <tr><td><code>click()</code></td><td>Al hacer clic.</td></tr>
+      <tr><td><code>dblclick()</code></td><td>Doble clic.</td></tr>
+      <tr><td><code>mouseenter()</code> / <code>mouseleave()</code></td><td>Entrar / salir con el mouse.</td></tr>
+      <tr><td><code>keyup()</code> / <code>keypress()</code></td><td>Teclado.</td></tr>
+      <tr><td><code>change()</code></td><td>Cambia el valor de un campo.</td></tr>
+      <tr><td><code>submit()</code></td><td>Se envía un formulario.</td></tr>
+      <tr><td><code>focus()</code> / <code>blur()</code></td><td>Toma / pierde el foco.</td></tr>
+      <tr><td><code>on()</code></td><td>Enlaza cualquier evento (forma general).</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>$(function () {
+  $("p").click(function () {
+    $(this).hide();          // this = el párrafo clickeado
+  });
+
+  $("#msg").mouseenter(function () {
+    $(this).css("background-color", "#fffbeb");
+  });
+});</code></pre>
+    <span class="label">Resultado · clic en el párrafo / pasar el mouse</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;p style=&quot;cursor:pointer&quot;&gt;Clickeame para ocultarme&lt;/p&gt;&lt;p id=&quot;msg&quot; style=&quot;padding:6px&quot;&gt;Pasá el mouse por acá&lt;/p&gt;&lt;script&gt;$(function(){$(&quot;p&quot;).click(function(){$(this).hide()});$(&quot;#msg&quot;).mouseenter(function(){$(this).css(&quot;background-color&quot;,&quot;#fffbeb&quot;)})});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Efectos y animaciones</h2>
+    <div class="def">
+      <p>jQuery trae efectos listos para usar. Todos aceptan una <strong>velocidad</strong> (<code>"slow"</code>,
+      <code>"fast"</code> o milisegundos) y una <strong>función de callback</strong> que se ejecuta al terminar. Con
+      el <em>encadenado</em> (<em>chaining</em>) se pueden aplicar varios efectos seguidos sobre el mismo elemento.</p>
+    </div>
+    <table>
+      <tr><th>Grupo</th><th>Métodos</th></tr>
+      <tr><td>Mostrar/ocultar</td><td><code>hide()</code>, <code>show()</code>, <code>toggle()</code></td></tr>
+      <tr><td>Desvanecer (fade)</td><td><code>fadeIn()</code>, <code>fadeOut()</code>, <code>fadeToggle()</code>, <code>fadeTo()</code></td></tr>
+      <tr><td>Deslizar (slide)</td><td><code>slideDown()</code>, <code>slideUp()</code>, <code>slideToggle()</code></td></tr>
+      <tr><td>Animación</td><td><code>animate({params}, speed, callback)</code></td></tr>
+      <tr><td>Detener</td><td><code>stop()</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>$("#ocultar").click(function () { $("p").hide("slow"); });
+$("#mostrar").click(function () { $("p").show("fast"); });
+
+$("#fade").click(function () {
+  $("#caja").fadeToggle(600);
+});
+
+$("#slide").click(function () {
+  $("#caja2").slideToggle("slow");
+});
+
+$("#animar").click(function () {
+  $("#caja").animate({ width: "260px", opacity: 0.4 }, 800)
+             .animate({ height: "120px" }, 600);
+});</code></pre>
+    <span class="label">Resultado · clickeá los botones</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;button id=&quot;fade&quot;&gt;fadeToggle&lt;/button&gt; &lt;button id=&quot;slide&quot;&gt;slideToggle&lt;/button&gt; &lt;button id=&quot;animar&quot;&gt;animate&lt;/button&gt;&lt;div id=&quot;caja&quot; style=&quot;width:140px;height:60px;background:#4f46e5;margin-top:8px&quot;&gt;&lt;/div&gt;&lt;div id=&quot;caja2&quot; style=&quot;width:140px;height:40px;background:#06b6d4;margin-top:8px&quot;&gt;&lt;/div&gt;&lt;script&gt;$(function(){$(&quot;#fade&quot;).click(function(){$(&quot;#caja&quot;).fadeToggle(600)});$(&quot;#slide&quot;).click(function(){$(&quot;#caja2&quot;).slideToggle(&quot;slow&quot;)});$(&quot;#animar&quot;).click(function(){$(&quot;#caja&quot;).animate({width:&quot;260px&quot;,opacity:0.4},800).animate({height:&quot;120px&quot;},600)})});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Manipulación de HTML y CSS</h2>
+    <div class="def">
+      <p>jQuery permite <strong>obtener</strong> (get) y <strong>establecer</strong> (set) contenido y atributos con
+      los mismos métodos: <code>text()</code>, <code>html()</code>, <code>val()</code>, <code>attr()</code>.
+      Además, puede <strong>agregar</strong> (<code>append</code>, <code>prepend</code>, <code>after</code>,
+      <code>before</code>), <strong>quitar</strong> (<code>remove</code>, <code>empty</code>) y
+      <strong>administrar estilos</strong> (<code>addClass</code>, <code>removeClass</code>,
+      <code>toggleClass</code>, <code>css</code>).</p>
+      <p>Sin argumentos, el método devuelve el valor; con argumento, lo establece.</p>
+    </div>
+    <table>
+      <tr><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>text()</code></td><td>Contenido de texto.</td></tr>
+      <tr><td><code>html()</code></td><td>Contenido incluyendo etiquetas HTML.</td></tr>
+      <tr><td><code>val()</code></td><td>Valor de un campo de formulario.</td></tr>
+      <tr><td><code>attr("href")</code></td><td>Lee / escribe un atributo.</td></tr>
+      <tr><td><code>append()</code> / <code>prepend()</code></td><td>Inserta al final / al comienzo.</td></tr>
+      <tr><td><code>after()</code> / <code>before()</code></td><td>Inserta después / antes del elemento.</td></tr>
+      <tr><td><code>remove()</code> / <code>empty()</code></td><td>Elimina el elemento / sus hijos.</td></tr>
+      <tr><td><code>addClass()</code> / <code>css()</code></td><td>Clases CSS / propiedades de estilo.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>$(function () {
+  $("#btnText").click(function () { $("#t1").text("Nuevo texto"); });
+  $("#btnHtml").click(function () { $("#t2").html("&lt;b&gt;Texto en negrita&lt;/b&gt;"); });
+  $("#btnAttr").click(function () { alert($("#link").attr("href")); });
+  $("#btnAdd").click(function () { $("#lista").append("&lt;li&gt;Nuevo ítem&lt;/li&gt;"); });
+  $("#btnCss").click(function () { $("#t1").css({ "background-color": "yellow", "font-size": "150%" }); });
+});</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;button id=&quot;btnText&quot;&gt;text()&lt;/button&gt; &lt;button id=&quot;btnHtml&quot;&gt;html()&lt;/button&gt; &lt;button id=&quot;btnAdd&quot;&gt;append()&lt;/button&gt; &lt;button id=&quot;btnCss&quot;&gt;css()&lt;/button&gt;&lt;p id=&quot;t1&quot;&gt;Párrafo 1&lt;/p&gt;&lt;p id=&quot;t2&quot;&gt;Párrafo 2&lt;/p&gt;&lt;ul id=&quot;lista&quot;&gt;&lt;li&gt;Ítem original&lt;/li&gt;&lt;/ul&gt;&lt;script&gt;$(function(){ $(&quot;#btnText&quot;).click(function(){$(&quot;#t1&quot;).text(&quot;Nuevo texto&quot;)}); $(&quot;#btnHtml&quot;).click(function(){$(&quot;#t2&quot;).html(&quot;&lt;b&gt;Texto en negrita&lt;/b&gt;&quot;)}); $(&quot;#btnAdd&quot;).click(function(){$(&quot;#lista&quot;).append(&quot;&lt;li&gt;Nuevo ítem&lt;/li&gt;&quot;)}); $(&quot;#btnCss&quot;).click(function(){$(&quot;#t1&quot;).css({&quot;background-color&quot;:&quot;yellow&quot;,&quot;font-size&quot;:&quot;150%&quot;})}) });&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> AJAX con jQuery</h2>
+    <div class="def">
+      <p>jQuery reduce AJAX a un método. <code>load()</code> carga el resultado directamente en un contenedor;
+      <code>$.get()</code> y <code>$.post()</code> hacen la petición y ejecutan un callback; y
+      <code>$.ajax()</code> es la versión completa, con todos los parámetros configurables.</p>
+      <p><strong>GET</strong> puede usar caché; <strong>POST</strong> nunca la usa. Si la respuesta trae etiquetas
+      HTML, el navegador las interpreta.</p>
+    </div>
+    <table>
+      <tr><th>Método</th><th>Sintaxis</th></tr>
+      <tr><td><code>load()</code></td><td><code>$(sel).load(URL, data, callback)</code></td></tr>
+      <tr><td><code>$.get()</code></td><td><code>$.get(URL, callback)</code></td></tr>
+      <tr><td><code>$.post()</code></td><td><code>$.post(URL, data, callback)</code></td></tr>
+      <tr><td><code>$.ajax()</code></td><td><code>$.ajax({url, type, data, dataType, success, error, complete})</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>$("#btn").click(function () {
+  $("#div1").load("hola.txt");          // carga directa en el div
+});
+
+$("button").click(function () {
+  $.get("hola.txt", function (data, status) {
+    alert("Data: " + data + "\nStatus: " + status);
+  });
+});
+
+$.ajax({
+  url: "comprobar_nick.php",
+  type: "POST",
+  data: { nickname: "ana" },
+  dataType: "json",
+  success: function (r) { $("#msg").html(r.mensaje); },
+  error: function (xhr, status, err) { $("#msg").html("Error: " + status); },
+  complete: function () { console.log("Petición finalizada"); }
+});</code></pre>
+    <span class="label">Resultado · petición real con $.ajax()</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;button id=&quot;go&quot;&gt;$.ajax()&lt;/button&gt;&lt;pre id=&quot;out&quot; style=&quot;font-size:12px&quot;&gt;&lt;/pre&gt;&lt;script&gt;$(function(){$(&quot;#go&quot;).click(function(){$(&quot;#out&quot;).text(&quot;Cargando…&quot;);$.ajax({url:&quot;https://jsonplaceholder.typicode.com/todos/1&quot;,type:&quot;GET&quot;,dataType:&quot;json&quot;}).done(function(d){$(&quot;#out&quot;).text(JSON.stringify(d,null,2))}).fail(function(x,s,e){$(&quot;#out&quot;).text(&quot;Sin conexión o bloqueado: &quot;+s)})})});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> noConflict()</h2>
+    <div class="def">
+      <p>jQuery usa <code>$</code> como atajo, pero otros frameworks (Angular, Backbone, Prototype…) usan el mismo
+      símbolo. Si dos lo usan a la vez, uno deja de funcionar. <code>$.noConflict()</code> <strong>libera</strong> el
+      <code>$</code> para que lo use otro script; desde ahí se escribe <code>jQuery</code> en lugar de
+      <code>$</code>, o se crea un atajo propio.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>// Liberar $ y usar jQuery con su nombre completo
+$.noConflict();
+jQuery(document).ready(function () {
+  jQuery("button").click(function () {
+    jQuery("p").text("jQuery sigue funcionando!");
+  });
+});
+
+// O crear un atajo propio
+const jq = $.noConflict();
+jq(document).ready(function () {
+  jq("p").text("Atajo propio jq");
+});</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;button id=&quot;b&quot;&gt;Probar&lt;/button&gt;&lt;p&gt;Sin cambios&lt;/p&gt;&lt;script&gt;var jq=window.jQuery?window.jQuery.noConflict():null;if(jq){jq(document).ready(function(){jq(&quot;#b&quot;).click(function(){jq(&quot;p&quot;).text(&quot;jQuery sigue funcionando con el atajo jq!&quot;)})})}else{document.body.insertAdjacentHTML(&quot;beforeend&quot;,&quot;&lt;p&gt;jQuery no cargó (sin conexión)&lt;/p&gt;&quot;)}&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="05-ajax.html">&#8592; Unidad 5 · AJAX</a>
+    <a class="next" href="07-php.html">Unidad 7 · PHP &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 6 · jQuery · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

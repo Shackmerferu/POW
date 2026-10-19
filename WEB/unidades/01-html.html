@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 1 · HTML</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html" selected>1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 1</p>
+    <h1>Unidad 1 · HTML</h1>
+    <p class="lead"><strong>HTML</strong> (HyperText Markup Language) es un lenguaje de <em>marcado</em>, no de
+    programación: describe la <em>estructura</em> y el <em>contenido</em> de una página mediante etiquetas.
+    Abajo están todos los temas de la unidad, cada uno con su definición y su ejemplo ejecutándose en vivo.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Estructura del documento</a></li>
+      <li><a href="#t2">Etiquetas de texto y títulos</a></li>
+      <li><a href="#t3">Listas</a></li>
+      <li><a href="#t4">Enlaces</a></li>
+      <li><a href="#t5">Imágenes</a></li>
+      <li><a href="#t6">Tablas</a></li>
+      <li><a href="#t7">Formularios</a></li>
+      <li><a href="#t8">Semántica HTML5</a></li>
+      <li><a href="#t9">Atributos globales</a></li>
+      <li><a href="#t10">HTML dinámico</a></li>
+      <li><a href="#t11">Iframes</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Estructura del documento</h2>
+    <div class="def">
+      <p>Todo documento HTML se organiza en un <strong>árbol de etiquetas</strong>. La raíz es <code>&lt;html&gt;</code>,
+      que contiene dos ramas: <strong><code>&lt;head&gt;</code></strong> (metadatos: título, codificación, CSS, scripts)
+      y <strong><code>&lt;body&gt;</code></strong> (todo lo visible).</p>
+      <p>La primera línea, <code>&lt;!DOCTYPE html&gt;</code>, le indica al navegador que use el <strong>modo estándar
+      HTML5</strong>.</p>
+    </div>
+    <table>
+      <tr><th>Etiqueta</th><th>Función</th></tr>
+      <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Declara el tipo de documento (HTML5).</td></tr>
+      <tr><td><code>&lt;html lang="es"&gt;</code></td><td>Elemento raíz; <code>lang</code> define el idioma.</td></tr>
+      <tr><td><code>&lt;head&gt;</code></td><td>Contenido no visible: metadatos, estilos, scripts.</td></tr>
+      <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Juego de caracteres; permite tildes y ñ.</td></tr>
+      <tr><td><code>&lt;meta name="viewport"&gt;</code></td><td>Adaptación a dispositivos móviles.</td></tr>
+      <tr><td><code>&lt;title&gt;</code></td><td>Título que se muestra en la pestaña del navegador.</td></tr>
+      <tr><td><code>&lt;body&gt;</code></td><td>Todo el contenido visible de la página.</td></tr>
+    </table>
+    <span class="label">Ejemplo · documento mínimo</span>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Mi primera página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hola mundo&lt;/h1&gt;
+  &lt;p&gt;Esta es mi primera página HTML.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;h1&gt;Hola mundo&lt;/h1&gt;&lt;p&gt;Esta es mi primera página HTML.&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Etiquetas de texto y títulos</h2>
+    <div class="def">
+      <p>Los <strong>títulos</strong> van de <code>&lt;h1&gt;</code> (más importante) a <code>&lt;h6&gt;</code> (menos
+      importante). Los <strong>párrafos</strong> se escriben con <code>&lt;p&gt;</code>. Para dar formato se usan
+      etiquetas <em>semánticas</em> (con significado) en lugar de etiquetas puramente visuales.</p>
+      <p><code>&lt;br&gt;</code> es de <strong>vacío</strong> (no se cierra) y produce un salto de línea;
+      <code>&lt;hr&gt;</code> dibuja una línea separadora.</p>
+    </div>
+    <table>
+      <tr><th>Etiqueta</th><th>Significado</th></tr>
+      <tr><td><code>&lt;strong&gt;</code></td><td>Importancia / negrita semántica.</td></tr>
+      <tr><td><code>&lt;em&gt;</code></td><td>Énfasis / cursiva semántica.</td></tr>
+      <tr><td><code>&lt;mark&gt;</code></td><td>Texto resaltado (como con marcador).</td></tr>
+      <tr><td><code>&lt;blockquote&gt;</code></td><td>Cita en bloque (párrafo sangrado).</td></tr>
+      <tr><td><code>&lt;code&gt;</code></td><td>Fragmento de código.</td></tr>
+      <tr><td><code>&lt;br&gt;</code> / <code>&lt;hr&gt;</code></td><td>Salto de línea / línea horizontal.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+&lt;p&gt;Esto es &lt;strong&gt;muy importante&lt;/strong&gt; y esto &lt;em&gt;enfatizado&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Fórmula: &lt;code&gt;x = a + b&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;Cita textual de un autor.&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;Después de la línea.&lt;br&gt;Con salto de línea.&lt;/p&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;h1&gt;Título principal&lt;/h1&gt;&lt;h2&gt;Subtítulo&lt;/h2&gt;&lt;p&gt;Esto es &lt;strong&gt;muy importante&lt;/strong&gt; y esto &lt;em&gt;enfatizado&lt;/em&gt;.&lt;/p&gt;&lt;p&gt;Fórmula: &lt;code&gt;x = a + b&lt;/code&gt;&lt;/p&gt;&lt;blockquote&gt;Cita textual de un autor.&lt;/blockquote&gt;&lt;hr&gt;&lt;p&gt;Después de la línea.&lt;br&gt;Con salto de línea.&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Listas</h2>
+    <div class="def">
+      <p>HTML ofrece tres tipos de listas:</p>
+      <p><strong>No ordenada</strong> (<code>&lt;ul&gt;</code>): viñetas. <strong>Ordenada</strong>
+      (<code>&lt;ol&gt;</code>): numerada. <strong>De definición</strong> (<code>&lt;dl&gt;</code>): pares
+      término (<code>&lt;dt&gt;</code>) y definición (<code>&lt;dd&gt;</code>). Cada ítem de las dos primeras se
+      marca con <code>&lt;li&gt;</code>, y las listas se pueden anidar.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS
+    &lt;ul&gt;&lt;li&gt;Selectores&lt;/li&gt;&lt;li&gt;Box model&lt;/li&gt;&lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Analizar&lt;/li&gt;
+  &lt;li&gt;Diseñar&lt;/li&gt;
+  &lt;li&gt;Programar&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;dl&gt;
+  &lt;dt&gt;DOM&lt;/dt&gt;
+  &lt;dd&gt;Modelo de Objetos del Documento&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;ul&gt;&lt;li&gt;HTML&lt;/li&gt;&lt;li&gt;CSS&lt;ul&gt;&lt;li&gt;Selectores&lt;/li&gt;&lt;li&gt;Box model&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ol&gt;&lt;li&gt;Analizar&lt;/li&gt;&lt;li&gt;Diseñar&lt;/li&gt;&lt;li&gt;Programar&lt;/li&gt;&lt;/ol&gt;&lt;dl&gt;&lt;dt&gt;DOM&lt;/dt&gt;&lt;dd&gt;Modelo de Objetos del Documento&lt;/dd&gt;&lt;/dl&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Enlaces</h2>
+    <div class="def">
+      <p>Los enlaces (<strong>hipervínculos</strong>) se crean con <code>&lt;a&gt;</code> y su atributo
+      <code>href</code>, que indica el destino. El texto entre las etiquetas es lo que se ve y se puede clicar.</p>
+      <p>El atributo <code>target</code> decide dónde se abre: en la misma pestaña (por defecto) o en una nueva
+      (<code>_blank</code>).</p>
+    </div>
+    <table>
+      <tr><th>Destino</th><th>Código</th></tr>
+      <tr><td>Sitio externo</td><td><code>&lt;a href="https://sitio.com"&gt;…&lt;/a&gt;</code></td></tr>
+      <tr><td>Archivo local</td><td><code>&lt;a href="otra.html"&gt;…&lt;/a&gt;</code></td></tr>
+      <tr><td>Ancla interna</td><td><code>&lt;a href="#seccion"&gt;…&lt;/a&gt;</code></td></tr>
+      <tr><td>Correo</td><td><code>&lt;a href="mailto:x@y.com"&gt;…&lt;/a&gt;</code></td></tr>
+      <tr><td>Nueva pestaña</td><td><code>target="_blank"</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;a href="https://developer.mozilla.org" target="_blank"&gt;
+  Documentación de MDN
+&lt;/a&gt;
+&lt;a href="mailto:info@unlpam.edu.ar"&gt;Escribinos&lt;/a&gt;
+&lt;a href="#temas"&gt;Ir a Temas&lt;/a&gt;
+
+&lt;h2 id="temas"&gt;Temas&lt;/h2&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;a href=&quot;https://developer.mozilla.org&quot; target=&quot;_blank&quot;&gt;Documentación de MDN&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;mailto:info@unlpam.edu.ar&quot;&gt;Escribinos&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;#temas&quot;&gt;Ir a Temas&lt;/a&gt;&lt;h2 id=&quot;temas&quot;&gt;Temas&lt;/h2&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Imágenes</h2>
+    <div class="def">
+      <p>Las imágenes se insertan con <code>&lt;img&gt;</code>, una etiqueta de <strong>vacío</strong> (no tiene
+      cierre). Sus atributos clave son <code>src</code> (ruta del archivo) y <code>alt</code> (texto alternativo que
+      se muestra si la imagen no carga y que leen los lectores de pantalla).</p>
+      <p>Es importante indicar <code>width</code> y <code>height</code> para que el navegador reserve el espacio
+      antes de descargarla.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;img src="https://picsum.photos/300/120"
+     alt="Imagen de ejemplo"
+     width="300" height="120"&gt;
+
+&lt;!-- Imagen que hace de enlace --&gt;
+&lt;a href="https://unlpam.edu.ar"&gt;
+  &lt;img src="logo.png" alt="Logo UNLPam" width="80"&gt;
+&lt;/a&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;img src=&quot;https://picsum.photos/300/120&quot; alt=&quot;Imagen de ejemplo&quot; width=&quot;300&quot; height=&quot;120&quot;&gt;&lt;p&gt;&lt;a href=&quot;https://unlpam.edu.ar&quot;&gt;&lt;img src=&quot;https://picsum.photos/80&quot; alt=&quot;Logo&quot; width=&quot;80&quot;&gt;&lt;/a&gt; &amp;larr; imagen que además es un enlace&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Tablas</h2>
+    <div class="def">
+      <p>Las tablas se construyen por <strong>filas</strong>: cada fila (<code>&lt;tr&gt;</code>) contiene celdas
+      de <strong>encabezado</strong> (<code>&lt;th&gt;</code>) o de <strong>datos</strong> (<code>&lt;td&gt;</code>).
+      La tabla se envuelve en <code>&lt;table&gt;</code>.</p>
+      <p>Para accesibilidad se agrega <code>&lt;caption&gt;</code> (título de la tabla) y se puede agrupar con
+      <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code> y <code>&lt;tfoot&gt;</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;table border="1"&gt;
+  &lt;caption&gt;Alumnos&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Legajo&lt;/th&gt;&lt;th&gt;Apellido&lt;/th&gt;&lt;th&gt;Nota&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;1234&lt;/td&gt;&lt;td&gt;Pérez&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;5678&lt;/td&gt;&lt;td&gt;Gómez&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;table border=&quot;1&quot; style=&quot;border-collapse:collapse&quot;&gt;&lt;caption&gt;Alumnos&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Legajo&lt;/th&gt;&lt;th&gt;Apellido&lt;/th&gt;&lt;th&gt;Nota&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1234&lt;/td&gt;&lt;td&gt;Pérez&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5678&lt;/td&gt;&lt;td&gt;Gómez&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Formularios</h2>
+    <div class="def">
+      <p>Un formulario (<code>&lt;form&gt;</code>) es la vía por la que el usuario <strong>envía datos al
+      servidor</strong>. El atributo <code>action</code> indica a qué página se envían y <code>method</code> cómo
+      (GET o POST). Cada control lleva un <code>name</code>, que es la clave con la que el servidor recibe el valor.</p>
+      <p><code>&lt;label for="…"&gt;</code> asocia el rótulo con el campo y mejora la accesibilidad.</p>
+    </div>
+    <table>
+      <tr><th>Etiqueta / atributo</th><th>Función</th></tr>
+      <tr><td><code>&lt;input type="text"&gt;</code></td><td>Campo de texto de una línea.</td></tr>
+      <tr><td><code>type="password"</code></td><td>Texto oculto con asteriscos.</td></tr>
+      <tr><td><code>type="email" / "number" / "date"</code></td><td>Campos con validación automática.</td></tr>
+      <tr><td><code>type="radio"</code> / <code>"checkbox"</code></td><td>Opción única / múltiple.</td></tr>
+      <tr><td><code>&lt;textarea&gt;</code></td><td>Texto de varias líneas.</td></tr>
+      <tr><td><code>&lt;select&gt;</code> + <code>&lt;option&gt;</code></td><td>Lista desplegable.</td></tr>
+      <tr><td><code>required</code>, <code>placeholder</code></td><td>Obligatorio, texto guía.</td></tr>
+      <tr><td><code>&lt;button type="submit"&gt;</code></td><td>Envía el formulario.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;form action="procesar.php" method="post"&gt;
+  &lt;label for="nombre"&gt;Nombre:&lt;/label&gt;
+  &lt;input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required&gt;
+
+  &lt;label for="clave"&gt;Clave:&lt;/label&gt;
+  &lt;input type="password" id="clave" name="clave"&gt;
+
+  &lt;label for="pais"&gt;País:&lt;/label&gt;
+  &lt;select id="pais" name="pais"&gt;
+    &lt;option value="ar"&gt;Argentina&lt;/option&gt;
+    &lt;option value="cl"&gt;Chile&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;label&gt;&lt;input type="checkbox" name="acepta"&gt; Acepto los términos&lt;/label&gt;
+
+  &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;form action=&quot;#&quot; method=&quot;post&quot; onsubmit=&quot;event.preventDefault();alert('Enviado (demo)'&quot;&gt;&lt;label for=&quot;nombre&quot;&gt;Nombre:&lt;/label&gt; &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; placeholder=&quot;Tu nombre&quot; required&gt;&lt;br&gt;&lt;br&gt;&lt;label for=&quot;clave&quot;&gt;Clave:&lt;/label&gt; &lt;input type=&quot;password&quot; id=&quot;clave&quot; name=&quot;clave&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;label for=&quot;pais&quot;&gt;País:&lt;/label&gt; &lt;select id=&quot;pais&quot; name=&quot;pais&quot;&gt;&lt;option value=&quot;ar&quot;&gt;Argentina&lt;/option&gt;&lt;option value=&quot;cl&quot;&gt;Chile&lt;/option&gt;&lt;/select&gt;&lt;br&gt;&lt;br&gt;&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;acepta&quot;&gt; Acepto los términos&lt;/label&gt;&lt;br&gt;&lt;br&gt;&lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;&lt;/form&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Semántica HTML5</h2>
+    <div class="def">
+      <p>HTML5 incorporó etiquetas <strong>semánticas</strong>: describen <em>qué es</em> cada bloque, no cómo se ve.
+      Esto mejora la accesibilidad, el posicionamiento (SEO) y hace el código más legible.</p>
+      <p>Antes se usaban <code>&lt;div&gt;</code> con <code>id</code> para todo; hoy se reemplazan por estas
+      etiquetas.</p>
+    </div>
+    <table>
+      <tr><th>Etiqueta</th><th>Representa</th></tr>
+      <tr><td><code>&lt;header&gt;</code></td><td>Encabezado de la página o de una sección.</td></tr>
+      <tr><td><code>&lt;nav&gt;</code></td><td>Bloque de navegación (menú de enlaces).</td></tr>
+      <tr><td><code>&lt;main&gt;</code></td><td>Contenido principal (uno solo por página).</td></tr>
+      <tr><td><code>&lt;section&gt;</code></td><td>Sección temática del documento.</td></tr>
+      <tr><td><code>&lt;article&gt;</code></td><td>Contenido autónomo (noticia, post).</td></tr>
+      <tr><td><code>&lt;aside&gt;</code></td><td>Contenido lateral o complementario.</td></tr>
+      <tr><td><code>&lt;footer&gt;</code></td><td>Pie de página.</td></tr>
+      <tr><td><code>&lt;figure&gt;</code> / <code>&lt;figcaption&gt;</code></td><td>Imagen u objeto con su leyenda.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;body&gt;
+  &lt;header&gt;&lt;h1&gt;Mi sitio&lt;/h1&gt;&lt;/header&gt;
+  &lt;nav&gt;&lt;a href="#inicio"&gt;Inicio&lt;/a&gt; | &lt;a href="#blog"&gt;Blog&lt;/a&gt;&lt;/nav&gt;
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;h2&gt;Noticia&lt;/h2&gt;
+      &lt;p&gt;Cuerpo de la noticia.&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/main&gt;
+  &lt;aside&gt;Enlaces relacionados&lt;/aside&gt;
+  &lt;footer&gt;&amp;copy; 2026 UNLPam&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;style&gt;header{background:#eef2ff;padding:6px 10px}nav{background:#e5e7eb;padding:6px 10px}main{padding:8px 10px;border:1px dashed #ccc}aside{background:#fffbeb;padding:6px 10px}footer{background:#111827;color:#fff;padding:6px 10px;font-size:12px}&lt;/style&gt;&lt;header&gt;&lt;h1 style=&quot;margin:0&quot;&gt;Mi sitio&lt;/h1&gt;&lt;/header&gt;&lt;nav&gt;&lt;a href=&quot;#inicio&quot;&gt;Inicio&lt;/a&gt; | &lt;a href=&quot;#blog&quot;&gt;Blog&lt;/a&gt;&lt;/nav&gt;&lt;main&gt;&lt;article&gt;&lt;h2&gt;Noticia&lt;/h2&gt;&lt;p&gt;Cuerpo de la noticia.&lt;/p&gt;&lt;/article&gt;&lt;/main&gt;&lt;aside&gt;Enlaces relacionados&lt;/aside&gt;&lt;footer&gt;&amp;copy; 2026 UNLPam&lt;/footer&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Atributos globales</h2>
+    <div class="def">
+      <p>Hay atributos que se pueden usar en <strong>cualquier</strong> etiqueta. Los más útiles son
+      <code>id</code> (identificador único), <code>class</code> (grupo reutilizable), <code>style</code> (CSS en
+      línea), <code>title</code> (tooltip) y los <code>data-*</code> (datos personalizados que lee JavaScript).</p>
+    </div>
+    <table>
+      <tr><th>Atributo</th><th>Para qué sirve</th></tr>
+      <tr><td><code>id</code></td><td>Identifica un elemento de forma única (anclas, CSS, JS).</td></tr>
+      <tr><td><code>class</code></td><td>Agrupa elementos para aplicarles el mismo estilo.</td></tr>
+      <tr><td><code>style</code></td><td>Declara CSS directamente sobre la etiqueta.</td></tr>
+      <tr><td><code>title</code></td><td>Texto emergente al pasar el mouse.</td></tr>
+      <tr><td><code>data-*</code></td><td>Guarda datos propios para usar desde JS.</td></tr>
+      <tr><td><code>hidden</code></td><td>Oculta el elemento.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;p class="destacado" id="aviso" style="color:#b00" title="Soy un tooltip"&gt;
+  Pasá el mouse por encima
+&lt;/p&gt;
+&lt;button data-id="42" data-accion="borrar"&gt;Borrar&lt;/button&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;p class=&quot;destacado&quot; id=&quot;aviso&quot; style=&quot;color:#b00&quot; title=&quot;Soy un tooltip&quot;&gt;Pasá el mouse por encima&lt;/p&gt;&lt;button data-id=&quot;42&quot; data-accion=&quot;borrar&quot;&gt;Borrar&lt;/button&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t10">
+    <a class="top-link" href="#t10">&#8593; volver al índice</a>
+    <h2><span class="n">10.</span> HTML dinámico</h2>
+    <div class="def">
+      <p>El HTML <strong>dinámico</strong> es el HTML que se genera o modifica <em>después</em> de cargar la página.
+      La idea no es escribir el HTML a mano, sino dejar que <strong>JavaScript</strong> lo construya o lo cambie en
+      respuesta a un evento.</p>
+      <p>Es la base de AJAX: el script recibe datos y los inserta en el documento sin recargarlo.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;p id="salida"&gt;Contenido original&lt;/p&gt;
+&lt;button onclick="document.getElementById('salida').innerHTML = 'Contenido cambiado por JavaScript'"&gt;
+  Cambiar el texto
+&lt;/button&gt;
+&lt;script&gt;
+  // También se puede crear HTML desde cero:
+  document.write("&lt;p&gt;Generado dinámicamente&lt;/p&gt;");
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;p id=&quot;salida&quot;&gt;Contenido original&lt;/p&gt;&lt;button onclick=&quot;document.getElementById('salida').innerHTML='Contenido cambiado por JavaScript'&quot;&gt;Cambiar el texto&lt;/button&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t11">
+    <a class="top-link" href="#t11">&#8593; volver al índice</a>
+    <h2><span class="n">11.</span> Iframes</h2>
+    <div class="def">
+      <p><code>&lt;iframe&gt;</code> incrusta <strong>otra página completa</strong> dentro de la actual, dentro de un
+      marco con scroll propio. Se usa para mapas, videos, documentos o cualquier contenido externo.</p>
+      <p>Cada iframe es un <strong>contexto aislado</strong> (su propio <code>window</code> y
+      <code>document</code>).</p>
+    </div>
+    <table>
+      <tr><th>Atributo</th><th>Función</th></tr>
+      <tr><td><code>src</code></td><td>URL de la página a incrustar.</td></tr>
+      <tr><td><code>width</code> / <code>height</code></td><td>Tamaño del marco.</td></tr>
+      <tr><td><code>title</code></td><td>Descripción para accesibilidad.</td></tr>
+      <tr><td><code>allowfullscreen</code></td><td>Permite pantalla completa (videos).</td></tr>
+      <tr><td><code>loading="lazy"</code></td><td>Lo carga solo cuando se ve.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;iframe src="https://www.example.com"
+        width="400" height="180"
+        title="Ejemplo" loading="lazy"&gt;
+&lt;/iframe&gt;
+
+&lt;iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-64.5,-35.7,-63.5,-35.2"
+        width="400" height="180" title="Mapa"&gt;
+&lt;/iframe&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa · iframe incrustado dentro de la vista previa</div>
+      <iframe class="mid" srcdoc="&lt;iframe src=&quot;https://www.openstreetmap.org/export/embed.html?bbox=-64.5,-35.7,-63.5,-35.2&amp;layer=mapnik&quot; width=&quot;100%&quot; height=&quot;150&quot; title=&quot;Mapa&quot;&gt;&lt;/iframe&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="../index.html">&#8592; Índice de unidades</a>
+    <a class="next" href="02-css.html">Unidad 2 · CSS &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 1 · HTML · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

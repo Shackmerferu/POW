@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 2 · CSS</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html" selected>2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 2</p>
+    <h1>Unidad 2 · CSS</h1>
+    <p class="lead"><strong>CSS</strong> (Cascading Style Sheets) describe la <em>presentación</em> del HTML:
+    colores, tipografía, espaciados, tamaños, posición y adaptación a cada pantalla. Separa el contenido (HTML) del
+    diseño (CSS).</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Formas de incluir CSS</a></li>
+      <li><a href="#t2">Sintaxis, reglas y comentarios</a></li>
+      <li><a href="#t3">Selectores</a></li>
+      <li><a href="#t4">Cascada, herencia y especificidad</a></li>
+      <li><a href="#t5">Box model</a></li>
+      <li><a href="#t6">Colores y fondos</a></li>
+      <li><a href="#t7">Unidades y tipografía</a></li>
+      <li><a href="#t8">Enlaces, listas y tablas</a></li>
+      <li><a href="#t9">Visualización y posicionamiento</a></li>
+      <li><a href="#t10">Flexbox</a></li>
+      <li><a href="#t11">Grid</a></li>
+      <li><a href="#t12">Diseño responsivo</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Formas de incluir CSS</h2>
+    <div class="def">
+      <p>Hay tres maneras de aplicar estilos, y se pueden combinar. La recomendada es la <strong>hoja externa</strong>,
+      porque un solo archivo <code>.css</code> da estilo a todas las páginas y el navegador lo guarda en caché.</p>
+    </div>
+    <table>
+      <tr><th>Forma</th><th>Cómo</th><th>Alcance</th></tr>
+      <tr><td>Externa</td><td><code>&lt;link rel="stylesheet" href="estilos.css"&gt;</code> en el <code>&lt;head&gt;</code></td><td>Todas las páginas que la enlacen.</td></tr>
+      <tr><td>Interna</td><td><code>&lt;style&gt;…&lt;/style&gt;</code> en el <code>&lt;head&gt;</code></td><td>Solo esa página.</td></tr>
+      <tr><td>En línea</td><td><code>style="color:red"</code> en la etiqueta</td><td>Solo ese elemento.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;!-- 1. Hoja externa (recomendada) --&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+
+&lt;!-- 2. Estilos internos --&gt;
+&lt;style&gt;
+  h1 { color: navy; }
+&lt;/style&gt;
+
+&lt;!-- 3. Estilos en línea --&gt;
+&lt;p style="color: crimson;"&gt;Texto rojo&lt;/p&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;style&gt;h1{color:navy}&lt;/style&gt;&lt;h1&gt;Título azul (styles internos)&lt;/h1&gt;&lt;p style=&quot;color:crimson&quot;&gt;Texto rojo (style en línea)&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Sintaxis, reglas y comentarios</h2>
+    <div class="def">
+      <p>Una <strong>regla</strong> de CSS tiene dos partes: el <strong>selector</strong> (a qué elementos aplica) y
+      el <strong>bloque de declaraciones</strong> entre llaves, con pares <code>propiedad: valor;</code>. Los
+      comentarios se escriben entre <code>/* … */</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>/* selector { propiedad: valor; } */
+p {
+  color: #333333;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Un bloque puede tener varias propiedades
+   y hay que terminar cada una con punto y coma */</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;style&gt;p{color:#333333;font-size:16px;line-height:1.5}&lt;/style&gt;&lt;p&gt;Este párrafo recibe color gris oscuro, tamaño 16px e interlineado 1.5.&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Selectores</h2>
+    <div class="def">
+      <p>El selector es la parte más importante de CSS: decide <em>a quién</em> se aplican los estilos. Se pueden
+      combinar y agrupar, y también se basan en el <strong>estado</strong> o en la <strong>posición</strong> del
+      elemento.</p>
+    </div>
+    <table>
+      <tr><th>Selector</th><th>Selecciona</th></tr>
+      <tr><td><code>p</code></td><td>Todos los elementos de esa etiqueta.</td></tr>
+      <tr><td><code>.alerta</code></td><td>Todos los elementos con <code>class="alerta"</code>.</td></tr>
+      <tr><td><code>#nav</code></td><td>El elemento con <code>id="nav"</code>.</td></tr>
+      <tr><td><code>*</code></td><td>Todos los elementos.</td></tr>
+      <tr><td><code>div p</code></td><td>Párrafos dentro de un div (descendiente).</td></tr>
+      <tr><td><code>ul &gt; li</code></td><td>Hijos directos (child).</td></tr>
+      <tr><td><code>h1 + p</code></td><td>Párrafo inmediatamente después de un h1 (adyacente).</td></tr>
+      <tr><td><code>a:hover</code></td><td>Cuando el mouse está encima (pseudo-clase).</td></tr>
+      <tr><td><code>input[type="text"]</code></td><td>Por atributo.</td></tr>
+      <tr><td><code>li:first-child</code></td><td>El primer hijo (pseudo-clase estructural).</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  p            { color: #444; }
+  .destacado   { background: #fffbeb; }
+  #unico       { border-left: 4px solid #4f46e5; }
+  a:hover      { color: red; }
+  ul li:first-child { font-weight: bold; }
+&lt;/style&gt;
+
+&lt;p&gt;Párrafo normal&lt;/p&gt;
+&lt;p class="destacado"&gt;Párrafo destacado&lt;/p&gt;
+&lt;p id="unico"&gt;Párrafo con id&lt;/p&gt;
+&lt;a href="#"&gt;Pasá el mouse por este enlace&lt;/a&gt;
+&lt;ul&gt;&lt;li&gt;Primero&lt;/li&gt;&lt;li&gt;Segundo&lt;/li&gt;&lt;/ul&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;style&gt;p{color:#444}.destacado{background:#fffbeb}#unico{border-left:4px solid #4f46e5;padding-left:8px}a:hover{color:red}ul li:first-child{font-weight:bold}&lt;/style&gt;&lt;p&gt;Párrafo normal&lt;/p&gt;&lt;p class=&quot;destacado&quot;&gt;Párrafo destacado&lt;/p&gt;&lt;p id=&quot;unico&quot;&gt;Párrafo con id&lt;/p&gt;&lt;a href=&quot;#&quot;&gt;Pasá el mouse por este enlace&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Primero&lt;/li&gt;&lt;li&gt;Segundo&lt;/li&gt;&lt;/ul&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Cascada, herencia y especificidad</h2>
+    <div class="def">
+      <p>Cuando dos reglas afectan al mismo elemento, gana la que tiene <strong>mayor especificidad</strong>. El
+      orden de prioridad aproximado es: estilos en línea &gt; <code>id</code> &gt; clase/atributo/pseudo-clase &gt;
+      etiqueta. Si empatan, gana la que aparece <strong>última</strong> (<em>cascada</em>).</p>
+      <p>La <strong>herencia</strong> hace que propiedades como el color o la tipografía pasen del contenedor a sus
+      hijos, salvo que se sobrescriban. <code>!important</code> fuerza una declaración.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  p        { color: green; }        /* etiqueta  →  baja prioridad */
+  .aviso   { color: orange; }       /* clase     →  media */
+  #final   { color: crimson; }      /* id        →  alta */
+
+  body { font-family: Georgia, serif; } /* se hereda en los hijos */
+&lt;/style&gt;
+
+&lt;p&gt;Queda verde&lt;/p&gt;
+&lt;p class="aviso"&gt;Queda naranja&lt;/p&gt;
+&lt;p class="aviso" id="final"&gt;Queda carmesí (gana el id)&lt;/p&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;p{color:green}.aviso{color:orange}#final{color:crimson}body{font-family:Georgia,serif}&lt;/style&gt;&lt;p&gt;Queda verde&lt;/p&gt;&lt;p class=&quot;aviso&quot;&gt;Queda naranja&lt;/p&gt;&lt;p class=&quot;aviso&quot; id=&quot;final&quot;&gt;Queda carmesí (gana el id)&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Box model (modelo de caja)</h2>
+    <div class="def">
+      <p>Todo elemento es una <strong>caja rectangular</strong> formada por cuatro capas, de adentro hacia afuera:
+      <strong>contenido</strong>, <strong>padding</strong> (relleno interno), <strong>border</strong> (borde) y
+      <strong>margin</strong> (separación externa).</p>
+      <p>Con <code>box-sizing: border-box</code> el ancho declarado incluye padding y borde, lo que hace el cálculo
+      mucho más predecible (es lo que aplican Bootstrap y la mayoría de los resets).</p>
+    </div>
+    <table>
+      <tr><th>Propiedad</th><th>Qué controla</th></tr>
+      <tr><td><code>width</code> / <code>height</code></td><td>Ancho y alto del contenido.</td></tr>
+      <tr><td><code>padding</code></td><td>Espacio interno (1 a 4 valores).</td></tr>
+      <tr><td><code>margin</code></td><td>Espacio externo. <code>auto</code> centra horizontalmente.</td></tr>
+      <tr><td><code>border</code></td><td>Ancho, estilo y color del borde.</td></tr>
+      <tr><td><code>border-radius</code></td><td>Redondeo de esquinas.</td></tr>
+      <tr><td><code>box-sizing</code></td><td>Incluye padding y borde en el ancho.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  .caja {
+    box-sizing: border-box;
+    width: 260px;
+    padding: 16px;
+    border: 3px solid #4f46e5;
+    border-radius: 10px;
+    margin: 20px auto;      /* auto = centrada */
+  }
+&lt;/style&gt;
+
+&lt;div class="caja"&gt;Caja con contenido, padding, borde y margen.&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;body{margin:0}.caja{box-sizing:border-box;width:260px;padding:16px;border:3px solid #4f46e5;border-radius:10px;margin:20px auto;background:#eef2ff}&lt;/style&gt;&lt;div class=&quot;caja&quot;&gt;Caja con contenido, padding, borde y margen.&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Colores y fondos</h2>
+    <div class="def">
+      <p>Los colores se pueden declarar con <strong>nombre</strong>, <strong>hexadecimal</strong>
+      (<code>#rrggbb</code>), <strong>rgb/rgba</strong> (con transparencia) o <strong>hsl</strong>. Los fondos aceptan
+      color, imagen, degradados y repetición.</p>
+    </div>
+    <table>
+      <tr><th>Sintaxis</th><th>Ejemplo</th></tr>
+      <tr><td>Nombre</td><td><code>color: crimson;</code></td></tr>
+      <tr><td>Hexadecimal</td><td><code>color: #4f46e5;</code></td></tr>
+      <tr><td>RGB / RGBA</td><td><code>rgba(79,70,229,0.5)</code></td></tr>
+      <tr><td>HSL</td><td><code>hsl(243, 75%, 59%)</code></td></tr>
+      <tr><td>Degradado</td><td><code>background: linear-gradient(90deg,#4f46e5,#06b6d4);</code></td></tr>
+      <tr><td>Imagen</td><td><code>background-image: url(fondo.jpg);</code></td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  .c1 { color: crimson; }
+  .c2 { background: #4f46e5; color: #fff; }
+  .c3 { background: rgba(79, 70, 229, .25); }
+  .c4 { background: linear-gradient(90deg, #4f46e5, #06b6d4); color: #fff; }
+&lt;/style&gt;
+
+&lt;p class="c1"&gt;Texto carmesí&lt;/p&gt;
+&lt;p class="c2"&gt;Fondo sólido&lt;/p&gt;
+&lt;p class="c3"&gt;Fondo con transparencia&lt;/p&gt;
+&lt;p class="c4"&gt;Fondo con degradado&lt;/p&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;.c1{color:crimson}.c2{background:#4f46e5;color:#fff}.c3{background:rgba(79,70,229,.25)}.c4{background:linear-gradient(90deg,#4f46e5,#06b6d4);color:#fff}&lt;/style&gt;&lt;p class=&quot;c1&quot;&gt;Texto carmesí&lt;/p&gt;&lt;p class=&quot;c2&quot;&gt;Fondo sólido&lt;/p&gt;&lt;p class=&quot;c3&quot;&gt;Fondo con transparencia&lt;/p&gt;&lt;p class=&quot;c4&quot;&gt;Fondo con degradado&lt;/p&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Unidades y tipografía</h2>
+    <div class="def">
+      <p>Las medidas pueden ser <strong>absolutas</strong> (<code>px</code>, no dependen del contexto) o
+      <strong>relativas</strong> (<code>em</code>, <code>rem</code>, <code>%</code>, <code>vw</code>,
+      <code>vh</code>). Las relativas son la base del diseño flexible y responsivo.</p>
+      <p>Para el texto se usan <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>,
+      <code>font-style</code>, <code>line-height</code>, <code>text-align</code>, <code>text-decoration</code> y
+      <code>text-transform</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  html { font-size: 16px; }              /* 1rem = 16px */
+  .titulo {
+    font-family: Georgia, serif;
+    font-size: 1.6rem;                   /* relativo a la raíz */
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+  .texto {
+    font-size: 14px;
+    text-align: justify;
+    text-decoration: underline;
+    color: #555;
+  }
+  .ancho { width: 60%; }                 /* relativo al contenedor */
+&lt;/style&gt;
+
+&lt;p class="titulo"&gt;Título en mayúsculas&lt;/p&gt;
+&lt;p class="texto"&gt;Párrafo justificado y subrayado.&lt;/p&gt;
+&lt;div class="ancho" style="background:#eef2ff;padding:6px"&gt;60% del ancho&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;style&gt;html{font-size:16px}.titulo{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;line-height:1.2;text-transform:uppercase}.texto{font-size:14px;text-align:justify;text-decoration:underline;color:#555}.ancho{width:60%}&lt;/style&gt;&lt;p class=&quot;titulo&quot;&gt;Título en mayúsculas&lt;/p&gt;&lt;p class=&quot;texto&quot;&gt;Párrafo justificado y subrayado.&lt;/p&gt;&lt;div class=&quot;ancho&quot; style=&quot;background:#eef2ff;padding:6px&quot;&gt;60% del ancho&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Enlaces, listas y tablas</h2>
+    <div class="def">
+      <p>Los enlaces tienen <strong>estados</strong> (<em>pseudo-clases</em>): <code>:link</code> sin visitar,
+      <code>:visited</code> visitado, <code>:hover</code> con el mouse encima y <code>:active</code> mientras se
+      mantiene apretado (se declaran en ese orden). Las listas y tablas también se estilizan: se puede quitar la
+      viñeta con <code>list-style</code> y colapsar bordes con <code>border-collapse</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  a:link    { color: #4f46e5; text-decoration: none; }
+  a:visited { color: #7c3aed; }
+  a:hover   { color: crimson; text-decoration: underline; }
+  a:active  { color: orange; }
+
+  ul.sin-vineta { list-style: none; padding-left: 0; }
+
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ddd; padding: 8px; }
+  tbody tr:nth-child(even) { background: #f6f7f9; } /* filas alternadas */
+  th { background: #eef2ff; }
+&lt;/style&gt;
+
+&lt;a href="#"&gt;Enlace de ejemplo&lt;/a&gt;
+&lt;ul class="sin-vineta"&gt;&lt;li&gt;Sin viñeta&lt;/li&gt;&lt;li&gt;Otra fila&lt;/li&gt;&lt;/ul&gt;
+&lt;table&gt;&lt;tr&gt;&lt;th&gt;A&lt;/th&gt;&lt;th&gt;B&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;style&gt;a:link{color:#4f46e5;text-decoration:none}a:visited{color:#7c3aed}a:hover{color:crimson;text-decoration:underline}a:active{color:orange}ul.sin-vineta{list-style:none;padding-left:0}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px}tbody tr:nth-child(even){background:#f6f7f9}th{background:#eef2ff}&lt;/style&gt;&lt;a href=&quot;#&quot;&gt;Enlace de ejemplo&lt;/a&gt;&lt;ul class=&quot;sin-vineta&quot;&gt;&lt;li&gt;Sin viñeta&lt;/li&gt;&lt;li&gt;Otra fila&lt;/li&gt;&lt;/ul&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;A&lt;/th&gt;&lt;th&gt;B&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Visualización y posicionamiento</h2>
+    <div class="def">
+      <p><code>display</code> decide cómo se comporta la caja: <code>block</code> (ocupa toda la línea),
+      <code>inline</code> (solo su contenido), <code>inline-block</code> (en línea pero acepta ancho y alto),
+      <code>none</code> (la oculta y no reserva espacio).</p>
+      <p><code>position</code> saca al elemento del flujo normal: <code>static</code> (por defecto),
+      <code>relative</code>, <code>absolute</code> (relativo al ancestro posicionado), <code>fixed</code> (fijo a la
+      ventana) y <code>sticky</code> (se pega al hacer scroll).</p>
+    </div>
+    <table>
+      <tr><th>Valor de position</th><th>Comportamiento</th></tr>
+      <tr><td><code>static</code></td><td>Flujo normal, ignora top/left.</td></tr>
+      <tr><td><code>relative</code></td><td>Se desplaza desde su posición original.</td></tr>
+      <tr><td><code>absolute</code></td><td>Se ubica respecto al ancestro posicionado.</td></tr>
+      <tr><td><code>fixed</code></td><td>Fijo respecto a la ventana al hacer scroll.</td></tr>
+      <tr><td><code>sticky</code></td><td>Normal hasta llegar al límite, luego se pega.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  .padre { position: relative; height: 110px; background: #eef2ff; }
+  .hijo  { position: absolute; top: 12px; right: 12px;
+           background: crimson; color: #fff; padding: 6px 10px; }
+  .inline-block { display: inline-block; width: 120px;
+                  background: #06b6d4; color: #fff; padding: 8px; margin: 4px; }
+&lt;/style&gt;
+
+&lt;div class="padre"&gt;
+  Contenedor posicionado
+  &lt;span class="hijo"&gt;absolute&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="inline-block"&gt;Caja 1&lt;/div&gt;&lt;div class="inline-block"&gt;Caja 2&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;style&gt;.padre{position:relative;height:110px;background:#eef2ff;padding:8px}.hijo{position:absolute;top:12px;right:12px;background:crimson;color:#fff;padding:6px 10px;border-radius:6px}.inline-block{display:inline-block;width:120px;background:#06b6d4;color:#fff;padding:8px;margin:4px;border-radius:6px}&lt;/style&gt;&lt;div class=&quot;padre&quot;&gt;Contenedor posicionado&lt;span class=&quot;hijo&quot;&gt;absolute&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;inline-block&quot;&gt;Caja 1&lt;/div&gt;&lt;div class=&quot;inline-block&quot;&gt;Caja 2&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t10">
+    <a class="top-link" href="#t10">&#8593; volver al índice</a>
+    <h2><span class="n">10.</span> Flexbox</h2>
+    <div class="def">
+      <p>Flexbox es un modelo de <strong>layout en una dimensión</strong> (fila <em>o</em> columna). Se activa con
+      <code>display: flex</code> en el <strong>contenedor</strong>, que distribuye y alinea a sus hijos (los
+      <strong>ítems</strong>).</p>
+      <p>Resuelve de forma sencilla el centrado, el reparto de espacio y el orden, tanto en filas como en columnas.</p>
+    </div>
+    <table>
+      <tr><th>Propiedad</th><th>Aplica a</th><th>Qué hace</th></tr>
+      <tr><td><code>display: flex</code></td><td>Contenedor</td><td>Activa el modelo flex.</td></tr>
+      <tr><td><code>flex-direction</code></td><td>Contenedor</td><td><code>row</code> / <code>column</code>.</td></tr>
+      <tr><td><code>justify-content</code></td><td>Contenedor</td><td>Alinea en el eje principal.</td></tr>
+      <tr><td><code>align-items</code></td><td>Contenedor</td><td>Alinea en el eje cruzado.</td></tr>
+      <tr><td><code>flex-wrap</code></td><td>Contenedor</td><td>Permite que los ítems salten de línea.</td></tr>
+      <tr><td><code>gap</code></td><td>Contenedor</td><td>Separación entre ítems.</td></tr>
+      <tr><td><code>flex</code></td><td>Ítem</td><td>Cómo crece o se encoge.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  .barra {
+    display: flex;
+    justify-content: space-between;  /* separa a los extremos */
+    align-items: center;
+    gap: 10px;
+    background: #eef2ff; padding: 12px; border-radius: 8px;
+  }
+  .tarjeta { flex: 1; background: #4f46e5; color: #fff;
+             padding: 14px; text-align: center; border-radius: 6px; }
+&lt;/style&gt;
+
+&lt;div class="barra"&gt;
+  &lt;div class="tarjeta"&gt;1&lt;/div&gt;
+  &lt;div class="tarjeta"&gt;2&lt;/div&gt;
+  &lt;div class="tarjeta"&gt;3&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;.barra{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#eef2ff;padding:12px;border-radius:8px}.tarjeta{flex:1;background:#4f46e5;color:#fff;padding:14px;text-align:center;border-radius:6px}&lt;/style&gt;&lt;div class=&quot;barra&quot;&gt;&lt;div class=&quot;tarjeta&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;tarjeta&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;tarjeta&quot;&gt;3&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t11">
+    <a class="top-link" href="#t11">&#8593; volver al índice</a>
+    <h2><span class="n">11.</span> Grid</h2>
+    <div class="def">
+      <p>Grid es un modelo de layout en <strong>dos dimensiones</strong> (filas <em>y</em> columnas a la vez). Se
+      activa con <code>display: grid</code> y se definen las pistas con <code>grid-template-columns</code> y
+      <code>grid-template-rows</code>.</p>
+      <p>La unidad <code>fr</code> reparte el espacio disponible. Es ideal para maquetas completas de página.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;style&gt;
+  .grilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+    grid-template-rows: auto auto;
+    gap: 10px;
+  }
+  .celda { background: #06b6d4; color: #fff; padding: 16px;
+           text-align: center; border-radius: 6px; }
+  .ancha { grid-column: span 2; background: #4f46e5; } /* ocupa 2 columnas */
+&lt;/style&gt;
+
+&lt;div class="grilla"&gt;
+  &lt;div class="celda"&gt;1&lt;/div&gt;
+  &lt;div class="celda"&gt;2&lt;/div&gt;
+  &lt;div class="celda"&gt;3&lt;/div&gt;
+  &lt;div class="celda ancha"&gt;Ocupa 2 columnas&lt;/div&gt;
+  &lt;div class="celda"&gt;5&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;.grilla{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:10px}.celda{background:#06b6d4;color:#fff;padding:16px;text-align:center;border-radius:6px}.ancha{grid-column:span 2;background:#4f46e5}&lt;/style&gt;&lt;div class=&quot;grilla&quot;&gt;&lt;div class=&quot;celda&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;celda&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;celda&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;celda ancha&quot;&gt;Ocupa 2 columnas&lt;/div&gt;&lt;div class=&quot;celda&quot;&gt;5&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t12">
+    <a class="top-link" href="#t12">&#8593; volver al índice</a>
+    <h2><span class="n">12.</span> Diseño responsivo</h2>
+    <div class="def">
+      <p>El diseño <strong>responsivo</strong> adapta la página al tamaño del dispositivo. Se logra con
+      <strong>media queries</strong> (<code>@media</code>), medidas relativas y el <code>meta viewport</code> del
+      <code>&lt;head&gt;</code>.</p>
+      <p>La idea es <em>mobile first</em>: se escribe primero el estilo para celular y luego se amplía con
+      <code>min-width</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+
+&lt;style&gt;
+  .columnas { display: flex; flex-direction: column; gap: 10px; }
+  .caja { background: #eef2ff; padding: 12px; border-radius: 6px; }
+
+  /* A partir de 600px se ponen en fila */
+  @media (min-width: 600px) {
+    .columnas { flex-direction: row; }
+    .caja { flex: 1; }
+  }
+&lt;/style&gt;
+
+&lt;div class="columnas"&gt;
+  &lt;div class="caja"&gt;Columna A&lt;/div&gt;
+  &lt;div class="caja"&gt;Columna B&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado · cambiá el ancho del iframe en la unidad para ver el cambio</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;style&gt;.columnas{display:flex;flex-direction:column;gap:10px}.caja{background:#eef2ff;padding:12px;border-radius:6px}@media (min-width:600px){.columnas{flex-direction:row}.caja{flex:1}}&lt;/style&gt;&lt;div class=&quot;columnas&quot;&gt;&lt;div class=&quot;caja&quot;&gt;Columna A&lt;/div&gt;&lt;div class=&quot;caja&quot;&gt;Columna B&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="01-html.html">&#8592; Unidad 1 · HTML</a>
+    <a class="next" href="03-bootstrap.html">Unidad 3 · Bootstrap &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 2 · CSS · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>

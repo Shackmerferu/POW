@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 3 · Bootstrap</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html" selected>3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 3</p>
+    <h1>Unidad 3 · Bootstrap</h1>
+    <p class="lead"><strong>Bootstrap</strong> es un <em>framework CSS</em> (con componentes JavaScript opcionales)
+    que trae estilos y componentes ya resueltos. Se usa agregando <strong>clases</strong> a tu HTML, en vez de
+    escribir todo el CSS a mano; conviven perfectamente con tu propia hoja de estilos.</p>
+    <p class="alert warn"><strong>Nota:</strong> las vistas previas de esta unidad cargan Bootstrap desde internet
+    (CDN). Sin conexión se verá el HTML sin los estilos del framework.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Qué es e incluir Bootstrap</a></li>
+      <li><a href="#t2">Sistema de grilla</a></li>
+      <li><a href="#t3">Contenedores y breakpoints</a></li>
+      <li><a href="#t4">Tipografía y colores</a></li>
+      <li><a href="#t5">Utilidades de espaciado y layout</a></li>
+      <li><a href="#t6">Botones, alertas y badges</a></li>
+      <li><a href="#t7">Tablas, tarjetas y listas</a></li>
+      <li><a href="#t8">Formularios</a></li>
+      <li><a href="#t9">Navegación</a></li>
+      <li><a href="#t10">Componentes con JavaScript</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Qué es e incluir Bootstrap</h2>
+    <div class="def">
+      <p>Bootstrap se puede incluir de tres maneras: descargando los archivos, por <strong>CDN</strong> (lo más
+      simple) o con un gestor de paquetes (<code>npm</code>). El CSS va en el <code>&lt;head&gt;</code> <em>antes</em>
+      de tu propia hoja, para que tus reglas puedan sobrescribir las del framework.</p>
+      <p>Las etiquetas <code>&lt;script&gt;</code> van al final del <code>&lt;body&gt;</code>; hacen falta solo para
+      los componentes interactivos (modal, dropdown, etc.).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;!-- 1. Bootstrap (CDN) --&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+  &lt;!-- 2. Tus propios estilos DESPUÉS, para poder sobrescribir --&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;button class="btn btn-primary"&gt;Ya estoy usando Bootstrap&lt;/button&gt;
+
+  &lt;!-- 3. JS del framework al final del body --&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;button class=&quot;btn btn-primary&quot;&gt;Ya estoy usando Bootstrap&lt;/button&gt; &lt;button class=&quot;btn btn-outline-secondary&quot;&gt;Secundario&lt;/button&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> Sistema de grilla</h2>
+    <div class="def">
+      <p>La grilla de Bootstrap se basa en <strong>12 columnas</strong> y tres elementos: un
+      <code>.container</code> (o <code>.container-fluid</code>), una <code>.row</code> y una o más
+      <code>.col</code>. El ancho de cada columna se expresa con un número del 1 al 12 y se puede definir
+      <strong>distinto por tamaño de pantalla</strong>.</p>
+      <p>Las filas se envuelven en <code>row</code> y, si las columnas suman más de 12, bajan a la línea siguiente.</p>
+    </div>
+    <table>
+      <tr><th>Clase</th><th>Significado</th></tr>
+      <tr><td><code>col</code></td><td>Reparte el espacio en partes iguales.</td></tr>
+      <tr><td><code>col-6</code></td><td>Ocupa 6 de 12 columnas (la mitad).</td></tr>
+      <tr><td><code>col-md-4</code></td><td>4 columnas a partir del breakpoint <em>md</em>.</td></tr>
+      <tr><td><code>col-lg-3</code></td><td>3 columnas a partir de <em>lg</em>.</td></tr>
+      <tr><td><code>g-3</code> / <code>gy-2</code></td><td>Separación (gap) entre columnas y filas.</td></tr>
+      <tr><td><code>offset-md-2</code></td><td>Deja 2 columnas vacías a la izquierda.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;div class="container text-center"&gt;
+  &lt;div class="row g-2"&gt;
+    &lt;div class="col-6"&gt;&lt;div class="p-2 bg-primary text-white"&gt;col-6&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="col-6"&gt;&lt;div class="p-2 bg-primary text-white"&gt;col-6&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="row g-2 mt-1"&gt;
+    &lt;div class="col-12 col-md-4"&gt;&lt;div class="p-2 bg-success text-white"&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="col-12 col-md-4"&gt;&lt;div class="p-2 bg-success text-white"&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="col-12 col-md-4"&gt;&lt;div class="p-2 bg-success text-white"&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;div class=&quot;row g-2 text-center&quot;&gt;&lt;div class=&quot;col-6&quot;&gt;&lt;div class=&quot;p-2 bg-primary text-white&quot;&gt;col-6&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;col-6&quot;&gt;&lt;div class=&quot;p-2 bg-primary text-white&quot;&gt;col-6&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;row g-2 mt-1 text-center&quot;&gt;&lt;div class=&quot;col-12 col-md-4&quot;&gt;&lt;div class=&quot;p-2 bg-success text-white&quot;&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;col-12 col-md-4&quot;&gt;&lt;div class=&quot;p-2 bg-success text-white&quot;&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;col-12 col-md-4&quot;&gt;&lt;div class=&quot;p-2 bg-success text-white&quot;&gt;col-12 / md-4&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Contenedores y breakpoints</h2>
+    <div class="def">
+      <p>El <strong>contenedor</strong> centra el contenido y le pone un ancho máximo según el tamaño de la
+      pantalla. Bootstrap define <strong>breakpoints</strong> con un nombre: <em>sm</em>, <em>md</em>, <em>lg</em>,
+      <em>xl</em> y <em>xxl</em>. Las clases de grilla llevan el breakpoint en el medio
+      (<code>col-md-…</code>) y significan “desde este tamaño en adelante”.</p>
+    </div>
+    <table>
+      <tr><th>Breakpoint</th><th>Prefijo</th><th>Desde</th></tr>
+      <tr><td>Extra small</td><td>(sin prefijo)</td><td>&lt; 576px</td></tr>
+      <tr><td>Small</td><td><code>sm</code></td><td>≥ 576px</td></tr>
+      <tr><td>Medium</td><td><code>md</code></td><td>≥ 768px</td></tr>
+      <tr><td>Large</td><td><code>lg</code></td><td>≥ 992px</td></tr>
+      <tr><td>Extra large</td><td><code>xl</code></td><td>≥ 1200px</td></tr>
+      <tr><td>Extra extra large</td><td><code>xxl</code></td><td>≥ 1400px</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;div class="container"&gt;…contenedor centrado con ancho máximo…&lt;/div&gt;
+&lt;div class="container-fluid"&gt;…ocupa todo el ancho…&lt;/div&gt;
+
+&lt;!-- Apilado en celular, en 4 columnas desde md, 6 desde lg --&gt;
+&lt;div class="row"&gt;
+  &lt;div class="col-12 col-md-3 col-lg-2"&gt;A&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div class=&quot;container border border-primary my-2 p-2&quot;&gt;.container (ancho máximo, centrado)&lt;/div&gt;&lt;div class=&quot;container-fluid border border-success p-2&quot;&gt;.container-fluid (todo el ancho)&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> Tipografía y colores</h2>
+    <div class="def">
+      <p>Bootstrap ya da estilo a los títulos y párrafos. Para el texto ofrece <code>display-*</code> (títulos
+      grandes), <code>text-*</code> (color), <code>fw-*</code> (grosor) y <code>fs-*</code> (tamaño). Los colores de
+      fondo se aplican con <code>bg-*</code> y el color del texto con <code>text-*</code>, en variantes
+      <em>solid</em> (600) y <em>subtle</em> (100).</p>
+    </div>
+    <table>
+      <tr><th>Clase</th><th>Efecto</th></tr>
+      <tr><td><code>display-1</code> … <code>display-6</code></td><td>Títulos de gran tamaño.</td></tr>
+      <tr><td><code>lead</code></td><td>Párrafo destacado.</td></tr>
+      <tr><td><code>text-primary</code>, <code>text-danger</code></td><td>Color del texto.</td></tr>
+      <tr><td><code>text-center</code>, <code>text-end</code></td><td>Alineación.</td></tr>
+      <tr><td><code>fw-bold</code>, <code>fst-italic</code></td><td>Negrita, cursiva.</td></tr>
+      <tr><td><code>bg-primary</code>, <code>bg-warning</code></td><td>Color de fondo.</td></tr>
+      <tr><td><code>bg-primary-subtle</code></td><td>Fondo suave de ese color.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;p class="display-4"&gt;Título display&lt;/p&gt;
+&lt;p class="lead"&gt;Párrafo lead, más grande y gris.&lt;/p&gt;
+&lt;p class="text-primary fw-bold"&gt;Texto azul en negrita&lt;/p&gt;
+&lt;p class="text-danger text-decoration-underline"&gt;Texto rojo subrayado&lt;/p&gt;
+&lt;p class="bg-info-subtle p-2"&gt;Fondo suave&lt;/p&gt;
+&lt;p class="bg-dark text-white p-2"&gt;Fondo oscuro, texto blanco&lt;/p&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;p class=&quot;display-4&quot;&gt;Título display&lt;/p&gt;&lt;p class=&quot;lead&quot;&gt;Párrafo lead, más grande y gris.&lt;/p&gt;&lt;p class=&quot;text-primary fw-bold&quot;&gt;Texto azul en negrita&lt;/p&gt;&lt;p class=&quot;text-danger text-decoration-underline&quot;&gt;Texto rojo subrayado&lt;/p&gt;&lt;p class=&quot;bg-info-subtle p-2&quot;&gt;Fondo suave&lt;/p&gt;&lt;p class=&quot;bg-dark text-white p-2&quot;&gt;Fondo oscuro, texto blanco&lt;/p&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Utilidades de espaciado y layout</h2>
+    <div class="def">
+      <p>Las <strong>utilidades</strong> son clases de un solo propósito que se combinan libremente. Las de
+      espaciado siguen el patrón <code>{propiedad}{lado}-{tamaño}</code>: <code>m</code> es <em>margin</em>,
+      <code>p</code> es <em>padding</em>; el lado puede ser <code>t</code> (arriba), <code>b</code> (abajo),
+      <code>s</code>/<code>e</code> (izq./der.) o <code>x</code>/<code>y</code> (ambos); el tamaño va de 0 a 5.</p>
+      <p>También hay utilidades de <em>display</em>, flexbox, bordes, sombras y tamaño.</p>
+    </div>
+    <table>
+      <tr><th>Clase</th><th>Efecto</th></tr>
+      <tr><td><code>m-3</code> / <code>p-3</code></td><td>Margen / relleno en todos los lados.</td></tr>
+      <tr><td><code>mt-2</code> / <code>px-4</code></td><td>Margen arriba / relleno a los costados.</td></tr>
+      <tr><td><code>mx-auto</code></td><td>Centra horizontalmente.</td></tr>
+      <tr><td><code>d-flex</code>, <code>d-none</code>, <code>d-md-block</code></td><td>Display y su variante por breakpoint.</td></tr>
+      <tr><td><code>justify-content-between</code></td><td>Reparte con flexbox.</td></tr>
+      <tr><td><code>border</code>, <code>rounded</code>, <code>shadow</code></td><td>Borde, esquinas redondeadas, sombra.</td></tr>
+      <tr><td><code>w-50</code>, <code>h-100</code></td><td>Ancho/alto.</td></tr>
+    </table>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;div class="d-flex justify-content-between align-items-center bg-light border rounded p-3"&gt;
+  &lt;span&gt;Izquierda&lt;/span&gt;
+  &lt;span&gt;Derecha&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="mx-auto mt-3 p-3 bg-warning rounded shadow" style="width:180px;text-align:center"&gt;
+  Centrado con mx-auto
+&lt;/div&gt;
+
+&lt;div class="d-none d-md-block mt-2 text-success"&gt;Solo visible desde md&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;div class=&quot;d-flex justify-content-between align-items-center bg-light border rounded p-3&quot;&gt;&lt;span&gt;Izquierda&lt;/span&gt;&lt;span&gt;Derecha&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;mx-auto mt-3 p-3 bg-warning rounded shadow&quot; style=&quot;width:180px;text-align:center&quot;&gt;Centrado con mx-auto&lt;/div&gt;&lt;div class=&quot;d-none d-md-block mt-2 text-success&quot;&gt;Solo visible desde md&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Botones, alertas y badges</h2>
+    <div class="def">
+      <p>Los botones se crean con la clase <code>.btn</code> más una variante de color
+      (<code>btn-primary</code>, <code>btn-success</code>…) o <code>btn-outline-*</code> (solo contorno). Las
+      <strong>alertas</strong> (<code>.alert</code>) muestran mensajes y los <strong>badges</strong>
+      (<code>.badge</code>) etiquetas pequeñas, muy útiles dentro de un botón o título.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;button class="btn btn-primary"&gt;Primario&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Éxito&lt;/button&gt;
+&lt;button class="btn btn-danger btn-sm"&gt;Peligro pequeño&lt;/button&gt;
+&lt;button class="btn btn-outline-secondary"&gt;Contorno&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Mensajes &lt;span class="badge bg-light text-dark"&gt;4&lt;/span&gt;&lt;/button&gt;
+
+&lt;div class="alert alert-success mt-3"&gt;Operación realizada con éxito.&lt;/div&gt;
+&lt;div class="alert alert-warning mt-2"&gt;Atención: revisá los datos.&lt;/div&gt;
+
+&lt;img src="https://picsum.photos/300/80" class="img-fluid rounded mt-2" alt="Ejemplo"&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;button class=&quot;btn btn-primary&quot;&gt;Primario&lt;/button&gt; &lt;button class=&quot;btn btn-success&quot;&gt;Éxito&lt;/button&gt; &lt;button class=&quot;btn btn-danger btn-sm&quot;&gt;Peligro pequeño&lt;/button&gt; &lt;button class=&quot;btn btn-outline-secondary&quot;&gt;Contorno&lt;/button&gt; &lt;button class=&quot;btn btn-primary&quot;&gt;Mensajes &lt;span class=&quot;badge bg-light text-dark&quot;&gt;4&lt;/span&gt;&lt;/button&gt;&lt;div class=&quot;alert alert-success mt-3&quot;&gt;Operación realizada con éxito.&lt;/div&gt;&lt;div class=&quot;alert alert-warning mt-2&quot;&gt;Atención: revisá los datos.&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Tablas, tarjetas y listas</h2>
+    <div class="def">
+      <p>Las <strong>tablas</strong> se estilizan con <code>.table</code> y variantes (<code>table-striped</code>,
+      <code>table-hover</code>, <code>table-bordered</code>). Las <strong>tarjetas</strong> (<code>.card</code>) son
+      contenedores flexibles con cabecera, cuerpo y pie. Las <strong>listas</strong> (<code>.list-group</code>) y las
+      <strong>barras de progreso</strong> (<code>.progress</code>) completan los componentes básicos.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;table class="table table-striped table-hover"&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;Ana&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Luis&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;div class="card" style="width:220px"&gt;
+  &lt;div class="card-header"&gt;Encabezado&lt;/div&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Título&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Texto de la tarjeta.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary btn-sm"&gt;Ver más&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;ul class="list-group mt-3"&gt;
+  &lt;li class="list-group-item"&gt;Primer ítem&lt;/li&gt;
+  &lt;li class="list-group-item active"&gt;Ítem activo&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class="progress mt-3" style="height:12px"&gt;
+  &lt;div class="progress-bar" style="width:65%"&gt;65%&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;table class=&quot;table table-striped table-hover&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;#&lt;/th&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;Ana&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Luis&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;div class=&quot;card&quot; style=&quot;width:220px&quot;&gt;&lt;div class=&quot;card-header&quot;&gt;Encabezado&lt;/div&gt;&lt;div class=&quot;card-body&quot;&gt;&lt;h5 class=&quot;card-title&quot;&gt;Título&lt;/h5&gt;&lt;p class=&quot;card-text&quot;&gt;Texto de la tarjeta.&lt;/p&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-primary btn-sm&quot;&gt;Ver más&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;ul class=&quot;list-group mt-3&quot;&gt;&lt;li class=&quot;list-group-item&quot;&gt;Primer ítem&lt;/li&gt;&lt;li class=&quot;list-group-item active&quot;&gt;Ítem activo&lt;/li&gt;&lt;/ul&gt;&lt;div class=&quot;progress mt-3&quot; style=&quot;height:12px&quot;&gt;&lt;div class=&quot;progress-bar&quot; style=&quot;width:65%&quot;&gt;65%&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> Formularios</h2>
+    <div class="def">
+      <p>Bootstrap estiliza los controles con <code>.form-control</code> (inputs y textarea),
+      <code>.form-select</code> (listas), <code>.form-check</code> (radio y checkbox) y
+      <code>.input-group</code> (agregar botones o texto al campo). Incluye estilos de
+      <strong>validación</strong> (<code>is-valid</code> / <code>is-invalid</code>) y etiquetas flotantes
+      (<code>form-floating</code>).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;form&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="mail" class="form-label"&gt;Correo&lt;/label&gt;
+    &lt;input type="email" class="form-control" id="mail" placeholder="tu@correo.com"&gt;
+    &lt;div class="form-text"&gt;Nunca compartiremos tu correo.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="mb-3"&gt;
+    &lt;label class="form-label"&gt;Provincia&lt;/label&gt;
+    &lt;select class="form-select"&gt;&lt;option&gt;La Pampa&lt;/option&gt;&lt;option&gt;Córdoba&lt;/option&gt;&lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;div class="form-check mb-3"&gt;
+    &lt;input class="form-check-input" type="checkbox" id="ok"&gt;
+    &lt;label class="form-check-label" for="ok"&gt;Acepto los términos&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class="input-group mb-3"&gt;
+    &lt;span class="input-group-text"&gt;@&lt;/span&gt;
+    &lt;input type="text" class="form-control" placeholder="usuario"&gt;
+  &lt;/div&gt;
+
+  &lt;div class="mb-3"&gt;
+    &lt;input type="text" class="form-control is-invalid" value="dato mal"&gt;
+    &lt;div class="invalid-feedback"&gt;Este campo tiene un error.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="form-floating"&gt;
+    &lt;input type="text" class="form-control" id="fl" placeholder="Nombre"&gt;
+    &lt;label for="fl"&gt;Nombre&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;button class="btn btn-primary mt-3"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;form onsubmit=&quot;event.preventDefault()&quot;&gt;&lt;div class=&quot;mb-3&quot;&gt;&lt;label class=&quot;form-label&quot;&gt;Correo&lt;/label&gt;&lt;input type=&quot;email&quot; class=&quot;form-control&quot; placeholder=&quot;tu@correo.com&quot;&gt;&lt;div class=&quot;form-text&quot;&gt;Nunca compartiremos tu correo.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;mb-3&quot;&gt;&lt;select class=&quot;form-select&quot;&gt;&lt;option&gt;La Pampa&lt;/option&gt;&lt;option&gt;Córdoba&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div class=&quot;form-check mb-3&quot;&gt;&lt;input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; id=&quot;ok2&quot;&gt;&lt;label class=&quot;form-check-label&quot; for=&quot;ok2&quot;&gt;Acepto los términos&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;input-group mb-3&quot;&gt;&lt;span class=&quot;input-group-text&quot;&gt;@&lt;/span&gt;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;usuario&quot;&gt;&lt;/div&gt;&lt;div class=&quot;mb-3&quot;&gt;&lt;input type=&quot;text&quot; class=&quot;form-control is-invalid&quot; value=&quot;dato mal&quot;&gt;&lt;div class=&quot;invalid-feedback&quot;&gt;Este campo tiene un error.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;form-floating&quot;&gt;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;fl2&quot; placeholder=&quot;Nombre&quot;&gt;&lt;label for=&quot;fl2&quot;&gt;Nombre&lt;/label&gt;&lt;/div&gt;&lt;button class=&quot;btn btn-primary mt-3&quot;&gt;Enviar&lt;/button&gt;&lt;/form&gt;&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Navegación</h2>
+    <div class="def">
+      <p>La <strong>navbar</strong> es la barra de navegación responsiva: se puede colapsar en un botón
+      <em>hamburguesa</em> en pantallas chicas con <code>collapse</code>. También hay <strong>tabs</strong> y
+      <strong>pills</strong> (pestañas y botones de pestaña), <strong>dropdowns</strong> (menús desplegables),
+      <strong>breadcrumbs</strong> (migas de pan) y <strong>paginación</strong>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;nav class="navbar navbar-expand-md navbar-dark bg-dark"&gt;
+  &lt;a class="navbar-brand" href="#"&gt;Mi Sitio&lt;/a&gt;
+  &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"&gt;
+    &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="collapse navbar-collapse" id="menu"&gt;
+    &lt;ul class="navbar-nav"&gt;
+      &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+      &lt;li class="nav-item dropdown"&gt;
+        &lt;a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"&gt;Unidades&lt;/a&gt;
+        &lt;ul class="dropdown-menu"&gt;&lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;HTML&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;nav class="mt-3"&gt;
+  &lt;div class="nav nav-tabs"&gt;
+    &lt;button class="nav-link active" data-bs-toggle="tab" data-bs-target="#a"&gt;Pestaña A&lt;/button&gt;
+    &lt;button class="nav-link" data-bs-toggle="tab" data-bs-target="#b"&gt;Pestaña B&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;ul class="pagination mt-3"&gt;
+  &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;«&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="page-item active"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;nav class=&quot;navbar navbar-expand-md navbar-dark bg-dark&quot;&gt;&lt;a class=&quot;navbar-brand ms-2&quot; href=&quot;#&quot;&gt;Mi Sitio&lt;/a&gt;&lt;ul class=&quot;navbar-nav flex-row gap-3 ms-3&quot;&gt;&lt;li class=&quot;nav-item&quot;&gt;&lt;a class=&quot;nav-link active&quot; href=&quot;#&quot;&gt;Inicio&lt;/a&gt;&lt;/li&gt;&lt;li class=&quot;nav-item dropdown&quot;&gt;&lt;a class=&quot;nav-link dropdown-toggle&quot; href=&quot;#&quot; data-bs-toggle=&quot;dropdown&quot;&gt;Unidades&lt;/a&gt;&lt;ul class=&quot;dropdown-menu&quot;&gt;&lt;li&gt;&lt;a class=&quot;dropdown-item&quot; href=&quot;#&quot;&gt;HTML&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a class=&quot;dropdown-item&quot; href=&quot;#&quot;&gt;CSS&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/nav&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;ul class=&quot;nav nav-tabs&quot;&gt;&lt;li class=&quot;nav-item&quot;&gt;&lt;span class=&quot;nav-link active&quot;&gt;Pestaña A&lt;/span&gt;&lt;/li&gt;&lt;li class=&quot;nav-item&quot;&gt;&lt;span class=&quot;nav-link&quot;&gt;Pestaña B&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;ul class=&quot;pagination mt-3&quot;&gt;&lt;li class=&quot;page-item&quot;&gt;&lt;a class=&quot;page-link&quot; href=&quot;#&quot;&gt;&laquo;&lt;/a&gt;&lt;/li&gt;&lt;li class=&quot;page-item active&quot;&gt;&lt;a class=&quot;page-link&quot; href=&quot;#&quot;&gt;1&lt;/a&gt;&lt;/li&gt;&lt;li class=&quot;page-item&quot;&gt;&lt;a class=&quot;page-link&quot; href=&quot;#&quot;&gt;2&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t10">
+    <a class="top-link" href="#t10">&#8593; volver al índice</a>
+    <h2><span class="n">10.</span> Componentes con JavaScript</h2>
+    <div class="def">
+      <p>Estos componentes <strong>necesitan el JS de Bootstrap</strong> y se activan con atributos
+      <code>data-bs-*</code>, sin escribir JavaScript propio: <code>collapse</code> (plegar/desplegar),
+      <code>accordion</code>, <code>modal</code> (ventana emergente), <code>carousel</code> (carrusel),
+      <code>tooltip</code> y <code>popover</code>.</p>
+      <p>También se pueden controlar por código: <code>new bootstrap.Modal(el).show()</code>.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;!-- Modal --&gt;
+&lt;button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#m1"&gt;Abrir modal&lt;/button&gt;
+&lt;div class="modal fade" id="m1"&gt;
+  &lt;div class="modal-dialog"&gt;&lt;div class="modal-content"&gt;
+    &lt;div class="modal-header"&gt;&lt;h5 class="modal-title"&gt;Título&lt;/h5&gt;
+      &lt;button class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;&lt;/div&gt;
+    &lt;div class="modal-body"&gt;Cuerpo del modal.&lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+      &lt;button class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cerrar&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Acordeón --&gt;
+&lt;div class="accordion" id="ac"&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header"&gt;
+      &lt;button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#i1"&gt;Sección 1&lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="i1" class="accordion-collapse collapse show"&gt;
+      &lt;div class="accordion-body"&gt;Contenido de la sección.&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="btn btn-outline-info" data-bs-toggle="collapse" data-bs-target="#oculto"&gt;Mostrar / ocultar&lt;/button&gt;
+&lt;div id="oculto" class="collapse mt-2"&gt;Texto plegable.&lt;/div&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Vista previa · probá abrir el modal y el acordeón</div>
+      <iframe class="tall" srcdoc="&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;button class=&quot;btn btn-primary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#m9&quot;&gt;Abrir modal&lt;/button&gt; &lt;button class=&quot;btn btn-outline-info&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#oculto9&quot;&gt;Mostrar / ocultar&lt;/button&gt;&lt;div id=&quot;oculto9&quot; class=&quot;collapse mt-2 p-2 bg-light border&quot;&gt;Texto plegable.&lt;/div&gt;&lt;div class=&quot;accordion mt-3&quot; id=&quot;ac9&quot;&gt;&lt;div class=&quot;accordion-item&quot;&gt;&lt;h2 class=&quot;accordion-header&quot;&gt;&lt;button class=&quot;accordion-button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#i9&quot;&gt;Sección 1&lt;/button&gt;&lt;/h2&gt;&lt;div id=&quot;i9&quot; class=&quot;accordion-collapse collapse show&quot;&gt;&lt;div class=&quot;accordion-body&quot;&gt;Contenido de la sección.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;modal fade&quot; id=&quot;m9&quot;&gt;&lt;div class=&quot;modal-dialog&quot;&gt;&lt;div class=&quot;modal-content&quot;&gt;&lt;div class=&quot;modal-header&quot;&gt;&lt;h5 class=&quot;modal-title&quot;&gt;Título&lt;/h5&gt;&lt;button class=&quot;btn-close&quot; data-bs-dismiss=&quot;modal&quot;&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;modal-body&quot;&gt;Cuerpo del modal.&lt;/div&gt;&lt;div class=&quot;modal-footer&quot;&gt;&lt;button class=&quot;btn btn-secondary&quot; data-bs-dismiss=&quot;modal&quot;&gt;Cerrar&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="02-css.html">&#8592; Unidad 2 · CSS</a>
+    <a class="next" href="04-javascript.html">Unidad 4 · JavaScript &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 3 · Bootstrap · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>
