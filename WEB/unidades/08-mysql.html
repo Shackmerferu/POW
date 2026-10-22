@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 8 · MySQL + PHP</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a una unidad…</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+      <option value="08-mysql.html" selected>8 · MySQL + PHP</option>
+      <option value="09-subida-archivos.html">9 · Subida de archivos</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 8</p>
+    <h1>Unidad 8 · MySQL + PHP</h1>
+    <p class="lead"><strong>MySQL</strong> (o MariaDB) es el gestor de bases de datos relacionales que trae XAMPP.
+    <strong>PHP</strong> se conecta a él para leer y escribir datos: esa combinación es la que da vida a una web
+    dinámica. Esta unidad cierra el circuito AJAX → PHP → MySQL.</p>
+    <p class="alert warn"><strong>Nota:</strong> el código SQL y PHP no se ejecuta en el navegador. En cada ejemplo
+    se muestra el código y, debajo, el <em>resultado que produciría</em> el servidor. Para probarlo de verdad usá
+    XAMPP (Apache + MySQL) y MySQL Workbench/phpMyAdmin.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">Qué es MySQL y el flujo web</a></li>
+      <li><a href="#t2">XAMPP: crear la base e importar un .sql</a></li>
+      <li><a href="#t3">Conectarse con mysqli y conexion.php</a></li>
+      <li><a href="#t4">SELECT y recorrer resultados</a></li>
+      <li><a href="#t5">INSERT, UPDATE y DELETE</a></li>
+      <li><a href="#t6">Consultas con filtros dinámicos (WHERE)</a></li>
+      <li><a href="#t7">Convertir resultados a JSON para la API</a></li>
+      <li><a href="#t8">json_decode y consumir una API con PHP</a></li>
+      <li><a href="#t9">Seguridad: escape e inyección SQL</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> Qué es MySQL y el flujo web</h2>
+    <div class="def">
+      <p><strong>MySQL</strong> es un <em>motor de base de datos</em>: guarda la información en
+      <strong>tablas</strong> (filas y columnas) y se consulta con el lenguaje <strong>SQL</strong>. Junto con
+      Apache y PHP forma la pila <strong>LAMP</strong> (Linux) o, en Windows, <strong>XAMPP</strong>
+      (Apache + MySQL/MariaDB + PHP).</p>
+      <p>El circuito completo de una web reactiva es:</p>
+      <p style="text-align:center"><strong>Navegador</strong> (HTML/CSS/JS) &nbsp;&#8594;&nbsp;
+      <strong>AJAX</strong> (fetch) &nbsp;&#8594;&nbsp; <strong>PHP</strong> (API) &nbsp;&#8594;&nbsp;
+      <strong>MySQL</strong> (datos) &nbsp;&#8594;&nbsp; y la respuesta vuelve como <strong>JSON</strong>.</p>
+      <p>Hay tres formas de conectarse desde PHP: la extensión <code>mysqli</code> (procedural u orientada a
+      objetos) y <code>PDO</code>. En esta materia usamos <strong>mysqli procedural</strong>, que es lo que aparece en
+      las API del parcial.</p>
+    </div>
+    <table>
+      <tr><th>Concepto</th><th>Qué es</th></tr>
+      <tr><td>Base de datos</td><td>Contenedor de tablas relacionadas (ej. <code>la_tania</code>).</td></tr>
+      <tr><td>Tabla</td><td>Conjunto de filas con columnas fijas (ej. <code>jugadores</code>).</td></tr>
+      <tr><td>Fila / registro</td><td>Un elemento (un jugador, un partido).</td></tr>
+      <tr><td>Columna / campo</td><td>Un atributo con su tipo (ej. <code>nombre varchar(50)</code>).</td></tr>
+      <tr><td>PK / Clave primaria</td><td>Campo que identifica unívocamente la fila (<code>id_jugador</code>).</td></tr>
+      <tr><td>FK / Clave foránea</td><td>Campo que referencia la PK de otra tabla.</td></tr>
+    </table>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> XAMPP: crear la base e importar un .sql</h2>
+    <div class="def">
+      <p>Antes de codificar PHP hay que <strong>preparar el motor</strong>. Con XAMPP se hace así:</p>
+      <ol>
+        <li>En el <em>XAMPP Control Panel</em> iniciar <strong>Apache</strong> y <strong>MySQL</strong>.</li>
+        <li>Abrir <code>http://localhost/phpmyadmin</code> y crear la base de datos (ej. <code>la_tania</code>).</li>
+        <li>Pestaña <strong>Importar</strong> → elegir el archivo <code>.sql</code> → <strong>Continuar</strong>.
+        Eso crea las tablas y carga los datos de prueba.</li>
+        <li>Copiar los archivos del proyecto dentro de <code>C:\xampp\htdocs\</code> (ej.
+        <code>htdocs\la_tania</code>) para acceder como <code>http://localhost/la_tania/...</code>.</li>
+      </ol>
+      <p>El <code>.sql</code> no es más que un archivo de texto con sentencias SQL separadas por <code>;</code>.</p>
+    </div>
+    <span class="label">Sintaxis SQL</span>
+<pre><code>-- Crear la base
+CREATE DATABASE la_tania CHARACTER SET utf8mb4;
+
+-- Usarla
+USE la_tania;
+
+-- Crear una tabla
+CREATE TABLE jugadores (
+  id_jugador INT NOT NULL AUTO_INCREMENT,   -- PK autoincremental
+  nombre     VARCHAR(50)  NOT NULL,
+  apellido   VARCHAR(150) NOT NULL,
+  apodo      VARCHAR(50)  NOT NULL,
+  dni        VARCHAR(40)  NOT NULL,
+  biografia  TEXT,
+  imagen     TEXT,
+  id_categoria INT NOT NULL,
+  PRIMARY KEY (id_jugador)
+);
+
+-- Insertar datos
+INSERT INTO jugadores (nombre, apellido, apodo, dni, imagen, id_categoria)
+VALUES ('Albino', 'Blanco', 'Cañita Voladora', '1', 'prof.jpg', 1);</code></pre>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Conectarse con mysqli y conexion.php</h2>
+    <div class="def">
+      <p>La conexión se hace con <code>mysqli_connect(servidor, usuario, password, base)</code> y luego se ejecutan
+      consultas con <code>mysqli_query()</code>. Es una buena práctica poner los datos de conexión en un archivo
+      aparte (<code>conexion.php</code>) e incluirlo con <code>require</code> en cada endpoint.</p>
+      <p>Funciones principales del flujo procedural:</p>
+    </div>
+    <table>
+      <tr><th>Función</th><th>Para qué sirve</th></tr>
+      <tr><td><code>mysqli_connect(...)</code></td><td>Abrir la conexión al servidor y a la base.</td></tr>
+      <tr><td><code>mysqli_query($c, $sql)</code></td><td>Ejecutar una sentencia SQL.</td></tr>
+      <tr><td><code>mysqli_num_rows($res)</code></td><td>Cuántas filas devolvió un SELECT.</td></tr>
+      <tr><td><code>mysqli_fetch_object($res)</code></td><td>Fila como objeto (para JSON).</td></tr>
+      <tr><td><code>mysqli_fetch_assoc($res)</code></td><td>Fila como array asociativo.</td></tr>
+      <tr><td><code>mysqli_insert_id($c)</code></td><td>Último id autogenerado por un INSERT.</td></tr>
+      <tr><td><code>mysqli_affected_rows($c)</code></td><td>Filas afectadas por INSERT/UPDATE/DELETE.</td></tr>
+      <tr><td><code>mysqli_error($c)</code></td><td>Mensaje de error de la última consulta.</td></tr>
+      <tr><td><code>mysqli_close($c)</code></td><td>Cerrar la conexión.</td></tr>
+    </table>
+    <span class="label">Ejemplo · conexion.php + uso</span>
+<pre><code>&lt;?php
+  // ---- conexion.php : solo datos ----
+  $server_db   = "localhost";
+  $usuario_db  = "root";
+  $password_db = "";          // en XAMPP por defecto va vacío
+  $base_db     = "la_tania";
+?&gt;
+
+&lt;?php
+  // ---- endpoint.php : conectarse y consultar ----
+  require("conexion.php");
+
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db)
+      or die("No se puede conectar con el servidor");
+
+  mysqli_select_db($conexion, $base_db)
+      or die("No se puede seleccionar base de datos");
+
+  $instruccion = "SELECT * FROM jugadores";
+  $consulta = mysqli_query($conexion, $instruccion)
+      or die("Fallo en la consulta: " . mysqli_error($conexion));
+
+  $nfilas = mysqli_num_rows($consulta);
+  echo "Filas: $nfilas";
+
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Filas: 15&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> SELECT y recorrer resultados</h2>
+    <div class="def">
+      <p><code>SELECT</code> trae datos. Se eligen las columnas (<code>*</code> = todas), la tabla
+      (<code>FROM</code>), el orden (<code>ORDER BY</code>) y el límite (<code>LIMIT</code>). El resultado es un
+      <em>cursor</em> que se recorre fila por fila con <code>while</code> + <code>mysqli_fetch_object()</code>.</p>
+    </div>
+    <span class="label">Sintaxis</span>
+<pre><code>SELECT columnas | *  FROM tabla
+[WHERE condición]
+[ORDER BY columna ASC | DESC]
+[LIMIT n];</code></pre>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  require("conexion.php");
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db);
+  mysqli_select_db($conexion, $base_db);
+
+  $instruccion = "SELECT id_jugador, nombre, apellido FROM jugadores
+                  WHERE id_categoria = 1
+                  ORDER BY apellido DESC";
+
+  $consulta = mysqli_query($conexion, $instruccion) or die("Fallo");
+  $nfilas   = mysqli_num_rows($consulta);
+
+  if ($nfilas &gt; 0) {
+      while ($row = mysqli_fetch_object($consulta)) {
+          echo $row-&gt;id_jugador . " - " . $row-&gt;nombre . " " . $row-&gt;apellido . "&lt;br&gt;";
+      }
+  } else {
+      echo "Sin resultados";
+  }
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;1 - Albino Blanco&lt;br&gt;7 - Juan Bautista Bairoletto&lt;br&gt;15 - Arquimides Rafael Puccio&lt;br&gt;14 - Edmundo Dantes&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> INSERT, UPDATE y DELETE</h2>
+    <div class="def">
+      <p>Estas tres sentencias <strong>modifican</strong> los datos:</p>
+      <ul>
+        <li><strong>INSERT</strong> agrega una fila nueva.</li>
+        <li><strong>UPDATE</strong> modifica filas existentes (¡no olvidar el <code>WHERE</code>!).</li>
+        <li><strong>DELETE</strong> elimina filas (¡también necesita <code>WHERE</code>!).</li>
+      </ul>
+      <p>Para valores que vienen del usuario se usa <code>mysqli_real_escape_string()</code> para escapar comillas y
+      evitar errores/inyección. Para <code>INSERT</code> conviene registrar <code>mysqli_affected_rows()</code> y
+      <code>mysqli_insert_id()</code>.</p>
+    </div>
+    <span class="label">Sintaxis</span>
+<pre><code>INSERT INTO tabla (col1, col2) VALUES (val1, val2);
+UPDATE tabla SET col1 = val1 WHERE condición;
+DELETE FROM tabla WHERE condición;</code></pre>
+    <span class="label">Ejemplo · guardar un palmarés (patrón de la API)</span>
+<pre><code>&lt;?php
+  require("conexion.php");
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db);
+  mysqli_select_db($conexion, $base_db);
+
+  extract($_REQUEST);           // crea $dni, $anio, $detalle desde GET/POST
+
+  $dni     = mysqli_real_escape_string($conexion, $dni);
+  $detalle = mysqli_real_escape_string($conexion, $detalle);
+  $anio    = (int) $anio;       // forzar entero por seguridad
+
+  $instruccion = "INSERT INTO palmares (dni, anio, detalle)
+                  VALUES ($dni, $anio, '$detalle')";
+
+  if (mysqli_query($conexion, $instruccion)) {
+      $data = ['status' =&gt; 200,
+               'mensaje' =&gt; 'Palmarés guardado',
+               'id' =&gt; mysqli_insert_id($conexion)];
+  } else {
+      $data = ['status' =&gt; 500,
+               'mensaje' =&gt; mysqli_error($conexion)];
+  }
+  echo json_encode($data);
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Respuesta de la API</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;{&amp;quot;status&amp;quot;:200,&amp;quot;mensaje&amp;quot;:&amp;quot;Palmarés guardado&amp;quot;,&amp;quot;id&amp;quot;:32}&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Consultas con filtros dinámicos (WHERE)</h2>
+    <div class="def">
+      <p>Un patrón muy usado en las API es <strong>armar el <code>WHERE</code> según los parámetros
+      recibidos</strong>. Se empieza con un filtro neutro (<code>where 1</code>) y se van concatenando condiciones
+      solo si el parámetro existe. Así un mismo endpoint sirve para varias búsquedas.</p>
+      <p>La API del parcial usa exactamente esto en <code>jugadores.php</code>, <code>partidos.php</code> y
+      <code>palmares_listar.php</code>.</p>
+    </div>
+    <span class="label">Ejemplo · filtros incrementales</span>
+<pre><code>&lt;?php
+  extract($_REQUEST);           // $id_categoria, $id_jugador, ...
+
+  $filtros = "where 1";         // filtro base (siempre verdadero)
+
+  if (isset($id_categoria))
+      $filtros .= " and id_categoria=" . (int)$id_categoria;
+
+  if (isset($id_jugador))
+      $filtros .= " and id_jugador=" . (int)$id_jugador;
+
+  $instruccion = "select * from jugadores " . $filtros;
+  // → con ?id_categoria=1 queda:  select * from jugadores where 1 and id_categoria=1
+?&gt;</code></pre>
+    <span class="label">Ejemplo · partidos por localía (A/B)</span>
+<pre><code>&lt;?php
+  // localia=A busca el equipo como local (id_equipo_A)
+  // localia=B lo busca como visitante (id_equipo_B)
+  $filtros = "where 1";
+  if (isset($id_categoria))
+      $filtros .= " and id_categoria=" . (int)$id_categoria;
+  if (isset($id_equipo) and isset($localia)) {
+      $localia = "id_equipo_" . $localia;      // id_equipo_A o id_equipo_B
+      $filtros .= " and $localia=" . (int)$id_equipo;
+  }
+  $instruccion = "select * from partidos_canicas " . $filtros;
+?&gt;</code></pre>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Convertir resultados a JSON para la API</h2>
+    <div class="def">
+      <p>El navegador consume <strong>JSON</strong>. En PHP se arma un array y se envía con
+      <code>json_encode()</code>. Primero hay que avisar al cliente que la respuesta es JSON con
+      <code>header('Content-Type: application/json')</code>, y (para permitir llamadas desde otro origen)
+      <code>Access-Control-Allow-Origin: *</code>.</p>
+      <p>El formato típico de las API del parcial es
+      <code>{ status, cantidad, productos }</code>. En JavaScript se accede con
+      <code>data.productos</code>.</p>
+    </div>
+    <span class="label">Ejemplo · endpoint completo (patrón menu.php)</span>
+<pre><code>&lt;?php
+  header('Access-Control-Allow-Origin: *');
+  header('Content-Type: application/json');
+  extract($_REQUEST);
+  require("conexion.php");
+
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db)
+      or die("No se puede conectar con el servidor");
+  mysqli_select_db($conexion, $base_db);
+
+  $instruccion = "select * from item_menu";
+  $consulta = mysqli_query($conexion, $instruccion) or die("Fallo");
+  $nfilas   = mysqli_num_rows($consulta);
+
+  if ($nfilas &gt; 0) {
+      $data = null;
+      while ($row = mysqli_fetch_object($consulta)) {
+          $data[] = $row;        // cada fila es un objeto
+      }
+      echo json_encode([
+          'status'    =&gt; 200,
+          'cantidad'  =&gt; $nfilas,
+          'productos' =&gt; $data      // &lt;-- el array de filas
+      ]);
+  } else {
+      echo json_encode(['status' =&gt; 500, 'mensaje' =&gt; 'Sin datos']);
+  }
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Respuesta de la API</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.6;white-space:pre-wrap&quot;&gt;{ &amp;quot;status&amp;quot;: 200, &amp;quot;cantidad&amp;quot;: 3, &amp;quot;productos&amp;quot;: [
+    {&amp;quot;id&amp;quot;:1,&amp;quot;titulo&amp;quot;:&amp;quot;inico&amp;quot;,&amp;quot;visible&amp;quot;:&amp;quot;SI&amp;quot;,&amp;quot;id_categoria&amp;quot;:0},
+    {&amp;quot;id&amp;quot;:3,&amp;quot;titulo&amp;quot;:&amp;quot;canicas masculino&amp;quot;,&amp;quot;visible&amp;quot;:&amp;quot;SI&amp;quot;,&amp;quot;id_categoria&amp;quot;:1},
+    {&amp;quot;id&amp;quot;:6,&amp;quot;titulo&amp;quot;:&amp;quot;canicas femenino&amp;quot;,&amp;quot;visible&amp;quot;:&amp;quot;SI&amp;quot;,&amp;quot;id_categoria&amp;quot;:3}
+] }&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t8">
+    <a class="top-link" href="#t8">&#8593; volver al índice</a>
+    <h2><span class="n">8.</span> json_decode y consumir una API con PHP</h2>
+    <div class="def">
+      <p>Así como <code>json_encode()</code> convierte PHP → JSON, <code>json_decode($texto, true)</code> hace
+      JSON → PHP (array asociativo si el segundo parámetro es <code>true</code>). Sirve cuando un script PHP necesita
+      consumir los datos de <em>otra</em> API o de un servicio externo.</p>
+      <p>Para descargar el contenido se usa <code>file_get_contents()</code> sobre la URL (las mismas funciones que
+      se usaron para archivos).</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  // PHP consumiendo la propia API
+  $json = file_get_contents("http://localhost/la_tania/api/equipos.php");
+  $datos = json_decode($json, true);         // true = array asociativo
+
+  echo "Cantidad de equipos: " . $datos['cantidad'] . "&lt;br&gt;";
+
+  foreach ($datos['productos'] as $equipo) {
+      echo $equipo['nombre'] . " - " . $equipo['puntos'] . " pts&lt;br&gt;";
+  }
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Cantidad de equipos: 6&lt;br&gt;Central Argentino - 0 pts&lt;br&gt;La Tania - 0 pts&lt;br&gt;Ferro Carril Oeste - 0 pts&lt;br&gt;Club All Boys - 0 pts&lt;br&gt;Club Sportivo Independiente - 0 pts&lt;br&gt;Club A. River Plate - 0 pts&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Seguridad: escape e inyección SQL</h2>
+    <div class="def">
+      <p>Cuando se concatenan datos del usuario dentro de una consulta hay riesgo de <strong>inyección SQL</strong>:
+      alguien puede escribir comillas y SQL malicioso en un campo. Ejemplo: si en el buscador escriben
+      <code>' OR '1'='1</code>, una consulta mal armada devolvería toda la tabla.</p>
+      <p>Medidas mínimas:</p>
+      <ul>
+        <li>Escapar texto con <code>mysqli_real_escape_string($conexion, $valor)</code>.</li>
+        <li>Convertir los numéricos con <code>(int)</code> o <code>(float)</code>.</li>
+        <li>La forma recomendada (nivel avanzado) son las <strong>consultas preparadas</strong>
+        (<em>prepared statements</em>) con <code>mysqli_prepare()</code> y <code>bind_param()</code>.</li>
+        <li>Nunca confiar en <code>$_REQUEST</code>/<code>$_GET</code>/<code>$_POST</code> sin validar.</li>
+      </ul>
+    </div>
+    <span class="label">Ejemplo · consulta preparada</span>
+<pre><code>&lt;?php
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db);
+  mysqli_select_db($conexion, $base_db);
+
+  // El signo ? es un marcador de posición
+  $sql = "SELECT * FROM jugadores WHERE id_categoria = ? AND dni = ?";
+  $stmt = mysqli_prepare($conexion, $sql);
+
+  $cat = 1; $dni = "5";
+  mysqli_stmt_bind_param($stmt, "is", $cat, $dni);  // i=entero, s=string
+  mysqli_stmt_execute($stmt);
+
+  $res = mysqli_stmt_get_result($stmt);
+  while ($row = mysqli_fetch_assoc($res)) {
+      echo $row['nombre'] . " " . $row['apellido'] . "&lt;br&gt;";
+  }
+  mysqli_stmt_close($stmt);
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Juan Bautista Bairoletto&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="07-php.html">&#8592; Unidad 7 · PHP</a>
+    <a class="next" href="09-subida-archivos.html">Unidad 9 · Subida de archivos &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 8 · MySQL + PHP · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>
