@@ -1,0 +1,203 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background-color: #f4f6f8;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* ---------- ENCABEZADO ---------- */
+header {
+  background-color: #004aad;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header img {
+  max-width: 180px;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- NAV ---------- */
+nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  background-color: white;
+  color: #004aad;
+}
+
+/* ---------- SECCIÓN PRINCIPAL ---------- */
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* ---------- TARJETAS ---------- */
+#tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+#tarjetas div {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  text-align: center;
+  transition: 0.3s;
+}
+
+#tarjetas div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#tarjetas img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+#tarjetas p {
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+#tarjetas a {
+  display: inline-block;
+  background-color: #004aad;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+#tarjetas a:hover {
+  background-color: #0069ff;
+}
+
+/* ---------- MODAL ---------- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: aparecer 0.3s ease-out;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.cerrar {
+  float: right;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #444;
+  transition: 0.2s;
+}
+
+.cerrar:hover {
+  color: #004aad;
+}
+
+.modal-content img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* ---------- PALMARÉS Y TABLA ---------- */
+#palmares {
+  margin-top: 1rem;
+  background-color: #f7f9fb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+#palmares p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+#tabla {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+}
+
+#tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#tabla th, #tabla td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+#tabla th {
+  background-color: #004aad;
+  color: white;
+}
+
+#tabla tr:hover {
+  background-color: #f1f5ff;
+}
+
+/* ---------- FOOTER OPCIONAL ---------- */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #004aad;
+  color: white;
+  margin-top: 2rem;
+}

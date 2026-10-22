@@ -1,0 +1,107 @@
+<HTML>
+<HEAD>
+<TITLE>Ejemplo de Select encadenados</TITLE>
+<SCRIPT language="JavaScript">
+
+   // Valores posibles del primer select
+   valores1= new Array();
+   valores1[0]="Argentina";
+   valores1[1]="Colombia";
+   valores1[2]="España";
+   valores1[3]="México";
+
+   // Valores posibles del segundo select
+   // Valores asociado a la primera opción del primer select
+   fila1= new Array();
+   fila1[0]="Buenos Aires";
+   fila1[1]="Cordoba";
+   fila1[2]="Mendoza";
+   fila1[3]="Santa Cruz";
+
+   // Valores asociado a la segunda opción del primer select
+   fila2= new Array();
+   fila2[0]="Bogotá";
+   fila2[1]="Cali";
+   fila2[2]="Barranquilla";
+   fila2[3]="Medellín";
+
+   // Valores asociado a la tercera opción del primer select
+   fila3= new Array();
+   fila3[0]="Madrid";
+   fila3[1]="Barcelona";
+   fila3[2]="Valencia";
+   fila3[3]="Sevilla";
+   fila3[4]="Bilbao"; 
+ 
+
+   // Valores asociado a la cuarta opción del primer select
+   fila4= new Array();
+   fila4[0]="México D.F.";
+   fila4[1]="Guadalajara";
+   fila4[2]="Monterrey";
+     
+   // Array de filas de opciones 
+   valores2= new Array();
+   valores2[0]=fila1;
+   valores2[1]=fila2;
+   valores2[2]=fila3;
+   valores2[3]=fila4;
+
+   // Escribe el código HTML correspondiente a las opciones del Select1 
+   function escribeopcionesselect(valores1)
+   {
+   for (var i=0;i<valores1.length;i++)
+      {
+      window.document.write('<OPTION VALUE="'+valores1[i]+'">'+
+                            valores1[i]+'</OPTION>');
+      } 
+   }
+
+   // Escribe el código HTML correspondiente a las opciones del Select2 
+   function escribeopcionesselect2(indice,valores2)
+   {
+      escribeopcionesselect(valores2[indice]);  
+   }
+ 
+   // Actualiza las opciones del segundo Select en función del primero
+   function cambiaselect2(form,nombreo,nombred,valores2)
+   {
+   // Obtención del índice activo en el primer select
+   var cadena="form."+nombreo+".selectedIndex";
+   var indice=eval(cadena);
+   // Obtención del objeto que representa al segundo select
+   var aux='form.'+nombred;
+   objeto=eval(aux);
+   // Actualización de las opciones posibles del segundo select
+   objeto.length=valores2[indice].length;
+   for (var i=0; i<valores2[indice].length;i++)
+      {
+      objeto.options[i].text=valores2[indice][i];
+      objeto.options[i].value=valores2[indice][i];
+      }
+   // Se activa la primera opción del segundo select
+   objeto.selectedIndex=0;   
+   }
+  
+</SCRIPT>
+</HEAD>
+<BODY>
+<FORM NAME="">
+   
+   <BR><BR>
+   <CENTER>
+   <B>Select encadenados</B><BR><BR>
+   Pais:
+   <SELECT NAME="select1" 
+    onChange="cambiaselect2(form,'select1','select2',valores2)">
+      <SCRIPT language="JavaScript">escribeopcionesselect(valores1)</SCRIPT>
+   </SELECT>
+   &nbsp&nbsp&nbsp
+   Ciudad:
+   <SELECT NAME="select2">
+      <SCRIPT language="JavaScript">escribeopcionesselect2(0,valores2)</SCRIPT>
+   </SELECT><BR>
+   </CENTER>
+</FORM>
+</BODY>
+</HTML>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literales</title>
+</head>
+
+<body>
+    <script>
+        let nombre = "Juan";
+        let apellido = "Perez";
+        let texto = `mi nombre es ${nombre} ${apellido}`;
+        document.write(texto);
+
+        let price = 10;
+        let VAT = 0.25;
+        let total = `Total: ${(price * (1 + VAT)).toFixed(2)}`;
+        document.write("<br><br>"+total);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script src="prototype.js" type="text/javascript"></script>
+ 
+  <title>Ejemplo de ocultar</title>
+ 
+<script type="text/javascript">
+    Event.observe(window, 'load', function() {
+        $('featurebox-5').hide();
+        $('featurebox-5-listen').update('<img src="add.png" alt="Open the feature box" />');
+        Event.observe('featurebox-5-listen', 'click', function(){
+            $('featurebox-5').toggle();
+            if($('featurebox-5').visible()){
+                $('featurebox-5-listen').update('<img src="no_ok.png" alt="Close the feature box" />');
+            } else {
+                $('featurebox-5-listen').update('<img src="ok.png" alt="Open the feature box" />');
+            }
+        });
+    });
+</script>
+
+</head>
+<body>
+
+<p><span id="featurebox-5-listen">Toggle Feature Box (Escuchando)</span></p>
+<div class="featurebox" id="featurebox-5">
+    <h3>A h3  "featurebox" div</h3>
+    <p>Un texto normal[…]</p>
+</div>
+
+</body>
+</html>

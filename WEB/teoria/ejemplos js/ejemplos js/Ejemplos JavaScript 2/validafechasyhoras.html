@@ -1,0 +1,200 @@
+<HTML>
+<HEAD>
+<TITLE>Validaciones de Fechas y Horas</TITLE>
+<SCRIPT language="JavaScript">
+
+   numeros="0123456789";
+   separadorfecha="/";
+   var separadorhora=":";
+   error= new creaerror();  
+   errores= new Array();
+  
+   errores[1]="Campo vacio no contiene ningún valor ";
+   errores[2]="Carácter ilegal en una fecha";
+   errores[3]="Faltan separadores en una fecha";
+   errores[4]="Año incorrecto en una fecha";
+   errores[5]="Mes incorrecto en una fecha";
+   errores[6]="Día incorrecto en una fecha";
+   errores[7]="Carácter ilegal en una hora";
+   errores[8]="Faltan separadores en una hora";
+   errores[9]="Hora incorrecta en una hora";
+   errores[10]="Minutos incorrectos en una hora";
+   errores[11]="Segundos incorrectos en una hora";
+  
+   // Crea un objeto que guarda un indice a la posición y al mensaje de error
+   function creaerror()
+   {
+   this.valor=0;
+   this.posicion=0;
+   return this
+   }
+  
+   // Determina si un caracter es un número
+   function numero(car)
+   {
+   return (numeros.indexOf(car)>=0)
+   }
+   
+   // Determina si un año es bisiesto
+   function bisiesto(anio) 
+   {
+   if (((anio % 4 == 0) && anio % 100 != 0) || anio % 400 == 0) 
+      return true;
+   return false;
+   }
+
+   // Comprueba si una fecha es correcta
+   function compruebafecha(contenido,error)
+   {
+   
+   if ((contenido.length==0))
+      {
+      error.valor=1;
+      error.posicion=1; 
+      return false;
+      } 
+   var nsep=0;
+   // Comprobación de la sintáxis de una fecha 
+   for (var i=0; i<contenido.length; ++i)
+      {
+      var car=contenido.charAt(i);
+      if (!numero(car)&&car!=separadorfecha)
+         {
+         error.valor=2;
+         error.posicion=i+1; 
+         return false;
+         } 
+      if (car==separadorfecha)
+        nsep++ 
+      }
+   if (nsep!=2)
+      {
+      error.valor=3;
+      error.posicion=i+1; 
+      return false;
+      }
+   // Comprobación de la semántica de una fecha
+   var pos1=contenido.indexOf(separadorfecha);
+   var dia=contenido.substring(0,pos1);
+   var pos2=contenido.indexOf(separadorfecha,pos1+1);
+   var mes=contenido.substring(pos1+1,pos2); 
+   var anio=contenido.substring(pos2+1,10);
+   if (anio<0||anio>9999)
+      {
+      error.valor=4;
+      error.posicion=6; 
+      return false;
+      } 
+   if (mes<1||mes>12)
+      {
+      error.valor=5;
+      error.posicion=4;
+      return false;
+      }
+   if ((dia<1 || dia>31)||(mes==4&&dia>30)||(mes==6&&dia>30)
+         ||(mes==9&&dia>30)||(mes==11&&dia>30)
+         ||(mes==2&&bisiesto(anio)&&dia>29)
+         ||(mes==2&&!bisiesto(anio)&&dia>28)
+         )
+      {
+      error.valor=6;
+      error.posicion=2;
+      return false;
+      } 
+   return true 
+   }
+
+   // Comprueba si una hora es correcta
+   function compruebahora(contenido,error)
+   {
+   if ((contenido.length==0))
+      {
+      error.valor=1;
+      error.posicion=1; 
+      return false;
+      } 
+   var nsep=0; 
+   // Comprobación de la sintáxis de una hora 
+   for (var i=0; i<contenido.length; ++i)
+      {
+      var car=contenido.charAt(i);
+      if (!numero(car) && car!=separadorhora)
+         {
+         error.valor=7;
+         error.posicion=i+1; 
+         return false;
+         } 
+      if (car==separadorhora)
+         nsep++ 
+      }
+   if (nsep!=2)
+      {
+      error.valor=8;
+      error.posicion=i+1; 
+      return false;
+      }
+   // Comprobación de la semántica de una hora 
+   var pos1=contenido.indexOf(separadorhora);
+   var horas=contenido.substring(0,pos1);
+   var pos2=contenido.indexOf(separadorhora,pos1+1);
+   var minutos=contenido.substring(pos1+1,pos2); 
+   var segundos=contenido.substring(pos2+1,10);
+   if (horas>24||horas.length>2)
+      {
+      error.valor=9;
+      error.posicion=2; 
+      return false;
+      } 
+   if (minutos>59||minutos.length>2)
+      {
+      error.valor=10;
+      error.posicion=4;
+      return false;
+      }
+   if (segundos>59||segundos.length>2)
+      {
+      error.valor=11;
+      error.posicion=6;
+      return false;
+      } 
+   return true 
+   }
+  
+   // Ejecuta la validación pedida
+   function ejecuta(valor)
+   {
+   var correcto;
+   switch (valor)
+      {
+      case 1:
+         correcto=compruebafecha(window.document.formulario.campo.value,error);
+         break;
+      case 2:
+         correcto=compruebahora(window.document.formulario.campo.value,error);
+         break;
+      default:
+         break; 
+      }
+   if (correcto)
+      alert("El campo es válido")
+   else
+      alert("El campo NO es válido. ERROR:"+errores[error.valor]+
+            " en la posicion "+error.posicion);
+   }
+  
+</SCRIPT>
+</HEAD>
+<BODY>
+<FORM NAME="formulario" ACTION="">
+
+   <CENTER>
+   <B>Validaciones de Fechas y Horas</B><BR><BR>
+   Dato:
+   <INPUT TYPE="Text" VALUE="" NAME="campo" MAXLENGTH=10 SIZE=10><BR><BR>
+   <INPUT TYPE="Button" VALUE="Validafecha" onClick="ejecuta(1)">
+   <INPUT TYPE="Button" VALUE="Validahora" onClick="ejecuta(2)"> 
+   </CENTER>
+   
+</FORM>
+</BODY>
+</HTML>
