@@ -1,0 +1,81 @@
+CONSIDERACIONES DEL DESARROLLO - PARCIAL 2025
+=============================================
+Materia: Programacion Orientada a la Web
+Club: Club Deportivo La Tania - Deporte: Canicas (Masculino y Femenino)
+Opcion elegida: OPCION A (HTML + CSS tradicional + JavaScript puro)
+
+1. TECNOLOGIAS UTILIZADAS
+-------------------------
+- HTML5 para la estructura de las paginas.
+- CSS tradicional (sin frameworks) en css/estilo.css, con diseno responsivo.
+- JavaScript puro (ES6), sin librerias ni frameworks.
+- La fuente tipografica shadowed_serif.ttf (aportada por la catedra) se usa en el
+  titulo del encabezado y en el texto del banner, mediante @font-face.
+
+2. ESTRUCTURA DE ARCHIVOS
+-------------------------
+- index.html                Pagina inicial (banner + texto + menu).
+- canicas_masculino.html    Jugadores y tabla de posiciones (id_categoria = 1).
+- canicas_femenino.html     Jugadores y tabla de posiciones (id_categoria = 3).
+- registrar_club.html       Pagina huerfana de alta de club (punto EXTRA).
+- css/estilo.css            Hoja de estilos unica.
+- js/config.js              Configuracion: API_BASE, endpoints y categorias.
+- js/app.js                 Utilidades comunes (fetch a la API, menu, WhatsApp).
+- js/canicas.js             Logica de jugadores, modal, palmares y tabla.
+- js/registrar.js           Envio del formulario de alta por AJAX.
+- assets/                   Imagenes (logo, banner, WhatsApp) y fuente.
+
+3. CONSIDERACIONES SOBRE LA API
+-------------------------------
+- NO se modifico la funcionalidad de la API de consulta (menu, jugadores, equipos,
+  partidos, palmares_listar). Se consumen tal cual vienen.
+- Las UNICAS modificaciones son las que el enunciado pedia COMPLETAR:
+    a) api/palmares_guardar.php  -> se implemento el INSERT en la tabla `palmares`.
+    b) api/equipos_insertar.php  -> se implemento el guardado del equipo y la subida
+       del logo a la carpeta api/img/logos/.
+  Las versiones resueltas de esos dos archivos se incluyen en la carpeta php-resuelto/.
+- La respuesta de la API tiene la forma { status, cantidad, productos }. El front
+  accede a data.productos y controla status === 200.
+
+4. LOGICA DE LA TABLA DE POSICIONES
+-----------------------------------
+- Se recorren TODOS los equipos (api/equipos.php).
+- Por cada equipo se consultan sus partidos como local (localia=A) y como visitante
+  (localia=B), filtrando por id_categoria.
+- Puntuacion: modalidad C1 = 3 puntos por ganar y 1 por empatar;
+  modalidad C2 = 5 puntos por ganar y 2 por empatar.
+- Al finalizar se ordena la tabla de mayor a menor puntaje.
+- Se muestra el logo del club, el nombre y los puntos.
+
+5. JUGADORES Y MODAL "VER MAS"
+------------------------------
+- Se listan los jugadores de la categoria con su foto, nombre y apodo.
+- Como un jugador puede participar en varios deportes, en la base de datos aparece
+  repetido: se eliminan duplicados usando el DNI como clave.
+- El boton "Ver mas" abre una ventana modal con foto, apellido y nombre, apodo,
+  biografia y la tabla de palmares (api/palmares_listar.php?dni=...).
+- Dentro del modal hay un textarea con su boton que permite AGREGAR un nuevo palmares
+  (funcionalidad A). Al guardar, se refresca la tabla mostrando el item agregado.
+
+6. UX / UI
+----------
+- Encabezado fijo (sticky) siempre visible, con logo y titulo destacado.
+- Menu horizontal obtenido desde la base de datos (solo items visible = SI),
+  mostrando los nombres en MAYUSCULA.
+- Pie de pagina destacado.
+- Boton de WhatsApp fijo en la esquina inferior derecha, enlazado a wa.me.
+- Colores acordes al logo (verde) y fondo crema para contraste.
+
+7. PUNTO EXTRA (AGREGAR CLUB)
+-----------------------------
+- registrar_club.html: formulario con nombre del club y su logo.
+- Se envia por AJAX (fetch + FormData) a api/equipos_insertar.php.
+- El PHP guarda la imagen en api/img/logos/ y el equipo en la tabla `equipos`,
+  y devuelve un JSON con el resultado que se muestra en pantalla.
+
+8. PARA EJECUTAR
+----------------
+- XAMPP con Apache y MySQL iniciados.
+- Base de datos `la_tania` creada e importado el archivo la_tania.sql.
+- API ubicada en http://localhost/la_tania/api/ (ajustable en js/config.js -> API_BASE).
+- Abrir http://localhost/parcialresuelto2025/index.html

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canicas Femenino · La Tania</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<!-- data-categoria: 3 = Canicas Femenino (1 = Masculino) -->
+<body data-categoria="3">
+
+  <header class="header">
+    <div class="header__barra">
+      <img class="header__logo" src="assets/logo.png" alt="Escudo Club La Tania">
+      <h1 class="header__titulo">
+        La Tania
+        <span class="header__subtitulo">Club Deportivo</span>
+      </h1>
+      <nav class="nav" id="nav" aria-label="Menú principal"></nav>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <h2 class="titulo-seccion">Canicas · Femenino</h2>
+
+    <!-- JUGADORES -->
+    <section>
+      <h3>Jugadoras</h3>
+      <div class="jugadores" id="jugadores"></div>
+    </section>
+
+    <!-- TABLA DE POSICIONES -->
+    <section>
+      <h3 class="titulo-seccion">Tabla de posiciones</h3>
+      <div class="tabla-posiciones" id="tabla"></div>
+    </section>
+
+  </main>
+
+  <!-- MODAL "Ver más" -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalNombre">
+    <div class="modal__caja">
+      <button class="modal__cerrar" id="cerrarModal" aria-label="Cerrar">&times;</button>
+
+      <div class="modal__cabecera">
+        <img class="modal__foto" id="modalFoto" src="" alt="Foto de la jugadora">
+        <div>
+          <h2 class="modal__nombre" id="modalNombre"></h2>
+          <p class="modal__apodo" id="modalApodo"></p>
+        </div>
+      </div>
+
+      <p id="modalBio"></p>
+
+      <h4>Palmarés</h4>
+      <table class="tabla-palmares">
+        <thead>
+          <tr><th>Año</th><th>Detalle</th></tr>
+        </thead>
+        <tbody id="modalPalmares"></tbody>
+      </table>
+
+      <!-- Agregar nuevo palmarés (funcionalidad "A" - PHP) -->
+      <h4>Agregar nuevo logro</h4>
+      <div class="campo">
+        <span>Año</span>
+        <input type="number" id="modalAnio" placeholder="2025">
+      </div>
+      <div class="campo">
+        <span>Detalle</span>
+        <textarea id="modalDetalle" placeholder="Ej: Campeona Zonal 2025"></textarea>
+      </div>
+      <button class="boton" id="guardarPalmares">Guardar palmarés</button>
+      <p class="mensaje" id="modalMensaje"></p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <strong>Club Deportivo La Tania</strong>
+    <p>General Pico, La Pampa · Canicas Femenino · 2025</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/canicas.js"></script>
+</body>
+</html>
