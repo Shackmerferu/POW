@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $("#test1").text("Hola mundo!");
+  });
+  $("#btn2").click(function(){
+    $("#test2").html("<b>Hello world!</b>");
+  });
+  $("#btn3").click(function(){
+    $("#test3").val("Dolly Duck");
+  });
+});
+</script>
+</head>
+<body>
+
+<p id="test1">Un parrafo.</p>
+<p id="test2">Otro Parrafo.</p>
+
+<p>Input field: <input type="text" id="test3" value="Mickey Mouse"></p>
+
+<button id="btn1">Setear Text</button>
+<button id="btn2">Setear HTML</button>
+<button id="btn3">Setear Value</button>
+
+</body>
+</html>

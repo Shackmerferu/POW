@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>
+EJEMPLO SCROLLING
+</title>
+<script language="JavaScript">
+
+
+
+function siguienteCaracter()
+   {
+
+   if (caracteractual >= msg[mensajeactual].length)
+      {
+      caracteractual=0;
+      mensajeactual++;
+      }
+   if (caracteractual == 0)
+      {
+      contenidomensaje.value = "";
+      }
+   if (mensajeactual >= msg.length)
+      {
+      mensajeactual = 0;
+      contenidomensaje.value = textoinicial; 
+      }
+   else 
+      { 
+      if (mensajeactual < msg.length)
+         {
+         contenidomensaje.value += msg[mensajeactual].charAt(caracteractual);
+         caracteractual++;
+         }
+      if (caracteractual >= msg[mensajeactual].length)
+         {
+         setTimeout("siguienteCaracter()",intervalo);
+         }
+      else
+         {
+         setTimeout("siguienteCaracter()",velocidad);
+         } 
+      }   
+   }
+
+function anuncio(objeto)
+   {
+   contenidomensaje = new Object();
+   contenidomensaje = objeto;
+   contenidomensaje.blur();
+   caracteractual = 0;
+   mensajeactual = 0;
+   textoinicial = txt02;
+   siguienteCaracter();
+   }
+
+
+function mensajeInicial()
+   {
+   longitud = 54;
+   velocidad = 175;
+   intervalo = 2000;
+   msg = new Array();
+   msg[0]=txt03;
+   msg[1]=txt04;
+   msg[2]=txt05;
+   msg[3]=txt06;
+
+   self.document.open();
+   self.document.write('<body><center><form name="anuncios">');
+   self.document.write('<td align=right><table border=0 width="100%">');
+   self.document.write('<tr><td align=center><font size=2><b>'+txt01+'</b></font></td></tr>');
+   self.document.write('<tr><td align=center><font face=arial><input type="text" name="proximo" size="50" value="'+txt02+'" onFocus="anuncio(this)"></font></td></tr>');
+   self.document.write('</table></td></tr>');
+   self.document.write('</form></center></body>');
+   self.document.close();
+   }
+
+var txt01 = "ANUNCIO";
+var txt02 = "Pulsar para ver detalles";
+var txt03 = "primera linea de texto";
+var txt04 = "segunda linea de texto";
+var txt05 = "tercera linea de texto";
+var txt06 = "cuarta linea de texto";
+
+mensajeInicial();
+
+</script>
+</head>
+</html>
