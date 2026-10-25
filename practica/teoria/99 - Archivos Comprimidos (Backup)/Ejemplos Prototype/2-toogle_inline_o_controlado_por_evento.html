@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script src="prototype.js" type="text/javascript"></script>
+ 
+  <title>Ejemplo de ocultar</title>
+ <script type="text/javascript">
+Event.observe(window, 'load', function() {
+    Event.observe('featurebox-3-listen', 'click', function(){
+        $('featurebox-3').toggle();
+    });
+});
+</script>
+</head>
+<body>
+
+<p><span id="featurebox-3-listen">Toggle escuchando un evento</span> |
+<span onclick="$('featurebox-3').toggle();">Toggle colocandolo en un evento (Inline)</span></p>
+<div class="featurebox" id="featurebox-3"><div class="featurebox" id="featurebox-2">
+    <h3>A h3 l featurebox" div</h3>
+    <p>A un parrafo de texto norma[…]</p>
+</div>
+
+</body>
+</html>
