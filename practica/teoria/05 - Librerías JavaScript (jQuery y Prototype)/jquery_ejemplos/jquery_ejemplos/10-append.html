@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $("p").append(" <b>Appended texto</b>.");
+  });
+
+  $("#btn2").click(function(){
+    $("ol").append("<li>Appended item</li>");
+  });
+});
+</script>
+</head>
+<body>
+
+<p>Un texto.</p>
+<p>Otro Texto.</p>
+
+<ol>
+  <li>Lista item 1</li>
+  <li>Lista item 2</li>
+  <li>Lista item 3</li>
+</ol>
+
+<button id="btn1">Append texto</button>
+<button id="btn2">Append Items a la lista</button>
+
+</body>
+</html>

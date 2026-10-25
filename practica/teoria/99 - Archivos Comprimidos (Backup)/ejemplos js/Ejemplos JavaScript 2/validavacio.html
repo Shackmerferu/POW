@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<TITLE>Validación de un campo vacio</TITLE>
+<SCRIPT language="JavaScript">
+   
+   error= new creaerror();  
+   errores= new Array(6); 
+   errores[1]="Campo no vacio";
+  
+   // Crea un objeto que guarda un indice a la posición y al mensaje de error
+   function creaerror()
+   {
+   this.valor=0;
+   this.posicion=0;
+   return this
+   }
+   
+   // Comprueba si contenido está vacio
+   function compruebavacio(contenido,error)
+   {
+   if (contenido.length==0)
+      return true;
+   for (var i=0; i<contenido.length; ++i)
+      if (contenido.charAt(i)!=' ' && contenido.charAt(i)!='\t')
+         {
+         error.valor=1;
+         error.posicion=i+1; 
+         return false;
+         } 
+   return true; 
+   }
+
+   // Ejecuta la validación pedida
+   function ejecuta()
+   {
+   if (compruebavacio(window.document.formulario.campo.value,error))
+      alert("El campo es válido")
+   else
+      alert("El campo NO es válido. ERROR:"+errores[error.valor]+
+            " en la posicion "+error.posicion);
+   }
+  
+</SCRIPT>
+</HEAD>
+<BODY>
+<FORM NAME="formulario" ACTION="">
+
+   <CENTER>
+   <B>Validación de un campo vacio</B><BR><BR>
+   Dato:
+   <INPUT TYPE="Text" VALUE="" NAME="campo" MAXLENGTH=12 SIZE=12><BR><BR>
+   <INPUT TYPE="Button" VALUE="Validavacio" onClick="ejecuta()">
+   </CENTER>
+   
+</FORM>
+</BODY>
+</HTML>

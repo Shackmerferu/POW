@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>getElementById</title>
+</head>
+
+<body>
+    <p class="texto">rrrrrr</p>
+    <p class="texto">rrrrrr</p>
+    <p class="texto">rrrrrr</p>
+    <script>
+        //usando query
+        var text = document.querySelectorAll("p.texto");
+        // text[0].innerHTML="hola que tal"; //modifica uno solo
+        //para modificar todos debemos recorrelos
+        cant = text.length;
+        for (i = 0; i < cant; i++)
+            text[i].innerHTML = "hola";
+
+
+       //usando class name
+        /*
+         var text = document.getElementsByClassName("texto");
+         cant=text.length;
+         for(i=0;i<cant;i++)
+             text[i].innerHTML="hola";
+ 
+        */
+    </script>
+</body>
+
+</html>

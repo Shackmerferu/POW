@@ -1,0 +1,63 @@
+<HTML>
+<head>
+<title>Fechas y Horas</title>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+var meses=new Array;
+var dias= new Array;
+
+meses[0]= "Enero";
+meses[1]= "Febrero";
+meses[2]= "Marzo";
+meses[3]= "Abril";
+meses[4]= "Mayo";
+meses[5]= "Junio";
+meses[6]= "Julio";
+meses[7]= "Agosto";
+meses[8]= "Septiembre";
+meses[9]= "Octubre";
+meses[10]="Noviembre";
+meses[11]="Diciembre";
+
+dias[0]="Domingo";
+dias[1]="Lunes";
+dias[2]="Martes";
+dias[3]="Miercoles";
+dias[4]="Jueves";
+dias[5]="Viernes";
+dias[6]="Sabado";
+
+hoy=new Date();
+hrs=hoy.getHours();
+min=hoy.getMinutes();
+sec=hoy.getSeconds();
+
+clckh=""+((hrs>12)?hrs-12:hrs);
+clck12h=((clckh<10)?"0":"")+clckh;
+clck24h=((hrs<10)?"0":"")+hrs;
+clckm=((min<10)?"0":"")+min;
+clcks=((sec<10)?"0":"")+sec;
+clck=(hrs>=12)?"p.m.":"a.m.";
+
+siglo="19"; // cambiar a partir del año 2000
+
+document.write("<table width=500 align=center>"); 
+document.write("<TR><TH COLSPAN=2>Ejemplo de Representación de Fechas y Horas<p></TH>"); 
+
+document.write("<TR><TD>Fecha en letras</TD>");
+document.write("<TD>"+dias[hoy.getDay()]+", "+hoy.getDate()+" de "+meses[hoy.getMonth()]+" de "+siglo+hoy.getYear()+"</TD></TR>");
+ 
+document.write("<TR><TD>Fecha en cifras</TD>");
+document.write("<TD>"+hoy.getDay()+"/"+(hoy.getMonth()+1)+"/"+siglo+hoy.getYear()+"</TD></TR>");
+
+document.write("<TR><TD>Hora en formato 12 horas (am/pm)</TD>");
+document.write("<TD>"+clck12h+":"+clckm+":"+clcks+" "+clck+"</TD></TR>");
+
+document.write("<TR><TD>Hora en formato 24 horas</TD>");
+document.write("<TD>"+clck24h+":"+clckm+":"+clcks+" "+"</TD></TR>");
+
+document.write("</table>");
+
+</SCRIPT>
+</HEAD>
