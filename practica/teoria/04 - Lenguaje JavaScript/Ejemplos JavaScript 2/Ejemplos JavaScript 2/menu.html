@@ -1,0 +1,253 @@
+<HTML>
+<HEAD>
+<SCRIPT LANGUAGE="JavaScript">
+
+   nmenus=0;
+   despmenu=4;
+   despopcion=5;
+   nopciones=new Array();
+   alturamenu=37;
+   anchuramenu=155;
+   alturaopcion=37;
+   anchuraopcion=145;
+   menuactivo=-1;
+   opcionactiva=-1;
+   datomenu=new Array();
+  
+   // Crea un nuevo menú
+   function creamenu(imagensinactivar,
+                     imagenactiva,imagenpisada,textoalternativo)
+   {
+   datomenu[nmenus*despmenu]=new Image(alturamenu,anchuramenu);
+   datomenu[nmenus*despmenu].src=imagensinactivar; 
+   datomenu[nmenus*despmenu+1]=new Image(alturamenu,anchuramenu);
+   datomenu[nmenus*despmenu+1].src=imagenactiva; 
+   datomenu[nmenus*despmenu+2]=new Image(alturamenu,anchuramenu);
+   datomenu[nmenus*despmenu+2].src=imagenpisada; 
+   datomenu[nmenus*despmenu+3]=textoalternativo;
+   nopciones[nmenus]=0;
+   nmenus++;
+   return nmenus-1;
+   }
+
+   // Crea una nueva opción de un menú
+   function creaopcion(numeromenu,imagensinactivar,
+                       imagenactiva,imagenpisada,textoalternativo,url)
+   {
+   if (numeromenu<0 || numeromenu>nmenus)
+      {
+      alert("Número de menu no existente");
+      return
+      }  
+   else
+      {
+      if (nopciones[numeromenu]==0)
+         eval('datoopcion'+numeromenu+'=new Array()');
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion)+
+           "]=new Image(alturaopcion,anchuraopcion)");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion)+
+           "].src=imagensinactivar");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+1)+
+           "]=new Image(alturaopcion,anchuraopcion)");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+1)+
+           "].src=imagenactiva");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+2)+
+           "]=new Image(alturaopcion,anchuraopcion)");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+2)+
+           "].src=imagenpisada");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+3)+
+           "]=textoalternativo");
+      eval("datoopcion"+numeromenu+"["+(nopciones[numeromenu]*despopcion+4)+
+           "]=url");
+      nopciones[numeromenu]++;
+      }
+   }
+   
+   // Escribe una pantalla vacia  
+   function escribepantallainicial()
+   {
+   window.pantalla.document.open();
+   window.pantalla.document.close();
+   }
+  
+   // Activa el estado pisado de una opción 
+   function dentroopcion(j,i)
+   {
+   eval('window.opciones.document.opcion'+i+'.src=datoopcion'+
+        j+'['+(i*despopcion+2)+'].src');
+   }
+
+   // Desactiva el estado pisado de una opción
+   function fueraopcion(j,i)
+   {
+   if (opcionactiva==i)
+      eval('window.opciones.document.opcion'+i+'.src=datoopcion'+
+           j+'['+(i*despopcion+1)+'].src');
+   else
+      eval('window.opciones.document.opcion'+i+'.src=datoopcion'+
+           j+'['+(i*despopcion)+'].src');
+   }
+
+   // Escribe las opciones del menú activo
+   function escribeopciones(j)
+   {
+   for (var i=0;i<nopciones[j];i++)
+      {
+      var imagen=eval('datoopcion'+j+'['+(i*despopcion)+'].src');
+      var texto=eval('datoopcion'+j+'['+(i*despopcion+3)+']');
+      window.opciones.document.writeln('<A href="javaScript:parent.irA('
+                                       +j+','+i+')" ');
+      window.opciones.document.writeln('OnmouseOver="parent.dentroopcion('+
+                                       j+','+i+')" ');
+      window.opciones.document.writeln('" OnmouseOut="parent.fueraopcion('+
+                                       j+','+i+')">');
+      window.opciones.document.writeln('<IMG Name="opcion'+i+'" ALT="'+
+                 texto+'" src='+imagen+' width='+anchuraopcion+' height='+alturaopcion+' border=0></A>');
+      }
+   }
+    
+   // Escribe el documento del frame opciones
+   function escribeframeopciones(i)
+   {
+   window.opciones.document.open(); 
+   window.opciones.document.writeln('<HTML><BODY BGCOLOR="#0000FF"');
+   window.opciones.document.writeln(' TEXT="#FFFFFF" LINK="#FFFFFF"');
+   window.opciones.document.writeln('VLINK="#FFFFFF" ALINK="#FFFFFFF">');
+   window.opciones.document.writeln('<BR><BR>');
+   if (i>-1)
+      escribeopciones(i); 
+   escribepantallainicial();
+   window.opciones.document.close();
+   }
+    
+   // Cambia el menu activo  
+   function cambiamenu(i)
+   {
+   if (menuactivo!=-1)
+      {
+      escribepantallainicial();
+      eval('window.menu.document.menu'+menuactivo+
+           '.src=datomenu['+menuactivo*despmenu+'].src');
+      if (menuactivo==i)
+         menuactivo=-1
+      else
+         menuactivo=i;
+      }
+   else menuactivo=i;
+   if (menuactivo!=-1)
+      eval('window.menu.document.menu'+menuactivo+
+           '.src=datomenu['+(i*despmenu+1)+'].src');
+   escribeframeopciones(menuactivo);
+   opcionactiva=-1;
+   }
+
+   // Activa el estado pisado del menú   
+   function dentromenu(i)
+   {
+   eval('window.menu.document.menu'+i+'.src=datomenu['+
+        (i*despmenu+2)+'].src');
+   }
+
+   // Desactiva el estado pisado del menú
+   function fueramenu(i)
+   {
+   if (menuactivo==i)
+      eval('window.menu.document.menu'+i+'.src=datomenu['+
+           (i*despmenu+1)+'].src');
+   else
+      eval('window.menu.document.menu'+i+'.src=datomenu['+
+           (i*despmenu)+'].src');
+   }
+
+   // Escribe el documento del frame menus
+   function escribeframemenus()
+   { 
+   window.menu.document.open();
+   for (var i=0;i<nmenus;i++)
+      {
+      window.menu.document.writeln('<A href="javaScript:parent.cambiamenu('+
+                                  i+')" ');
+      window.menu.document.writeln('OnmouseOver="parent.dentromenu('+
+                                i+')" OnmouseOut="parent.fueramenu('+i+')">');
+      window.menu.document.writeln('<IMG Name="menu'+i+'" ALT='+
+                   datomenu[i*despmenu+3]+' src='+datomenu[i*despmenu].src+
+                   ' width='+anchuramenu+' height='+alturamenu+' border=0></A>');
+      }
+   window.menu.document.close();
+   }
+
+   // Carga o descarga la Url de la opción escogida
+   function irA(vmenu,vopcion)
+   {
+   if (opcionactiva!=-1)
+      {
+      escribepantallainicial();
+      eval('window.opciones.document.opcion'+opcionactiva+
+           '.src=datoopcion'+vmenu+'['+(opcionactiva*despopcion)+'].src');
+      if (opcionactiva==vopcion)
+         opcionactiva=-1
+      else
+         opcionactiva=vopcion;
+      }
+   else 
+      opcionactiva=vopcion;
+   if (opcionactiva!=-1)
+      {
+      eval('window.opciones.document.opcion'+opcionactiva+
+           '.src=datoopcion'+vmenu+'['+(vopcion*despopcion+1)+'].src');
+      eval('window.pantalla.location=datoopcion'+vmenu+'['+(vopcion*despopcion+4)+']');
+      }
+   else
+      escribepantallainicial();
+   }
+
+   // Definición de menus
+   var primero=creamenu("invierno_normal.gif","invierno_pulsado.gif",
+                        "invierno_pisado.gif","Invierno");
+   var segundo=creamenu("primavera_normal.gif","primavera_pulsado.gif",
+                        "primavera_pisado.gif","Primavera");
+   var tercero=creamenu("verano_normal.gif","verano_pulsado.gif",
+                        "verano_pisado.gif","Verano");
+
+   // Definición de las opciones de menú
+   creaopcion(primero,"invierno1_normal.gif","invierno1_pulsado.gif",
+             "invierno1_pisado.gif","Esqui","invierno1.html");
+   creaopcion(primero,"invierno2_normal.gif","invierno2_pulsado.gif",
+             "invierno2_pisado.gif","Hockey","invierno2.html");
+   creaopcion(primero,"invierno3_normal.gif","invierno3_pulsado.gif",
+             "invierno3_pisado.gif","Bobsled","invierno3.html");
+   creaopcion(segundo,"primavera1_normal.gif","primavera1_pulsado.gif",
+             "primavera1_pisado.gif","Futbol","primavera1.html");
+   creaopcion(segundo,"primavera2_normal.gif","primavera2_pulsado.gif",
+             "primavera2_pisado.gif","Tenis","primavera2.html");
+   creaopcion(tercero,"verano1_normal.gif","verano1_pulsado.gif",
+             "verano1_pisado.gif","Natación","verano1.html");
+   creaopcion(tercero,"verano2_normal.gif","verano2_pulsado.gif",
+             "verano2_pisado.gif","Vela","verano2.html");
+   creaopcion(tercero,"verano3_normal.gif","verano3_pulsado.gif",
+             "verano3_pisado.gif","Waterpolo","verano3.html");
+
+
+
+   // Definición de los frames de trabajo    
+   document.writeln('<HTML>');
+   document.writeln('<FRAMESET COLS="165,*" FRAMEBORDER=NO>');
+   document.writeln('<FRAME Src="javascript:parent.escribeframeopciones(-1)"');
+   document.writeln('NAME="opciones">');
+   document.writeln('<FRAMESET ROWS="45,*"  FRAMEBORDER=NO>');
+   document.writeln('<FRAME MARGINWIDTH=0 MARGINHEIGHT=0');
+   document.writeln(' Src="javascript:parent.escribeframemenus()"');
+   document.writeln(' NAME="menu" NoResize SCROLLING="No">');
+   document.writeln('<FRAME MARGINWIDTH=0 MARGINHEIGHT=0');
+   document.writeln(' Src="javascript:parent.escribepantallainicial()"');
+   document.writeln(' NAME="pantalla" NoResize>');
+   document.writeln('</FRAMESET>');
+   document.writeln('<NOFRAMES>');
+   document.writeln('NECESITA UTILIZAR UN NAVEGADOR CON FRAMES');
+   document.writeln('</NOFRAMES>');
+   document.writeln('</FRAMESET>');
+   document.writeln('</BODY>');
+   document.writeln('</HTML>');
+</SCRIPT>
+</HEAD>
+</HTML>

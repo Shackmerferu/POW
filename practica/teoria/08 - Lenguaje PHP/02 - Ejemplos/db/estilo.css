@@ -1,0 +1,9 @@
+BODY {font-family: verdana,arial; font-size: 10pt}
+H1 {font-family: verdana,arial; font-size: 16pt; font-weight: bold; color: #0066CC}
+H2 {font-family: verdana,arial; font-size: 12pt; font-weight: bold; font-style: italic;
+    color: black}
+H3 {font-family: verdana,arial; font-size: 10pt; font-weight: bold; color: black}
+TH {font-family: verdana,arial; font-size: 10pt; font-weight: bold; color: white;
+    background: #0066CC; text-align: left}
+TD {font-family: verdana,arial; font-size: 10pt; background: #CCCCCC}
+TD.blanco {font-family: verdana,arial; font-size: 10pt; background: #FFFFFF}
