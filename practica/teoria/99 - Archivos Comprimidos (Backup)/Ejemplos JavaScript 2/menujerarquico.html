@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<TITLE>Menú Jerárquico</TITLE>
+<SCRIPT LANGUAGE="JavaScript">
+
+   nidentificador=0;
+   alturaimagen=20;
+   anchuraimagen=30; 
+
+   // Definición de las imágenes
+   expandir=new Image(alturaimagen, anchuraimagen);
+   expandir.src="cerrada_normal.gif";
+   contraer=new Image(alturaimagen, anchuraimagen);
+   contraer.src="abierta_normal.gif";
+   expandirpisado=new Image(alturaimagen, anchuraimagen);
+   expandirpisado.src="cerrada_pisada.gif";
+   contraerpisado=new Image(alturaimagen, anchuraimagen);
+   contraerpisado.src="abierta_pisada.gif";
+   enlaceactivado=new Image(alturaimagen, anchuraimagen);
+   enlaceactivado.src="hoja_pulsada.gif";
+   enlaceinactivado=new Image(alturaimagen, anchuraimagen);
+   enlaceinactivado.src="hoja_normal.gif";
+   enlacepisado=new Image(alturaimagen, anchuraimagen);
+   enlacepisado.src="hoja_pisada.gif";
+ 
+   adyacentes= new Array();
+   items= new Array();
+  
+   // Constructor de un objeto con la información de un item
+   function creaitem(textoalternativo,url)
+   {
+   this.identificador=nidentificador;
+   this.alternativo=textoalternativo;
+   this.activo=false;
+   this.enlace=url;
+   adyacentes[nidentificador]=new Array();
+   items[nidentificador]=this;
+   }   
+  
+   // Crea un nuevo item 
+   function nuevoitem(textoalternativo,url)
+   {
+   new creaitem(textoalternativo,url);
+   return nidentificador++; 
+   }
+
+   // Define la relación jerárquica entre dos items
+   function enlazaitems(padre,hijo)
+   {
+   adyacentes[padre][adyacentes[padre].length]=hijo;
+   }
+
+   // Escribe una pantalla vacia  
+   function escribepantallainicial()
+   {
+   window.pantalla.document.open();
+   window.pantalla.document.close();
+   }
+
+   // Desactiva todos los hijos del item I
+   function desactivahijos(I)
+   {
+   window.status=I;
+   items[I].estado=false;
+   for (var j=0; j<adyacentes[I].length;j++)
+      desactivahijos(adyacentes[I][j])
+   }
+
+   // Actualiza el estado de un item y sus descendientes si es necesario
+   function actualizar(I)
+   {
+   items[I].estado=!items[I].estado;
+   // Si se ha activado un enlace entonces hay que desactivar cualquier otro 
+   // que esté activo
+   if (adyacentes[I].length==0 && items[I].estado)
+      {
+      for (var j=0; j<items.length;j++)
+         if (adyacentes[j].length==0 && I!=j && items[j].estado)
+            {
+            items[j].estado=false
+            break;
+            }
+      accedeaenlace(I);
+      }
+   // Si un nodo ha pasado al estado inactivo hay que desactivar cualquier 
+   // enlace que cuelgue de él
+   if (!items[I].estado)
+      {
+      for (var j=0; j<adyacentes[I].length;j++)
+         desactivahijos(adyacentes[I][j]);
+      escribepantallainicial();
+      }
+   escribeenlaces();
+   }
+
+   function dentroitem(I)
+   {
+   if (adyacentes[I].length==0)
+      eval('window.enlaces.document.enlace'+I+'.src=enlacepisado.src');
+   else
+      if (items[I].estado)
+         eval('window.enlaces.document.enlace'+I+'.src=contraerpisado.src');
+      else
+         eval('window.enlaces.document.enlace'+I+'.src=expandirpisado.src');
+   }
+
+   function fueraitem(I)
+   {
+   if (adyacentes[I].length==0)
+      if (items[I].estado)
+         eval('window.enlaces.document.enlace'+I+
+              '.src=enlaceactivado.src');
+      else
+         eval('window.enlaces.document.enlace'+I+
+              '.src=enlaceinactivado.src');
+   else 
+      if (items[I].estado)
+         eval('window.enlaces.document.enlace'+I+'.src=contraer.src');
+      else
+         eval('window.enlaces.document.enlace'+I+'.src=expandir.src');
+   }
+
+   // Accede al documento representado por el item I
+   function accedeaenlace(I)
+   {
+   window.pantalla.location=items[I].enlace;
+   }
+
+   // Recorre el árbol de enlaces
+   function recorreenprofundidad(raiz,nivel,primero)
+   {
+   for (var i=1;i<nivel;i++)
+      window.enlaces.document.writeln("&nbsp&nbsp&nbsp&nbsp");
+   if (items[raiz].estado) 
+      var valor=contraer.src;
+   else
+      var valor=expandir.src;
+   if (adyacentes[raiz].length==0)
+      { 
+      if (items[raiz].estado)
+         var valor=enlaceactivado.src;
+      else
+         var valor=enlaceinactivado.src;
+      }
+   if (!primero)
+      {
+      window.enlaces.document.writeln('<A href="javaScript:parent.actualizar('+raiz+')"');
+      window.enlaces.document.writeln('OnmouseOver="parent.dentroitem('+raiz+')" '); 
+      window.enlaces.document.writeln('OnmouseOut="parent.fueraitem('+raiz+')">');
+      window.enlaces.document.writeln('<IMG Name="enlace'+raiz+'"'); 
+      window.enlaces.document.writeln('ALT="opcion'+items[raiz].alternativo+'"');
+      window.enlaces.document.writeln('src='+valor+' border=0></A>');
+      window.enlaces.document.writeln(items[raiz].alternativo+'<BR>');
+      }
+   else
+      window.enlaces.document.writeln('<BR>');
+   if (items[raiz].estado||primero)
+      for (var i=0;i<adyacentes[raiz].length;i++)
+         recorreenprofundidad(adyacentes[raiz][i],nivel+1,false);
+   }  
+
+   // Escribe el frame donde se aparece el árbol de enlaces  
+   function escribeenlaces()
+   {
+   window.enlaces.document.open();
+   recorreenprofundidad(0,0,true);
+   window.enlaces.document.close();
+   }  
+
+   // Raiz del árbol de enlaces; nunca es visualizado //
+   nivel0= nuevoitem("0","0");
+   // Items del nivel 1 del árbol de enlaces //
+   nivel1item0= nuevoitem("Invierno");
+   nivel1item1= nuevoitem("Primavera");
+   nivel1item2= nuevoitem("Verano");
+   // items del nivel 2 del árbol de enlaces //
+   nivel2item0= nuevoitem("Esqui","invierno1.html");
+   nivel2item1= nuevoitem("Hockey","invierno2.html");
+   nivel2item2= nuevoitem("Bobsled","invierno3.html");
+   nivel2item3= nuevoitem("Futbol","url1a");
+   nivel2item4= nuevoitem("Tenis","primavera2.html");
+   nivel2item5= nuevoitem("Natación","verano1.html");
+   nivel2item6= nuevoitem("Vela","verano2.html");
+   nivel2item7= nuevoitem("WaterPolo","verano3.html");
+   // items del nivel 3 del árbol de enlaces //
+   nivel3item0= nuevoitem("FIFA","futbol1.html");
+   nivel3item1= nuevoitem("UEFA","futbol2.html");
+   
+   // Creación del árbol de enlaces
+   enlazaitems(nivel0,nivel1item0);
+   enlazaitems(nivel0,nivel1item1);
+   enlazaitems(nivel0,nivel1item2);
+   enlazaitems(nivel1item0,nivel2item0);
+   enlazaitems(nivel1item0,nivel2item1);
+   enlazaitems(nivel1item0,nivel2item2);
+   enlazaitems(nivel1item1,nivel2item3);
+   enlazaitems(nivel1item1,nivel2item4);
+   enlazaitems(nivel1item2,nivel2item5);
+   enlazaitems(nivel1item2,nivel2item6);
+   enlazaitems(nivel1item2,nivel2item7);
+
+   enlazaitems(nivel2item3,nivel3item0);  
+   enlazaitems(nivel2item3,nivel3item1);  
+   
+   
+   // Definición de los frames de trabajo      
+   document.writeln('<HTML>');
+   document.writeln('<FRAMESET COLS="160,*" FRAMEBORDER=yes>');
+   document.writeln('<FRAME Src="javascript:parent.escribeenlaces()" ');
+   document.writeln('NAME="enlaces" scrolling="auto">');
+   document.writeln('<FRAME MARGINWIDTH=0 MARGINHEIGHT=0 NAME="pantalla"');
+   document.writeln('Src="javascript:parent.escribepantallainicial()" >');
+   document.writeln('<NOFRAMES>');
+   document.writeln('SU NAVEGADOR NO MANEJA FRAMES');
+   document.writeln('</NOFRAMES>');
+   document.writeln('</FRAMESET>');
+   document.writeln('</BODY>');
+   document.writeln('</HTML>');
+</SCRIPT>
+</HEAD>
+</HTML>

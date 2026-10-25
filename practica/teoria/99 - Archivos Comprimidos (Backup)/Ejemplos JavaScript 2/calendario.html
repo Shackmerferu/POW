@@ -1,0 +1,142 @@
+<HTML>
+<HEAD>
+<TITLE>Calendario</TITLE>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+var fuente=6; //tamaño de la fuente
+
+var fondo="black";
+var textonormal="white";
+var fiesta="red";
+
+var meses=new Array;
+var dias= new Array;
+
+meses[0]= "Enero";
+meses[1]= "Febrero";
+meses[2]= "Marzo";
+meses[3]= "Abril";
+meses[4]= "Mayo";
+meses[5]= "Junio";
+meses[6]= "Julio";
+meses[7]= "Agosto";
+meses[8]= "Septiembre";
+meses[9]= "Octubre";
+meses[10]="Noviembre";
+meses[11]="Diciembre";
+
+dias[0]="Dom";
+dias[1]="Lun";
+dias[2]="Mar";
+dias[3]="Mie";
+dias[4]="Jue";
+dias[5]="Vie";
+dias[6]="Sab";
+
+siglo=1900; // cambiar a partir del 2000
+
+function numerodedias(mth,yr)
+   {
+   if (mth==3 || mth==5 || mth==8 || mth==10) return 30;
+   else if ((mth==1) && bisiesto(yr)) return 29;
+   else if (mth==1) return 28;
+   else return 31;
+   }
+
+function bisiesto(yr) 
+   {
+   if (((yr % 4 == 0) && yr % 100 != 0) || yr % 400 == 0) return true;
+   else return false;
+   }
+
+function getFullYear(d) 
+   { 
+   yr = d.getYear();
+   if (yr < 1000)
+   yr+=siglo;
+   return yr;
+   }
+
+function vercolor(i)
+   {
+   if (i == 0)
+    {return fiesta;}
+   else
+    {return textonormal;}
+   }
+
+function calendario()
+   {
+   hoy=new Date();
+   mo=hoy.getMonth();
+   diadehoy=hoy.getDate();
+   yr1=getFullYear(hoy)+""; //completamos los dos primeros digitos de año
+ 
+   primerdia=new Date(meses[mo]+" 1,"+yr1);
+   dy=primerdia.getDay();
+
+   ultimodia=numerodedias(mo,yr1);
+
+   // escribir cabecera mes
+   document.write("<TABLE BORDER=2 ALIGN=CENTER><TR><TD ALIGN=CENTER COLSPAN=7 BGCOLOR="+fondo+">");
+   document.write("<FONT SIZE="+fuente+" COLOR="+textonormal+">"+meses[mo]+" "+yr1+"</FONT></TD></TR>");
+   document.write();
+
+   // escribir cabecera dias de la semana
+   for (var i=0;i<7;i++)
+      {
+      document.write("<TD ALIGN=CENTER BGCOLOR="+fondo+"><FONT SIZE=3 COLOR="+textonormal+">"+dias[i]+"</FONT></TD>");
+      }
+   document.write("</TR><TR>");
+
+   // escribir primera semana
+   ctr=0;
+   for (var i=0;i<7;i++)
+      {
+      texto=vercolor(i);
+      if (i<dy)
+         {
+         document.write("<TD ALIGN=CENTER><FONT SIZE="+fuente+" COLOR="+texto+">&nbsp;</FONT></TD>");
+         }
+      else
+         {
+         ctr++;
+         if (ctr==diadehoy)
+            {document.write("<TD ALIGN=CENTER bgcolor="+texto+"><FONT SIZE="+fuente+" COLOR="+fondo);}
+         else
+            {document.write("<TD ALIGN=CENTER bgcolor="+fondo+"><FONT SIZE="+fuente+" COLOR="+texto);}
+         document.write(">"+ctr+"</FONT></TD>");
+         }
+      }
+      document.write("</TR><TR>");
+     
+   // escribir resto semanas 
+ 
+   while (ctr<ultimodia)
+      {
+      for (var i=0;i<7;i++)
+         {
+         texto=vercolor(i);
+         ctr++;
+         if (ctr>ultimodia)
+            {document.write("<TD ALIGN=CENTER>&nbsp;</TD>");}
+         else
+            {
+            if (ctr==diadehoy)
+               {document.write("<TD ALIGN=CENTER bgcolor="+texto+"><FONT SIZE="+fuente+" COLOR="+fondo);}
+            else
+               {document.write("<TD ALIGN=CENTER bgcolor="+fondo+"><FONT SIZE="+fuente+" COLOR="+texto);}
+            document.write(">"+ctr+"</TD>");
+            }
+         }
+      document.write("</TR><TR>");
+      }
+   document.write("</TR></TABLE>");
+   }
+
+calendario();
+
+</SCRIPT>
+</HEAD>
+</HTML>
