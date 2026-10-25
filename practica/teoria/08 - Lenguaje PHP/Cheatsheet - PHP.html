@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - PHP</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #7e22ce; margin: 0 0 5px;
+  border-bottom: 3px solid #7e22ce; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #7e22ce; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #581c87; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #581c87; }
+blockquote {
+  background: #f1f7fb; border-left: 4px solid #7e22ce;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #7e22ce;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #e8f1f8; color: #7e22ce; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #7e22ce; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — Lenguaje PHP</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido y consulta durante el parcial.<br>
+<strong>Base:</strong> teoría de la cátedra (PHP 8.x, MySQLi procedural, POO).</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Qué es PHP y cómo funciona</li>
+<li>Sintaxis básica</li>
+<li><code>echo</code>, <code>print</code> y comentarios</li>
+<li>Inclusión de archivos</li>
+<li>Tipos de datos</li>
+<li>Variables y ámbito</li>
+<li>Superglobales</li>
+<li>Constantes</li>
+<li>Operadores</li>
+<li>Estructuras de control</li>
+<li>Funciones</li>
+<li>Arrays</li>
+<li>Formularios</li>
+<li>Subida de archivos</li>
+<li>Validación de datos</li>
+<li>Fechas y horas</li>
+<li>Sesiones</li>
+<li>Cookies</li>
+<li>Manejo de archivos</li>
+<li>Programación Orientada a Objetos</li>
+<li>Acceso a MySQL con MySQLi</li>
+<li>Paginación y filtrado</li>
+<li>Seguridad</li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+</ol>
+<hr>
+<h2>1. Qué es PHP y cómo funciona</h2>
+<ul>
+<li><strong>PHP</strong> es un lenguaje de <strong>script del lado del servidor</strong>. Otros similares: ASP, JSP, ColdFusion.</li>
+<li>Los scripts PHP están <strong>incrustados en el documento HTML</strong>; el servidor los <strong>interpreta y ejecuta antes</strong> de servir la página.</li>
+<li>El cliente <strong>no ve el código PHP</strong>, sino los <strong>resultados</strong> que produce.</li>
+<li>Creado por <strong>Rasmus Lerdorf</strong> en 1994. <strong>PHP = Personal Hypertext Processor</strong>.</li>
+<li>Es un <strong>módulo que se añade al servidor web</strong> (Apache, Nginx, etc.).</li>
+<li>Versión actual de referencia: <strong>PHP 8.4</strong> (nov. 2024).</li>
+</ul>
+<pre><code>Cliente (navegador)  --HTTP--&gt;  Servidor web (Apache)  --&gt;  Intérprete PHP
+                                                                  |
+Cliente (navegador)  &lt;--HTML--  Servidor web  &lt;-------------------+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Página HTML estática</th>
+<th>Página con PHP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>El servidor entrega el archivo tal cual.</td>
+<td>El servidor ejecuta el PHP y entrega el HTML resultante.</td>
+</tr>
+<tr>
+<td>El cliente ve todo el código.</td>
+<td>El cliente <strong>nunca</strong> ve el código PHP.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Sintaxis básica</h2>
+<pre><code class="language-php">&lt;?php
+// código PHP
+?&gt;
+
+&lt;?= $expresion ?&gt;   &lt;!-- equivale a &lt;?php echo $expresion; ?&gt; --&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Regla</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Etiqueta recomendada</td>
+<td><code>&lt;?php ... ?&gt;</code> (siempre disponible).</td>
+</tr>
+<tr>
+<td>Etiqueta corta de salida</td>
+<td><code>&lt;?= expresión ?&gt;</code> equivale a <code>echo expresión</code>.</td>
+</tr>
+<tr>
+<td>Fin de instrucción</td>
+<td><code>;</code> — el cierre <code>?&gt;</code> implica un <code>;</code>.</td>
+</tr>
+<tr>
+<td>Sensibilidad a mayúsculas</td>
+<td><strong>Las variables sí</strong> distinguen mayúsculas. Las palabras clave y funciones no.</td>
+</tr>
+<tr>
+<td>Comentarios</td>
+<td><code>// ...</code>, <code># ...</code>, <code>/* ... */</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">&lt;HTML&gt;
+&lt;HEAD&gt;
+  &lt;TITLE&gt;Mi primer programa en PHP&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+&lt;?php
+  print(&quot;Hola mundo&quot;);
+?&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<blockquote>
+<p><code>\n</code> sirve para generar código HTML <strong>legible</strong>, no para que se vea distinto en el navegador.</p>
+</blockquote>
+<hr>
+<h2>3. <code>echo</code>, <code>print</code> y comentarios</h2>
+<pre><code class="language-php">echo &quot;Hola mundo&quot;;
+echo &quot;Hola &quot;, &quot;mundo&quot;;        // varios argumentos
+print &quot;Hola mundo&quot;;
+print(&quot;Hola mundo&quot;);
+print(&quot;Hola &quot; . &quot;mundo&quot;);     // concatenación con punto
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>echo</code></th>
+<th><code>print</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Es función?</td>
+<td>No (constructo).</td>
+<td>No (constructo).</td>
+</tr>
+<tr>
+<td>Argumentos</td>
+<td>Uno o varios.</td>
+<td>Uno solo.</td>
+</tr>
+<tr>
+<td>Valor de retorno</td>
+<td>Ninguno.</td>
+<td><code>1</code>.</td>
+</tr>
+<tr>
+<td>Velocidad</td>
+<td>Levemente más rápido.</td>
+<td>Levemente más lento.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">&lt;?php
+// Comentario de una línea
+# Otro comentario de una línea
+/*
+  Comentario
+  de varias líneas
+*/
+?&gt;
+</code></pre>
+<hr>
+<h2>4. Inclusión de archivos</h2>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Ante un error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>include</code></td>
+<td>Produce un <strong>warning</strong> y sigue.</td>
+</tr>
+<tr>
+<td><code>require</code></td>
+<td>Produce un <strong>error fatal</strong> y detiene la ejecución.</td>
+</tr>
+<tr>
+<td><code>include_once</code> / <code>require_once</code></td>
+<td>Igual, pero solo incluye una vez.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">&lt;?php
+require(&quot;$libdir/conecta.php&quot;);
+require(&quot;$libdir/fecha.php&quot;);
+
+include(&quot;cabecera.html&quot;);
+// contenido de la página
+include(&quot;pie.html&quot;);
+?&gt;
+</code></pre>
+<blockquote>
+<p>Se usa <code>require()</code> cuando un error debe <strong>interrumpir</strong> la carga de la página (por ejemplo, la conexión a la base).</p>
+</blockquote>
+<hr>
+<h2>5. Tipos de datos</h2>
+<p>PHP soporta <strong>8 tipos primitivos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Tipos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Escalares</td>
+<td><code>boolean</code>, <code>integer</code>, <code>double</code> (float), <code>string</code></td>
+</tr>
+<tr>
+<td>Compuestos</td>
+<td><code>array</code>, <code>object</code></td>
+</tr>
+<tr>
+<td>Especiales</td>
+<td><code>resource</code>, <code>NULL</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>El tipo <strong>no se suele especificar</strong>: se decide en tiempo de ejecución según el contexto y <strong>puede variar</strong>.</li>
+<li>Desde <strong>PHP 7</strong> existen las <strong>declaraciones de tipo</strong> (tipado estricto opcional).</li>
+</ul>
+<pre><code class="language-php">$entero   = 27;
+$real     = 1.234;
+$logico   = true;
+$texto    = &quot;Hola&quot;;
+$lista    = array(10, 25, 15);
+$nulo     = NULL;
+</code></pre>
+<h3>Funciones de inspección</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Devuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gettype($v)</code></td>
+<td>El tipo de la variable (string).</td>
+</tr>
+<tr>
+<td><code>var_dump($v)</code></td>
+<td>Tipo <strong>y</strong> valor (ideal para arrays).</td>
+</tr>
+<tr>
+<td><code>print_r($v)</code></td>
+<td>Contenido legible de un array u objeto.</td>
+</tr>
+<tr>
+<td><code>is_array()</code>, <code>is_bool()</code>, <code>is_float()</code>, <code>is_integer()</code>, <code>is_null()</code>, <code>is_numeric()</code>, <code>is_object()</code>, <code>is_resource()</code>, <code>is_scalar()</code>, <code>is_string()</code></td>
+<td>Comprueban el tipo.</td>
+</tr>
+</tbody>
+</table>
+<h3>Booleanos</h3>
+<ul>
+<li>Valores: <code>true</code>, <code>false</code> (insensibles a mayúsculas).</li>
+<li>Se evalúan como <code>false</code>: <code>0</code>, <code>0.0</code>, <code>""</code>, <code>"0"</code>, <code>NULL</code>, array vacío, y la variable no definida.</li>
+</ul>
+<h3>Strings</h3>
+<table>
+<thead>
+<tr>
+<th>Comillas</th>
+<th>Variables</th>
+<th>Escapes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simples <code>'...'</code></td>
+<td><strong>No</strong> se evalúan</td>
+<td><code>\'</code> y <code>\\</code></td>
+</tr>
+<tr>
+<td>Dobles <code>"..."</code></td>
+<td><strong>Sí</strong> se evalúan</td>
+<td><code>\n</code>, <code>\r</code>, <code>\t</code>, <code>\\</code>, <code>\$</code>, <code>\"</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">$a = 9;
+print 'a vale $a';   // a vale $a
+print &quot;a vale $a&quot;;   // a vale 9
+
+// Acceso a un carácter
+$inicial = $nombre[0];
+</code></pre>
+<h3>Casteo</h3>
+<pre><code class="language-php">$a = &quot;25&quot;;
+$a = (int) $a;        // 25
+$b = (string) 25;     // &quot;25&quot;
+$c = (float) &quot;3.5&quot;;   // 3.5
+$d = (bool) 0;        // false
+$e = (array) $obj;
+$f = (object) $arr;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Casteo</th>
+<th>Convierte a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(string)</code></td>
+<td>String</td>
+</tr>
+<tr>
+<td><code>(int)</code></td>
+<td>Integer</td>
+</tr>
+<tr>
+<td><code>(float)</code></td>
+<td>Float</td>
+</tr>
+<tr>
+<td><code>(bool)</code></td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td><code>(array)</code></td>
+<td>Array</td>
+</tr>
+<tr>
+<td><code>(object)</code></td>
+<td>Object</td>
+</tr>
+<tr>
+<td><code>(unset)</code></td>
+<td>NULL (<strong>obsoleto</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>6. Variables y ámbito</h2>
+<ul>
+<li>Siempre empiezan con <code>$</code>.</li>
+<li>El <strong>nombre es sensible a mayúsculas</strong>: <code>$edad</code> ≠ <code>$Edad</code>.</li>
+<li>Comienzan con letra o guion bajo, seguido de letras, números o guiones bajos.</li>
+</ul>
+<pre><code class="language-php">$valor = 5;
+print &quot;El valor es: &quot; . $valor . &quot;\n&quot;;
+print &quot;El valor es: $valor\n&quot;;   // solo con comillas dobles
+</code></pre>
+<h3>Ámbito</h3>
+<table>
+<thead>
+<tr>
+<th>Ámbito</th>
+<th>Dónde se define</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Global</strong></td>
+<td>Fuera de funciones</td>
+<td>Visible en el archivo, <strong>no</strong> dentro de funciones.</td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td>Dentro de una función</td>
+<td>Solo existe dentro de esa función.</td>
+</tr>
+<tr>
+<td><strong>Static</strong></td>
+<td>Dentro de una función con <code>static</code></td>
+<td>Conserva el valor entre llamadas.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">// static: conserva el valor
+function myTest() {
+  static $x = 0;
+  echo $x;
+  $x++;
+}
+myTest();  // 0
+myTest();  // 1
+myTest();  // 2
+</code></pre>
+<pre><code class="language-php">// global: hay que declararla
+$x = 5;
+$y = 10;
+
+function sumar() {
+  global $x, $y;
+  $y = $x + $y;
+}
+sumar();
+echo $y;   // 15
+</code></pre>
+<pre><code class="language-php">// $GLOBALS: acceso directo desde cualquier lado
+$x = 5;
+$y = 10;
+
+function sumar2() {
+  $GLOBALS['y'] = $GLOBALS['x'] + $GLOBALS['y'];
+}
+sumar2();
+echo $y;   // 15
+</code></pre>
+<h3>Variables variables (<code>$$</code>)</h3>
+<p>Convierten el <strong>contenido</strong> de una variable en el <strong>nombre</strong> de otra.</p>
+<pre><code class="language-php">$mes = &quot;enero&quot;;
+$$mes = 1;      // crea $enero = 1
+echo $enero;    // 1
+</code></pre>
+<hr>
+<h2>7. Superglobales</h2>
+<table>
+<thead>
+<tr>
+<th>Superglobal</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$GLOBALS</code></td>
+<td>Todas las variables globales (accesible desde funciones).</td>
+</tr>
+<tr>
+<td><code>$_SERVER</code></td>
+<td>Información del servidor y de la petición.</td>
+</tr>
+<tr>
+<td><code>$_GET</code></td>
+<td>Datos enviados por método GET (en la URL).</td>
+</tr>
+<tr>
+<td><code>$_POST</code></td>
+<td>Datos enviados por método POST (en el cuerpo).</td>
+</tr>
+<tr>
+<td><code>$_FILES</code></td>
+<td>Archivos subidos.</td>
+</tr>
+<tr>
+<td><code>$_COOKIE</code></td>
+<td>Cookies del cliente.</td>
+</tr>
+<tr>
+<td><code>$_SESSION</code></td>
+<td>Variables de sesión.</td>
+</tr>
+<tr>
+<td><code>$_ENV</code></td>
+<td>Variables de entorno.</td>
+</tr>
+<tr>
+<td><code>$_REQUEST</code></td>
+<td>Une <code>$_GET</code>, <code>$_POST</code> y <code>$_COOKIE</code>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Desde PHP 4.2.0, <code>register_globals = off</code> por defecto: <strong>no</strong> se accede a los datos del formulario como <code>$edad</code>, sino como <code>$_POST['edad']</code>, <code>$_GET['edad']</code> o <code>$_REQUEST['edad']</code>.</p>
+</blockquote>
+<hr>
+<h2>8. Constantes</h2>
+<pre><code class="language-php">define(&quot;CONSTANTE&quot;, &quot;hola&quot;);
+print CONSTANTE;      // sin $ delante
+</code></pre>
+<ul>
+<li><strong>No llevan <code>$</code></strong>.</li>
+<li>Solo admiten tipos <strong>escalares</strong>: <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>.</li>
+<li>No se pueden cambiar una vez definidas.</li>
+</ul>
+<pre><code class="language-php">const OTRA = &quot;valor&quot;;   // sintaxis alternativa
+echo OTRA;
+</code></pre>
+<hr>
+<h2>9. Operadores</h2>
+<h3>Aritméticos</h3>
+<pre><code class="language-php">+   -   *   /   %   ++   --
+</code></pre>
+<h3>Asignación y combinados</h3>
+<pre><code class="language-php">$a = 4;
+$a += 6;              // 10
+$a -= 2; $a *= 2; $a /= 2; $a %= 3;
+
+$b = &quot;hola &quot;;
+$b .= &quot;mundo&quot;;        // &quot;hola mundo&quot;
+</code></pre>
+<h3>Comparación</h3>
+<pre><code class="language-php">==   !=   &lt;&gt;   &lt;   &gt;   &lt;=   &gt;=   ===   !==   &lt;=&gt;
+</code></pre>
+<blockquote>
+<p><code>==</code> compara valor; <code>===</code> compara <strong>valor y tipo</strong>. <code>&lt;=&gt;</code> es el operador <em>spaceship</em>.</p>
+</blockquote>
+<h3>Lógicos</h3>
+<pre><code class="language-php">and (&amp;&amp;)    or (||)    !    xor
+</code></pre>
+<blockquote>
+<p><code>and</code>/<code>or</code> tienen <strong>menor prioridad</strong> que <code>&amp;&amp;</code>/<code>||</code> y que la asignación.</p>
+</blockquote>
+<h3>Cadenas</h3>
+<pre><code class="language-php">$c = &quot;Hola&quot; . &quot; &quot; . &quot;mundo&quot;;   // concatenación
+</code></pre>
+<h3>Control de error</h3>
+<pre><code class="language-php">@$resultado = 10 / 0;   // evita el mensaje de error
+</code></pre>
+<h3>Precedencia (de mayor a menor)</h3>
+<pre><code>++  --
+*   /   %
++   -
+&lt;   &lt;=   &gt;   &gt;=
+==  !=
+&amp;&amp;
+||
+</code></pre>
+<blockquote>
+<p>Ante la duda, usar <strong>paréntesis</strong>.</p>
+</blockquote>
+<hr>
+<h2>10. Estructuras de control</h2>
+<h3><code>if</code> / <code>elseif</code> / <code>else</code></h3>
+<pre><code class="language-php">if ($nota &gt;= 8) {
+  echo &quot;Promociona&quot;;
+} elseif ($nota &gt;= 6) {
+  echo &quot;Regulariza&quot;;
+} else {
+  echo &quot;Recursa&quot;;
+}
+</code></pre>
+<h3><code>while</code></h3>
+<pre><code class="language-php">$i = 1;
+while ($i &lt;= 10) {
+  echo $i . &quot;&lt;br&gt;\n&quot;;
+  $i++;
+}
+</code></pre>
+<h3><code>do ... while</code></h3>
+<pre><code class="language-php">$i = 1;
+do {
+  echo $i;
+  $i++;
+} while ($i &lt;= 10);
+</code></pre>
+<h3><code>for</code></h3>
+<pre><code class="language-php">for ($i = 1; $i &lt;= 10; $i++) {
+  echo &quot;$n x $i = &quot; . ($n * $i) . &quot;&lt;br&gt;\n&quot;;
+}
+</code></pre>
+<h3><code>foreach</code></h3>
+<pre><code class="language-php">foreach ($color as $valor) {
+  print &quot;Valor: $valor&lt;BR&gt;\n&quot;;
+}
+
+foreach ($color as $clave =&gt; $valor) {
+  print &quot;Clave: $clave; Valor: $valor&lt;BR&gt;\n&quot;;
+}
+</code></pre>
+<h3><code>switch</code></h3>
+<pre><code class="language-php">switch ($categoria) {
+  case &quot;promociones&quot;:
+    echo &quot;Ofertas&quot;;
+    break;
+  case &quot;costas&quot;:
+    echo &quot;Costa&quot;;
+    break;
+  default:
+    echo &quot;General&quot;;
+}
+</code></pre>
+<blockquote>
+<p>La expresión del <code>case</code> puede ser <code>integer</code>, <code>float</code> o <code>string</code>. No olvidar los <code>break</code>.</p>
+</blockquote>
+<h3><code>break</code> / <code>continue</code></h3>
+<pre><code class="language-php">foreach ($items as $item) {
+  if ($item == &quot;salir&quot;) break;      // corta el bucle
+  if ($item == &quot;ignorar&quot;) continue; // salta a la siguiente iteración
+  echo $item;
+}
+</code></pre>
+<hr>
+<h2>11. Funciones</h2>
+<pre><code class="language-php">function suma($x, $y) {
+  $s = $x + $y;
+  return $s;
+}
+
+$a = 1;
+$b = 2;
+echo suma($a, $b);   // 3
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parámetros</td>
+<td>Por defecto se pasan <strong>por valor</strong>.</td>
+</tr>
+<tr>
+<td>Por referencia</td>
+<td>Se antepone <code>&amp;</code> al parámetro.</td>
+</tr>
+<tr>
+<td>Valores por defecto</td>
+<td>Deben ser <strong>los últimos</strong> parámetros.</td>
+</tr>
+<tr>
+<td>Tipo de retorno</td>
+<td>Se declara después de los paréntesis: <code>: int</code>, <code>: string</code>, <code>: iterable</code>.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">// Paso por referencia
+function incrementa(&amp;$a) {
+  $a = $a + 1;
+}
+$a = 1;
+incrementa($a);
+print $a;   // 2
+</code></pre>
+<pre><code class="language-php">// Argumentos por defecto
+function muestranombre($nombre, $titulo = &quot;Sr.&quot;) {
+  print &quot;Estimado $titulo $nombre:\n&quot;;
+}
+muestranombre(&quot;Fernández&quot;);            // Estimado Sr. Fernández
+muestranombre(&quot;Fernández&quot;, &quot;Prof.&quot;);   // Estimado Prof. Fernández
+</code></pre>
+<pre><code class="language-php">// Declaración de tipo (PHP 7+)
+function sumar(int $a, int $b): int {
+  return $a + $b;
+}
+</code></pre>
+<hr>
+<h2>12. Arrays</h2>
+<h3>Definición</h3>
+<pre><code class="language-php">$medidas = array(10, 25, 15);                    // índice 0, 1, 2
+$color   = array('rojo' =&gt; 101, 'verde' =&gt; 51);  // asociativo
+$anidado = array('a' =&gt; array(1, 2), 'b' =&gt; 3);  // multidimensional
+
+// Sintaxis corta (PHP 5.4+)
+$medidas = [10, 25, 15];
+$color   = ['rojo' =&gt; 101, 'verde' =&gt; 51];
+</code></pre>
+<h3>Acceso</h3>
+<pre><code class="language-php">echo $medidas[0];       // 10
+echo $color['rojo'];    // 101  ← no olvidar las comillas
+</code></pre>
+<h3>Agregar / modificar</h3>
+<pre><code class="language-php">$medidas[] = 40;              // agrega al final
+$color['azul'] = 255;         // agrega clave
+$color['rojo'] = 100;         // modifica
+unset($color['verde']);       // elimina
+</code></pre>
+<h3>Recorrido</h3>
+<pre><code class="language-php">foreach ($medidas as $valor) { echo $valor; }
+
+foreach ($color as $clave =&gt; $valor) {
+  echo &quot;$clave = $valor&quot;;
+}
+</code></pre>
+<h3>Funciones de arrays</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count($a)</code></td>
+<td>Cantidad de elementos.</td>
+</tr>
+<tr>
+<td><code>sort()</code> / <code>rsort()</code></td>
+<td>Ordena por valor (asc / desc), reindexa.</td>
+</tr>
+<tr>
+<td><code>asort()</code> / <code>arsort()</code></td>
+<td>Ordena por valor conservando claves.</td>
+</tr>
+<tr>
+<td><code>ksort()</code> / <code>krsort()</code></td>
+<td>Ordena por clave.</td>
+</tr>
+<tr>
+<td><code>array_keys()</code></td>
+<td>Devuelve las claves.</td>
+</tr>
+<tr>
+<td><code>array_values()</code></td>
+<td>Devuelve los valores.</td>
+</tr>
+<tr>
+<td><code>in_array($v, $a)</code></td>
+<td>¿Existe el valor?</td>
+</tr>
+<tr>
+<td><code>array_key_exists($k, $a)</code></td>
+<td>¿Existe la clave?</td>
+</tr>
+<tr>
+<td><code>array_push()</code> / <code>array_pop()</code></td>
+<td>Agrega al final / quita del final.</td>
+</tr>
+<tr>
+<td><code>array_shift()</code> / <code>array_unshift()</code></td>
+<td>Quita / agrega al principio.</td>
+</tr>
+<tr>
+<td><code>array_merge()</code></td>
+<td>Une arrays.</td>
+</tr>
+<tr>
+<td><code>array_slice()</code></td>
+<td>Extrae una porción.</td>
+</tr>
+<tr>
+<td><code>implode()</code> / <code>explode()</code></td>
+<td>Array → string / string → array.</td>
+</tr>
+<tr>
+<td><code>array_map()</code> / <code>array_filter()</code></td>
+<td>Transforma / filtra.</td>
+</tr>
+<tr>
+<td><code>print_r()</code> / <code>var_dump()</code></td>
+<td>Muestra el contenido.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">$idiomas = [&quot;ingles&quot;, &quot;frances&quot;, &quot;aleman&quot;];
+$n = count($idiomas);
+
+for ($i = 0; $i &lt; $n; $i++) {
+  print &quot;$idiomas[$i]&lt;BR&gt;\n&quot;;
+}
+
+$lista = implode(&quot;, &quot;, $idiomas);   // &quot;ingles, frances, aleman&quot;
+$partes = explode(&quot;, &quot;, $lista);    // vuelve a array
+</code></pre>
+<hr>
+<h2>13. Formularios</h2>
+<h3>Acceso a los datos</h3>
+<pre><code class="language-html">&lt;!-- uno.php --&gt;
+&lt;form action=&quot;dos.php&quot; method=&quot;POST&quot;&gt;
+  Edad: &lt;input type=&quot;text&quot; name=&quot;edad&quot;&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;aceptar&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<pre><code class="language-php">&lt;!-- dos.php --&gt;
+&lt;?php
+  $edad = $_REQUEST['edad'];   // o $_POST['edad']
+  print(&quot;La edad es: $edad&quot;);
+?&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Superglobal</th>
+<th>Cuándo usarla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$_GET</code></td>
+<td><code>method="get"</code> (datos en la URL).</td>
+</tr>
+<tr>
+<td><code>$_POST</code></td>
+<td><code>method="post"</code> (datos en el cuerpo).</td>
+</tr>
+<tr>
+<td><code>$_REQUEST</code></td>
+<td>Cualquiera de los dos (menos específica).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>extract($_REQUEST)</code> convierte todos los elementos enviados en <code>$variable = valor</code>. Es cómodo pero <strong>inseguro</strong>: mejor usar las superglobales explícitas.</p>
+</blockquote>
+<h3>Tipos de controles</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Cómo llega</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code>, <code>password</code>, <code>hidden</code>, <code>textarea</code></td>
+<td>Un string.</td>
+</tr>
+<tr>
+<td><code>radio</code></td>
+<td>Un string (el <code>value</code> elegido).</td>
+</tr>
+<tr>
+<td><code>checkbox</code> (individual)</td>
+<td>Presente si está marcado.</td>
+</tr>
+<tr>
+<td><code>checkbox</code> (grupo)</td>
+<td>Array si <code>name="extras[]"</code>.</td>
+</tr>
+<tr>
+<td><code>select</code> simple</td>
+<td>Un string.</td>
+</tr>
+<tr>
+<td><code>select multiple</code></td>
+<td>Array si <code>name="idiomas[]"</code>.</td>
+</tr>
+<tr>
+<td><code>submit</code></td>
+<td>Presente si se pulsó.</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>En <code>$_FILES</code>, no en <code>$_POST</code>.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- Checkbox múltiple --&gt;
+&lt;input type=&quot;checkbox&quot; name=&quot;extras[]&quot; value=&quot;garaje&quot; checked&gt; Garaje
+&lt;input type=&quot;checkbox&quot; name=&quot;extras[]&quot; value=&quot;piscina&quot;&gt; Piscina
+</code></pre>
+<pre><code class="language-php">&lt;?php
+  $n = count($extras);
+  for ($i = 0; $i &lt; $n; $i++) {
+    print(&quot;$extras[$i]&lt;BR&gt;\n&quot;);
+  }
+
+  // o mejor:
+  foreach ($_POST['extras'] as $extra) {
+    print(&quot;$extra&lt;BR&gt;\n&quot;);
+  }
+?&gt;
+</code></pre>
+<pre><code class="language-html">&lt;!-- Select múltiple --&gt;
+&lt;select multiple size=&quot;3&quot; name=&quot;idiomas[]&quot;&gt;
+  &lt;option value=&quot;ingles&quot; selected&gt;Inglés&lt;/option&gt;
+  &lt;option value=&quot;frances&quot;&gt;Francés&lt;/option&gt;
+  &lt;option value=&quot;aleman&quot;&gt;Alemán&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+<h3>Formulario multipropósito</h3>
+<p>La forma habitual es usar <strong>un solo archivo</strong> que muestre o procese el formulario según si fue enviado.</p>
+<pre><code class="language-php">&lt;?php
+if (isset($_POST['enviar'])) {
+  // procesar
+} else {
+  // mostrar formulario
+}
+?&gt;
+</code></pre>
+<pre><code class="language-php">// Saber si se envió
+if (isset($_POST['enviar']))
+if ($_POST['enviar'] == &quot;procesar&quot;)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Ventaja</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Menos archivos</td>
+<td>Un solo script.</td>
+</tr>
+<tr>
+<td>Validación en el propio formulario</td>
+<td>Se muestran los errores junto a los campos.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>El botón de envío debe tener <code>name</code> para poder detectarlo: <code>&lt;input type="submit" name="enviar" value="procesar"&gt;</code>.</p>
+</blockquote>
+<h3>Campos dinámicos con JavaScript</h3>
+<p>Cuando un campo debe cambiar según otro:</p>
+<pre><code class="language-javascript">function actualizaPagina() {
+  var i = document.forms.selecciona.categoria.selectedIndex;
+  var categoria = document.forms.selecciona.categoria.options[i].value;
+  window.location = 'muestra_noticias.php?categoria=' + categoria;
+}
+</code></pre>
+<pre><code class="language-html">&lt;select name=&quot;categoria&quot; onchange=&quot;actualizaPagina()&quot;&gt;
+</code></pre>
+<hr>
+<h2>14. Subida de archivos</h2>
+<h3>Formulario</h3>
+<pre><code class="language-html">&lt;form action=&quot;procesa.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;input type=&quot;hidden&quot; name=&quot;MAX_FILE_SIZE&quot; value=&quot;102400&quot;&gt;
+  &lt;input type=&quot;file&quot; name=&quot;imagen&quot;&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;Subir&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote>
+<p><code>enctype="multipart/form-data"</code> es <strong>obligatorio</strong>. Sin él, el archivo no se envía.</p>
+</blockquote>
+<h3><code>$_FILES</code></h3>
+<table>
+<thead>
+<tr>
+<th>Índice</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$_FILES['imagen']['name']</code></td>
+<td>Nombre original en la máquina del cliente.</td>
+</tr>
+<tr>
+<td><code>$_FILES['imagen']['type']</code></td>
+<td>Tipo MIME (<code>image/gif</code>, <code>application/pdf</code>...).</td>
+</tr>
+<tr>
+<td><code>$_FILES['imagen']['size']</code></td>
+<td>Tamaño en bytes.</td>
+</tr>
+<tr>
+<td><code>$_FILES['imagen']['tmp_name']</code></td>
+<td>Nombre del archivo temporal en el servidor.</td>
+</tr>
+<tr>
+<td><code>$_FILES['imagen']['error']</code></td>
+<td>Código de error.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>php.ini</code></h3>
+<pre><code class="language-ini">file_uploads = On
+;upload_tmp_dir =
+upload_max_filesize = 2M
+post_max_size = 40M
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Directiva</th>
+<th>Qué limita</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file_uploads</code></td>
+<td>Habilita la subida.</td>
+</tr>
+<tr>
+<td><code>upload_max_filesize</code></td>
+<td>Tamaño máximo por archivo.</td>
+</tr>
+<tr>
+<td><code>post_max_size</code></td>
+<td>Tamaño máximo del POST completo (debe ser ≥ <code>upload_max_filesize</code>).</td>
+</tr>
+<tr>
+<td><code>upload_tmp_dir</code></td>
+<td>Carpeta temporal.</td>
+</tr>
+</tbody>
+</table>
+<h3>Mover el archivo</h3>
+<pre><code class="language-php">&lt;?php
+if (is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+  $nombreDirectorio = &quot;img/&quot;;
+  $idUnico = time();
+  $nombreArchivo = $idUnico . &quot;-&quot; . $_FILES['imagen']['name'];
+
+  move_uploaded_file(
+    $_FILES['imagen']['tmp_name'],
+    $nombreDirectorio . $nombreArchivo
+  );
+} else {
+  print(&quot;No se ha podido subir el archivo\n&quot;);
+}
+?&gt;
+</code></pre>
+<pre><code class="language-php">// Verificar si ya existe
+if (file_exists($target_file)) {
+  echo &quot;El archivo ya existe.&quot;;
+}
+</code></pre>
+<blockquote>
+<p>Regla: <strong>descartar el nombre original</strong> y generar uno único (<code>time()</code>, <code>uniqid()</code>) para evitar colisiones y nombres maliciosos.</p>
+</blockquote>
+<hr>
+<h2>15. Validación de datos</h2>
+<blockquote>
+<p>Toda la información proveniente de un formulario debe considerarse <strong>"contaminada"</strong> y validarse antes de procesarla.</p>
+</blockquote>
+<h3>Esquema</h3>
+<pre><code>si se envió el formulario:
+    validar datos
+fin si
+
+si se envió el formulario y no hay errores:
+    procesar
+si no:
+    mostrar formulario (con valores por defecto o ya enviados)
+fin si
+</code></pre>
+<h3>Ejemplo</h3>
+<pre><code class="language-php">&lt;?php
+$errores = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+  $nombre = trim($_POST['nombre'] ?? '');
+  $email  = trim($_POST['email'] ?? '');
+  $edad   = filter_input(INPUT_POST, 'edad', FILTER_VALIDATE_INT);
+
+  if ($nombre === '') {
+    $errores[] = &quot;El nombre es obligatorio.&quot;;
+  }
+
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errores[] = &quot;El correo no es válido.&quot;;
+  }
+
+  if ($edad === false || $edad &lt; 1 || $edad &gt; 120) {
+    $errores[] = &quot;La edad debe estar entre 1 y 120.&quot;;
+  }
+
+  if (empty($errores)) {
+    // procesar
+  }
+}
+?&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trim()</code></td>
+<td>Quita espacios al inicio y al final.</td>
+</tr>
+<tr>
+<td><code>isset()</code></td>
+<td>¿Existe y no es <code>NULL</code>?</td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>¿No existe o es "vacío"?</td>
+</tr>
+<tr>
+<td><code>filter_var()</code></td>
+<td>Valida emails, URLs, IPs, enteros.</td>
+</tr>
+<tr>
+<td><code>filter_input()</code></td>
+<td>Obtiene y filtra una variable externa.</td>
+</tr>
+<tr>
+<td><code>htmlspecialchars()</code></td>
+<td>Escapa caracteres para mostrar en HTML.</td>
+</tr>
+<tr>
+<td><code>strip_tags()</code></td>
+<td>Elimina etiquetas HTML.</td>
+</tr>
+<tr>
+<td><code>is_numeric()</code></td>
+<td>¿Es un número?</td>
+</tr>
+<tr>
+<td><code>preg_match()</code></td>
+<td>Valida con expresión regular.</td>
+</tr>
+<tr>
+<td><code>strlen()</code></td>
+<td>Longitud.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>16. Fechas y horas</h2>
+<h3>Zona horaria</h3>
+<pre><code class="language-php">date_default_timezone_set(&quot;America/Argentina/Salta&quot;);
+date_default_timezone_set(&quot;Europe/Madrid&quot;);
+</code></pre>
+<blockquote>
+<p>Se setea por script cuando el servidor da error de zona horaria o cuando se desarrolla para otra zona sin tocar <code>php.ini</code>.</p>
+</blockquote>
+<h3><code>date($formato)</code></h3>
+<table>
+<thead>
+<tr>
+<th>Carácter</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code></td>
+<td>Día con ceros (<code>01</code>–<code>31</code>).</td>
+</tr>
+<tr>
+<td><code>j</code></td>
+<td>Día sin ceros (<code>1</code>–<code>31</code>).</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Mes con ceros (<code>01</code>–<code>12</code>).</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>Mes sin ceros.</td>
+</tr>
+<tr>
+<td><code>Y</code></td>
+<td>Año 4 cifras.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>Año 2 cifras.</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>Día de la semana corto (<code>Mon</code>).</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>Día de la semana completo (<code>Monday</code>).</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Mes corto (<code>Jan</code>).</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td>Mes completo (<code>January</code>).</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>Hora 12 h con ceros.</td>
+</tr>
+<tr>
+<td><code>H</code></td>
+<td>Hora 24 h con ceros.</td>
+</tr>
+<tr>
+<td><code>g</code> / <code>G</code></td>
+<td>Hora 12 h / 24 h sin ceros.</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>Minutos con ceros.</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>Segundos con ceros.</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Fecha completa RFC 2822.</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>Fecha completa ISO 8601.</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>Días del mes actual.</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>Día de la semana (lunes 1 … domingo 7).</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>Día de la semana (domingo 0 … sábado 6).</td>
+</tr>
+<tr>
+<td><code>z</code></td>
+<td>Día del año.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">date_default_timezone_set(&quot;Europe/Madrid&quot;);
+print &quot;&lt;p&gt;Ejemplo 1: &quot; . date(&quot;d/m/y H:i:s&quot;) . &quot;&lt;/p&gt;\n&quot;;
+print &quot;&lt;p&gt;Ejemplo 2: &quot; . date(&quot;l, F jS Y&quot;) . &quot;&lt;/p&gt;\n&quot;;
+</code></pre>
+<h3><code>time()</code> y <code>strtotime()</code></h3>
+<pre><code class="language-php">$semanaSiguiente = time() + (7 * 24 * 60 * 60);
+
+echo 'Ahora: ' . date('Y-m-d') . &quot;\n&quot;;
+echo 'Semana siguiente: ' . date('Y-m-d', $semanaSiguiente) . &quot;\n&quot;;
+echo 'Semana siguiente: ' . date('Y-m-d', strtotime('+1 week')) . &quot;\n&quot;;
+</code></pre>
+<h3><code>strftime()</code> (localizado)</h3>
+<pre><code class="language-php">date_default_timezone_set(&quot;Europe/Madrid&quot;);
+setlocale(LC_TIME, &quot;spanish&quot;);
+print strftime(&quot;Ejemplo: %A, %d de %B de %Y&quot;);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%d</code>, <code>%m</code>, <code>%Y</code>, <code>%y</code></td>
+<td>Día, mes, año.</td>
+</tr>
+<tr>
+<td><code>%a</code>, <code>%A</code></td>
+<td>Día corto / completo.</td>
+</tr>
+<tr>
+<td><code>%b</code>, <code>%B</code></td>
+<td>Mes corto / completo.</td>
+</tr>
+<tr>
+<td><code>%H</code>, <code>%I</code>, <code>%M</code>, <code>%S</code></td>
+<td>Hora 24 h, 12 h, minutos, segundos.</td>
+</tr>
+<tr>
+<td><code>%c</code>, <code>%x</code>, <code>%X</code></td>
+<td>Fecha y hora / fecha / hora.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>strftime()</code> está <strong>obsoleta</strong> desde PHP 8.1, pero aparece en la teoría.</p>
+</blockquote>
+<h3><code>getdate()</code></h3>
+<pre><code class="language-php">$hoy = getdate();
+print_r($hoy);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clave</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seconds</code>, <code>minutes</code>, <code>hours</code></td>
+<td>Hora.</td>
+</tr>
+<tr>
+<td><code>mday</code></td>
+<td>Día del mes (1–31).</td>
+</tr>
+<tr>
+<td><code>wday</code></td>
+<td>Día de la semana (0 = domingo).</td>
+</tr>
+<tr>
+<td><code>mon</code></td>
+<td>Mes (1–12).</td>
+</tr>
+<tr>
+<td><code>year</code></td>
+<td>Año de 4 cifras.</td>
+</tr>
+<tr>
+<td><code>yday</code></td>
+<td>Día del año (0–365).</td>
+</tr>
+<tr>
+<td><code>weekday</code>, <code>month</code></td>
+<td>Nombre del día y del mes.</td>
+</tr>
+<tr>
+<td><code>[0]</code></td>
+<td>Timestamp Unix.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>localtime()</code></h3>
+<pre><code class="language-php">$fecha_actual = localtime(time(), 1);
+$anyo_actual  = $fecha_actual[&quot;tm_year&quot;] + 1900;
+$mes_actual   = $fecha_actual[&quot;tm_mon&quot;] + 1;
+$dia_actual   = $fecha_actual[&quot;tm_mday&quot;];
+
+print &quot;&lt;p&gt;Hoy es el $dia_actual/$mes_actual/$anyo_actual.&lt;/p&gt;&quot;;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clave</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tm_sec</code>, <code>tm_min</code>, <code>tm_hour</code></td>
+<td>Hora.</td>
+</tr>
+<tr>
+<td><code>tm_mday</code></td>
+<td>Día del mes.</td>
+</tr>
+<tr>
+<td><code>tm_mon</code></td>
+<td>Mes <strong>0–11</strong>.</td>
+</tr>
+<tr>
+<td><code>tm_year</code></td>
+<td>Años <strong>desde 1900</strong>.</td>
+</tr>
+<tr>
+<td><code>tm_wday</code></td>
+<td>Día de la semana (0 = domingo).</td>
+</tr>
+<tr>
+<td><code>tm_yday</code></td>
+<td>Día del año.</td>
+</tr>
+<tr>
+<td><code>tm_isdst</code></td>
+<td>Horario de verano.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>checkdate()</code></h3>
+<pre><code class="language-php">if (checkdate($mes, $dia, $anyo)) {
+  print &quot;&lt;p&gt;El día $dia/$mes/$anyo existe.&lt;/p&gt;&quot;;
+} else {
+  print &quot;&lt;p&gt;El día $dia/$mes/$anyo no existe.&lt;/p&gt;&quot;;
+}
+</code></pre>
+<blockquote>
+<p>Valida fechas del calendario <strong>gregoriano</strong> (desde el 15/10/1582).</p>
+</blockquote>
+<h3><code>DateTime</code></h3>
+<pre><code class="language-php">// Estilo por procedimientos
+$date = date_create('2000-01-01');
+echo date_format($date, 'Y-m-d H:i:s');
+
+// Estilo orientado a objetos
+$date = new DateTime('2000-01-01');
+echo $date-&gt;format('Y-m-d H:i:s');
+</code></pre>
+<pre><code class="language-php">// Diferencia entre fechas
+$datetime1 = new DateTime('2009-10-11');
+$datetime2 = new DateTime('2009-10-13');
+$interval  = $datetime1-&gt;diff($datetime2);
+echo $interval-&gt;format('%R%a días');   // +2 días
+</code></pre>
+<pre><code class="language-php">// Calcular la edad
+function obtener_edad_segun_fecha($fecha_nacimiento) {
+  $nacimiento = new DateTime($fecha_nacimiento);
+  $ahora      = new DateTime(date(&quot;Y-m-d&quot;));
+  $diferencia = $ahora-&gt;diff($nacimiento);
+  return $diferencia-&gt;format(&quot;%y&quot;);
+}
+
+echo obtener_edad_segun_fecha(&quot;1974-12-27&quot;);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Formato de intervalo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%y</code></td>
+<td>Años.</td>
+</tr>
+<tr>
+<td><code>%m</code></td>
+<td>Meses.</td>
+</tr>
+<tr>
+<td><code>%d</code></td>
+<td>Días.</td>
+</tr>
+<tr>
+<td><code>%a</code></td>
+<td>Total de días.</td>
+</tr>
+<tr>
+<td><code>%R</code></td>
+<td>Signo (<code>+</code> / <code>-</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>17. Sesiones</h2>
+<p>Las sesiones permiten disponer de <strong>variables persistentes</strong> durante toda la conexión del usuario (carrito, login, preferencias).</p>
+<h3>Funciones</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_start()</code></td>
+<td>Inicia la sesión y asigna un ID único; si ya existe, carga las variables.</td>
+</tr>
+<tr>
+<td><code>$_SESSION['clave'] = valor</code></td>
+<td>Registra una variable de sesión (reemplaza a <code>session_register</code>).</td>
+</tr>
+<tr>
+<td><code>unset($_SESSION['clave'])</code></td>
+<td>Elimina una variable (reemplaza a <code>session_unregister</code>).</td>
+</tr>
+<tr>
+<td><code>isset($_SESSION['clave'])</code></td>
+<td>Comprueba si existe (reemplaza a <code>session_is_registered</code>).</td>
+</tr>
+<tr>
+<td><code>session_destroy()</code></td>
+<td>Cierra la sesión.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">&lt;?php
+session_start();
+
+$_SESSION['usuario'] = &quot;ana&quot;;
+
+if (isset($_SESSION['usuario'])) {
+  echo &quot;Bienvenida &quot; . $_SESSION['usuario'];
+}
+
+unset($_SESSION['usuario']);
+session_destroy();
+?&gt;
+</code></pre>
+<blockquote>
+<p><strong>Regla de oro:</strong> <code>session_start()</code> debe estar <strong>antes de cualquier salida HTML</strong>, en <strong>todas</strong> las páginas que usen la sesión.</p>
+</blockquote>
+<h3>Autenticación de usuarios</h3>
+<pre><code>inicio
+  ├── ¿sesión iniciada? --sí--&gt; menú
+  └── no
+        ├── ¿formulario enviado? --sí--&gt; ¿datos correctos?
+        │                                   ├── sí --&gt; iniciar sesión --&gt; menú
+        │                                   └── no --&gt; mostrar error
+        └── no --&gt; mostrar formulario
+</code></pre>
+<ul>
+<li>Los usuarios autorizados se guardan en una <strong>tabla de la base de datos</strong>.</li>
+<li>Las contraseñas se almacenan <strong>encriptadas</strong> (<code>password_hash()</code> / <code>password_verify()</code>).</li>
+<li>Alternativa sin PHP: archivos <code>.htaccess</code> de Apache.</li>
+</ul>
+<hr>
+<h2>18. Cookies</h2>
+<p>Las sesiones mantienen los datos <strong>del lado del servidor</strong>; si se quieren mantener variables <strong>del lado del cliente</strong>, se usan cookies.</p>
+<pre><code class="language-php">setcookie(&quot;nombre&quot;, $valor, $expiracion);
+</code></pre>
+<pre><code class="language-php">setcookie(&quot;persona&quot;, $nombre, time() + 86400 * 365);  // 1 año
+setcookie(&quot;migalleta&quot;, &quot;mivalor&quot;);                    // sesión del navegador
+setcookie(&quot;cookie2&quot;, &quot;mivalor2&quot;, time() + 3600);      // 1 hora
+setcookie(&quot;otracookie&quot;, &quot;valorfinal&quot;, time() + 3600, &quot;/&quot;, &quot;.midominio.com&quot;);
+</code></pre>
+<h3>Leer</h3>
+<pre><code class="language-php">echo $_COOKIE[&quot;migalleta&quot;];
+</code></pre>
+<h3>Contador de visitas</h3>
+<pre><code class="language-php">if (isset($_COOKIE['webtaller'])) {
+  $_COOKIE['webtaller']++;
+  setcookie(&quot;webtaller&quot;, $_COOKIE['webtaller'], time() + 30 * 24 * 60 * 60);
+} else {
+  setcookie(&quot;webtaller&quot;, 1, time() + 30 * 24 * 60 * 60);
+}
+</code></pre>
+<h3>Borrar</h3>
+<pre><code class="language-php">unset($_COOKIE['webtaller']);
+setcookie(&quot;webtaller&quot;, &quot;&quot;);
+</code></pre>
+<blockquote>
+<p>La cookie <strong>no está disponible hasta que el usuario recargue la página</strong>. <code>setcookie()</code> también debe ir antes de cualquier salida HTML.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Sesión</th>
+<th>Cookie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dónde se guarda</td>
+<td>Servidor</td>
+<td>Cliente</td>
+</tr>
+<tr>
+<td>Tamaño</td>
+<td>Sin límite práctico</td>
+<td>~4 KB</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Mayor</td>
+<td>Menor (visible/manipulable)</td>
+</tr>
+<tr>
+<td>Duración</td>
+<td>Mientras dure la sesión</td>
+<td>Según <code>expires</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>19. Manejo de archivos</h2>
+<h3><code>fopen($nombre, $modo)</code> / <code>fclose($fp)</code></h3>
+<table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Lectura</th>
+<th>Escritura</th>
+<th>Posición</th>
+<th>Trunca</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r</code></td>
+<td>Sí</td>
+<td>No</td>
+<td>Inicio</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>r+</code></td>
+<td>Sí</td>
+<td>Sí</td>
+<td>Inicio</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>No</td>
+<td>Sí</td>
+<td>Inicio</td>
+<td><strong>Sí</strong></td>
+</tr>
+<tr>
+<td><code>w+</code></td>
+<td>Sí</td>
+<td>Sí</td>
+<td>Inicio</td>
+<td><strong>Sí</strong></td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>No</td>
+<td>Sí (append)</td>
+<td>Final</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>a+</code></td>
+<td>Sí</td>
+<td>Sí (append)</td>
+<td>Final</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>El modo puede llevar <code>b</code> para binarios (<code>rb</code>, <code>wb</code>), útil en sistemas que distinguen texto y binario.</p>
+</blockquote>
+<pre><code class="language-php">$fp = fopen(&quot;/home/practicos/archivo.txt&quot;, &quot;r&quot;);
+$fp = fopen(&quot;http://www.php.net/&quot;, &quot;r&quot;);
+$fp = fopen(&quot;ftp://user:password@example.com/&quot;, &quot;w&quot;);
+$fp = fopen(&quot;c:\\datos\\info.txt&quot;, &quot;r&quot;);
+
+fclose($fp);
+</code></pre>
+<h3>Leer</h3>
+<pre><code class="language-php">// Archivo completo
+$nombreArchivo = &quot;test.txt&quot;;
+$arch = fopen($nombreArchivo, &quot;r&quot;);
+$contenido = fread($arch, filesize($nombreArchivo));
+print &quot;El contenido del archivo es: $contenido&quot;;
+fclose($arch);
+</code></pre>
+<pre><code class="language-php">// Línea por línea
+$arch = fopen(&quot;archivo.txt&quot;, &quot;r&quot;);
+while (!feof($arch)) {
+  $linea = fgets($arch);
+  echo $linea . &quot;&lt;br&gt;&quot;;
+}
+fclose($arch);
+</code></pre>
+<h3>Escribir</h3>
+<pre><code class="language-php">$archivoNombre = 'almacen.txt';
+$contenido = &quot;almacena esto en el archivo\n&quot;;
+
+if (is_writable($archivoNombre)) {
+  if (!$arch = fopen($archivoNombre, 'a')) {
+    print &quot;No puede abrir el archivo ($archivoNombre)&quot;;
+    exit;
+  }
+
+  if (!fwrite($arch, $contenido)) {
+    print &quot;No puede escribir al archivo ($archivoNombre)&quot;;
+    exit;
+  }
+
+  print &quot;Éxito, almacenó ($contenido) en ($archivoNombre)&quot;;
+  fclose($arch);
+} else {
+  print &quot;El archivo $archivoNombre no se puede escribir&quot;;
+}
+</code></pre>
+<h3>Otras funciones</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fgets($fp)</code></td>
+<td>Lee una línea.</td>
+</tr>
+<tr>
+<td><code>fgetc($fp)</code></td>
+<td>Lee un carácter.</td>
+</tr>
+<tr>
+<td><code>fputs()</code></td>
+<td>Alias de <code>fwrite()</code>.</td>
+</tr>
+<tr>
+<td><code>feof($fp)</code></td>
+<td>¿Fin del archivo?</td>
+</tr>
+<tr>
+<td><code>file()</code></td>
+<td>Devuelve el archivo como array de líneas.</td>
+</tr>
+<tr>
+<td><code>readfile()</code></td>
+<td>Lee y envía el contenido directamente a la salida.</td>
+</tr>
+<tr>
+<td><code>file_get_contents()</code></td>
+<td>Devuelve el archivo completo como string.</td>
+</tr>
+<tr>
+<td><code>file_put_contents()</code></td>
+<td>Escribe un string en el archivo.</td>
+</tr>
+<tr>
+<td><code>filesize()</code></td>
+<td>Tamaño en bytes.</td>
+</tr>
+<tr>
+<td><code>is_writable()</code> / <code>is_readable()</code></td>
+<td>Permisos.</td>
+</tr>
+<tr>
+<td><code>file_exists()</code></td>
+<td>¿Existe?</td>
+</tr>
+<tr>
+<td><code>unlink()</code></td>
+<td>Borra un archivo.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>20. Programación Orientada a Objetos</h2>
+<p>PHP no fue un lenguaje OO hasta la versión <strong>5.0</strong>. La POO crea <strong>objetos que contienen datos y funciones</strong>; la programación procedimental escribe funciones que operan sobre los datos.</p>
+<h3>Ventajas</h3>
+<ul>
+<li>Más rápida y fácil de ejecutar.</li>
+<li>Estructura clara para los programas.</li>
+<li>Código <strong>LIMPIO (DRY: Don't Repeat Yourself)</strong>, más fácil de mantener, modificar y depurar.</li>
+<li>Aplicaciones reutilizables con menos código.</li>
+</ul>
+<h3>Clase y objeto</h3>
+<pre><code class="language-php">class Fruit {
+  public $name;
+  public $color;
+
+  function set_name($name) {
+    $this-&gt;name = $name;
+  }
+
+  function get_name() {
+    return $this-&gt;name;
+  }
+}
+
+$apple = new Fruit();
+$apple-&gt;set_name('Apple');
+echo $apple-&gt;get_name();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clase</strong></td>
+<td>Plantilla / modelo (ej. <code>Fruta</code>, <code>Auto</code>).</td>
+</tr>
+<tr>
+<td><strong>Objeto</strong></td>
+<td>Instancia concreta de una clase (ej. manzana, Ferrari).</td>
+</tr>
+<tr>
+<td><strong>Propiedad</strong></td>
+<td>Variable de la clase.</td>
+</tr>
+<tr>
+<td><strong>Método</strong></td>
+<td>Función de la clase.</td>
+</tr>
+<tr>
+<td><strong><code>$this</code></strong></td>
+<td>Referencia al objeto actual; solo dentro de métodos.</td>
+</tr>
+<tr>
+<td><strong><code>new</code></strong></td>
+<td>Crea una instancia.</td>
+</tr>
+</tbody>
+</table>
+<h3>Visibilidad</h3>
+<table>
+<thead>
+<tr>
+<th>Modificador</th>
+<th>Acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>Desde cualquier lugar (predeterminado).</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>Desde la clase y sus clases derivadas.</td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td><strong>Solo</strong> desde la clase que lo definió.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">class Fruit {
+  public $name;
+  protected $color;
+  private $weight;
+}
+
+$mango = new Fruit();
+$mango-&gt;name   = 'Mango';    // OK
+$mango-&gt;color  = 'Yellow';   // ERROR
+$mango-&gt;weight = '300';      // ERROR
+</code></pre>
+<blockquote>
+<p><code>var</code> equivale a <code>public</code>, pero está en desuso.</p>
+</blockquote>
+<h3>Constructor y destructor</h3>
+<pre><code class="language-php">class Fruit {
+  public $name;
+  public $color;
+
+  function __construct($name, $color) {
+    $this-&gt;name  = $name;
+    $this-&gt;color = $color;
+  }
+
+  function __destruct() {
+    echo &quot;The fruit is {$this-&gt;name} and the color is {$this-&gt;color}.&quot;;
+  }
+}
+
+$apple = new Fruit(&quot;Apple&quot;, &quot;red&quot;);
+</code></pre>
+<blockquote>
+<p><code>__construct()</code> se ejecuta automáticamente al crear el objeto; <code>__destruct()</code> al destruirlo o al terminar el script.</p>
+</blockquote>
+<h3>Herencia</h3>
+<pre><code class="language-php">class Fruit {
+  public $name;
+  public $color;
+
+  public function __construct($name, $color) {
+    $this-&gt;name  = $name;
+    $this-&gt;color = $color;
+  }
+
+  public function intro() {
+    echo &quot;The fruit is {$this-&gt;name} and the color is {$this-&gt;color}.&quot;;
+  }
+}
+
+class Strawberry extends Fruit {
+  public function message() {
+    echo &quot;Am I a fruit or a berry? &quot;;
+  }
+}
+
+$strawberry = new Strawberry(&quot;Strawberry&quot;, &quot;red&quot;);
+$strawberry-&gt;message();
+$strawberry-&gt;intro();
+</code></pre>
+<ul>
+<li>La subclase hereda propiedades y métodos <strong>públicos y protegidos</strong>.</li>
+<li>La herencia va en <strong>una sola dirección</strong>: el padre <strong>no</strong> tiene lo de la hija.</li>
+<li><code>protected</code> no se puede llamar desde fuera, solo desde la clase o sus hijas.</li>
+</ul>
+<h3>Constantes de clase</h3>
+<pre><code class="language-php">class Goodbye {
+  const LEAVING_MESSAGE = &quot;Gracias a ti!&quot;;
+
+  public function byebye() {
+    echo self::LEAVING_MESSAGE;     // desde dentro
+  }
+}
+
+echo Goodbye::LEAVING_MESSAGE;      // desde fuera
+</code></pre>
+<blockquote>
+<p>Se accede con <code>::</code> (operador de resolución de alcance). Distinguen mayúsculas; se recomienda escribirlas en MAYÚSCULAS.</p>
+</blockquote>
+<h3>Clases y métodos abstractos</h3>
+<pre><code class="language-php">abstract class Car {
+  public $name;
+
+  public function __construct($name) {
+    $this-&gt;name = $name;
+  }
+
+  abstract public function intro(): string;
+}
+
+class Audi extends Car {
+  public function intro(): string {
+    return &quot;Choose German quality! I'm an $this-&gt;name!&quot;;
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Regla</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clase abstracta</td>
+<td>Tiene al menos un método abstracto.</td>
+</tr>
+<tr>
+<td>Método abstracto</td>
+<td>Se declara pero <strong>no se implementa</strong>.</td>
+</tr>
+<tr>
+<td>No se instancia</td>
+<td><code>new Car()</code> da error.</td>
+</tr>
+<tr>
+<td>Firma</td>
+<td>La hija debe usar el mismo nombre y modificador <strong>igual o menos restrictivo</strong>.</td>
+</tr>
+<tr>
+<td>Argumentos</td>
+<td>Misma cantidad de requeridos; puede agregar opcionales.</td>
+</tr>
+</tbody>
+</table>
+<h3>Interfaces y polimorfismo</h3>
+<pre><code class="language-php">interface Animal {
+  public function makeSound();
+}
+
+class Cat implements Animal {
+  public function makeSound() {
+    echo &quot;Meow&quot;;
+  }
+}
+
+$animal = new Cat();
+$animal-&gt;makeSound();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Clase abstracta</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propiedades</td>
+<td>Sí</td>
+<td><strong>No</strong></td>
+</tr>
+<tr>
+<td>Visibilidad de métodos</td>
+<td><code>public</code> o <code>protected</code></td>
+<td>Todos <code>public</code></td>
+</tr>
+<tr>
+<td>Implementación</td>
+<td>Puede tener métodos concretos</td>
+<td>Todos abstractos</td>
+</tr>
+<tr>
+<td>Palabra <code>abstract</code></td>
+<td>Necesaria</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Herencia múltiple</td>
+<td>No</td>
+<td>Se pueden implementar varias</td>
+</tr>
+<tr>
+<td>Palabra clave</td>
+<td><code>extends</code></td>
+<td><code>implements</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Polimorfismo:</strong> varias clases usan la misma interfaz y se pueden tratar de la misma manera.</p>
+</blockquote>
+<h3>Traits</h3>
+<p>PHP solo admite <strong>herencia única</strong>. Los <em>traits</em> permiten reutilizar métodos en varias clases.</p>
+<pre><code class="language-php">trait message1 {
+  public function msg1() {
+    echo &quot;OOP is fun! &quot;;
+  }
+}
+
+trait message2 {
+  public function msg2() {
+    echo &quot;OOP reduces code duplication!&quot;;
+  }
+}
+
+class Welcome {
+  use message1;
+}
+
+class Welcome2 {
+  use message1, message2;
+}
+
+$obj2 = new Welcome2();
+$obj2-&gt;msg1();
+$obj2-&gt;msg2();
+</code></pre>
+<blockquote>
+<p>Los traits pueden tener métodos (con cualquier visibilidad) y métodos abstractos. Se usan con <code>use</code>.</p>
+</blockquote>
+<h3>Métodos y propiedades estáticas</h3>
+<pre><code class="language-php">class greeting {
+  public static function welcome() {
+    echo &quot;Hello World!&quot;;
+  }
+}
+
+greeting::welcome();          // sin instanciar
+
+class pi {
+  public static $value = 3.14159;
+}
+
+echo pi::$value;
+
+class x extends pi {
+  public function xStatic() {
+    return parent::$value;    // desde la clase hija
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Acceso</th>
+<th>Sintaxis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Método estático</td>
+<td><code>Clase::metodo()</code></td>
+</tr>
+<tr>
+<td>Propiedad estática</td>
+<td><code>Clase::$propiedad</code></td>
+</tr>
+<tr>
+<td>Desde dentro de la clase</td>
+<td><code>self::metodo()</code> / <code>self::$propiedad</code></td>
+</tr>
+<tr>
+<td>Desde la clase hija</td>
+<td><code>parent::$propiedad</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Espacios de nombres</h3>
+<pre><code class="language-php">&lt;?php
+namespace Html;
+
+class Table {
+  public $title = &quot;&quot;;
+  public $numRows = 0;
+
+  public function message() {
+    echo &quot;&lt;p&gt;Table '{$this-&gt;title}' has {$this-&gt;numRows} rows.&lt;/p&gt;&quot;;
+  }
+}
+?&gt;
+</code></pre>
+<pre><code class="language-php">namespace Code\Html;      // anidados
+use Html as H;            // alias de espacio
+use Html\Table as T;      // alias de clase
+</code></pre>
+<blockquote>
+<p>La declaración <code>namespace</code> debe ser <strong>lo primero</strong> en el archivo.</p>
+</blockquote>
+<h3>Iterables</h3>
+<pre><code class="language-php">function printIterable(iterable $myIterable) {
+  foreach ($myIterable as $item) {
+    echo $item;
+  }
+}
+
+$arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
+printIterable($arr);
+</code></pre>
+<pre><code class="language-php">function getIterable(): iterable {
+  return [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
+}
+</code></pre>
+<blockquote>
+<p><code>iterable</code> (PHP 7.1+) acepta arrays y objetos <code>Traversable</code>.</p>
+</blockquote>
+<hr>
+<h2>21. Acceso a MySQL con MySQLi</h2>
+<h3>MySQLi vs. PDO</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MySQLi</th>
+<th>PDO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bases soportadas</td>
+<td>Solo MySQL</td>
+<td>12+ (PostgreSQL, SQLite, Oracle...)</td>
+</tr>
+<tr>
+<td>Estilos</td>
+<td>Procedural y OO</td>
+<td>Solo OO</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Hay que sanitizar</td>
+<td>Exige sanitizar (prepared statements)</td>
+</tr>
+</tbody>
+</table>
+<h3>Pasos</h3>
+<ol>
+<li>Conectar con el servidor.</li>
+<li>Seleccionar la base de datos.</li>
+<li>Enviar la instrucción SQL.</li>
+<li>Obtener y procesar los resultados.</li>
+<li>Cerrar la conexión.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conectar</td>
+<td><code>mysqli_connect()</code></td>
+</tr>
+<tr>
+<td>Seleccionar BD</td>
+<td><code>mysqli_select_db()</code></td>
+</tr>
+<tr>
+<td>Enviar SQL</td>
+<td><code>mysqli_query()</code></td>
+</tr>
+<tr>
+<td>Contar filas</td>
+<td><code>mysqli_num_rows()</code></td>
+</tr>
+<tr>
+<td>Obtener fila</td>
+<td><code>mysqli_fetch_array()</code> / <code>mysqli_fetch_object()</code></td>
+</tr>
+<tr>
+<td>Cerrar</td>
+<td><code>mysqli_close()</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>La extensión vieja <code>mysql_*</code> quedó <strong>obsoleta</strong> desde PHP 7. <code>mysqli_*</code> cambia el orden de algunos parámetros: primero la conexión.</p>
+</blockquote>
+<h3>Conexión</h3>
+<pre><code class="language-php">$conexion = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;pepe&quot;, &quot;lindavista&quot;)
+  or die(&quot;No se puede conectar con el servidor&quot;);
+</code></pre>
+<pre><code class="language-php">mysqli_select_db($conexion, &quot;noticias&quot;)
+  or die(&quot;No se puede seleccionar la base de datos&quot;);
+</code></pre>
+<h3>Consulta y resultados</h3>
+<pre><code class="language-php">$consulta = mysqli_query($conexion, &quot;SELECT * FROM noticias WHERE categoria='promociones'&quot;)
+  or die(&quot;Fallo en la consulta&quot;);
+
+$nfilas = mysqli_num_rows($consulta);
+
+if ($nfilas &gt; 0) {
+  for ($i = 0; $i &lt; $nfilas; $i++) {
+    $fila = mysqli_fetch_array($consulta);
+
+    echo &quot;Título: &quot; . $fila[&quot;titulo&quot;];
+    echo &quot;Fecha: &quot;  . $fila[&quot;fecha&quot;];
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Acceso</th>
+<th>Sintaxis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Por nombre de campo</td>
+<td><code>$fila["titulo"]</code></td>
+</tr>
+<tr>
+<td>Por índice numérico</td>
+<td><code>$fila[0]</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">mysqli_close($conexion);
+</code></pre>
+<h3>Insertar</h3>
+<pre><code class="language-php">$sql = &quot;INSERT INTO noticias (titulo, copete, cuerpo, categoria, fecha)
+        VALUES ('$titulo', '$copete', '$cuerpo', '$categoria', '$fecha')&quot;;
+
+mysqli_query($conexion, $sql) or die(&quot;Fallo en la inserción&quot;);
+</code></pre>
+<hr>
+<h2>22. Paginación y filtrado</h2>
+<h3>Paginación con <code>LIMIT</code></h3>
+<pre><code class="language-sql">SELECT * FROM noticias LIMIT 0, 5
+</code></pre>
+<p>Recupera <strong>5 elementos a partir de la posición 0</strong>.</p>
+<pre><code class="language-sql">SELECT * FROM noticias LIMIT $comienzo, $num
+</code></pre>
+<ul>
+<li><code>$num</code> es constante (por ejemplo 5).</li>
+<li><code>$comienzo</code> se incrementa o decrementa en 5 al pasar de página.</li>
+<li>Se pasa como parámetro en el enlace del botón.</li>
+</ul>
+<pre><code class="language-php">$num = 5;
+$comienzo = isset($_GET['comienzo']) ? (int) $_GET['comienzo'] : 0;
+
+$consulta = mysqli_query($conexion,
+  &quot;SELECT * FROM noticias LIMIT $comienzo, $num&quot;);
+
+echo &quot;&lt;a href='{$_SERVER['PHP_SELF']}?comienzo=&quot; . ($comienzo + $num) . &quot;'&gt;Siguiente&lt;/a&gt;&quot;;
+</code></pre>
+<blockquote>
+<p>Hay que comprobar que el nuevo valor de <code>comienzo</code> esté dentro de los límites de la tabla.</p>
+</blockquote>
+<h3>Filtrado con <code>WHERE</code></h3>
+<pre><code class="language-sql">SELECT * FROM noticias WHERE categoria = '$categoria'
+</code></pre>
+<pre><code class="language-html">&lt;select name=&quot;categoria&quot; onchange=&quot;actualizaPagina()&quot;&gt;
+  &lt;option value=&quot;promociones&quot;&gt;promociones&lt;/option&gt;
+  &lt;option value=&quot;ofertas&quot; selected&gt;ofertas&lt;/option&gt;
+  &lt;option value=&quot;costas&quot;&gt;costas&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+<h3>Obtener las opciones de un <code>ENUM</code></h3>
+<pre><code class="language-sql">SHOW COLUMNS FROM noticias LIKE 'categoria'
+</code></pre>
+<p>Devuelve, entre otras cosas:</p>
+<pre><code>enum(&quot;promociones&quot;,&quot;ofertas&quot;,&quot;costas&quot;)
+</code></pre>
+<p>A partir de eso se generan las opciones del <code>&lt;select&gt;</code> y se marca con <code>selected</code> la que vino por formulario. Así no hay que mantener la lista a mano.</p>
+<hr>
+<h2>23. Seguridad</h2>
+<h3>Inyección SQL</h3>
+<p>Un ataque clásico: <code>1' OR '1'='1';#</code></p>
+<p><strong>Opciones en MySQLi:</strong></p>
+<ol>
+<li><strong>Escapar los datos</strong> (menos seguro):</li>
+</ol>
+<pre><code class="language-php">$titulo = mysqli_real_escape_string($conexion, $titulo);
+</code></pre>
+<ol start="2">
+<li><strong>Consultas preparadas</strong> con parámetros vinculados (<strong>más seguro</strong>):</li>
+</ol>
+<pre><code class="language-php">$stmt = mysqli_prepare($conexion,
+  &quot;INSERT INTO noticias (titulo, copete, cuerpo, imagen, categoria, id_usuario, fecha)
+   VALUES (?, ?, ?, ?, ?, ?, ?)&quot;);
+
+mysqli_stmt_bind_param($stmt, 'sssssds',
+  $titulo, $copete, $cuerpo, $imagen, $categoria, $id_usuario, $fecha);
+
+mysqli_stmt_execute($stmt);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Letra</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i</code></td>
+<td>integer</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>double (float)</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>binary (imagen, PDF...)</td>
+</tr>
+</tbody>
+</table>
+<h3>Otras medidas</h3>
+<table>
+<thead>
+<tr>
+<th>Riesgo</th>
+<th>Medida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XSS (scripts inyectados)</td>
+<td><code>htmlspecialchars($texto, ENT_QUOTES, 'UTF-8')</code> al mostrar.</td>
+</tr>
+<tr>
+<td>Inyección SQL</td>
+<td>Consultas preparadas; nunca concatenar entrada del usuario.</td>
+</tr>
+<tr>
+<td>Contraseñas</td>
+<td><code>password_hash()</code> / <code>password_verify()</code>; nunca texto plano.</td>
+</tr>
+<tr>
+<td>Subida de archivos</td>
+<td>Validar extensión, MIME y tamaño; generar nombre único; guardar fuera del webroot si es posible.</td>
+</tr>
+<tr>
+<td>Sesiones</td>
+<td><code>session_regenerate_id()</code> al iniciar sesión; <code>session_start()</code> antes de todo.</td>
+</tr>
+<tr>
+<td>Datos del formulario</td>
+<td>Validar y filtrar <strong>siempre</strong> en el servidor.</td>
+</tr>
+<tr>
+<td>Errores en producción</td>
+<td><code>display_errors = Off</code>, registrar en log.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-php">// Mostrar texto seguro
+echo htmlspecialchars($_POST['comentario'], ENT_QUOTES, 'UTF-8');
+
+// Contraseñas
+$hash = password_hash($clave, PASSWORD_DEFAULT);
+if (password_verify($clave, $hash)) {
+  // correcto
+}
+</code></pre>
+<hr>
+<h2>24. Errores típicos y checklist</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Se ve el código PHP en el navegador</td>
+<td>El servidor no interpreta PHP o el archivo es <code>.html</code>.</td>
+<td>Usar extensión <code>.php</code> y verificar Apache/módulo.</td>
+</tr>
+<tr>
+<td><code>Undefined variable</code></td>
+<td>La variable no está definida en ese ámbito.</td>
+<td>Inicializar o usar <code>??</code>.</td>
+</tr>
+<tr>
+<td><code>Headers already sent</code></td>
+<td><code>setcookie()</code> o <code>session_start()</code> después de HTML.</td>
+<td>Ponerlos al inicio, antes de cualquier salida.</td>
+</tr>
+<tr>
+<td>El formulario llega vacío</td>
+<td>Los campos no tienen <code>name</code>.</td>
+<td>Agregar <code>name</code> a cada control.</td>
+</tr>
+<tr>
+<td>No llega el archivo</td>
+<td>Falta <code>enctype="multipart/form-data"</code>.</td>
+<td>Agregarlo al <code>&lt;form&gt;</code>.</td>
+</tr>
+<tr>
+<td>El archivo subido no aparece</td>
+<td>Se leyó <code>$_POST</code> en vez de <code>$_FILES</code>.</td>
+<td>Usar <code>$_FILES</code> y <code>move_uploaded_file()</code>.</td>
+</tr>
+<tr>
+<td><code>move_uploaded_file()</code> falla</td>
+<td>Permisos de la carpeta destino.</td>
+<td>Dar permisos de escritura.</td>
+</tr>
+<tr>
+<td>La consulta falla</td>
+<td>SQL mal escrito o conexión inválida.</td>
+<td>Revisar con <code>mysqli_error($conexion)</code>.</td>
+</tr>
+<tr>
+<td>Acentos rotos</td>
+<td>Codificación distinta entre PHP, HTML y BD.</td>
+<td>UTF-8 en todos lados (<code>set_charset("utf8mb4")</code>).</td>
+</tr>
+<tr>
+<td>Fechas corridas</td>
+<td>Zona horaria del servidor.</td>
+<td><code>date_default_timezone_set()</code>.</td>
+</tr>
+<tr>
+<td><code>session_start()</code> avisa que la sesión ya existe</td>
+<td>Se llama dos veces.</td>
+<td>Verificar con <code>session_status()</code>.</td>
+</tr>
+<tr>
+<td>La cookie no se lee</td>
+<td>Todavía no se recargó la página.</td>
+<td>Recargar o redirigir.</td>
+</tr>
+<tr>
+<td><code>$_POST['x']</code> da error si no existe</td>
+<td>No se envió ese campo.</td>
+<td><code>isset()</code> / <code>empty()</code> / <code>??</code>.</td>
+</tr>
+<tr>
+<td>Concatenar arrays da "Array"</td>
+<td>Se usó <code>.</code> con un array.</td>
+<td><code>implode()</code> o <code>print_r()</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>[ ] Todos los archivos con extensión <code>.php</code>.</li>
+<li>[ ] <code>session_start()</code> y <code>setcookie()</code> antes de cualquier HTML.</li>
+<li>[ ] Formularios con <code>action</code>, <code>method</code> y <code>name</code> en todos los campos.</li>
+<li>[ ] <code>enctype="multipart/form-data"</code> si hay archivos.</li>
+<li>[ ] Datos del usuario validados y escapados en el servidor.</li>
+<li>[ ] Consultas SQL con <em>prepared statements</em> (o al menos <code>mysqli_real_escape_string</code>).</li>
+<li>[ ] Contraseñas con <code>password_hash()</code>.</li>
+<li>[ ] Conexión a la base cerrada con <code>mysqli_close()</code>.</li>
+<li>[ ] Errores controlados (<code>or die</code>, <code>try/catch</code>, validación).</li>
+<li>[ ] UTF-8 en HTML, PHP y base de datos.</li>
+<li>[ ] Zona horaria configurada si se usa fecha/hora.</li>
+<li>[ ] Sin <code>var_dump()</code> ni <code>print_r()</code> de depuración en la entrega.</li>
+<li>[ ] <code>display_errors</code> desactivado en producción.</li>
+</ul>
+<hr>
+<h2>25. Plantilla completa</h2>
+<pre><code class="language-php">&lt;?php
+// ===== 1. Configuración =====
+declare(strict_types=1);
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
+date_default_timezone_set(&quot;America/Argentina/Salta&quot;);
+
+session_start();
+
+// ===== 2. Conexión =====
+$conexion = mysqli_connect(&quot;localhost&quot;, &quot;root&quot;, &quot;&quot;, &quot;lindavista&quot;)
+  or die(&quot;No se pudo conectar con el servidor&quot;);
+
+mysqli_set_charset($conexion, &quot;utf8mb4&quot;);
+
+// ===== 3. Datos de entrada =====
+$errores = [];
+$enviado = ($_SERVER['REQUEST_METHOD'] === 'POST');
+
+$titulo    = trim($_POST['titulo'] ?? '');
+$categoria = $_POST['categoria'] ?? '';
+$cuerpo    = trim($_POST['cuerpo'] ?? '');
+
+// ===== 4. Validación =====
+if ($enviado) {
+  if ($titulo === '') {
+    $errores[] = &quot;El título es obligatorio.&quot;;
+  }
+
+  if (!in_array($categoria, ['promociones', 'ofertas', 'costas'], true)) {
+    $errores[] = &quot;Categoría inválida.&quot;;
+  }
+
+  if (strlen($cuerpo) &lt; 10) {
+    $errores[] = &quot;El cuerpo debe tener al menos 10 caracteres.&quot;;
+  }
+}
+
+// ===== 5. Procesamiento =====
+if ($enviado &amp;&amp; empty($errores)) {
+  $stmt = mysqli_prepare($conexion,
+    &quot;INSERT INTO noticias (titulo, cuerpo, categoria, fecha)
+     VALUES (?, ?, ?, ?)&quot;);
+
+  $fecha = date(&quot;Y-m-d&quot;);
+
+  mysqli_stmt_bind_param($stmt, 'ssss', $titulo, $cuerpo, $categoria, $fecha);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+
+  header(&quot;Location: lista_noticias.php&quot;);
+  exit;
+}
+
+// ===== 6. Listado paginado =====
+$num      = 5;
+$comienzo = isset($_GET['comienzo']) ? max(0, (int) $_GET['comienzo']) : 0;
+
+$consulta = mysqli_query($conexion,
+  &quot;SELECT * FROM noticias ORDER BY fecha DESC LIMIT $comienzo, $num&quot;);
+
+$nfilas = mysqli_num_rows($consulta);
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Noticias — POW&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Noticias&lt;/h1&gt;
+
+  &lt;?php if ($enviado &amp;&amp; !empty($errores)): ?&gt;
+    &lt;ul class=&quot;errores&quot;&gt;
+      &lt;?php foreach ($errores as $error): ?&gt;
+        &lt;li&gt;&lt;?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?&gt;&lt;/li&gt;
+      &lt;?php endforeach; ?&gt;
+    &lt;/ul&gt;
+  &lt;?php endif; ?&gt;
+
+  &lt;form action=&quot;&lt;?= htmlspecialchars($_SERVER['PHP_SELF']) ?&gt;&quot; method=&quot;post&quot;&gt;
+    &lt;label for=&quot;titulo&quot;&gt;Título:&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;titulo&quot; name=&quot;titulo&quot;
+           value=&quot;&lt;?= htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8') ?&gt;&quot; required&gt;
+
+    &lt;label for=&quot;categoria&quot;&gt;Categoría:&lt;/label&gt;
+    &lt;select id=&quot;categoria&quot; name=&quot;categoria&quot;&gt;
+      &lt;option value=&quot;promociones&quot;&gt;Promociones&lt;/option&gt;
+      &lt;option value=&quot;ofertas&quot;&gt;Ofertas&lt;/option&gt;
+      &lt;option value=&quot;costas&quot;&gt;Costas&lt;/option&gt;
+    &lt;/select&gt;
+
+    &lt;label for=&quot;cuerpo&quot;&gt;Cuerpo:&lt;/label&gt;
+    &lt;textarea id=&quot;cuerpo&quot; name=&quot;cuerpo&quot; rows=&quot;4&quot;&gt;&lt;?= htmlspecialchars($cuerpo, ENT_QUOTES, 'UTF-8') ?&gt;&lt;/textarea&gt;
+
+    &lt;button type=&quot;submit&quot;&gt;Publicar&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;hr&gt;
+
+  &lt;?php if ($nfilas &gt; 0): ?&gt;
+    &lt;?php while ($fila = mysqli_fetch_array($consulta)): ?&gt;
+      &lt;article&gt;
+        &lt;h2&gt;&lt;?= htmlspecialchars($fila[&quot;titulo&quot;], ENT_QUOTES, 'UTF-8') ?&gt;&lt;/h2&gt;
+        &lt;p&gt;&lt;?= htmlspecialchars($fila[&quot;cuerpo&quot;], ENT_QUOTES, 'UTF-8') ?&gt;&lt;/p&gt;
+        &lt;small&gt;&lt;?= htmlspecialchars($fila[&quot;fecha&quot;], ENT_QUOTES, 'UTF-8') ?&gt;&lt;/small&gt;
+      &lt;/article&gt;
+    &lt;?php endwhile; ?&gt;
+  &lt;?php else: ?&gt;
+    &lt;p&gt;No hay noticias para mostrar.&lt;/p&gt;
+  &lt;?php endif; ?&gt;
+
+  &lt;p&gt;
+    &lt;?php if ($comienzo &gt; 0): ?&gt;
+      &lt;a href=&quot;?comienzo=&lt;?= max(0, $comienzo - $num) ?&gt;&quot;&gt;Anterior&lt;/a&gt;
+    &lt;?php endif; ?&gt;
+
+    &lt;a href=&quot;?comienzo=&lt;?= $comienzo + $num ?&gt;&quot;&gt;Siguiente&lt;/a&gt;
+  &lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;?php
+mysqli_close($conexion);
+?&gt;
+</code></pre>
+<hr>
+<p><strong>Fin del cheatsheet.</strong><br>
+Si tenés que priorizar para el parcial: sintaxis y variables/superglobales, tipos y casteo, <code>include</code>/<code>require</code>, funciones (por valor/referencia/por defecto), arrays y <code>foreach</code>, formularios (<code>$_GET</code>/<code>$_POST</code>/<code>$_REQUEST</code>, checkbox y select múltiple), <code>$_FILES</code> + <code>move_uploaded_file()</code>, validación, fechas (<code>date</code>, <code>checkdate</code>, <code>DateTime::diff</code>), sesiones y cookies, archivos (<code>fopen</code>/<code>fread</code>/<code>fwrite</code>), POO (clase, <code>$this</code>, constructor, visibilidad, herencia, abstract, interface, trait, static, namespace) y MySQLi (conexión, consulta, <code>fetch_array</code>, <code>LIMIT</code>, prepared statements).</p>
+</body>
+</html>

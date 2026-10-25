@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - Lenguaje HTML</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #b45309; margin: 0 0 5px;
+  border-bottom: 3px solid #b45309; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #b45309; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #7c2d12; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #7c2d12; }
+blockquote {
+  background: #f1f7fb; border-left: 4px solid #b45309;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #b45309;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #e8f1f8; color: #b45309; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #b45309; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — Lenguaje HTML</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido y consulta durante el parcial.<br>
+<strong>Base:</strong> HTML 5 (con referencias a HTML 4 cuando la teoría las menciona).</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Estructura mínima de un documento</li>
+<li>Cabecera: <code>title</code>, <code>meta</code>, <code>link</code></li>
+<li>Texto y formato</li>
+<li>Listas</li>
+<li>Enlaces</li>
+<li>Imágenes y <code>figure</code></li>
+<li>Tablas</li>
+<li>Entidades y caracteres especiales</li>
+<li>Formularios</li>
+<li>HTML5 semántico</li>
+<li>Multimedia, <code>canvas</code> y SVG</li>
+<li>Atributos globales y accesibilidad</li>
+<li>Almacenamiento del lado cliente</li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+</ol>
+<hr>
+<h2>1. Estructura mínima de un documento</h2>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Título de la página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hola mundo&lt;/h1&gt;
+  &lt;p&gt;Contenido del documento.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;!DOCTYPE html&gt;</code></td>
+<td>Declara el tipo de documento. En HTML5 es única y no es una etiqueta HTML (viene de SGML).</td>
+</tr>
+<tr>
+<td><code>&lt;html&gt;</code></td>
+<td>Elemento raíz. <code>lang="es"</code> indica el idioma.</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;</code></td>
+<td>Metainformación: no se muestra en el cuerpo.</td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;</code></td>
+<td>Contenido visible de la página.</td>
+</tr>
+<tr>
+<td><code>&lt;meta charset="UTF-8"&gt;</code></td>
+<td>Codificación de caracteres. En HTML5, UTF-8 es lo esperado.</td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;</code></td>
+<td>Título en la pestaña y en los resultados de búsqueda.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>HTML no respeta</strong> los espacios múltiples ni los saltos de línea del código: todo se interpreta como <strong>un único espacio</strong>. El navegador decide dónde cortar la línea. Para saltos explícitos se usa <code>&lt;br&gt;</code>; para párrafos, <code>&lt;p&gt;</code>.</p>
+</blockquote>
+<h3>DOCTYPE en HTML 4 (solo como referencia histórica)</h3>
+<pre><code class="language-html">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot;&gt;              &lt;!-- Strict --&gt;
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt; &lt;!-- Loose --&gt;
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Frameset//EN&quot;&gt;     &lt;!-- Frameset --&gt;
+</code></pre>
+<hr>
+<h2>2. Cabecera: <code>title</code>, <code>meta</code>, <code>link</code></h2>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;title&gt;Mi sitio&lt;/title&gt;
+
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;author&quot; content=&quot;Nombre Apellido&quot;&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;Descripción breve de la página&quot;&gt;
+  &lt;meta name=&quot;keywords&quot; content=&quot;html, css, web, facultad&quot;&gt;
+  &lt;meta name=&quot;generator&quot; content=&quot;Visual Studio Code&quot;&gt;
+
+  &lt;!-- Redirigir a otra URL a los 5 segundos --&gt;
+  &lt;meta http-equiv=&quot;Refresh&quot; content=&quot;5; URL=https://www.example.com&quot;&gt;
+
+  &lt;!-- Vincular una hoja de estilos --&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;estilos.css&quot; type=&quot;text/css&quot; media=&quot;screen&quot;&gt;
+&lt;/head&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>meta name</code></th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>author</code></td>
+<td>Autor de la página.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Descripción; la usan los buscadores.</td>
+</tr>
+<tr>
+<td><code>keywords</code></td>
+<td>Palabras clave separadas por comas.</td>
+</tr>
+<tr>
+<td><code>generator</code></td>
+<td>Programa con el que se creó la página.</td>
+</tr>
+<tr>
+<td><code>classification</code></td>
+<td>Clasificación temática.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><code>meta http-equiv</code></th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Refresh</code></td>
+<td>Recargar la página o redirigir (<code>content="5; URL=..."</code>).</td>
+</tr>
+<tr>
+<td><code>expires</code></td>
+<td>Fecha de vencimiento del contenido.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Atributos de <code>link</code>:</strong> <code>rel="stylesheet"</code>, <code>type="text/css"</code>, <code>href</code>, <code>media</code> (<code>screen</code>, <code>print</code>, <code>projection</code>, <code>aural</code>, <code>braille</code>, <code>tty</code>, <code>tv</code>, <code>all</code>), <code>title</code> (estilo preferido/alterno).</p>
+<hr>
+<h2>3. Texto y formato</h2>
+<h3>Encabezados y párrafos</h3>
+<pre><code class="language-html">&lt;h1&gt;Título principal&lt;/h1&gt;
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+&lt;h3&gt;Sección&lt;/h3&gt;
+&lt;h4&gt;Subsección&lt;/h4&gt;
+&lt;h5&gt;Detalle&lt;/h5&gt;
+&lt;h6&gt;Mínimo&lt;/h6&gt;
+
+&lt;p&gt;Un párrafo de texto.&lt;/p&gt;
+&lt;p&gt;Otro párrafo.&lt;br&gt;Con un salto de línea.&lt;/p&gt;
+</code></pre>
+<blockquote>
+<p>Usar <strong>un solo <code>&lt;h1&gt;</code></strong> por página y no saltear niveles (<code>h2</code> → <code>h4</code>) por estética: la jerarquía es semántica.</p>
+</blockquote>
+<h3>Formato de texto</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Efecto</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;strong&gt;</code></td>
+<td>Importancia (negrita)</td>
+<td>Semántica.</td>
+</tr>
+<tr>
+<td><code>&lt;b&gt;</code></td>
+<td>Negrita visual</td>
+<td>Sin importancia semántica.</td>
+</tr>
+<tr>
+<td><code>&lt;em&gt;</code></td>
+<td>Énfasis (itálica)</td>
+<td>Semántica.</td>
+</tr>
+<tr>
+<td><code>&lt;i&gt;</code></td>
+<td>Itálica visual</td>
+<td>Sin énfasis semántico.</td>
+</tr>
+<tr>
+<td><code>&lt;u&gt;</code></td>
+<td>Subrayado</td>
+<td>Puede confundirse con un enlace.</td>
+</tr>
+<tr>
+<td><code>&lt;s&gt;</code></td>
+<td>Tachado</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code></td>
+<td>Texto resaltado</td>
+<td>HTML5.</td>
+</tr>
+<tr>
+<td><code>&lt;small&gt;</code></td>
+<td>Texto pequeño</td>
+<td>Letra chica, comentarios.</td>
+</tr>
+<tr>
+<td><code>&lt;sub&gt;</code> / <code>&lt;sup&gt;</code></td>
+<td>Subíndice / superíndice</td>
+<td><code>H&lt;sub&gt;2&lt;/sub&gt;O</code>, <code>x&lt;sup&gt;2&lt;/sup&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;code&gt;</code></td>
+<td>Código</td>
+<td>Fuente monoespaciada.</td>
+</tr>
+<tr>
+<td><code>&lt;pre&gt;</code></td>
+<td>Texto preformateado</td>
+<td>Respeta espacios y saltos.</td>
+</tr>
+<tr>
+<td><code>&lt;kbd&gt;</code></td>
+<td>Tecla</td>
+<td><code>Ctrl + S</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;abbr title="..."&gt;</code></td>
+<td>Abreviatura</td>
+<td>Muestra el significado al pasar el mouse.</td>
+</tr>
+<tr>
+<td><code>&lt;blockquote&gt;</code></td>
+<td>Cita en bloque</td>
+<td><code>cite</code> para la fuente.</td>
+</tr>
+<tr>
+<td><code>&lt;q&gt;</code></td>
+<td>Cita en línea</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>&lt;hr&gt;</code></td>
+<td>Línea horizontal</td>
+<td>Separador temático.</td>
+</tr>
+<tr>
+<td><code>&lt;br&gt;</code></td>
+<td>Salto de línea</td>
+<td>Elemento vacío.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;p&gt;El &lt;strong&gt;parcial&lt;/strong&gt; es &lt;em&gt;teórico-práctico&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Fórmula: H&lt;sub&gt;2&lt;/sub&gt;O — Potencia: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;pre&gt;
+  Este texto
+    conserva   los espacios
+&lt;/pre&gt;
+&lt;blockquote cite=&quot;https://www.w3.org/&quot;&gt;
+  La Web es para todos.
+&lt;/blockquote&gt;
+</code></pre>
+<h3>Elementos vacíos (sin cierre)</h3>
+<p><code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;link&gt;</code>, <code>&lt;source&gt;</code>, <code>&lt;track&gt;</code>, <code>&lt;area&gt;</code>, <code>&lt;base&gt;</code>, <code>&lt;col&gt;</code>, <code>&lt;embed&gt;</code>, <code>&lt;wbr&gt;</code>.</p>
+<hr>
+<h2>4. Listas</h2>
+<h3>Ordenada</h3>
+<pre><code class="language-html">&lt;ol&gt;
+  &lt;li&gt;Primer paso&lt;/li&gt;
+  &lt;li&gt;Segundo paso&lt;/li&gt;
+  &lt;li&gt;Tercer paso&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ol start=&quot;3&quot; type=&quot;A&quot;&gt;
+  &lt;li&gt;Empieza en C&lt;/li&gt;
+  &lt;li&gt;Sigue D&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+<h3>No ordenada</h3>
+<pre><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<h3>De definiciones</h3>
+<pre><code class="language-html">&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;Lenguaje de marcado para estructurar páginas web.&lt;/dd&gt;
+
+  &lt;dt&gt;CSS&lt;/dt&gt;
+  &lt;dd&gt;Lenguaje de hojas de estilo para la presentación.&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre>
+<h3>Anidadas</h3>
+<pre><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;Front-end
+    &lt;ul&gt;
+      &lt;li&gt;HTML&lt;/li&gt;
+      &lt;li&gt;CSS&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Back-end&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;ol&gt;</code></td>
+<td>Lista ordenada (numerada).</td>
+</tr>
+<tr>
+<td><code>&lt;ul&gt;</code></td>
+<td>Lista no ordenada (viñetas).</td>
+</tr>
+<tr>
+<td><code>&lt;li&gt;</code></td>
+<td>Ítem de lista.</td>
+</tr>
+<tr>
+<td><code>&lt;dl&gt;</code></td>
+<td>Lista de definiciones.</td>
+</tr>
+<tr>
+<td><code>&lt;dt&gt;</code></td>
+<td>Término.</td>
+</tr>
+<tr>
+<td><code>&lt;dd&gt;</code></td>
+<td>Definición del término.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Atributos útiles de <code>ol</code>:</strong> <code>type</code> (<code>1</code>, <code>A</code>, <code>a</code>, <code>I</code>, <code>i</code>), <code>start</code>, <code>reversed</code>.</p>
+<hr>
+<h2>5. Enlaces</h2>
+<pre><code class="language-html">&lt;!-- A otra página del mismo sitio (ruta relativa) --&gt;
+&lt;a href=&quot;contacto.html&quot;&gt;Contacto&lt;/a&gt;
+
+&lt;!-- A un sitio externo (ruta absoluta) --&gt;
+&lt;a href=&quot;https://www.w3.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;W3C&lt;/a&gt;
+
+&lt;!-- Ancla dentro del mismo documento --&gt;
+&lt;a href=&quot;#seccion-2&quot;&gt;Ir a la sección 2&lt;/a&gt;
+&lt;h2 id=&quot;seccion-2&quot;&gt;Sección 2&lt;/h2&gt;
+
+&lt;!-- Ancla en otro documento --&gt;
+&lt;a href=&quot;apuntes.html#tablas&quot;&gt;Tablas de apuntes&lt;/a&gt;
+
+&lt;!-- Correo --&gt;
+&lt;a href=&quot;mailto:usuario@example.com&quot;&gt;Enviar mail&lt;/a&gt;
+&lt;a href=&quot;mailto:usuario@example.com?subject=Consulta&quot;&gt;Consulta&lt;/a&gt;
+
+&lt;!-- Teléfono --&gt;
+&lt;a href=&quot;tel:+542302123456&quot;&gt;Llamar&lt;/a&gt;
+
+&lt;!-- Descarga --&gt;
+&lt;a href=&quot;archivo.pdf&quot; download&gt;Descargar PDF&lt;/a&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tipo de ruta</th>
+<th>Ejemplo</th>
+<th>Cuándo usarla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relativa</td>
+<td><code>img/logo.png</code>, <code>../index.html</code></td>
+<td>Dentro del mismo sitio.</td>
+</tr>
+<tr>
+<td>Absoluta</td>
+<td><code>https://sitio.com/pagina</code></td>
+<td>Fuera del sitio.</td>
+</tr>
+<tr>
+<td>Raíz</td>
+<td><code>/css/estilos.css</code></td>
+<td>Desde la raíz del servidor.</td>
+</tr>
+<tr>
+<td>Ancla</td>
+<td><code>#id</code></td>
+<td>Dentro de la misma página.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>target="_blank"</code> abre en otra pestaña. Conviene acompañarlo con <code>rel="noopener"</code> por seguridad.</p>
+</blockquote>
+<p><strong>Estados de un enlace (se estilan con CSS):</strong> <code>:link</code> (no visitado), <code>:visited</code> (visitado), <code>:hover</code> (mouse encima), <code>:active</code> (al hacer clic), <code>:focus</code> (teclado).</p>
+<hr>
+<h2>6. Imágenes y <code>figure</code></h2>
+<pre><code class="language-html">&lt;img src=&quot;img/foto.jpg&quot;
+     alt=&quot;Descripción de la imagen&quot;
+     width=&quot;320&quot;
+     height=&quot;240&quot;
+     title=&quot;Texto al pasar el mouse&quot;
+     loading=&quot;lazy&quot;&gt;
+
+&lt;figure&gt;
+  &lt;img src=&quot;img/grafico.png&quot; alt=&quot;Evolución de ventas 2025&quot;&gt;
+  &lt;figcaption&gt;Figura 1. Ventas del último año.&lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src</code></td>
+<td>Ruta de la imagen.</td>
+</tr>
+<tr>
+<td><code>alt</code></td>
+<td>Texto alternativo (obligatorio por accesibilidad).</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td>Dimensiones; evitan saltos de layout.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Tooltip.</td>
+</tr>
+<tr>
+<td><code>loading="lazy"</code></td>
+<td>Carga diferida.</td>
+</tr>
+<tr>
+<td><code>srcset</code> / <code>sizes</code></td>
+<td>Imágenes adaptativas.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Formatos:</strong> JPG (fotos), PNG (transparencia), GIF (animación simple), SVG (vectores), WebP/AVIF (modernos, mejor compresión).</p>
+<blockquote>
+<p><code>alt</code> no es opcional: si la imagen es decorativa se usa <code>alt=""</code>; si transmite información, se describe brevemente.</p>
+</blockquote>
+<hr>
+<h2>7. Tablas</h2>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Notas del parcial&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th scope=&quot;col&quot;&gt;Alumno&lt;/th&gt;
+      &lt;th scope=&quot;col&quot;&gt;Nota&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Ana Gómez&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Luis Pérez&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Promedio&lt;/td&gt;
+      &lt;td&gt;7,5&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;table&gt;</code></td>
+<td>Contenedor de la tabla.</td>
+</tr>
+<tr>
+<td><code>&lt;caption&gt;</code></td>
+<td>Título de la tabla.</td>
+</tr>
+<tr>
+<td><code>&lt;thead&gt;</code></td>
+<td>Grupo de filas de encabezado.</td>
+</tr>
+<tr>
+<td><code>&lt;tbody&gt;</code></td>
+<td>Cuerpo de la tabla.</td>
+</tr>
+<tr>
+<td><code>&lt;tfoot&gt;</code></td>
+<td>Pie de la tabla.</td>
+</tr>
+<tr>
+<td><code>&lt;tr&gt;</code></td>
+<td>Fila (<em>table row</em>).</td>
+</tr>
+<tr>
+<td><code>&lt;th&gt;</code></td>
+<td>Celda de encabezado.</td>
+</tr>
+<tr>
+<td><code>&lt;td&gt;</code></td>
+<td>Celda de datos.</td>
+</tr>
+<tr>
+<td><code>&lt;colgroup&gt;</code> / <code>&lt;col&gt;</code></td>
+<td>Agrupar columnas para darles estilo.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>colspan</code> y <code>rowspan</code></h3>
+<pre><code class="language-html">&lt;table border=&quot;1&quot;&gt;
+  &lt;tr&gt;
+    &lt;td colspan=&quot;2&quot;&gt;Ocupa 2 columnas&lt;/td&gt;
+    &lt;td rowspan=&quot;2&quot;&gt;Ocupa 2 filas&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Normal 1&lt;/td&gt;
+    &lt;td&gt;Normal 2&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<ul>
+<li><code>colspan="n"</code>: la celda se expande <strong>n columnas</strong>.</li>
+<li><code>rowspan="n"</code>: la celda se expande <strong>n filas</strong>.</li>
+</ul>
+<blockquote>
+<p>Las tablas son para <strong>datos tabulados</strong>, no para diagramar la página. Para layout se usa CSS (Flexbox/Grid).</p>
+</blockquote>
+<hr>
+<h2>8. Entidades y caracteres especiales</h2>
+<table>
+<thead>
+<tr>
+<th>Carácter</th>
+<th>Entidad</th>
+<th>Carácter</th>
+<th>Entidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>á</code></td>
+<td><code>&amp;aacute;</code></td>
+<td><code>Á</code></td>
+<td><code>&amp;Aacute;</code></td>
+</tr>
+<tr>
+<td><code>é</code></td>
+<td><code>&amp;eacute;</code></td>
+<td><code>É</code></td>
+<td><code>&amp;Eacute;</code></td>
+</tr>
+<tr>
+<td><code>í</code></td>
+<td><code>&amp;iacute;</code></td>
+<td><code>Í</code></td>
+<td><code>&amp;Iacute;</code></td>
+</tr>
+<tr>
+<td><code>ó</code></td>
+<td><code>&amp;oacute;</code></td>
+<td><code>Ó</code></td>
+<td><code>&amp;Oacute;</code></td>
+</tr>
+<tr>
+<td><code>ú</code></td>
+<td><code>&amp;uacute;</code></td>
+<td><code>Ú</code></td>
+<td><code>&amp;Uacute;</code></td>
+</tr>
+<tr>
+<td><code>ñ</code></td>
+<td><code>&amp;ntilde;</code></td>
+<td><code>Ñ</code></td>
+<td><code>&amp;Ntilde;</code></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td><code>&amp;lt;</code></td>
+<td><code>&gt;</code></td>
+<td><code>&amp;gt;</code></td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td><code>&amp;amp;</code></td>
+<td><code>"</code></td>
+<td><code>&amp;quot;</code></td>
+</tr>
+<tr>
+<td>espacio duro</td>
+<td><code>&amp;nbsp;</code></td>
+<td><code>©</code></td>
+<td><code>&amp;copy;</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Con <code>UTF-8</code> casi no se necesitan entidades para tildes y ñ, pero siguen siendo necesarias para <code>&lt;</code>, <code>&gt;</code> y <code>&amp;</code> cuando se muestran como texto.</p>
+</blockquote>
+<hr>
+<h2>9. Formularios</h2>
+<h3>Estructura</h3>
+<pre><code class="language-html">&lt;form action=&quot;procesar.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Datos personales&lt;/legend&gt;
+
+    &lt;label for=&quot;nombre&quot;&gt;Nombre:&lt;/label&gt;
+    &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot;
+           placeholder=&quot;Tu nombre&quot; required autofocus&gt;
+
+    &lt;label for=&quot;email&quot;&gt;Correo:&lt;/label&gt;
+    &lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; required&gt;
+
+    &lt;label for=&quot;edad&quot;&gt;Edad:&lt;/label&gt;
+    &lt;input type=&quot;number&quot; id=&quot;edad&quot; name=&quot;edad&quot; min=&quot;1&quot; max=&quot;120&quot;&gt;
+
+    &lt;label for=&quot;clave&quot;&gt;Clave:&lt;/label&gt;
+    &lt;input type=&quot;password&quot; id=&quot;clave&quot; name=&quot;clave&quot; minlength=&quot;8&quot; required&gt;
+
+    &lt;label for=&quot;fecha&quot;&gt;Fecha:&lt;/label&gt;
+    &lt;input type=&quot;date&quot; id=&quot;fecha&quot; name=&quot;fecha&quot;&gt;
+
+    &lt;label for=&quot;archivo&quot;&gt;Archivo:&lt;/label&gt;
+    &lt;input type=&quot;file&quot; id=&quot;archivo&quot; name=&quot;archivo&quot; accept=&quot;image/*&quot;&gt;
+
+    &lt;label for=&quot;comentario&quot;&gt;Comentario:&lt;/label&gt;
+    &lt;textarea id=&quot;comentario&quot; name=&quot;comentario&quot; rows=&quot;4&quot; cols=&quot;40&quot;&gt;&lt;/textarea&gt;
+
+    &lt;label for=&quot;pais&quot;&gt;País:&lt;/label&gt;
+    &lt;select id=&quot;pais&quot; name=&quot;pais&quot;&gt;
+      &lt;option value=&quot;&quot;&gt;Seleccione...&lt;/option&gt;
+      &lt;option value=&quot;ar&quot;&gt;Argentina&lt;/option&gt;
+      &lt;option value=&quot;br&quot;&gt;Brasil&lt;/option&gt;
+    &lt;/select&gt;
+
+    &lt;label&gt;
+      &lt;input type=&quot;checkbox&quot; name=&quot;acepto&quot; value=&quot;1&quot;&gt; Acepto los términos
+    &lt;/label&gt;
+
+    &lt;p&gt;Sexo:&lt;/p&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;sexo&quot; value=&quot;f&quot;&gt; Femenino&lt;/label&gt;
+    &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;sexo&quot; value=&quot;m&quot;&gt; Masculino&lt;/label&gt;
+
+    &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+    &lt;button type=&quot;reset&quot;&gt;Limpiar&lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>Métodos HTTP</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Dónde van los datos</th>
+<th>Cuándo usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td>En la URL (<code>?clave=valor</code>)</td>
+<td>Búsquedas, filtros; no para datos sensibles.</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td>En el cuerpo de la petición</td>
+<td>Altas, login, datos sensibles o largos.</td>
+</tr>
+</tbody>
+</table>
+<p><code>enctype</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application/x-www-form-urlencoded</code></td>
+<td>Por defecto.</td>
+</tr>
+<tr>
+<td><code>multipart/form-data</code></td>
+<td><strong>Obligatorio</strong> para subir archivos.</td>
+</tr>
+<tr>
+<td><code>text/plain</code></td>
+<td>Poco usado.</td>
+</tr>
+</tbody>
+</table>
+<h3>Tipos de <code>input</code></h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Texto de una línea.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>Clave (oculta).</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Correo con validación básica.</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Número (<code>min</code>, <code>max</code>, <code>step</code>).</td>
+</tr>
+<tr>
+<td><code>range</code></td>
+<td>Control deslizante.</td>
+</tr>
+<tr>
+<td><code>date</code>, <code>time</code>, <code>datetime-local</code>, <code>month</code>, <code>week</code></td>
+<td>Fechas y horas.</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>Selector de color.</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>Campo de búsqueda.</td>
+</tr>
+<tr>
+<td><code>tel</code></td>
+<td>Teléfono (sin validación estricta).</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>URL.</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>Archivo (<code>accept</code>, <code>multiple</code>).</td>
+</tr>
+<tr>
+<td><code>checkbox</code></td>
+<td>Casilla (varias opciones).</td>
+</tr>
+<tr>
+<td><code>radio</code></td>
+<td>Opción excluyente dentro de un grupo (<code>name</code> igual).</td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Dato oculto.</td>
+</tr>
+<tr>
+<td><code>submit</code></td>
+<td>Botón de envío.</td>
+</tr>
+<tr>
+<td><code>reset</code></td>
+<td>Botón de limpieza.</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td>Botón genérico.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Imagen que actúa como botón.</td>
+</tr>
+</tbody>
+</table>
+<h3>Atributos de validación y ayuda</h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>required</code></td>
+<td>Campo obligatorio.</td>
+</tr>
+<tr>
+<td><code>placeholder</code></td>
+<td>Texto de ayuda dentro del campo.</td>
+</tr>
+<tr>
+<td><code>min</code> / <code>max</code></td>
+<td>Rango de valores.</td>
+</tr>
+<tr>
+<td><code>minlength</code> / <code>maxlength</code></td>
+<td>Longitud del texto.</td>
+</tr>
+<tr>
+<td><code>pattern</code></td>
+<td>Expresión regular (ej. <code>[A-Za-z]{3}</code>).</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td>Intervalo permitido.</td>
+</tr>
+<tr>
+<td><code>autofocus</code></td>
+<td>Recibe el foco al cargar.</td>
+</tr>
+<tr>
+<td><code>autocomplete="on/off"</code></td>
+<td>Autocompletado del navegador.</td>
+</tr>
+<tr>
+<td><code>readonly</code></td>
+<td>Solo lectura (se envía).</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>Deshabilitado (no se envía).</td>
+</tr>
+<tr>
+<td><code>multiple</code></td>
+<td>Permite varios valores/archivos.</td>
+</tr>
+<tr>
+<td><code>novalidate</code> (en <code>form</code>)</td>
+<td>Desactiva la validación del navegador.</td>
+</tr>
+<tr>
+<td><code>formnovalidate</code> (en <code>submit</code>)</td>
+<td>Envía sin validar.</td>
+</tr>
+<tr>
+<td><code>formaction</code> (en <code>submit</code>)</td>
+<td>URL alternativa de envío.</td>
+</tr>
+<tr>
+<td><code>formmethod</code> (en <code>submit</code>)</td>
+<td>Método alternativo (<code>get</code>/<code>post</code>).</td>
+</tr>
+<tr>
+<td><code>formtarget</code> (en <code>submit</code>)</td>
+<td>Dónde mostrar la respuesta.</td>
+</tr>
+<tr>
+<td><code>formenctype</code> (en <code>submit</code>)</td>
+<td>Codificación alternativa.</td>
+</tr>
+</tbody>
+</table>
+<h3>Otros controles</h3>
+<pre><code class="language-html">&lt;datalist id=&quot;navegadores&quot;&gt;
+  &lt;option value=&quot;Chrome&quot;&gt;
+  &lt;option value=&quot;Firefox&quot;&gt;
+  &lt;option value=&quot;Edge&quot;&gt;
+&lt;/datalist&gt;
+&lt;input list=&quot;navegadores&quot; name=&quot;navegador&quot;&gt;
+
+&lt;output name=&quot;resultado&quot; for=&quot;a b&quot;&gt;&lt;/output&gt;
+
+&lt;progress value=&quot;70&quot; max=&quot;100&quot;&gt;70%&lt;/progress&gt;
+&lt;meter value=&quot;0.7&quot;&gt;70%&lt;/meter&gt;
+</code></pre>
+<blockquote>
+<p><strong>Accesibilidad:</strong> cada control debe tener su <code>&lt;label for="id"&gt;</code> (o envolverlo). El <code>name</code> es lo que viaja al servidor; el <code>id</code> es lo que usa el <code>label</code>.</p>
+</blockquote>
+<hr>
+<h2>10. HTML5 semántico</h2>
+<pre><code class="language-html">&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Mi sitio&lt;/h1&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/noticias&quot;&gt;Noticias&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/contacto&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;header&gt;
+        &lt;h2&gt;Título de la noticia&lt;/h2&gt;
+        &lt;p&gt;&lt;time datetime=&quot;2026-10-25&quot;&gt;25/10/2026&lt;/time&gt;&lt;/p&gt;
+      &lt;/header&gt;
+      &lt;section&gt;
+        &lt;p&gt;Cuerpo de la noticia...&lt;/p&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+
+    &lt;aside&gt;
+      &lt;h2&gt;Relacionado&lt;/h2&gt;
+      &lt;ul&gt;&lt;li&gt;&lt;a href=&quot;#&quot;&gt;Otra nota&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+    &lt;/aside&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 Mi sitio&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;header&gt;</code></td>
+<td>Cabecera de la página o de una sección.</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>Bloque de navegación.</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>Contenido principal (uno por página).</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>Sección genérica con título.</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>Contenido independiente y reutilizable (noticia, post, comentario).</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>Contenido tangencial (barra lateral, relacionados).</td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>Pie de página o de sección.</td>
+</tr>
+<tr>
+<td><code>&lt;figure&gt;</code></td>
+<td>Contenido autocontenido (imagen, gráfico, código).</td>
+</tr>
+<tr>
+<td><code>&lt;figcaption&gt;</code></td>
+<td>Pie de la figura.</td>
+</tr>
+<tr>
+<td><code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code></td>
+<td>Bloque plegable y su título visible.</td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code></td>
+<td>Texto resaltado.</td>
+</tr>
+<tr>
+<td><code>&lt;time&gt;</code></td>
+<td>Fecha/hora legible por máquina (<code>datetime</code>).</td>
+</tr>
+<tr>
+<td><code>&lt;dialog&gt;</code></td>
+<td>Cuadro de diálogo.</td>
+</tr>
+<tr>
+<td><code>&lt;address&gt;</code></td>
+<td>Datos de contacto del autor.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Ventaja:</strong> el HTML semántico mejora accesibilidad, SEO y mantenimiento. Un <code>&lt;div&gt;</code> no dice nada; <code>&lt;nav&gt;</code> sí.</p>
+</blockquote>
+<h3>Ejemplo de <code>details</code></h3>
+<pre><code class="language-html">&lt;details&gt;
+  &lt;summary&gt;Ver respuesta&lt;/summary&gt;
+  &lt;p&gt;La respuesta correcta es la B.&lt;/p&gt;
+&lt;/details&gt;
+</code></pre>
+<hr>
+<h2>11. Multimedia, <code>canvas</code> y SVG</h2>
+<h3>Video y audio</h3>
+<pre><code class="language-html">&lt;video src=&quot;video.mp4&quot; controls poster=&quot;portada.jpg&quot;
+       width=&quot;640&quot; height=&quot;360&quot; preload=&quot;metadata&quot;&gt;
+  &lt;source src=&quot;video.webm&quot; type=&quot;video/webm&quot;&gt;
+  &lt;source src=&quot;video.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  Tu navegador no soporta video HTML5.
+&lt;/video&gt;
+
+&lt;audio src=&quot;audio.mp3&quot; controls preload=&quot;metadata&quot;&gt;
+  &lt;source src=&quot;audio.ogg&quot; type=&quot;audio/ogg&quot;&gt;
+  &lt;source src=&quot;audio.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
+  Tu navegador no soporta audio HTML5.
+&lt;/audio&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>controls</code></td>
+<td>Muestra los controles.</td>
+</tr>
+<tr>
+<td><code>autoplay</code></td>
+<td>Reproduce automáticamente (muchos navegadores lo bloquean).</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>Repite.</td>
+</tr>
+<tr>
+<td><code>muted</code></td>
+<td>Silenciado.</td>
+</tr>
+<tr>
+<td><code>preload</code></td>
+<td><code>none</code>, <code>metadata</code>, <code>auto</code>.</td>
+</tr>
+<tr>
+<td><code>poster</code></td>
+<td>Imagen previa al video.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Formatos:</strong> MP4/H.264 (video), WebM/OGG (video), MP3/AAC (audio), OGG (audio).</p>
+<h3><code>canvas</code></h3>
+<pre><code class="language-html">&lt;canvas id=&quot;lienzo&quot; width=&quot;200&quot; height=&quot;100&quot;
+        style=&quot;border: 1px solid #ccc;&quot;&gt;
+  Tu navegador no soporta canvas.
+&lt;/canvas&gt;
+
+&lt;script&gt;
+  const c = document.getElementById(&quot;lienzo&quot;);
+  const ctx = c.getContext(&quot;2d&quot;);
+
+  ctx.fillStyle = &quot;#FAA200&quot;;
+  ctx.fillRect(0, 0, 150, 75);          // rectángulo
+  ctx.beginPath();
+  ctx.arc(95, 50, 40, 0, 2 * Math.PI);  // círculo
+  ctx.stroke();
+  ctx.font = &quot;20px Arial&quot;;
+  ctx.fillText(&quot;Hola&quot;, 10, 30);
+&lt;/script&gt;
+</code></pre>
+<ul>
+<li><code>&lt;canvas&gt;</code> es solo un contenedor: <strong>sin JavaScript no dibuja nada</strong>.</li>
+<li><code>getContext("2d")</code> da acceso a la API de dibujo.</li>
+<li>Métodos: <code>fillRect</code>, <code>strokeRect</code>, <code>moveTo</code>, <code>lineTo</code>, <code>arc</code>, <code>fillText</code>, <code>strokeText</code>, <code>drawImage</code>, <code>createLinearGradient</code>, <code>createRadialGradient</code>.</li>
+</ul>
+<h3>SVG</h3>
+<pre><code class="language-html">&lt;svg width=&quot;300&quot; height=&quot;200&quot; viewBox=&quot;0 0 300 200&quot;&gt;
+  &lt;circle cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;60&quot;
+          fill=&quot;purple&quot; stroke=&quot;lime&quot; stroke-width=&quot;5&quot; /&gt;
+  &lt;rect x=&quot;180&quot; y=&quot;60&quot; width=&quot;80&quot; height=&quot;80&quot; fill=&quot;orange&quot; /&gt;
+&lt;/svg&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Canvas</th>
+<th>SVG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mapa de píxeles.</td>
+<td>Vectores (XML).</td>
+</tr>
+<tr>
+<td>Se dibuja con JS.</td>
+<td>Se describe con etiquetas.</td>
+</tr>
+<tr>
+<td>Pierde calidad al escalar.</td>
+<td>No pierde calidad.</td>
+</tr>
+<tr>
+<td>Mejor para animaciones y muchos objetos.</td>
+<td>Mejor para íconos y gráficos simples.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>12. Atributos globales y accesibilidad</h2>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Identificador <strong>único</strong> en el documento.</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td>Uno o más estilos/clases separados por espacio.</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>CSS en línea (evitar salvo casos puntuales).</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Información adicional (tooltip).</td>
+</tr>
+<tr>
+<td><code>lang</code></td>
+<td>Idioma del contenido.</td>
+</tr>
+<tr>
+<td><code>dir</code></td>
+<td>Dirección (<code>ltr</code>, <code>rtl</code>, <code>auto</code>).</td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Oculta el elemento.</td>
+</tr>
+<tr>
+<td><code>tabindex</code></td>
+<td>Orden de tabulación.</td>
+</tr>
+<tr>
+<td><code>contenteditable</code></td>
+<td>Permite editar el contenido.</td>
+</tr>
+<tr>
+<td><code>data-*</code></td>
+<td>Datos personalizados (<code>data-id="5"</code>).</td>
+</tr>
+<tr>
+<td><code>accesskey</code></td>
+<td>Atajo de teclado.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Buenas prácticas de accesibilidad</strong></p>
+<ol>
+<li><code>alt</code> descriptivo en imágenes informativas; <code>alt=""</code> en decorativas.</li>
+<li>Un solo <code>&lt;h1&gt;</code> y jerarquía de encabezados coherente.</li>
+<li><code>&lt;label&gt;</code> asociado a cada control de formulario.</li>
+<li>No transmitir información <strong>solo</strong> por color.</li>
+<li>Enlaces con texto descriptivo (evitar “clic aquí”).</li>
+<li>Contraste suficiente entre texto y fondo.</li>
+<li>Tablas de datos con <code>&lt;th scope="col|row"&gt;</code> y <code>&lt;caption&gt;</code>.</li>
+<li>Navegación posible solo con teclado.</li>
+</ol>
+<hr>
+<h2>13. Almacenamiento del lado cliente</h2>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Capacidad</th>
+<th>Duración</th>
+<th>Se envía al servidor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cookie</strong></td>
+<td>~4 KB</td>
+<td>Según <code>expires</code></td>
+<td>Sí, en cada petición.</td>
+</tr>
+<tr>
+<td><strong>localStorage</strong></td>
+<td>~5 MB</td>
+<td>Hasta que se borre</td>
+<td>No.</td>
+</tr>
+<tr>
+<td><strong>sessionStorage</strong></td>
+<td>~5 MB</td>
+<td>Hasta cerrar la pestaña</td>
+<td>No.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">// localStorage
+localStorage.setItem(&quot;usuario&quot;, &quot;ana&quot;);
+const usuario = localStorage.getItem(&quot;usuario&quot;);
+localStorage.removeItem(&quot;usuario&quot;);
+localStorage.clear();
+
+// sessionStorage
+sessionStorage.setItem(&quot;paso&quot;, &quot;2&quot;);
+
+// Verificar soporte
+if (typeof Storage !== &quot;undefined&quot;) {
+  // disponible
+}
+</code></pre>
+<pre><code class="language-javascript">// Cookie básica
+document.cookie = &quot;usuario=ana; path=/; max-age=86400&quot;;
+console.log(document.cookie);
+</code></pre>
+<p><strong>Cookie (formato del encabezado):</strong></p>
+<pre><code>Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN; secure
+</code></pre>
+<ul>
+<li><code>expires</code>: fecha de vencimiento (formato <code>Wdy, DD-Mon-YYYY HH:MM:SS GMT</code>).</li>
+<li><code>path</code> / <code>domain</code>: dónde se envía.</li>
+<li><code>secure</code>: solo por HTTPS.</li>
+</ul>
+<h3>Offline: Service Workers (concepto)</h3>
+<ul>
+<li>Script que corre en segundo plano y actúa como <strong>proxy</strong> entre la app y la red.</li>
+<li>Permite cachear recursos y funcionar sin conexión (base de las PWA).</li>
+<li>Solo funciona en <strong>HTTPS</strong> o <code>localhost</code>.</li>
+<li>Estrategias: <em>cache-first</em>, <em>network-first</em>, <em>stale-while-revalidate</em>.</li>
+</ul>
+<pre><code class="language-javascript">if (&quot;serviceWorker&quot; in navigator) {
+  navigator.serviceWorker.register(&quot;/sw.js&quot;);
+}
+</code></pre>
+<hr>
+<h2>14. Errores típicos y checklist</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>La página se ve “rota”</td>
+<td>Etiquetas sin cerrar o mal anidadas.</td>
+<td>Cerrar en orden inverso al de apertura.</td>
+</tr>
+<tr>
+<td>Tildes y ñ se ven mal</td>
+<td>Falta <code>charset</code> o el archivo no está en UTF-8.</td>
+<td><code>&lt;meta charset="UTF-8"&gt;</code> y guardar en UTF-8.</td>
+</tr>
+<tr>
+<td>El enlace no lleva a ningún lado</td>
+<td><code>href="#"</code> o ruta incorrecta.</td>
+<td>Revisar ruta relativa/absoluta.</td>
+</tr>
+<tr>
+<td>La imagen no carga</td>
+<td>Ruta o extensión incorrecta.</td>
+<td>Revisar <code>src</code> y mayúsculas/minúsculas.</td>
+</tr>
+<tr>
+<td>El formulario no envía archivos</td>
+<td>Falta <code>enctype</code>.</td>
+<td><code>enctype="multipart/form-data"</code>.</td>
+</tr>
+<tr>
+<td>El servidor no recibe un campo</td>
+<td>Falta <code>name</code> o está <code>disabled</code>.</td>
+<td>Agregar <code>name</code>; no usar <code>disabled</code>.</td>
+</tr>
+<tr>
+<td>Los radio buttons se seleccionan todos</td>
+<td>Tienen distinto <code>name</code>.</td>
+<td>Mismo <code>name</code> para el grupo.</td>
+</tr>
+<tr>
+<td>La tabla se descuadra</td>
+<td><code>colspan</code>/<code>rowspan</code> mal calculados.</td>
+<td>Contar columnas por fila.</td>
+</tr>
+<tr>
+<td>El CSS no se aplica</td>
+<td>Ruta del <code>link</code> incorrecta o caché.</td>
+<td>Revisar <code>href</code>; recargar con Ctrl+F5.</td>
+</tr>
+<tr>
+<td>HTML inválido</td>
+<td>Atributos repetidos o etiquetas obsoletas.</td>
+<td>Validar en <code>validator.w3.org</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>[ ] <code>&lt;!DOCTYPE html&gt;</code> y <code>&lt;html lang="es"&gt;</code>.</li>
+<li>[ ] <code>&lt;meta charset="UTF-8"&gt;</code> y <code>&lt;meta name="viewport"&gt;</code>.</li>
+<li>[ ] <code>&lt;title&gt;</code> descriptivo.</li>
+<li>[ ] Un solo <code>&lt;h1&gt;</code>; jerarquía de encabezados correcta.</li>
+<li>[ ] Todas las imágenes con <code>alt</code>.</li>
+<li>[ ] Todos los controles con <code>&lt;label&gt;</code>.</li>
+<li>[ ] Formularios con <code>action</code>, <code>method</code> y <code>name</code> en los campos.</li>
+<li>[ ] Enlaces probados (internos y externos).</li>
+<li>[ ] HTML validado.</li>
+<li>[ ] Contenido estructurado con etiquetas semánticas, no solo <code>&lt;div&gt;</code>.</li>
+</ul>
+<hr>
+<h2>15. Plantilla completa</h2>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;Página de ejemplo de la materia POW&quot;&gt;
+  &lt;meta name=&quot;author&quot; content=&quot;Nombre Apellido&quot;&gt;
+  &lt;title&gt;Mi página — POW&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/estilos.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;header&gt;
+    &lt;h1&gt;Mi sitio&lt;/h1&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;index.html&quot;&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;noticias.html&quot;&gt;Noticias&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;contacto.html&quot;&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;header&gt;
+        &lt;h2&gt;Primera noticia&lt;/h2&gt;
+        &lt;p&gt;&lt;time datetime=&quot;2026-10-25&quot;&gt;25 de octubre de 2026&lt;/time&gt;&lt;/p&gt;
+      &lt;/header&gt;
+
+      &lt;figure&gt;
+        &lt;img src=&quot;img/foto.jpg&quot; alt=&quot;Descripción de la foto&quot; width=&quot;600&quot;&gt;
+        &lt;figcaption&gt;Epígrafe de la imagen.&lt;/figcaption&gt;
+      &lt;/figure&gt;
+
+      &lt;p&gt;Contenido de la noticia con &lt;strong&gt;texto importante&lt;/strong&gt;
+         y un &lt;a href=&quot;https://www.w3.org/&quot;&gt;enlace externo&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;section&gt;
+        &lt;h3&gt;Datos&lt;/h3&gt;
+        &lt;table&gt;
+          &lt;caption&gt;Resumen&lt;/caption&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Campo&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Valor&lt;/th&gt;&lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;&lt;td&gt;Estado&lt;/td&gt;&lt;td&gt;Publicada&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Categoría&lt;/td&gt;&lt;td&gt;General&lt;/td&gt;&lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/section&gt;
+    &lt;/article&gt;
+
+    &lt;aside&gt;
+      &lt;h2&gt;Relacionado&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;noticia-2.html&quot;&gt;Otra noticia&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;noticia-3.html&quot;&gt;Y otra más&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/aside&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 Mi sitio — Todos los derechos reservados.&lt;/p&gt;
+    &lt;address&gt;Contacto: &lt;a href=&quot;mailto:info@example.com&quot;&gt;info@example.com&lt;/a&gt;&lt;/address&gt;
+  &lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr>
+<p><strong>Fin del cheatsheet.</strong><br>
+Si tenés que priorizar para el parcial: estructura del documento, listas, enlaces, tablas con <code>colspan</code>/<code>rowspan</code>, formularios (métodos, <code>input</code>, validación), etiquetas semánticas de HTML5 y las diferencias entre <code>canvas</code> y SVG.</p>
+</body>
+</html>
