@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar club · La Tania</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__barra">
+      <img class="header__logo" src="assets/logo.png" alt="Escudo Club La Tania">
+      <h1 class="header__titulo">
+        La Tania
+        <span class="header__subtitulo">Club Deportivo</span>
+      </h1>
+      <nav class="nav" id="nav" aria-label="Menú principal"></nav>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <h2 class="titulo-seccion">Registrar nuevo club</h2>
+    <p>Completá el nombre del club y subí su escudo (PNG/JPG). El equipo se guarda en la base de datos
+    y el logo en la carpeta <code>img/logos</code> del servidor.</p>
+    <p>Si necesitás un logo de prueba, en <code>assets/logos/</code> hay imágenes de clubes de ejemplo.</p>
+
+    <!-- Punto EXTRA: formulario enviado por AJAX con FormData -->
+    <form id="formClub" class="form-club" enctype="multipart/form-data" style="max-width: 480px;">
+      <label class="campo">
+        <span>Nombre del club</span>
+        <input type="text" name="nombre" required placeholder="Ej: Club Atlético Pico">
+      </label>
+
+      <label class="campo">
+        <span>Escudo / logo</span>
+        <input type="file" name="logo" accept="image/*" required>
+      </label>
+
+      <button type="submit" class="boton">Registrar club</button>
+      <p class="mensaje" id="msg"></p>
+    </form>
+
+  </main>
+
+  <footer class="footer">
+    <strong>Club Deportivo La Tania</strong>
+    <p>General Pico, La Pampa · Alta de clubes · 2025</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/registrar.js"></script>
+</body>
+</html>

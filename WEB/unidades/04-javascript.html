@@ -11,7 +11,8 @@
   <div class="container nav">
     <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
     <select aria-label="Navegación" onchange="if(this.value)location=this.value">
-      <option value="">Ir a una unidad…</option>
+      <option value="">Ir a…</option>
+      <option value="../guia-parcial.html">Guía del parcial</option>
       <option value="01-html.html">1 · HTML</option>
       <option value="02-css.html">2 · CSS</option>
       <option value="03-bootstrap.html">3 · Bootstrap</option>
@@ -19,6 +20,8 @@
       <option value="05-ajax.html">5 · AJAX</option>
       <option value="06-jquery.html">6 · jQuery</option>
       <option value="07-php.html">7 · PHP</option>
+      <option value="08-mysql.html">8 · MySQL + PHP</option>
+      <option value="09-subida-archivos.html">9 · Subida de archivos</option>
     </select>
   </div>
 </header>
@@ -48,6 +51,7 @@
       <li><a href="#t10">Entrada y salida</a></li>
       <li><a href="#t11">Eventos</a></li>
       <li><a href="#t12">DOM</a></li>
+      <li><a href="#t13">Módulos ES6</a></li>
     </ol>
   </nav>
 
@@ -499,6 +503,53 @@ console.log(`Hola ${nombre}, tenés ${nombre.length} letras.`);</code></pre>
     <div class="preview">
       <div class="bar">Vista previa</div>
       <iframe class="mid" srcdoc="&lt;style&gt;.resaltado{background:#fffbeb;padding:8px;border-radius:6px}&lt;/style&gt;&lt;div id=&quot;caja&quot;&gt;Contenido original&lt;/div&gt;&lt;button id=&quot;go&quot;&gt;Transformar&lt;/button&gt;&lt;script&gt;var c=document.getElementById(&quot;caja&quot;);document.getElementById(&quot;go&quot;).addEventListener(&quot;click&quot;,function(){c.textContent=&quot;Texto cambiado por el DOM&quot;;c.style.color=&quot;crimson&quot;;c.classList.add(&quot;resaltado&quot;);var n=document.createElement(&quot;p&quot;);n.textContent=&quot;Párrafo creado con createElement&quot;;c.appendChild(n)});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t13">
+    <a class="top-link" href="#t13">&#8593; volver al índice</a>
+    <h2><span class="n">13.</span> Módulos ES6</h2>
+    <div class="def">
+      <p>A medida que un proyecto crece, conviene <strong>dividir el código en archivos</strong>. Los
+      <strong>módulos ES6</strong> permiten <em>exportar</em> cosas desde un archivo e <em>importarlas</em> en
+      otro. El archivo que importa debe cargarse con <code>&lt;script type="module"&gt;</code>, y cada módulo tiene su
+      propio ámbito (las variables no se filtran al global).</p>
+      <ul>
+        <li><strong><code>export</code></strong>: expone una variable, función o clase.</li>
+        <li><strong><code>export default</code></strong>: expone un único valor principal.</li>
+        <li><strong><code>import</code></strong>: trae lo exportado (con <code>./</code> para archivos locales).</li>
+      </ul>
+      <p><strong>Importante:</strong> los módulos solo funcionan servidos por HTTP (no abriendo el archivo con
+      <code>file://</code>), por eso conviene servirlos con Apache/XAMPP o un servidor de desarrollo.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>// ---- api.js ----
+export async function getDatos(url) {
+  const res = await fetch(url);
+  return res.json();
+}
+
+export const CATEGORIA_MASCULINO = 1;
+export const CATEGORIA_FEMENINO  = 3;
+
+// ---- main.js ----
+import { getDatos, CATEGORIA_MASCULINO } from "./api.js";
+
+const data = await getDatos(`api/jugadores.php?id_categoria=${CATEGORIA_MASCULINO}`);
+console.log(data.productos);
+
+// ---- index.html ----
+&lt;!-- type="module" habilita import/export y el ámbito de módulo --&gt;
+&lt;script type="module" src="main.js"&gt;&lt;/script&gt;</code></pre>
+    <span class="label">Resultado · cómo se resuelven las rutas</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7;white-space:pre-wrap&quot;&gt;index.html
+  └─ &amp;lt;script type=&amp;quot;module&amp;quot; src=&amp;quot;main.js&amp;quot;&amp;gt;
+        └─ main.js  → import ... from &amp;quot;./api.js&amp;quot;
+              └─ api.js  (exporta getDatos)
+
+Recorre las dependencias y carga cada módulo una sola vez.&lt;/pre&gt;"></iframe>
     </div>
   </section>
 

@@ -11,7 +11,8 @@
   <div class="container nav">
     <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
     <select aria-label="Navegación" onchange="if(this.value)location=this.value">
-      <option value="">Ir a una unidad…</option>
+      <option value="">Ir a…</option>
+      <option value="../guia-parcial.html">Guía del parcial</option>
       <option value="01-html.html">1 · HTML</option>
       <option value="02-css.html">2 · CSS</option>
       <option value="03-bootstrap.html">3 · Bootstrap</option>
@@ -19,6 +20,8 @@
       <option value="05-ajax.html" selected>5 · AJAX</option>
       <option value="06-jquery.html">6 · jQuery</option>
       <option value="07-php.html">7 · PHP</option>
+      <option value="08-mysql.html">8 · MySQL + PHP</option>
+      <option value="09-subida-archivos.html">9 · Subida de archivos</option>
     </select>
   </div>
 </header>
@@ -49,6 +52,7 @@
       <li><a href="#t6">Respuestas: texto, XML y JSON</a></li>
       <li><a href="#t7">Validar un formulario con AJAX</a></li>
       <li><a href="#t8">Fetch API y async/await</a></li>
+      <li><a href="#t9">Patrones reales: API encadenadas</a></li>
     </ol>
   </nav>
 
@@ -343,6 +347,80 @@ cargar();</code></pre>
     <div class="preview">
       <div class="bar">Vista previa</div>
       <iframe class="mid" srcdoc="&lt;button id=&quot;c&quot;&gt;Traer un dato (fetch real)&lt;/button&gt;&lt;pre id=&quot;o&quot; style=&quot;font-size:12px&quot;&gt;&lt;/pre&gt;&lt;script&gt;document.getElementById(&quot;c&quot;).addEventListener(&quot;click&quot;,async function(){var o=document.getElementById(&quot;o&quot;);o.textContent=&quot;Cargando…&quot;;try{var r=await fetch(&quot;https://jsonplaceholder.typicode.com/todos/1&quot;);if(!r.ok)throw new Error(&quot;Error &quot;+r.status);var d=await r.json();o.textContent=JSON.stringify(d,null,2)}catch(e){o.textContent=&quot;Sin conexión o bloqueado: &quot;+e.message}});&lt;/script&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t9">
+    <a class="top-link" href="#t9">&#8593; volver al índice</a>
+    <h2><span class="n">9.</span> Patrones reales: API encadenadas</h2>
+    <div class="def">
+      <p>En un proyecto real no alcanza con <em>una</em> llamada: muchas veces hay que hacer
+      <strong>varias llamadas encadenadas</strong> y combinar los resultados. Este es el patrón típico de la web
+      reactiva y aparece constantemente en los parciales.</p>
+      <ul>
+        <li><strong>Entender el envoltorio JSON</strong>: las API suelen responder
+        <code>{ status, cantidad, productos }</code>. El array útil está en <code>data.productos</code>.</li>
+        <li><strong>Llamadas secuenciales con <code>await</code> dentro de un <code>for</code></strong>: primero se
+        trae la lista (ej. equipos) y, por cada ítem, se hacen una o más llamadas (ej. partidos).</li>
+        <li><strong>Acumular en un objeto/Map</strong>: se van sumando los totales a medida que llegan.</li>
+        <li><strong>Deduplicar</strong>: si el mismo registro (ej. jugador por <code>dni</code>) aparece repetido, se
+        elimina con un <code>Set</code> o un <code>Map</code>.</li>
+        <li><strong>Ordenar y renderizar</strong>: al final se ordena (ej. por puntos) y se pinta en el DOM.</li>
+      </ul>
+    </div>
+    <span class="label">Ejemplo · deduplicar con Map (jugadores por dni)</span>
+<pre><code>async function cargarJugadores(idCategoria) {
+  const res  = await fetch(`api/jugadores.php?id_categoria=${idCategoria}`);
+  const data = await res.json();
+
+  // data.productos puede traer el mismo jugador repetido (juega varios deportes)
+  const unicos = new Map();
+  data.productos.forEach(j =&gt; unicos.set(j.dni, j));   // la clave es el dni
+
+  return [...unicos.values()];      // array sin repetidos
+}</code></pre>
+    <span class="label">Ejemplo · encadenar llamadas y calcular totales</span>
+<pre><code>// Traer equipos y, por cada uno, sus partidos de local (A) y visitante (B)
+async function tablaPosiciones(idCategoria) {
+  const resEq  = await fetch("api/equipos.php");
+  const equipos = (await resEq.json()).productos;
+
+  const tabla = [];
+
+  for (const eq of equipos) {
+    let puntos = 0;
+
+    // Dos llamadas por equipo: como local y como visitante
+    const urls = [
+      `api/partidos.php?localia=A&amp;id_equipo=${eq.id_equipo}&amp;id_categoria=${idCategoria}`,
+      `api/partidos.php?localia=B&amp;id_equipo=${eq.id_equipo}&amp;id_categoria=${idCategoria}`
+    ];
+
+    for (const url of urls) {
+      const data = await (await fetch(url)).json();
+      if (data.status !== 200) continue;
+
+      for (const p of data.productos) {
+        // puntos_A / puntos_B según de qué lado jugó el equipo
+        const gano   = p.puntos_A &gt; p.puntos_B;
+        const empato = p.puntos_A === p.puntos_B;
+        const c1     = p.modalidad === "C1";
+
+        if (gano)        puntos += c1 ? 3 : 5;
+        else if (empato) puntos += c1 ? 1 : 2;
+      }
+    }
+    tabla.push({ nombre: eq.nombre, logo: eq.logo, puntos });
+  }
+
+  // Ordenar de mayor a menor puntaje
+  tabla.sort((a, b) =&gt; b.puntos - a.puntos);
+  return tabla;
+}</code></pre>
+    <span class="label">Resultado · simulación</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="mid" srcdoc="&lt;button id=&quot;tp&quot;&gt;Calcular tabla (datos de ejemplo)&lt;/button&gt;&lt;ul id=&quot;l&quot; style=&quot;font-family:system-ui;line-height:1.8&quot;&gt;&lt;/ul&gt;&lt;script&gt;document.getElementById(&quot;tp&quot;).addEventListener(&quot;click&quot;,function(){var t=[{nombre:&quot;La Tania&quot;,puntos:34},{nombre:&quot;Ferro Carril Oeste&quot;,puntos:31},{nombre:&quot;Central Argentino&quot;,puntos:22}];t.sort(function(a,b){return b.puntos-a.puntos});var html=&quot;&quot;;t.forEach(function(x,i){html+=&quot;&lt;li&gt;&quot;+(i+1)+&quot;. &quot;+x.nombre+&quot; — &lt;b&gt;&quot;+x.puntos+&quot;&lt;/b&gt; pts&lt;/li&gt;&quot;});document.getElementById(&quot;l&quot;).innerHTML=html});&lt;/script&gt;"></iframe>
     </div>
   </section>
 

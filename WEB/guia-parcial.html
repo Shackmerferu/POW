@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de parcial · POW</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="index.html">&#9776; POW · Guía de parcial</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a…</option>
+      <option value="index.html">Inicio · índice de unidades</option>
+      <option value="guia-parcial.html" selected>Guía del parcial</option>
+      <option value="unidades/01-html.html">1 · HTML</option>
+      <option value="unidades/02-css.html">2 · CSS</option>
+      <option value="unidades/03-bootstrap.html">3 · Bootstrap</option>
+      <option value="unidades/04-javascript.html">4 · JavaScript</option>
+      <option value="unidades/05-ajax.html">5 · AJAX</option>
+      <option value="unidades/06-jquery.html">6 · jQuery</option>
+      <option value="unidades/07-php.html">7 · PHP</option>
+      <option value="unidades/08-mysql.html">8 · MySQL + PHP</option>
+      <option value="unidades/09-subida-archivos.html">9 · Subida de archivos</option>
+    </select>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <div class="hero">
+    <p class="crumb">POW › Modo parcial</p>
+    <h1>Guía de combate para el parcial</h1>
+    <p>No es otro resumen: es el <strong>mapa de decisiones</strong> para leer un enunciado, saber qué
+    tecnología usar en cada punto y resolverlo con código que funcione. Incluye <strong>18 recetas
+    copiables</strong>, los errores que más puntos cuestan, teoría probable y un checklist final.</p>
+    <p class="progress-txt">9 unidades · 18 recetas · 22 preguntas teóricas · progreso guardado en tu navegador</p>
+    <div class="actions">
+      <a class="btn" href="#recetas">Ir a las recetas</a>
+      <a class="btn ghost" href="#mapa">Mapa de decisiones</a>
+      <a class="btn ghost" href="#simulacro">Simulacro La Tania</a>
+      <a class="btn ghost" href="#checklist">Checklist final</a>
+    </div>
+  </div>
+
+  <nav class="toc">
+    <h2>En esta guía</h2>
+    <ol>
+      <li><a href="#formato">Cómo es el parcial</a></li>
+      <li><a href="#ruta">Ruta de ataque en 7 pasos</a></li>
+      <li><a href="#mapa">Mapa de decisiones</a></li>
+      <li><a href="#recetas">Recetario copiable</a></li>
+      <li><a href="#errores">Errores que cuestan puntos</a></li>
+      <li><a href="#depurar">Protocolo de depuración</a></li>
+      <li><a href="#teoria">Preguntas teóricas probables</a></li>
+      <li><a href="#simulacro">Simulacro: La Tania 2025</a></li>
+      <li><a href="#plan">Plan de estudio de 7 días</a></li>
+      <li><a href="#checklist">Checklist final</a></li>
+    </ol>
+  </nav>
+
+  <section class="group" id="formato">
+    <h2><span class="badge">1</span> Cómo es el parcial (y qué te van a pedir)</h2>
+    <div class="def">
+      <p>El parcial típico de POW es <strong>práctico sobre un proyecto que ya existe</strong>: te entregan un
+      sitio (HTML/CSS/JS), una <strong>API en PHP</strong>, una <strong>base MySQL</strong> con datos y una carpeta
+      de recursos. No hay que inventar todo: hay que <strong>integrar</strong> una funcionalidad nueva y, a veces,
+      completar uno o dos archivos PHP que vienen vacíos.</p>
+      <p>Puede haber dos opciones de front: <strong>Opción A</strong> (HTML + CSS tradicional + JavaScript puro)
+      o <strong>Opción B</strong> (Bootstrap y/o jQuery). Elegí una y no mezcles: se evalúa que el resultado
+      funcione, no la cantidad de librerías.</p>
+    </div>
+
+    <table>
+      <tr><th>Qué te entregan</th><th>Qué esperan que hagas</th></tr>
+      <tr><td>Sitio o maqueta existente</td><td>Respetar el diseño y agregar la página, sección o componente pedido.</td></tr>
+      <tr><td>API con endpoints que ya funcionan</td><td>Consumirla desde el front; no modificarla salvo el archivo que el enunciado marca como “completar”.</td></tr>
+      <tr><td>Base de datos con tablas y filas reales</td><td>Leer el esquema y usar los nombres exactos de tablas y columnas.</td></tr>
+      <tr><td>Uno o dos PHP vacíos o incompletos</td><td>Completarlos con conexión, validación, consulta y respuesta JSON.</td></tr>
+      <tr><td>Puntos A, B y “extra”</td><td>Primero asegurar A (lo central), después B y extras si sobra tiempo.</td></tr>
+    </table>
+
+    <div class="alert warn">
+      <strong>Regla de oro:</strong> antes de escribir una línea, respondé estas tres preguntas:
+      ¿<em>de dónde salen los datos</em>?, ¿<em>dónde se muestran</em>? y ¿<em>qué acción del usuario dispara todo</em>?
+      Si las respondés, el código casi se escribe solo.
+    </div>
+
+    <table>
+      <tr><th>Verbo del enunciado</th><th>Traducción técnica</th></tr>
+      <tr><td>Listar, mostrar, cargar</td><td><code>fetch</code> GET + render en el DOM.</td></tr>
+      <tr><td>Filtrar, buscar</td><td>Parámetro en la URL + <code>WHERE</code> en SQL (o <code>filter()</code> en JS).</td></tr>
+      <tr><td>Ordenar</td><td><code>ORDER BY</code> en SQL o <code>sort()</code> en JS.</td></tr>
+      <tr><td>Calcular, sumar puntos</td><td>Recorrer los datos y acumular; después ordenar.</td></tr>
+      <tr><td>Guardar, agregar, registrar</td><td><code>fetch</code> POST + <code>INSERT</code> en PHP.</td></tr>
+      <tr><td>Modificar, actualizar</td><td><code>UPDATE ... WHERE</code> (nunca sin <code>WHERE</code>).</td></tr>
+      <tr><td>Eliminar</td><td><code>DELETE ... WHERE</code> (nunca sin <code>WHERE</code>).</td></tr>
+      <tr><td>Subir imagen, logo, archivo</td><td><code>FormData</code> + <code>$_FILES</code> + <code>move_uploaded_file</code>.</td></tr>
+      <tr><td>Que no se repita</td><td><code>Map</code>/<code>Set</code> en JS o <code>DISTINCT</code> en SQL.</td></tr>
+      <tr><td>Iniciar sesión, restringir</td><td><code>session_start()</code> + <code>$_SESSION</code> + redirección.</td></tr>
+    </table>
+  </section>
+
+  <section class="group" id="ruta">
+    <h2><span class="badge">2</span> Ruta de ataque en 7 pasos</h2>
+    <ol class="steps">
+      <li><strong>Leer todo el enunciado y subrayar los verbos.</strong> Marcá qué es obligatorio, qué es opcional y qué archivos NO se tocan. Anotá los nombres exactos de tablas, columnas y endpoints.</li>
+      <li><strong>Abrir la base de datos.</strong> En phpMyAdmin mirá estructura y algunos registros. Sin entender los datos, cualquier consulta es adivinanza.</li>
+      <li><strong>Probar la API antes de tocar el front.</strong> Pegá cada endpoint en el navegador y mirá el JSON. Si no responde, el problema es del servidor, no de tu JS.</li>
+      <li><strong>Dibujar el flujo.</strong> Evento → <code>fetch</code> → PHP → SQL → JSON → DOM. Escribilo en un papel; te ahorra media hora de depuración.</li>
+      <li><strong>Maquetar primero con datos fijos.</strong> Armá el HTML/CSS con dos o tres tarjetas escritas a mano. Cuando se ve bien, reemplazá por datos reales.</li>
+      <li><strong>Conectar y renderizar.</strong> Traé los datos, vaciá el contenedor y creá los elementos. Manejá el caso “no hay datos” y el error de red.</li>
+      <li><strong>Probar el flujo completo y recién ahí sumar extras.</strong> Recargá, guardá, volvé a entrar, revisá la consola y la pestaña Network. Un extra roto resta más de lo que suma.</li>
+    </ol>
+    <div class="tip">
+      <strong>Consejo de tiempo:</strong> si el parcial dura 3 horas, dedicá 15 minutos a leer y explorar,
+      90 minutos al punto principal, 45 al segundo punto y 30 a probar/embellecer. Nunca empieces por el CSS.
+    </div>
+  </section>
+
+  <section class="group" id="mapa">
+    <h2><span class="badge">3</span> Mapa de decisiones: “si te piden…, usá…”</h2>
+    <table>
+      <tr><th>Si el enunciado pide…</th><th>Qué usar</th><th>Unidad</th></tr>
+      <tr><td>Mostrar un listado que sale de la base</td><td><code>fetch</code> GET → <code>json()</code> → recorrer → crear tarjetas/filas.</td><td><a href="unidades/05-ajax.html">5</a> · <a href="unidades/08-mysql.html">8</a></td></tr>
+      <tr><td>Armar el menú con los datos de la tabla <code>item_menu</code></td><td>GET al endpoint del menú, filtrar <code>visible = "SI"</code>, mostrar en mayúsculas y mapear categoría → página.</td><td><a href="unidades/05-ajax.html">5</a></td></tr>
+      <tr><td>Guardar un texto nuevo (palmarés, comentario, etc.)</td><td><code>fetch</code> POST con <code>URLSearchParams</code> + PHP con <code>INSERT</code>.</td><td><a href="unidades/05-ajax.html">5</a> · <a href="unidades/07-php.html">7</a></td></tr>
+      <tr><td>Subir una imagen o un archivo</td><td><code>FormData</code> + <code>$_FILES</code> + validar + <code>move_uploaded_file()</code> + guardar el nombre en la BD.</td><td><a href="unidades/09-subida-archivos.html">9</a></td></tr>
+      <tr><td>Login, permisos o “solo usuarios logueados”</td><td>Sesiones PHP: <code>session_start()</code>, <code>$_SESSION</code> y <code>header("Location: ...")</code>.</td><td><a href="unidades/07-php.html">7</a></td></tr>
+      <tr><td>Una grilla que se adapte al celular</td><td>CSS Grid/Flexbox + <code>@media</code>, o grilla de Bootstrap (<code>col-12 col-md-6</code>).</td><td><a href="unidades/02-css.html">2</a> · <a href="unidades/03-bootstrap.html">3</a></td></tr>
+      <tr><td>Header fijo y botón flotante</td><td><code>position: sticky</code> arriba y <code>position: fixed</code> abajo a la derecha.</td><td><a href="unidades/02-css.html">2</a></td></tr>
+      <tr><td>Banner con texto encima de la imagen</td><td>Contenedor <code>position: relative</code> + <code>position: absolute</code> del texto.</td><td><a href="unidades/02-css.html">2</a></td></tr>
+      <tr><td>Ventana modal “Ver más”</td><td>Un <code>div</code> que cubre la pantalla y una clase <code>.visible</code> que se agrega/quita con JS.</td><td><a href="unidades/04-javascript.html">4</a></td></tr>
+      <tr><td>Tabla de posiciones calculada</td><td>Recorrer equipos y partidos, sumar con una función de puntos y ordenar con <code>sort()</code>.</td><td><a href="unidades/04-javascript.html">4</a></td></tr>
+      <tr><td>Evitar jugadores repetidos</td><td><code>new Map(filas.map(f => [f.dni, f]))</code> y quedarse con los valores.</td><td><a href="unidades/04-javascript.html">4</a></td></tr>
+      <tr><td>Filtros combinados (categoría, localía, búsqueda)</td><td>Query params + <code>$_GET</code> + <code>WHERE</code> con validación/escape.</td><td><a href="unidades/08-mysql.html">8</a></td></tr>
+      <tr><td>Validar antes de enviar</td><td><code>required</code>, <code>type</code>, <code>pattern</code> en HTML + comprobación en JS + validación final en PHP.</td><td><a href="unidades/01-html.html">1</a> · <a href="unidades/07-php.html">7</a></td></tr>
+      <tr><td>Resolverlo con jQuery (Opción B)</td><td><code>$.ajax()</code>, <code>$(selector)</code>, <code>.on()</code>, <code>.serialize()</code>.</td><td><a href="unidades/06-jquery.html">6</a></td></tr>
+      <tr><td>Dar formato a precios, fechas o mayúsculas</td><td><code>toLocaleString()</code>, <code>toLocaleDateString()</code>, <code>toUpperCase()</code> (o <code>text-transform</code> en CSS).</td><td><a href="unidades/04-javascript.html">4</a></td></tr>
+      <tr><td>Recibir y devolver JSON desde PHP</td><td><code>json_decode(file_get_contents("php://input"))</code> y <code>json_encode()</code> con header JSON.</td><td><a href="unidades/05-ajax.html">5</a> · <a href="unidades/07-php.html">7</a></td></tr>
+      <tr><td>Evitar inyección SQL</td><td><code>mysqli_prepare()</code> + <code>bind_param()</code>, o como mínimo <code>mysqli_real_escape_string()</code>.</td><td><a href="unidades/08-mysql.html">8</a></td></tr>
+    </table>
+  </section>
+
+  <section class="group" id="recetas">
+    <h2><span class="badge">4</span> Recetario copiable</h2>
+    <p>Cada receta trae el código mínimo que funciona. Copialo, cambiá nombres de tablas, columnas y rutas,
+    y adaptalo al enunciado. Los bloques tienen un botón <strong>Copiar</strong> arriba a la derecha.</p>
+
+    <nav class="toc">
+      <h2>Recetas</h2>
+      <ol>
+        <li><a href="#r1">Esqueleto HTML de cualquier página</a></li>
+        <li><a href="#r2">CSS que resuelve el 90%</a></li>
+        <li><a href="#r3">Bootstrap en 60 segundos</a></li>
+        <li><a href="#r4">Chuleta de JavaScript y DOM</a></li>
+        <li><a href="#r5">Menú dinámico desde la base</a></li>
+        <li><a href="#r6">Traer datos con fetch (GET)</a></li>
+        <li><a href="#r7">Guardar datos con fetch (POST)</a></li>
+        <li><a href="#r8">Subir archivo con FormData</a></li>
+        <li><a href="#r9">Modal “Ver más”</a></li>
+        <li><a href="#r10">jQuery AJAX (Opción B)</a></li>
+        <li><a href="#r11">PHP: endpoint JSON + conexión</a></li>
+        <li><a href="#r12">PHP: SELECT que devuelve JSON</a></li>
+        <li><a href="#r13">PHP: INSERT seguro</a></li>
+        <li><a href="#r14">PHP: subida de archivos</a></li>
+        <li><a href="#r15">PHP: sesiones y login</a></li>
+        <li><a href="#r16">MySQL: las consultas que necesitás</a></li>
+        <li><a href="#r17">Node: servidor mínimo</a></li>
+        <li><a href="#r18">XMLHttpRequest clásico</a></li>
+      </ol>
+    </nav>
+
+    <h3 style="margin-top:26px">Front-end</h3>
+
+    <div class="recipe" id="r1">
+      <h3>1. Esqueleto HTML de cualquier página <span class="tag front">front</span></h3>
+      <p class="when">Cuando tenés que crear una página nueva desde cero.</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Mi página&lt;/title&gt;
+  &lt;link rel="stylesheet" href="css/estilo.css"&gt;
+&lt;/head&gt;
+&lt;body data-categoria="1"&gt;
+  &lt;header class="header"&gt;
+    &lt;img src="assets/logo.png" alt="Logo" class="logo"&gt;
+    &lt;nav id="nav"&gt;&lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main class="contenedor"&gt;
+    &lt;section id="contenido"&gt;&lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer class="footer"&gt;© 2026 Mi sitio&lt;/footer&gt;
+
+  &lt;script src="js/config.js"&gt;&lt;/script&gt;
+  &lt;script src="js/app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p class="care">Ojo: <code>data-categoria="1"</code> es una convención útil (el parcial La Tania la usa) para que el mismo JS sirva en masculino y femenino: se lee con <code>document.body.dataset.categoria</code>.</p>
+    </div>
+
+    <div class="recipe" id="r2">
+      <h3>2. CSS que resuelve el 90% <span class="tag front">front</span></h3>
+      <p class="when">Para layout, header fijo, banner, tarjetas, modal y responsive sin pelear con el CSS.</p>
+<pre><code>* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Arial, sans-serif;
+  background: #f5f3ec;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Header siempre visible */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .6rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.header img { height: 56px; }
+
+#nav { display: flex; gap: .9rem; flex-wrap: wrap; }
+#nav a {
+  color: #1d4d2b;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.contenedor { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+
+/* Tarjetas responsive sin media query */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* Banner con texto encima */
+.banner { position: relative; }
+.banner img { width: 100%; display: block; }
+.banner h1 {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  text-shadow: 0 2px 8px #000;
+}
+
+/* Botón flotante abajo a la derecha */
+.whatsapp {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
+}
+.whatsapp img { width: 52px; }
+
+/* En celular, header en columna */
+@media (max-width: 600px) {
+  .header { flex-direction: column; align-items: flex-start; }
+}</code></pre>
+      <p class="care">Si algo “no se aplica”, revisá en este orden: ruta del archivo, caché (Ctrl+F5), especificidad y que el selector exista de verdad.</p>
+    </div>
+
+    <div class="recipe" id="r3">
+      <h3>3. Bootstrap en 60 segundos <span class="tag front">front</span></h3>
+      <p class="when">Si elegís la Opción B y querés grilla/componentes sin escribir tanto CSS.</p>
+<pre><code>&lt;!-- En el &lt;head&gt; --&gt;
+&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+
+&lt;div class="container py-4"&gt;
+  &lt;div class="row g-3"&gt;
+    &lt;div class="col-12 col-md-6 col-lg-4"&gt;
+      &lt;div class="card h-100"&gt;
+        &lt;img src="foto.jpg" class="card-img-top" alt="..."&gt;
+        &lt;div class="card-body"&gt;
+          &lt;h5 class="card-title"&gt;Nombre&lt;/h5&gt;
+          &lt;p class="card-text"&gt;Descripción.&lt;/p&gt;
+          &lt;button class="btn btn-primary"&gt;Ver más&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Antes de cerrar el &lt;/body&gt; --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;</code></pre>
+      <table>
+        <tr><th>Breakpoint</th><th>Prefijo</th><th>Desde</th></tr>
+        <tr><td>Teléfono</td><td><code>col-12</code></td><td>0 px</td></tr>
+        <tr><td>Tablet</td><td><code>col-md-6</code></td><td>768 px</td></tr>
+        <tr><td>Escritorio</td><td><code>col-lg-4</code></td><td>992 px</td></tr>
+        <tr><td>Pantalla grande</td><td><code>col-xl-3</code></td><td>1200 px</td></tr>
+      </table>
+      <p class="care">Para el modal de Bootstrap necesitás el <code>bootstrap.bundle.min.js</code> (incluye Popper). Si no carga, el modal no abre y no hay error visible.</p>
+    </div>
+
+    <div class="recipe" id="r4">
+      <h3>4. Chuleta de JavaScript y DOM <span class="tag front">front</span></h3>
+      <p class="when">Para no olvidarte la sintaxis justo en el parcial.</p>
+<pre><code>// ---- Seleccionar ----
+const el = document.getElementById("id");
+const primero = document.querySelector(".card");
+const todos = document.querySelectorAll(".card");
+
+// ---- Leer / escribir ----
+el.textContent = "Hola";            // texto seguro (no interpreta HTML)
+el.innerHTML = "&lt;b&gt;Hola&lt;/b&gt;"; // interpreta HTML
+input.value;                        // valor de un input
+document.body.dataset.categoria;    // data-categoria="1"
+
+// ---- Crear y agregar ----
+const p = document.createElement("p");
+p.className = "aviso";
+p.textContent = "Sin datos";
+contenedor.appendChild(p);
+
+// ---- Clases y atributos ----
+el.classList.add("activo");
+el.classList.toggle("visible");
+el.setAttribute("src", "img/foto.jpg");
+
+// ---- Eventos ----
+boton.addEventListener("click", () =&gt; { /* ... */ });
+form.addEventListener("submit", (e) =&gt; { e.preventDefault(); /* ... */ });
+
+// ---- Arrays que se usan siempre ----
+filas.filter(f =&gt; f.visible === "SI");
+filas.map(f =&gt; f.nombre);
+filas.sort((a, b) =&gt; b.puntos - a.puntos);
+const unicos = [...new Map(filas.map(f =&gt; [f.dni, f])).values()];
+
+// ---- Esperar la carga del DOM ----
+document.addEventListener("DOMContentLoaded", () =&gt; { /* arranque */ });</code></pre>
+      <p class="care">Usá <code>textContent</code> para datos de usuarios y <code>innerHTML</code> solo cuando el contenido es HTML confiable (por ejemplo, una biografía que ya viene con etiquetas).</p>
+    </div>
+
+    <div class="recipe" id="r5">
+      <h3>5. Menú dinámico desde la base <span class="tag front">front</span></h3>
+      <p class="when">Cuando el menú no está escrito en el HTML sino en la tabla <code>item_menu</code>.</p>
+<pre><code>// config.js
+const API = "http://localhost/la_tania/api";
+
+// app.js
+async function armarMenu() {
+  const nav = document.getElementById("nav");
+  if (!nav) return;
+
+  try {
+    const res = await fetch(`${API}/menu.php`);
+    const data = await res.json();
+
+    nav.innerHTML = "";
+
+    // Solo los visibles (la BD puede traer "SI", "NO" o vacío)
+    data.productos
+      .filter(item =&gt; String(item.visible).trim().toUpperCase() === "SI")
+      .forEach(item =&gt; {
+        const a = document.createElement("a");
+        a.textContent = String(item.titulo).toUpperCase();
+
+        const cat = Number(item.id_categoria);
+        if (cat === 1) a.href = "canicas_masculino.html";
+        else if (cat === 3) a.href = "canicas_femenino.html";
+        else a.href = item.src || "index.html";
+
+        nav.appendChild(a);
+      });
+  } catch (error) {
+    console.error("No se pudo armar el menú:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", armarMenu);</code></pre>
+      <p class="care">No hardcodees los ítems “porque total son pocos”: el punto del ejercicio suele ser justamente demostrar que salen de la BD.</p>
+    </div>
+
+    <div class="recipe" id="r6">
+      <h3>6. Traer datos con fetch (GET) <span class="tag front">front</span></h3>
+      <p class="when">Para listar jugadores, equipos, partidos, novedades o cualquier endpoint que solo consulta.</p>
+<pre><code>async function traer(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+
+  const data = await res.json();
+
+  // La API del parcial responde { status, cantidad, productos }
+  if (Number(data.status) !== 200) {
+    throw new Error(data.mensaje || "La API devolvió un error");
+  }
+  return data.productos ?? data;
+}
+
+async function cargarJugadores() {
+  const cont = document.getElementById("jugadores");
+  cont.innerHTML = "&lt;p&gt;Cargando…&lt;/p&gt;";
+
+  try {
+    const filas = await traer(`${API}/jugadores.php?id_categoria=1`);
+
+    // Sin repetidos: un jugador puede estar en varias categorías
+    const unicos = [...new Map(filas.map(j =&gt; [j.dni, j])).values()];
+
+    cont.innerHTML = "";
+    if (unicos.length === 0) {
+      cont.innerHTML = "&lt;p&gt;No hay jugadores cargados.&lt;/p&gt;";
+      return;
+    }
+
+    unicos.forEach(j =&gt; {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      card.innerHTML = `
+        &lt;img src="${API}/img/jugadores/${j.imagen}" alt="${j.nombre} ${j.apellido}"&gt;
+        &lt;h3&gt;${j.nombre} ${j.apellido}&lt;/h3&gt;
+        &lt;p&gt;"${j.apodo || ""}"&lt;/p&gt;
+        &lt;button type="button"&gt;Ver más&lt;/button&gt;
+      `;
+
+      card.querySelector("button").addEventListener("click", () =&gt; abrirModal(j));
+      cont.appendChild(card);
+    });
+  } catch (error) {
+    cont.innerHTML = `&lt;p class="error"&gt;No se pudo cargar: ${error.message}&lt;/p&gt;`;
+    console.error(error);
+  }
+}</code></pre>
+      <p class="care">Siempre contemplá tres estados: <strong>cargando</strong>, <strong>vacío</strong> y <strong>error</strong>. Es lo primero que mira un corrector.</p>
+    </div>
+
+    <div class="recipe" id="r7">
+      <h3>7. Guardar datos con fetch (POST) <span class="tag front">front</span></h3>
+      <p class="when">Para agregar un palmarés, un comentario, una inscripción o cualquier alta simple.</p>
+<pre><code>async function guardar(dni, anio, detalle) {
+  const params = new URLSearchParams({ dni, anio, detalle });
+
+  const res = await fetch(`${API}/palmares_guardar.php`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params
+  });
+
+  const data = await res.json();
+
+  if (Number(data.status) === 200) {
+    alert(data.mensaje || "Guardado");
+    // Refrescar la lista para ver el dato nuevo:
+    // await cargarPalmares(dni);
+  } else {
+    alert(data.mensaje || "No se pudo guardar");
+  }
+}
+
+// Uso desde un formulario
+formulario.addEventListener("submit", async (e) =&gt; {
+  e.preventDefault();
+  await guardar(dni, anio, detalle);
+});</code></pre>
+      <p class="care">Si el PHP espera <code>$_POST</code>, usá <code>application/x-www-form-urlencoded</code> o <code>FormData</code>. Si le mandás JSON crudo, el PHP tiene que leer <code>php://input</code>.</p>
+    </div>
+
+    <div class="recipe" id="r8">
+      <h3>8. Subir archivo con FormData <span class="tag front">front</span></h3>
+      <p class="when">Para logos, fotos de jugadores o cualquier archivo que deba quedar en el servidor.</p>
+<pre><code>&lt;form id="formClub"&gt;
+  &lt;input id="nombre" name="nombre" required&gt;
+  &lt;input id="logo" name="logo" type="file" accept="image/*" required&gt;
+  &lt;button&gt;Guardar club&lt;/button&gt;
+  &lt;p id="msg"&gt;&lt;/p&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+const formClub = document.getElementById("formClub");
+
+formClub.addEventListener("submit", async (e) =&gt; {
+  e.preventDefault();
+
+  const fd = new FormData();
+  fd.append("nombre", document.getElementById("nombre").value);
+  fd.append("logo", document.getElementById("logo").files[0]);
+
+  try {
+    const res = await fetch(`${API}/equipos_insertar.php`, {
+      method: "POST",
+      body: fd
+      // NO pongas Content-Type: fetch agrega el boundary solo
+    });
+
+    const data = await res.json();
+    document.getElementById("msg").textContent = data.mensaje;
+  } catch (error) {
+    document.getElementById("msg").textContent = "Error de conexión";
+    console.error(error);
+  }
+});
+&lt;/script&gt;</code></pre>
+      <p class="care">Errores clásicos: poner <code>Content-Type: multipart/form-data</code> a mano (rompe el boundary), olvidar el <code>name</code> del input o no usar <code>type="file"</code>.</p>
+    </div>
+
+    <div class="recipe" id="r9">
+      <h3>9. Modal “Ver más” <span class="tag front">front</span></h3>
+      <p class="when">Para mostrar detalle, biografía o un formulario sin cambiar de página.</p>
+<pre><code>&lt;!-- HTML (al final del body) --&gt;
+&lt;div id="modal" class="modal"&gt;
+  &lt;div class="modal__caja"&gt;
+    &lt;button id="cerrar" class="modal__cerrar" aria-label="Cerrar"&gt;×&lt;/button&gt;
+    &lt;img id="mFoto" alt=""&gt;
+    &lt;h3 id="mNombre"&gt;&lt;/h3&gt;
+    &lt;p id="mApodo"&gt;&lt;/p&gt;
+    &lt;div id="mBio"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* CSS */
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, .6);
+  display: none;
+  place-items: center;
+  padding: 1rem;
+  z-index: 50;
+}
+.modal.visible { display: grid; }
+.modal__caja {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 1.2rem;
+}
+.modal__cerrar {
+  position: absolute; top: 8px; right: 12px;
+  border: 0; background: none; font-size: 28px; cursor: pointer;
+}
+
+// JS
+const modal = document.getElementById("modal");
+
+function abrirModal(jugador) {
+  document.getElementById("mFoto").src = `${API}/img/jugadores/${jugador.imagen}`;
+  document.getElementById("mNombre").textContent = `${jugador.nombre} ${jugador.apellido}`;
+  document.getElementById("mApodo").textContent = jugador.apodo || "";
+  document.getElementById("mBio").innerHTML = jugador.biografia || "Sin biografía.";
+  modal.classList.add("visible");
+}
+
+function cerrarModal() { modal.classList.remove("visible"); }
+
+document.getElementById("cerrar").addEventListener("click", cerrarModal);
+modal.addEventListener("click", e =&gt; { if (e.target === modal) cerrarModal(); });
+document.addEventListener("keydown", e =&gt; { if (e.key === "Escape") cerrarModal(); });</code></pre>
+      <p class="care">Si el modal aparece detrás de otros elementos, es un problema de <code>z-index</code> y de <code>position</code>: el overlay debe ser <code>fixed</code>.</p>
+    </div>
+
+    <div class="recipe" id="r10">
+      <h3>10. jQuery AJAX (Opción B) <span class="tag front">front</span></h3>
+      <p class="when">Solo si elegís la Opción B o el enunciado lo exige.</p>
+<pre><code>&lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+$(function () {
+  // GET
+  $.ajax({
+    url: API + "/jugadores.php",
+    method: "GET",
+    data: { id_categoria: 1 },
+    dataType: "json"
+  })
+    .done(function (data) {
+      if (Number(data.status) !== 200) return;
+      const $cont = $("#jugadores").empty();
+      data.productos.forEach(function (j) {
+        $("&lt;article&gt;").addClass("card")
+          .append($("&lt;h3&gt;").text(j.nombre + " " + j.apellido))
+          .appendTo($cont);
+      });
+    })
+    .fail(function (xhr) {
+      console.error("Error", xhr.status, xhr.responseText);
+    });
+
+  // POST de formulario (sin archivos)
+  $("#form").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: API + "/equipos_insertar.php",
+      method: "POST",
+      data: $(this).serialize(),
+      dataType: "json"
+    })
+      .done(function (data) { alert(data.mensaje); })
+      .fail(function (xhr) { console.error(xhr.status); });
+  });
+});
+&lt;/script&gt;</code></pre>
+      <p class="care"><code>.serialize()</code> no sirve para archivos. Para subir imágenes con jQuery usá <code>FormData</code> y <code>processData: false, contentType: false</code>.</p>
+    </div>
+
+    <h3 style="margin-top:30px">Back-end</h3>
+
+    <div class="recipe" id="r11">
+      <h3>11. PHP: endpoint JSON + conexión <span class="tag back">back</span></h3>
+      <p class="when">Base de cualquier archivo PHP que la API vaya a consumir con <code>fetch</code>.</p>
+<pre><code>&lt;?php
+// IMPORTANTE: nada de espacios ni líneas en blanco antes de &lt;?php.
+// Un solo espacio rompe el JSON y el front falla con "Unexpected token".
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json; charset=utf-8");
+
+// conexion.php define las variables de conexión
+require __DIR__ . "/conexion.php";
+
+$conexion = mysqli_connect($server_db, $usuario_db, $password_db);
+if (!$conexion) {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "No se pudo conectar"]);
+    exit;
+}
+
+mysqli_select_db($conexion, $base_db);
+mysqli_set_charset($conexion, "utf8mb4");</code></pre>
+      <p class="care">En XAMPP el usuario suele ser <code>root</code> sin contraseña y el servidor <code>localhost</code>. Si cambiás de máquina, revisá <code>conexion.php</code> antes que nada.</p>
+    </div>
+
+    <div class="recipe" id="r12">
+      <h3>12. PHP: SELECT que devuelve JSON <span class="tag back">back</span></h3>
+      <p class="when">Para cualquier listado con filtro, por ejemplo jugadores por categoría.</p>
+<pre><code>&lt;?php
+// ... conexión y headers de la receta 11 ...
+
+$cat = (int) ($_GET["id_categoria"] ?? 0);
+
+$sql = "SELECT id_jugador, nombre, apellido, apodo, dni, biografia, imagen
+        FROM jugadores
+        WHERE id_categoria = $cat";
+
+$res = mysqli_query($conexion, $sql);
+if (!$res) {
+    echo json_encode([
+        "status" =&gt; 500,
+        "mensaje" =&gt; mysqli_error($conexion)
+    ]);
+    exit;
+}
+
+$filas = [];
+while ($fila = mysqli_fetch_assoc($res)) {
+    $filas[] = $fila;
+}
+
+echo json_encode([
+    "status" =&gt; 200,
+    "cantidad" =&gt; count($filas),
+    "productos" =&gt; $filas
+], JSON_UNESCAPED_UNICODE);
+
+mysqli_close($conexion);</code></pre>
+      <p class="care">Respetá la forma de respuesta que ya usa la API del parcial: <code>{ status, cantidad, productos }</code>. Si inventás otra, el front existente deja de funcionar.</p>
+    </div>
+
+    <div class="recipe" id="r13">
+      <h3>13. PHP: INSERT seguro <span class="tag back">back</span></h3>
+      <p class="when">Para guardar un registro que llega por POST.</p>
+<pre><code>&lt;?php
+// ... conexión y headers de la receta 11 ...
+
+$dni     = trim($_POST["dni"] ?? "");
+$detalle = trim($_POST["detalle"] ?? "");
+$anio    = (int) ($_POST["anio"] ?? date("Y"));
+
+// Validar antes de tocar la base
+if ($dni === "" || $detalle === "") {
+    echo json_encode([
+        "status" =&gt; 500,
+        "mensaje" =&gt; "Faltan datos obligatorios"
+    ]);
+    exit;
+}
+
+// Prepared statement: evita inyección SQL
+$sql = "INSERT INTO palmares (dni, anio, detalle) VALUES (?, ?, ?)";
+$stmt = mysqli_prepare($conexion, $sql);
+mysqli_stmt_bind_param($stmt, "sis", $dni, $anio, $detalle);
+// "s" = string, "i" = integer, "d" = decimal
+
+if (mysqli_stmt_execute($stmt)) {
+    echo json_encode([
+        "status" =&gt; 200,
+        "mensaje" =&gt; "Guardado correctamente",
+        "id" =&gt; mysqli_insert_id($conexion)
+    ]);
+} else {
+    echo json_encode([
+        "status" =&gt; 500,
+        "mensaje" =&gt; mysqli_error($conexion)
+    ]);
+}</code></pre>
+      <p class="care">Si usás la versión con <code>mysqli_real_escape_string()</code>, escapá <strong>todos</strong> los strings y casteá los números. La prepared statement es más segura y más corta.</p>
+    </div>
+
+    <div class="recipe" id="r14">
+      <h3>14. PHP: subida de archivos <span class="tag back">back</span></h3>
+      <p class="when">Para logos, fotos o cualquier archivo que llegue por <code>FormData</code>.</p>
+<pre><code>&lt;?php
+// ... conexión y headers de la receta 11 ...
+
+if (!isset($_FILES["logo"]) || $_FILES["logo"]["error"] !== UPLOAD_ERR_OK) {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "No llegó el archivo"]);
+    exit;
+}
+
+$archivo = $_FILES["logo"];
+$permitidas = ["jpg", "jpeg", "png", "gif", "webp"];
+$ext = strtolower(pathinfo($archivo["name"], PATHINFO_EXTENSION));
+
+if (!in_array($ext, $permitidas, true)) {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "Extensión no permitida"]);
+    exit;
+}
+
+if ($archivo["size"] &gt; 2 * 1024 * 1024) {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "El archivo supera 2 MB"]);
+    exit;
+}
+
+$carpeta = __DIR__ . "/img/logos/";
+if (!is_dir($carpeta)) {
+    mkdir($carpeta, 0777, true);
+}
+
+$nombreArchivo = uniqid("logo_") . "." . $ext;
+
+if (!move_uploaded_file($archivo["tmp_name"], $carpeta . $nombreArchivo)) {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "No se pudo guardar"]);
+    exit;
+}
+
+// En la base guardás SOLO el nombre; la URL se arma al mostrar
+$nombre = trim($_POST["nombre"] ?? "");
+if ($nombre === "") {
+    echo json_encode(["status" =&gt; 500, "mensaje" =&gt; "Falta el nombre del club"]);
+    exit;
+}
+
+$sql = "INSERT INTO equipos (nombre, logo, puntos) VALUES (?, ?, 0)";
+$stmt = mysqli_prepare($conexion, $sql);
+mysqli_stmt_bind_param($stmt, "ss", $nombre, $nombreArchivo);
+mysqli_stmt_execute($stmt);
+
+echo json_encode([
+    "status" =&gt; 200,
+    "mensaje" =&gt; "Club guardado con el logo $nombreArchivo"
+]);</code></pre>
+      <p class="care">Si el archivo no llega, revisá <code>upload_max_filesize</code> y <code>post_max_size</code> en <code>php.ini</code>, que la carpeta tenga permisos y que el input tenga <code>name="logo"</code>.</p>
+    </div>
+
+    <div class="recipe" id="r15">
+      <h3>15. PHP: sesiones y login <span class="tag back">back</span></h3>
+      <p class="when">Para restringir páginas o recordar al usuario logueado.</p>
+<pre><code>&lt;?php
+// login.php (después de validar usuario y contraseña)
+session_start();
+$_SESSION["usuario"] = $usuario;
+$_SESSION["rol"] = "admin";
+header("Location: panel.php");
+exit;</code></pre>
+<pre><code>&lt;?php
+// panel.php (proteger la página)
+session_start();
+if (!isset($_SESSION["usuario"])) {
+    header("Location: login.php");
+    exit;
+}
+echo "Hola, " . htmlspecialchars($_SESSION["usuario"]);</code></pre>
+<pre><code>&lt;?php
+// logout.php
+session_start();
+session_destroy();
+header("Location: login.php");
+exit;</code></pre>
+      <p class="care"><code>session_start()</code> va <strong>antes</strong> de cualquier salida HTML. La sesión vive en el servidor; la cookie solo guarda el identificador.</p>
+    </div>
+
+    <div class="recipe" id="r16">
+      <h3>16. MySQL: las consultas que necesitás <span class="tag back">back</span></h3>
+      <p class="when">Chuleta para phpMyAdmin o para pegar dentro de PHP.</p>
+<pre><code>-- Listar con filtro y orden
+SELECT nombre, apellido FROM jugadores
+WHERE id_categoria = 1
+ORDER BY apellido ASC;
+
+-- Buscar texto
+SELECT * FROM equipos WHERE nombre LIKE '%tania%';
+
+-- Insertar
+INSERT INTO equipos (nombre, logo, puntos)
+VALUES ('Nuevo Club', 'logo.png', 0);
+
+-- Actualizar (¡siempre con WHERE!)
+UPDATE equipos SET puntos = 3 WHERE id_equipo = 2;
+
+-- Borrar (¡siempre con WHERE!)
+DELETE FROM palmares WHERE id = 5;
+
+-- Contar / agrupar
+SELECT id_categoria, COUNT(*) AS total
+FROM jugadores
+GROUP BY id_categoria;
+
+-- Unir tablas
+SELECT j.nombre, p.anio, p.detalle
+FROM jugadores j
+JOIN palmares p ON p.dni = j.dni
+WHERE j.dni = '1';
+
+-- Top 5
+SELECT nombre, puntos FROM equipos
+ORDER BY puntos DESC
+LIMIT 5;</code></pre>
+      <p class="care">Antes de escribir la consulta en PHP, probala en phpMyAdmin. Si ahí funciona y en PHP no, el problema es de conexión, comillas o nombre de columna.</p>
+    </div>
+
+    <div class="recipe" id="r17">
+      <h3>17. Node: servidor mínimo <span class="tag extra">extra</span></h3>
+      <p class="when">Solo si el enunciado o la cátedra pide Node en lugar de PHP/Apache.</p>
+<pre><code>// servidor.js  →  node servidor.js
+const http = require("http");
+const fs = require("fs");
+
+const server = http.createServer((req, res) =&gt; {
+  if (req.url === "/datos") {
+    res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(fs.readFileSync("datos.json", "utf8"));
+    return;
+  }
+
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+  res.end(fs.readFileSync("index.html", "utf8"));
+});
+
+server.listen(3000, () =&gt; {
+  console.log("Servidor en http://localhost:3000");
+});</code></pre>
+      <p class="care">En Node no hay <code>$_POST</code> ni <code>$_FILES</code>: para leer el cuerpo de un POST hay que juntar los chunks del request (<code>req.on("data")</code> / <code>req.on("end")</code>) o usar Express + <code>express.json()</code>.</p>
+    </div>
+
+    <div class="recipe" id="r18">
+      <h3>18. XMLHttpRequest clásico <span class="tag extra">si lo exigen</span></h3>
+      <p class="when">Si el enunciado pide explícitamente <code>XMLHttpRequest</code> en lugar de <code>fetch</code>. Es la técnica original de AJAX.</p>
+<pre><code>// GET
+const xhr = new XMLHttpRequest();
+xhr.open("GET", `${API}/jugadores.php?id_categoria=1`, true);
+
+xhr.onreadystatechange = function () {
+  if (xhr.readyState !== 4) return;   // 4 = petición terminada
+  if (xhr.status !== 200) {
+    console.error("HTTP", xhr.status);
+    return;
+  }
+  const data = JSON.parse(xhr.responseText);
+  console.log(data.productos);
+};
+
+xhr.send();
+
+// POST de formulario
+const xhr2 = new XMLHttpRequest();
+xhr2.open("POST", `${API}/palmares_guardar.php`, true);
+xhr2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+xhr2.onload = function () {
+  if (xhr2.status === 200) {
+    console.log(JSON.parse(xhr2.responseText));
+  }
+};
+
+xhr2.send("dni=1&amp;anio=2026&amp;detalle=Campe%C3%B3n");</code></pre>
+      <p class="care"><code>readyState</code> va de 0 a 4 (4 = completado) y <code>status</code> es el código HTTP. Si usás <code>onload</code>, no hace falta preguntar por <code>readyState</code>.</p>
+    </div>
+  </section>
+
+  <section class="group" id="errores">
+    <h2><span class="badge">5</span> Errores que cuestan puntos</h2>
+    <table>
+      <tr><th>Síntoma</th><th>Causa probable y solución</th></tr>
+      <tr><td>“No hace nada” al hacer clic</td><td>Error de JS anterior, id mal escrito o listener ejecutado antes de que exista el elemento. Mirá la consola y usá <code>DOMContentLoaded</code>.</td></tr>
+      <tr><td><code>Failed to fetch</code></td><td>Ruta incorrecta, Apache apagado o CORS. Probá el endpoint directo en el navegador.</td></tr>
+      <tr><td>404 en la API</td><td><code>API_BASE</code> mal, carpeta distinta o falta el <code>.php</code>. Compará con la URL real en <code>htdocs</code>.</td></tr>
+      <tr><td>500 en PHP</td><td>Error de sintaxis, <code>require</code> que no encuentra el archivo, conexión fallida o columna inexistente. Mirá la respuesta y el log de Apache.</td></tr>
+      <tr><td><code>Unexpected token &lt;</code> al parsear JSON</td><td>PHP devolvió HTML o un warning antes del JSON. Eliminá líneas en blanco antes de <code>&lt;?php</code>, revisá warnings y el BOM del archivo.</td></tr>
+      <tr><td>La API responde 200 pero la lista está vacía</td><td>La consulta no devuelve filas: tabla/columna mal, filtro imposible, charset o <code>WHERE</code> mal armado. Probala en phpMyAdmin.</td></tr>
+      <tr><td>“No guarda”</td><td>Estás leyendo <code>$_GET</code> y mandaste POST (o al revés), falta un campo obligatorio, la columna es <code>NOT NULL</code> o falla una clave foránea.</td></tr>
+      <tr><td>La imagen no se ve</td><td>Ruta incorrecta (guardaste una ruta absoluta del disco), carpeta distinta o nombre de archivo con espacios/acentos.</td></tr>
+      <tr><td>La subida no llega</td><td>Input sin <code>name</code>, sin <code>type="file"</code>, <code>$_FILES["logo"]["error"] != 0</code> o el archivo supera el límite de <code>php.ini</code>.</td></tr>
+      <tr><td>Acentos y ñ rotos</td><td>Falta <code>mysqli_set_charset($conexion, "utf8mb4")</code>, header con <code>charset=utf-8</code> o la base no es utf8.</td></tr>
+      <tr><td>Se repiten los jugadores</td><td>La tabla tiene una fila por deporte. Deduplicá por <code>dni</code> con <code>Map</code> o usá <code>DISTINCT</code>.</td></tr>
+      <tr><td>El menú muestra ítems ocultos</td><td>No estás filtrando <code>visible === "SI"</code> con <code>trim()</code> y <code>toUpperCase()</code>.</td></tr>
+      <tr><td>El CSS no se aplica</td><td>Ruta del archivo, caché, selector que no coincide o especificidad. Inspeccioná el elemento y mirá qué regla gana.</td></tr>
+      <tr><td>Se ve mal en el celular</td><td>Falta <code>&lt;meta name="viewport"&gt;</code>, hay un ancho fijo en px o no hay <code>@media</code>/columnas flexibles.</td></tr>
+      <tr><td>Funciona una vez y después no</td><td>No refrescás el estado después de guardar, duplicás listeners o el modal queda abierto con datos viejos.</td></tr>
+      <tr><td>El modal queda detrás del contenido</td><td><code>z-index</code> bajo o falta <code>position: fixed</code> en el overlay.</td></tr>
+    </table>
+  </section>
+
+  <section class="group" id="depurar">
+    <h2><span class="badge">6</span> Protocolo de depuración (en orden)</h2>
+    <ol class="steps">
+      <li><strong>Consola (F12 → Console).</strong> Cualquier texto rojo es tu primera pista: archivo y línea exactos.</li>
+      <li><strong>Network.</strong> Mirá la petición: URL, método, status, payload enviado y respuesta cruda. El 90% de los bugs de AJAX se ve acá.</li>
+      <li><strong>Abrí el endpoint directo en el navegador.</strong> Si ahí falla, el problema es del PHP o de la base, no del front.</li>
+      <li><strong>Mostrá los errores de PHP en desarrollo.</strong> Arriba del archivo: <code>ini_set("display_errors", 1); error_reporting(E_ALL);</code>. Acordate de sacarlo después.</li>
+      <li><strong>Inspeccioná lo que llega.</strong> <code>var_dump($_POST, $_GET, $_FILES);</code> y, si mandás JSON, <code>file_get_contents("php://input")</code>.</li>
+      <li><strong>Probá la consulta en phpMyAdmin.</strong> Aislás el problema de SQL del problema de PHP.</li>
+      <li><strong>Recargá sin caché (Ctrl+F5)</strong> y volvé a probar en una ventana incógnito. Muchos “no se actualiza” son caché.</li>
+    </ol>
+    <div class="tip">
+      <strong>Truco:</strong> cuando algo no funciona, comentá todo y andá agregando de a una capa:
+      HTML → CSS → datos fijos → fetch → PHP → SQL. La primera capa que falla es el bug.
+    </div>
+  </section>
+
+  <section class="group" id="teoria">
+    <h2><span class="badge">7</span> Preguntas teóricas probables</h2>
+    <p>Respuestas cortas para defender el código. Si querés el desarrollo completo, cada tema está en su unidad.</p>
+    <table>
+      <tr><th>Pregunta</th><th>Respuesta mínima</th></tr>
+      <tr><td>¿Qué es AJAX?</td><td>Técnica para comunicarse con el servidor de forma asíncrona sin recargar la página; combina HTML/CSS, DOM, JSON/XML, XMLHttpRequest/fetch y JavaScript.</td></tr>
+      <tr><td>GET vs POST</td><td>GET envía datos en la URL (visible, limitado, cacheable) y se usa para consultar. POST los envía en el cuerpo (más privado, sin límite práctico) y se usa para crear/modificar.</td></tr>
+      <tr><td><code>==</code> vs <code>===</code></td><td><code>==</code> compara con conversión de tipos; <code>===</code> compara valor y tipo. Usá siempre <code>===</code>.</td></tr>
+      <tr><td><code>var</code> vs <code>let</code> vs <code>const</code></td><td><code>var</code> tiene alcance de función y hoisting; <code>let</code> y <code>const</code> tienen alcance de bloque. <code>const</code> no permite reasignar la variable.</td></tr>
+      <tr><td>id vs class</td><td><code>id</code> es único en la página y se selecciona con <code>#</code>; <code>class</code> se repite y se selecciona con <code>.</code>.</td></tr>
+      <tr><td>Box model</td><td>Cada elemento es contenido + padding + border + margin. <code>box-sizing: border-box</code> incluye padding y border en el ancho declarado.</td></tr>
+      <tr><td>Especificidad CSS</td><td>Estilos en línea &gt; id &gt; clase/atributo/pseudo-clase &gt; elemento. A igual especificidad gana la última regla; <code>!important</code> rompe la cascada.</td></tr>
+      <tr><td><code>position</code>: relative / absolute / fixed / sticky</td><td><code>relative</code> se mueve respecto de su lugar; <code>absolute</code> respecto del ancestro posicionado; <code>fixed</code> respecto de la ventana; <code>sticky</code> se fija al hacer scroll.</td></tr>
+      <tr><td>Flexbox vs Grid</td><td>Flexbox distribuye en un eje (fila o columna); Grid maneja filas y columnas a la vez. Grid para layouts completos, Flex para alinear componentes.</td></tr>
+      <tr><td>¿Qué es el DOM?</td><td>La representación en árbol del documento HTML que el navegador expone a JavaScript para leer y modificar la página.</td></tr>
+      <tr><td>¿Qué es un evento y qué es bubbling?</td><td>Una acción del usuario o del navegador. Bubbling es la propagación del evento desde el elemento hijo hacia sus ancestros; se puede cortar con <code>stopPropagation()</code>.</td></tr>
+      <tr><td>¿Qué es JSON?</td><td>Formato de texto para intercambiar datos, con pares clave-valor y arrays. En JS se pasa con <code>JSON.parse()</code>/<code>JSON.stringify()</code>; en PHP con <code>json_decode()</code>/<code>json_encode()</code>.</td></tr>
+      <tr><td>Cookie vs sesión</td><td>La cookie se guarda en el cliente y viaja en cada request; la sesión se guarda en el servidor y el cliente solo conserva un identificador.</td></tr>
+      <tr><td><code>include</code> vs <code>require</code></td><td>Ambos insertan un archivo; <code>require</code> produce un error fatal si falla y <code>include</code> solo un warning. Para archivos críticos usá <code>require</code>.</td></tr>
+      <tr><td>mysqli vs PDO</td><td>Ambos acceden a MySQL. mysqli es específico de MySQL; PDO es una interfaz única para varias bases. Los dos soportan prepared statements.</td></tr>
+      <tr><td>¿Qué es la inyección SQL y cómo se evita?</td><td>Es colar SQL malicioso a través de datos del usuario. Se evita con prepared statements y validación/escape, nunca concatenando input sin controlar.</td></tr>
+      <tr><td>¿Para qué sirve <code>header("Content-Type: application/json")</code>?</td><td>Le dice al cliente que la respuesta es JSON para que <code>res.json()</code> la interprete correctamente.</td></tr>
+      <tr><td>Status HTTP 200 / 404 / 500</td><td>200 OK; 404 recurso no encontrado; 500 error interno del servidor (por ejemplo, un PHP que falla).</td></tr>
+      <tr><td>¿Qué es responsive?</td><td>Diseño que se adapta al tamaño de pantalla usando viewport, unidades flexibles, media queries y/o grillas.</td></tr>
+      <tr><td>¿Qué es CORS?</td><td>Política del navegador que bloquea pedidos entre orígenes distintos si el servidor no envía los headers <code>Access-Control-Allow-*</code>.</td></tr>
+      <tr><td>¿Qué hace <code>move_uploaded_file()</code>?</td><td>Mueve el archivo temporal subido (<code>$_FILES["campo"]["tmp_name"]</code>) a una carpeta del servidor con el nombre definitivo.</td></tr>
+      <tr><td>¿Por qué <code>$_FILES["logo"]["error"] === 0</code>?</td><td>Porque 0 (<code>UPLOAD_ERR_OK</code>) indica que la subida terminó bien; cualquier otro valor es un error.</td></tr>
+    </table>
+  </section>
+
+  <section class="group" id="simulacro">
+    <h2><span class="badge">8</span> Simulacro: parcial La Tania 2025</h2>
+    <p>El parcial real está en el repositorio, junto con una resolución completa. Usalo como examen de práctica:
+    leé el enunciado, intentá resolverlo en 3 horas y después compará con la solución.</p>
+
+    <div class="cols">
+      <div class="card">
+        <strong>Enunciado</strong>
+        <p><a href="parcial2025/Parcial%20%202025.pdf">Parcial 2025 (PDF)</a></p>
+        <p class="progress-txt">Sitio del Club Deportivo La Tania: front, API y base de datos.</p>
+      </div>
+      <div class="card">
+        <strong>Resolución</strong>
+        <p><a href="parcialresuelto2025/index.html">Sitio resuelto</a> ·
+        <a href="parcialresuelto2025/README.md">README</a> ·
+        <a href="parcialresuelto2025/consideraciones.txt">Consideraciones</a></p>
+        <p class="progress-txt">Opción A: HTML + CSS tradicional + JavaScript puro.</p>
+      </div>
+      <div class="card">
+        <strong>Archivos clave</strong>
+        <p><a href="parcialresuelto2025/js/config.js">config.js</a> ·
+        <a href="parcialresuelto2025/js/app.js">app.js</a> ·
+        <a href="parcialresuelto2025/js/canicas.js">canicas.js</a></p>
+        <p class="progress-txt">Menú, fetch, modal, palmarés y tabla de posiciones.</p>
+      </div>
+      <div class="card">
+        <strong>PHP a completar</strong>
+        <p><a href="parcialresuelto2025/php-resuelto/palmares_guardar.php">palmares_guardar.php</a> ·
+        <a href="parcialresuelto2025/php-resuelto/equipos_insertar.php">equipos_insertar.php</a></p>
+        <p class="progress-txt">INSERT y subida de logo con validación.</p>
+      </div>
+    </div>
+
+    <h3>Qué pedía el parcial (y dónde está resuelto)</h3>
+    <table>
+      <tr><th>Requisito</th><th>Dónde se resuelve</th></tr>
+      <tr><td>Header fijo con logo y título con fuente propia</td><td><code>.header</code> en <code>css/estilo.css</code> + <code>@font-face</code>.</td></tr>
+      <tr><td>Menú desde la base, solo visibles y en mayúsculas</td><td><code>armarMenu()</code> en <code>js/app.js</code>.</td></tr>
+      <tr><td>Banner con texto superpuesto</td><td><code>.banner</code> en <code>css/estilo.css</code>.</td></tr>
+      <tr><td>Botón de WhatsApp fijo abajo a la derecha</td><td><code>armarWhatsapp()</code> en <code>js/app.js</code>.</td></tr>
+      <tr><td>Jugadores con foto, nombre y apodo, sin repetidos</td><td><code>cargarJugadores()</code> en <code>js/canicas.js</code> (dedupe por DNI).</td></tr>
+      <tr><td>Modal “Ver más” con datos y palmarés</td><td><code>abrirModal()</code> / <code>cargarPalmares()</code>.</td></tr>
+      <tr><td>Guardar un nuevo palmarés (funcionalidad A)</td><td><code>guardarPalmares()</code> + <code>palmares_guardar.php</code>.</td></tr>
+      <tr><td>Tabla de posiciones (C1: 3/1 — C2: 5/2), ordenada</td><td><code>cargarTabla()</code> / <code>puntosPartido()</code>.</td></tr>
+      <tr><td>Categoría femenina (<code>id_categoria = 3</code>)</td><td><code>canicas_femenino.html</code> + <code>data-categoria="3"</code>.</td></tr>
+      <tr><td>Alta de club con logo (extra B)</td><td><code>registrar_club.html</code> + <code>equipos_insertar.php</code>.</td></tr>
+    </table>
+
+    <h3>Cómo levantarlo en XAMPP</h3>
+    <ol>
+      <li>Iniciar <strong>Apache</strong> y <strong>MySQL</strong> desde el panel de XAMPP.</li>
+      <li>Crear la base <code>la_tania</code> en phpMyAdmin e importar <code>parcial2025/la_tania.sql</code>.</li>
+      <li>Copiar la API a <code>htdocs/la_tania/</code> (debe quedar <code>htdocs/la_tania/api/...</code>).</li>
+      <li>Reemplazar los dos PHP vacíos por los de <code>php-resuelto/</code>.</li>
+      <li>Abrir <a href="parcialresuelto2025/index.html">parcialresuelto2025/index.html</a> desde <code>http://localhost/...</code>.</li>
+      <li>Si la API está en otra ruta, cambiar solo <code>API_BASE</code> en <code>js/config.js</code>.</li>
+    </ol>
+    <div class="alert warn">
+      <strong>No toques lo que funciona:</strong> en este parcial las únicas modificaciones permitidas eran los dos
+      PHP marcados. El resto de la API se consume tal cual. Si “arreglás” algo que no te pidieron, podés romper
+      todos los endpoints y perder el punto igual.
+    </div>
+  </section>
+
+  <section class="group" id="plan">
+    <h2><span class="badge">9</span> Plan de estudio de 7 días</h2>
+    <table>
+      <tr><th>Día</th><th>Foco</th><th>Entregable concreto</th></tr>
+      <tr><td>1</td><td><a href="unidades/01-html.html">HTML</a> + <a href="unidades/02-css.html">CSS</a></td><td>Maquetar una home con header sticky, banner, grilla de tarjetas y footer.</td></tr>
+      <tr><td>2</td><td><a href="unidades/04-javascript.html">JavaScript y DOM</a></td><td>Renderizar tarjetas desde un array y abrir/cerrar un modal.</td></tr>
+      <tr><td>3</td><td><a href="unidades/05-ajax.html">AJAX y JSON</a></td><td>Consumir un endpoint con <code>fetch</code>, mostrar carga/vacío/error y filtrar.</td></tr>
+      <tr><td>4</td><td><a href="unidades/07-php.html">PHP</a></td><td>Endpoint propio que recibe POST y devuelve JSON validado.</td></tr>
+      <tr><td>5</td><td><a href="unidades/08-mysql.html">MySQL + PHP</a></td><td>Crear base, importar SQL, SELECT con filtro e INSERT con prepared statement.</td></tr>
+      <tr><td>6</td><td><a href="unidades/09-subida-archivos.html">Subidas</a> + <a href="unidades/03-bootstrap.html">Bootstrap</a> / <a href="unidades/06-jquery.html">jQuery</a></td><td>Formulario con imagen que guarda archivo + registro, y una versión con Bootstrap.</td></tr>
+      <tr><td>7</td><td>Simulacro</td><td>Resolver <a href="#simulacro">La Tania</a> en 3 horas sin mirar la solución; después comparar y anotar diferencias.</td></tr>
+    </table>
+    <div class="tip">
+      <strong>Regla de los 20 minutos:</strong> si estás trabado con un bug, escribí qué probaste, revisá Network/logs
+      y pasá a otra parte del ejercicio. Volver con la cabeza fresca suele resolverlo en dos minutos.
+    </div>
+  </section>
+
+  <section class="group" id="checklist">
+    <h2><span class="badge">10</span> Checklist final (marcá antes de entregar)</h2>
+    <p>El progreso se guarda en este navegador. Si recargás, no se pierde.</p>
+    <div class="progress"><span></span></div>
+    <p class="progress-txt" id="progressTxt">0 de 0 puntos</p>
+
+    <ul class="check">
+      <li><input type="checkbox" id="c1"><label for="c1">Leí todo el enunciado y marqué qué completar y qué <strong>no</strong> tocar.</label></li>
+      <li><input type="checkbox" id="c2"><label for="c2">Identifiqué tablas, columnas, relaciones y algunos datos de ejemplo en la base.</label></li>
+      <li><input type="checkbox" id="c3"><label for="c3">Probé la API original antes de modificar nada y entendí la forma del JSON.</label></li>
+      <li><input type="checkbox" id="c4"><label for="c4">Configuré bien <code>API_BASE</code> y las rutas relativas de CSS, JS e imágenes.</label></li>
+      <li><input type="checkbox" id="c5"><label for="c5">El header queda fijo y el menú se arma desde la base, solo con <code>visible = "SI"</code> y en mayúsculas.</label></li>
+      <li><input type="checkbox" id="c6"><label for="c6">Las imágenes cargan desde la carpeta correcta (logo, jugadores, logos de clubes).</label></li>
+      <li><input type="checkbox" id="c7"><label for="c7">Probé el sitio en celular (375 px) y en escritorio (1440 px) y no hay scroll horizontal.</label></li>
+      <li><input type="checkbox" id="c8"><label for="c8">Los listados se pintan con <code>fetch</code> y contemplan cargando, vacío y error.</label></li>
+      <li><input type="checkbox" id="c9"><label for="c9">Deduplico por DNI (o con <code>DISTINCT</code>) cuando el enunciado lo pide.</label></li>
+      <li><input type="checkbox" id="c10"><label for="c10">Los formularios validan antes de enviar (HTML + JS) y muestran un mensaje claro.</label></li>
+      <li><input type="checkbox" id="c11"><label for="c11">El POST llega al PHP: lo verifiqué en la pestaña Network (payload y status).</label></li>
+      <li><input type="checkbox" id="c12"><label for="c12">El INSERT usa prepared statement o escape, y valida los campos obligatorios.</label></li>
+      <li><input type="checkbox" id="c13"><label for="c13">El PHP devuelve JSON válido con <code>status</code> y <code>mensaje</code>, sin warnings ni líneas en blanco antes.</label></li>
+      <li><input type="checkbox" id="c14"><label for="c14">La subida valida extensión y tamaño, usa <code>move_uploaded_file()</code> y guarda solo el nombre en la BD.</label></li>
+      <li><input type="checkbox" id="c15"><label for="c15">Después de guardar, la vista se refresca y muestra el dato nuevo sin recargar toda la página.</label></li>
+      <li><input type="checkbox" id="c16"><label for="c16">Probé el flujo completo de punta a punta con Apache y MySQL encendidos.</label></li>
+      <li><input type="checkbox" id="c17"><label for="c17">No hay errores rojos en la consola ni 404/500 en Network.</label></li>
+      <li><input type="checkbox" id="c18"><label for="c18">Saqué los <code>console.log</code> de depuración y dejé comentarios útiles.</label></li>
+      <li><input type="checkbox" id="c19"><label for="c19">Los nombres de variables, funciones y archivos se entienden sin explicación.</label></li>
+      <li><input type="checkbox" id="c20"><label for="c20">Entregué la carpeta correcta, con la base importada y la API en la ruta indicada.</label></li>
+    </ul>
+  </section>
+
+  <section class="group">
+    <h2><span class="badge">Kit</span> Todo el material</h2>
+    <div class="grid">
+      <a class="tile" href="unidades/01-html.html"><span class="num">Unidad 1</span><span class="tt">HTML</span><span class="ds">Estructura, etiquetas, listas, enlaces, imágenes, tablas, formularios, semántica e iframes.</span></a>
+      <a class="tile" href="unidades/02-css.html"><span class="num">Unidad 2</span><span class="tt">CSS</span><span class="ds">Selectores, cascada, box model, posicionamiento, Flexbox, Grid y responsive.</span></a>
+      <a class="tile" href="unidades/03-bootstrap.html"><span class="num">Unidad 3</span><span class="tt">Bootstrap</span><span class="ds">Grilla, breakpoints, utilidades, componentes y formularios.</span></a>
+      <a class="tile" href="unidades/04-javascript.html"><span class="num">Unidad 4</span><span class="tt">JavaScript</span><span class="ds">Tipos, control de flujo, funciones, arrays, objetos, eventos, DOM y módulos.</span></a>
+      <a class="tile" href="unidades/05-ajax.html"><span class="num">Unidad 5</span><span class="tt">AJAX</span><span class="ds">XMLHttpRequest, GET vs POST, JSON, validación, fetch y APIs encadenadas.</span></a>
+      <a class="tile" href="unidades/06-jquery.html"><span class="num">Unidad 6</span><span class="tt">jQuery</span><span class="ds">Selectores, eventos, efectos, manipulación y AJAX con jQuery.</span></a>
+      <a class="tile" href="unidades/07-php.html"><span class="num">Unidad 7</span><span class="tt">PHP</span><span class="ds">Sintaxis, superglobales, funciones, arrays, formularios, archivos, sesiones y POO.</span></a>
+      <a class="tile" href="unidades/08-mysql.html"><span class="num">Unidad 8</span><span class="tt">MySQL + PHP</span><span class="ds">Conexión, SELECT/INSERT/UPDATE/DELETE, filtros, JSON y seguridad.</span></a>
+      <a class="tile" href="unidades/09-subida-archivos.html"><span class="num">Unidad 9</span><span class="tt">Subida de archivos</span><span class="ds">multipart/form-data, $_FILES, validación, move_uploaded_file y FormData.</span></a>
+      <a class="tile" href="parcialresuelto2025/index.html"><span class="num">Práctica</span><span class="tt">Parcial resuelto</span><span class="ds">La Tania 2025 completo, con API, menú dinámico, modal, tabla y subida.</span></a>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="index.html">← Volver al índice de unidades</a>
+    <a class="next" href="#top">Volver arriba ↑</a>
+  </div>
+
+</div>
+</main>
+
+<footer class="container">
+  Guía de parcial de Programación Orientada a la Web · HTML, CSS, Bootstrap, JavaScript, AJAX, jQuery, PHP, MySQL y subida de archivos.
+</footer>
+
+<script>
+/* ---------- Copiar bloques de código ---------- */
+document.querySelectorAll("pre").forEach(function (pre) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.textContent = "Copiar";
+
+  btn.addEventListener("click", function () {
+    const code = pre.querySelector("code");
+    const texto = code ? code.textContent : pre.textContent;
+
+    const listo = function () {
+      btn.textContent = "¡Copiado!";
+      setTimeout(function () { btn.textContent = "Copiar"; }, 1200);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(listo).catch(alternativa);
+    } else {
+      alternativa();
+    }
+
+    function alternativa() {
+      const area = document.createElement("textarea");
+      area.value = texto;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand("copy"); listo(); }
+      catch (e) { btn.textContent = "No se pudo"; }
+      document.body.removeChild(area);
+    }
+  });
+
+  pre.appendChild(btn);
+});
+
+/* ---------- Progreso del checklist ---------- */
+(function () {
+  const CLAVE = "pow-parcial-checklist";
+  const cajas = Array.prototype.slice.call(
+    document.querySelectorAll(".check input[type=checkbox]")
+  );
+  const barra = document.querySelector(".progress span");
+  const texto = document.getElementById("progressTxt");
+
+  let guardado = [];
+  try { guardado = JSON.parse(localStorage.getItem(CLAVE) || "[]"); } catch (e) { guardado = []; }
+
+  cajas.forEach(function (caja, i) {
+    caja.checked = guardado.indexOf(i) !== -1;
+    caja.addEventListener("change", actualizar);
+  });
+
+  function actualizar() {
+    const hechos = cajas.filter(function (c) { return c.checked; }).length;
+    const pct = cajas.length ? Math.round((hechos / cajas.length) * 100) : 0;
+
+    barra.style.width = pct + "%";
+    texto.textContent = hechos + " de " + cajas.length + " puntos (" + pct + "%)";
+
+    const indices = [];
+    cajas.forEach(function (c, i) { if (c.checked) indices.push(i); });
+    try { localStorage.setItem(CLAVE, JSON.stringify(indices)); } catch (e) {}
+  }
+
+  actualizar();
+})();
+</script>
+</body>
+</html>

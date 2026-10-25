@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 9 · Subida de archivos</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="../index.html">&#9776; POW · Resumen</a>
+    <select aria-label="Navegación" onchange="if(this.value)location=this.value">
+      <option value="">Ir a…</option>
+      <option value="../guia-parcial.html">Guía del parcial</option>
+      <option value="01-html.html">1 · HTML</option>
+      <option value="02-css.html">2 · CSS</option>
+      <option value="03-bootstrap.html">3 · Bootstrap</option>
+      <option value="04-javascript.html">4 · JavaScript</option>
+      <option value="05-ajax.html">5 · AJAX</option>
+      <option value="06-jquery.html">6 · jQuery</option>
+      <option value="07-php.html">7 · PHP</option>
+      <option value="08-mysql.html">8 · MySQL + PHP</option>
+      <option value="09-subida-archivos.html" selected>9 · Subida de archivos</option>
+    </select>
+  </div>
+</header>
+<main>
+<div class="container">
+
+  <div class="unit-head">
+    <p class="crumb">Índice de unidades › Unidad 9</p>
+    <h1>Unidad 9 · Subida de archivos</h1>
+    <p class="lead">Subir archivos (imágenes, PDF, etc.) al servidor combina tres piezas:
+    un <strong>formulario</strong> HTML con <code>enctype="multipart/form-data"</code>, la superglobal
+    <strong><code>$_FILES</code></strong> en PHP y <strong><code>move_uploaded_file()</code></strong> para guardar
+    el archivo en disco. Además, con <strong>AJAX + <code>FormData</code></strong> se puede subir sin recargar la
+    página.</p>
+    <p class="alert warn"><strong>Nota:</strong> el código PHP no se ejecuta en el navegador. Cada ejemplo muestra el
+    código y, debajo, el <em>resultado que produciría</em> el servidor con XAMPP.</p>
+  </div>
+
+  <nav class="toc">
+    <h2>Temas de esta unidad</h2>
+    <ol>
+      <li><a href="#t1">El formulario con multipart/form-data</a></li>
+      <li><a href="#t2">La superglobal $_FILES</a></li>
+      <li><a href="#t3">Validar antes de guardar</a></li>
+      <li><a href="#t4">move_uploaded_file() y carpetas</a></li>
+      <li><a href="#t5">Guardar el nombre del archivo en MySQL</a></li>
+      <li><a href="#t6">Subida con AJAX y FormData</a></li>
+      <li><a href="#t7">Patrón completo: formulario → Ajax → PHP → BD</a></li>
+    </ol>
+  </nav>
+
+  <section class="topic" id="t1">
+    <a class="top-link" href="#t1">&#8593; volver al índice</a>
+    <h2><span class="n">1.</span> El formulario con multipart/form-data</h2>
+    <div class="def">
+      <p>Para enviar archivos el <code>&lt;form&gt;</code> debe llevar
+      <strong><code>enctype="multipart/form-data"</code></strong> y método <code>POST</code>. El campo de archivo es
+      <code>&lt;input type="file"&gt;</code> (con <code>name</code>, y <code>accept</code> para limitar tipos).</p>
+      <p>Sin <code>enctype="multipart/form-data"</code> el navegador solo envía el <em>nombre</em> del archivo, no su
+      contenido, y PHP nunca lo recibe en <code>$_FILES</code>.</p>
+    </div>
+    <span class="label">Sintaxis</span>
+<pre><code>&lt;form action="subir.php" method="POST" enctype="multipart/form-data"&gt;
+  &lt;input type="text"   name="nombre"   placeholder="Nombre del club"&gt;
+  &lt;input type="file"   name="logo"     accept="image/*"&gt;
+  &lt;button type="submit"&gt;Guardar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    <span class="label">Ejemplo · el formulario en vivo</span>
+    <div class="preview">
+      <div class="bar">Vista previa</div>
+      <iframe class="short" srcdoc="&lt;form style=&quot;font-family:system-ui;padding:14px&quot; onsubmit=&quot;event.preventDefault()&quot;&gt;&lt;input type=&quot;text&quot; placeholder=&quot;Nombre del club&quot; style=&quot;display:block;margin-bottom:8px;padding:6px&quot;&gt;&lt;input type=&quot;file&quot; style=&quot;margin-bottom:8px&quot;&gt;&lt;button type=&quot;submit&quot;&gt;Guardar&lt;/button&gt;&lt;/form&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t2">
+    <a class="top-link" href="#t2">&#8593; volver al índice</a>
+    <h2><span class="n">2.</span> La superglobal $_FILES</h2>
+    <div class="def">
+      <p>Cuando el navegador envía un archivo, PHP lo deposita en una <strong>carpeta temporal</strong> y describe
+      todo en la superglobal <code>$_FILES</code>, indexada por el <code>name</code> del input:</p>
+    </div>
+    <table>
+      <tr><th>Clave</th><th>Contiene</th></tr>
+      <tr><td><code>$_FILES['logo']['name']</code></td><td>Nombre original del archivo (ej. <code>tania.png</code>).</td></tr>
+      <tr><td><code>$_FILES['logo']['type']</code></td><td>Tipo MIME (ej. <code>image/png</code>).</td></tr>
+      <tr><td><code>$_FILES['logo']['tmp_name']</code></td><td>Ruta temporal en el servidor (de donde se mueve).</td></tr>
+      <tr><td><code>$_FILES['logo']['error']</code></td><td>Código de error (0 = sin error, 4 = no se subió archivo).</td></tr>
+      <tr><td><code>$_FILES['logo']['size']</code></td><td>Tamaño en bytes.</td></tr>
+    </table>
+    <span class="label">Ejemplo · inspeccionar lo recibido</span>
+<pre><code>&lt;?php
+  // Llega por POST con enctype multipart/form-data
+  echo $_FILES['logo']['name'];      // tania.png
+  echo $_FILES['logo']['type'];      // image/png
+  echo $_FILES['logo']['tmp_name'];  // C:\xampp\tmp\phpA1B2.tmp
+  echo $_FILES['logo']['size'];      // 20480
+  echo $_FILES['logo']['error'];     // 0
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;tania.png
+image/png
+C:\xampp\tmp\phpA1B2.tmp
+20480
+0&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t3">
+    <a class="top-link" href="#t3">&#8593; volver al índice</a>
+    <h2><span class="n">3.</span> Validar antes de guardar</h2>
+    <div class="def">
+      <p>Nunca hay que guardar un archivo sin validarlo. Controles mínimos:</p>
+      <ul>
+        <li>Que <code>error === 0</code> (que se haya subido bien).</li>
+        <li>Que la <strong>extensión</strong> esté permitida (<code>png, jpg, jpeg, gif, webp</code>).</li>
+        <li>Que el <strong>tamaño</strong> no supere un máximo (ej. 2 MB).</li>
+        <li>Opcional: comprobar el tipo real con <code>getimagesize()</code>.</li>
+      </ul>
+      <p>Es habitual generar un <strong>nombre único</strong> (para no pisar archivos con el mismo nombre) usando
+      <code>uniqid()</code> o la fecha, conservando la extensión original.</p>
+    </div>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $archivo   = $_FILES['logo'];
+  $permitidos = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+  $ext = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+
+  $errores = [];
+  if ($archivo['error'] !== 0)              $errores[] = "Error al subir el archivo.";
+  if (!in_array($ext, $permitidos))         $errores[] = "Extensión no permitida.";
+  if ($archivo['size'] &gt; 2 * 1024 * 1024)   $errores[] = "El archivo supera 2 MB.";
+
+  if (empty($errores)) {
+      $nuevoNombre = uniqid("logo_") . "." . $ext;   // logo_67a1f3.png
+      echo "OK, se guardará como $nuevoNombre";
+  } else {
+      echo implode(" | ", $errores);
+  }
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;OK, se guardará como logo_67a1f3.png&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t4">
+    <a class="top-link" href="#t4">&#8593; volver al índice</a>
+    <h2><span class="n">4.</span> move_uploaded_file() y carpetas</h2>
+    <div class="def">
+      <p>El archivo temporal se mueve a su destino final con <strong><code>move_uploaded_file($tmp, $destino)</code></strong>.
+      Devuelve <code>true</code> si pudo. La carpeta destino debe existir y tener permisos de escritura; por convención
+      se guardan las imágenes en carpetas como <code>img/logos/</code> o <code>img/fotos_jugadores/</code>.</p>
+      <p>Para armar rutas se usa <code>__DIR__</code> (carpeta del script actual), lo que evita problemas de rutas
+      relativas. Si la carpeta no existe, se puede crear con <code>mkdir()</code>.</p>
+    </div>
+    <span class="label">Sintaxis</span>
+<pre><code>move_uploaded_file($_FILES['campo']['tmp_name'], $rutaDestino);</code></pre>
+    <span class="label">Ejemplo</span>
+<pre><code>&lt;?php
+  $archivo = $_FILES['logo'];
+  $ext     = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+  $nuevo   = uniqid("logo_") . "." . $ext;
+
+  $carpeta = __DIR__ . "/img/logos/";          // ruta física en el servidor
+  if (!is_dir($carpeta)) mkdir($carpeta, 0777, true);
+
+  $destino = $carpeta . $nuevo;
+
+  if (move_uploaded_file($archivo['tmp_name'], $destino)) {
+      echo "Imagen guardada en img/logos/$nuevo";
+      // Para mostrarla en el navegador:  api/img/logos/$nuevo
+  } else {
+      echo "No se pudo guardar la imagen.";
+  }
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Salida del servidor</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;Imagen guardada en img/logos/logo_67a1f3.png&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t5">
+    <a class="top-link" href="#t5">&#8593; volver al índice</a>
+    <h2><span class="n">5.</span> Guardar el nombre del archivo en MySQL</h2>
+    <div class="def">
+      <p>En la base de datos <strong>no se guarda la imagen</strong>, sino su <strong>nombre/ruta</strong>
+      (ej. <code>logo_67a1f3.png</code>). El flujo completo: recibir → validar → mover → <code>INSERT</code> con el
+      nombre en la columna <code>logo</code>. Esta combinación une esta unidad con la anterior (MySQL).</p>
+    </div>
+    <span class="label">Ejemplo · equipos_insertar.php</span>
+<pre><code>&lt;?php
+  header('Access-Control-Allow-Origin: *');
+  header('Content-Type: application/json');
+  extract($_REQUEST);
+  require("conexion.php");
+
+  $conexion = mysqli_connect($server_db, $usuario_db, $password_db)
+      or die("No se puede conectar con el servidor");
+  mysqli_select_db($conexion, $base_db);
+
+  // 1) Subir el logo
+  $archivo = $_FILES['logo'];
+  $ext     = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+  $nuevo   = uniqid("logo_") . "." . $ext;
+  $carpeta = __DIR__ . "/img/logos/";
+  if (!is_dir($carpeta)) mkdir($carpeta, 0777, true);
+  move_uploaded_file($archivo['tmp_name'], $carpeta . $nuevo);
+
+  // 2) Guardar el equipo con el nombre del archivo
+  $nombre = mysqli_real_escape_string($conexion, $nombre);
+  $sql = "INSERT INTO equipos (nombre, logo, puntos)
+          VALUES ('$nombre', '$nuevo', 0)";
+
+  if (mysqli_query($conexion, $sql)) {
+      echo json_encode(['status' =&gt; 200,
+                        'mensaje' =&gt; "Club $nombre guardado con logo $nuevo"]);
+  } else {
+      echo json_encode(['status' =&gt; 500,
+                        'mensaje' =&gt; mysqli_error($conexion)]);
+  }
+  mysqli_close($conexion);
+?&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Respuesta de la API</div>
+      <iframe class="short" srcdoc="&lt;pre style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;{&amp;quot;status&amp;quot;:200,&amp;quot;mensaje&amp;quot;:&amp;quot;Club Atenas guardado con logo logo_67a1f3.png&amp;quot;}&lt;/pre&gt;"></iframe>
+    </div>
+  </section>
+
+  <section class="topic" id="t6">
+    <a class="top-link" href="#t6">&#8593; volver al índice</a>
+    <h2><span class="n">6.</span> Subida con AJAX y FormData</h2>
+    <div class="def">
+      <p>Para subir sin recargar la página se usa <strong><code>FormData</code></strong>: un objeto que empaqueta
+      los campos del formulario (incluido el archivo) y se envía con <code>fetch</code> por POST. <strong>No hay que
+      fijar el <code>Content-Type</code></strong>: el navegador lo calcula solo con el <em>boundary</em> correcto.</p>
+      <p>Se puede construir desde un formulario real (<code>new FormData(form)</code>) o a mano con
+      <code>append()</code>.</p>
+    </div>
+    <span class="label">Sintaxis</span>
+<pre><code>const fd = new FormData();
+fd.append("nombre", valor);        // campos de texto
+fd.append("logo", inputFile.files[0]);   // el archivo
+fetch(url, { method: "POST", body: fd });</code></pre>
+    <span class="label">Ejemplo · fetch con FormData</span>
+<pre><code>&lt;script&gt;
+  const form = document.getElementById("formClub");
+
+  form.addEventListener("submit", async (e) =&gt; {
+    e.preventDefault();
+
+    const fd = new FormData(form);   // toma todos los campos + el archivo
+
+    const resp = await fetch("api/equipos_insertar.php", {
+      method: "POST",
+      body: fd                       // ¡sin headers de Content-Type!
+    });
+
+    const data = await resp.json();  // { status, mensaje }
+    document.getElementById("msg").textContent = data.mensaje;
+  });
+&lt;/script&gt;</code></pre>
+    <span class="label">Ejemplo · jQuery con FormData</span>
+<pre><code>$("#formClub").on("submit", function (e) {
+  e.preventDefault();
+  const fd = new FormData(this);
+
+  $.ajax({
+    url: "api/equipos_insertar.php",
+    type: "POST",
+    data: fd,
+    processData: false,   // no convertir a query string
+    contentType: false,   // dejar que el navegador ponga el boundary
+    success: function (data) {
+      $("#msg").text(data.mensaje);
+    }
+  });
+});</code></pre>
+  </section>
+
+  <section class="topic" id="t7">
+    <a class="top-link" href="#t7">&#8593; volver al índice</a>
+    <h2><span class="n">7.</span> Patrón completo: formulario → Ajax → PHP → BD</h2>
+    <div class="def">
+      <p>Este es el patrón integrador que pide el parcial (página huérfana
+      <code>registrar_club.html</code>):</p>
+      <ol>
+        <li><strong>HTML</strong>: formulario con <code>enctype</code>, campo de texto y <code>type="file"</code>.</li>
+        <li><strong>JS</strong>: interceptar el <code>submit</code>, armar <code>FormData</code> y enviar por AJAX.</li>
+        <li><strong>PHP</strong>: validar, mover la imagen a <code>img/logos/</code> e <code>INSERT</code> en MySQL.</li>
+        <li><strong>Respuesta</strong>: JSON <code>{status, mensaje}</code> que el JS muestra en pantalla.</li>
+      </ol>
+    </div>
+    <span class="label">Ejemplo · las tres piezas juntas</span>
+<pre><code>&lt;!-- registrar_club.html --&gt;
+&lt;form id="formClub" enctype="multipart/form-data"&gt;
+  &lt;input type="text" name="nombre" required placeholder="Nombre del club"&gt;
+  &lt;input type="file" name="logo" accept="image/*" required&gt;
+  &lt;button type="submit"&gt;Registrar club&lt;/button&gt;
+&lt;/form&gt;
+&lt;p id="msg"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+document.getElementById("formClub").addEventListener("submit", async (e) =&gt; {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const resp = await fetch("api/equipos_insertar.php", { method: "POST", body: fd });
+  const data = await resp.json();
+  document.getElementById("msg").textContent =
+    data.status === 200 ? "✔ " + data.mensaje : "✘ " + data.mensaje;
+});
+&lt;/script&gt;</code></pre>
+    <span class="label">Resultado</span>
+    <div class="preview">
+      <div class="bar">Respuesta de la API mostrada en la página</div>
+      <iframe class="short" srcdoc="&lt;div style=&quot;font-family:system-ui;padding:12px;line-height:1.7&quot;&gt;✔ Club Atenas guardado con logo logo_67a1f3.png&lt;/div&gt;"></iframe>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="08-mysql.html">&#8592; Unidad 8 · MySQL + PHP</a>
+    <a class="next" href="../index.html">Volver al índice de unidades &#8594;</a>
+  </div>
+
+</div>
+</main>
+<footer class="container">Unidad 9 · Subida de archivos · Resumen de Programación Orientada a la Web.</footer>
+</body>
+</html>
