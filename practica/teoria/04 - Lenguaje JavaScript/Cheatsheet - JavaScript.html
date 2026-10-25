@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - JavaScript</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #a16207; margin: 0 0 5px;
+  border-bottom: 3px solid #a16207; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #a16207; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #713f12; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #713f12; }
+blockquote {
+  background: #fdf8ee; border-left: 4px solid #a16207;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #a16207;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #f7f0dd; color: #a16207; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #a16207; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — Lenguaje JavaScript</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido y consulta durante el parcial.<br>
+<strong>Base:</strong> teoría de la cátedra (<code>2025 Javascript_II.pdf</code>, 107 páginas) + estándar ECMAScript.</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Qué es JavaScript</li>
+<li>Historia y versionado</li>
+<li>Características del lenguaje</li>
+<li>Cliente vs. servidor</li>
+<li>Cómo incluir JavaScript en HTML</li>
+<li>JavaScript vs. Java</li>
+<li>Comentarios y sentencias</li>
+<li>Salida: <code>document.write</code>, <code>alert</code>, <code>console.log</code>, <code>innerHTML</code></li>
+<li>Jerarquía de objetos del navegador</li>
+<li>Variables: <code>var</code>, <code>let</code>, <code>const</code></li>
+<li>Tipos de datos y coerciones</li>
+<li>Operadores</li>
+<li>Palabras reservadas</li>
+<li>Control de flujo</li>
+<li>Entrada de datos: <code>prompt</code> y <code>confirm</code></li>
+<li>Arreglos</li>
+<li>Funciones</li>
+<li>Objetos</li>
+<li>Objetos preconstruidos: <code>Math</code> y <code>Date</code></li>
+<li>Eventos</li>
+<li>Strings</li>
+<li>Template literals</li>
+<li>DOM: qué es</li>
+<li>Acceso a los nodos</li>
+<li>Crear y eliminar nodos</li>
+<li>Atributos, <code>innerHTML</code> y <code>style</code></li>
+<li><code>addEventListener</code></li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+<li>Ejercicios de repaso</li>
+</ol>
+<hr>
+<h2>1. Qué es JavaScript</h2>
+<ul>
+<li>Lenguaje <strong>compacto de scripting basado en objetos</strong> para desarrollar aplicaciones <strong>Internet Cliente – Servidor</strong>.</li>
+<li>Es <strong>embebido en un documento HTML</strong>: se coloca tanto en el <code>&lt;head&gt;</code> como en el <code>&lt;body&gt;</code>.</li>
+<li>Puede <strong>reconocer y responder a eventos</strong> del usuario <strong>sin conexión a la red</strong> (por ejemplo, chequeos de validación).</li>
+<li>Es <strong>interpretado</strong> por un intérprete incorporado en el navegador, que permite ejecutar código <strong>generado dinámicamente</strong>.</li>
+<li>La sintaxis es muy similar a <strong>Java o C++</strong>; a diferencia de ellos, el <code>;</code> final es <strong>opcional</strong> (aunque conviene usarlo).</li>
+<li>Es un lenguaje <strong>basado en objetos</strong> que <strong>no implementa clases ni el mecanismo de herencia</strong> clásico: la herencia se hace por <strong>prototipos</strong>.</li>
+<li>Usa una <strong>jerarquía de objetos</strong> encabezada por el navegador (<strong>DOM</strong>).</li>
+<li>Provee objetos <strong>predefinidos</strong> de mucha utilidad (<code>Math</code>, <code>Date</code>, <code>String</code>, <code>Array</code>...).</li>
+<li>Es la <strong>base de AJAX</strong> y permite incorporar otras tecnologías (XML, DHTML, ActiveX).</li>
+</ul>
+<hr>
+<h2>2. Historia y versionado</h2>
+<table>
+<thead>
+<tr>
+<th>Momento</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Origen</td>
+<td>Creado por <strong>Brendan Eich</strong> para Netscape.</td>
+</tr>
+<tr>
+<td>Nombre original</td>
+<td><strong>Mocha</strong> → <strong>LiveScript</strong> → <strong>JavaScript</strong>.</td>
+</tr>
+<tr>
+<td>Versionado</td>
+<td>Desde JavaScript 1.0 hasta 2015.</td>
+</tr>
+<tr>
+<td>Desde 2015</td>
+<td>Se actualiza <strong>todos los meses de junio</strong> con versionado <strong>ECMAScript</strong>.</td>
+</tr>
+<tr>
+<td>Estándar actual (teoría)</td>
+<td><strong>ECMAScript 2026</strong> (1 de junio de 2026).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Aclaración: "JavaScript" es el nombre comercial; el <strong>estándar</strong> es <strong>ECMAScript</strong>. No confundir con Java: son lenguajes distintos.</p>
+</blockquote>
+<hr>
+<h2>3. Características del lenguaje</h2>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Consecuencia práctica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Interpretado</strong> en el navegador</td>
+<td>No requiere compilación ni máquina virtual.</td>
+</tr>
+<tr>
+<td>Sintaxis tipo <strong>Java/C++</strong></td>
+<td>Fácil de leer; <code>;</code> opcional.</td>
+</tr>
+<tr>
+<td><strong>Basado en objetos</strong> (sin clases)</td>
+<td>Objetos literales y herencia por <strong>prototipos</strong>.</td>
+</tr>
+<tr>
+<td><strong>Jerarquía de objetos</strong> del navegador</td>
+<td><code>window</code> → <code>document</code> → <code>forms</code> → <code>elements</code>.</td>
+</tr>
+<tr>
+<td><strong>Objetos predefinidos</strong></td>
+<td><code>Math</code>, <code>Date</code>, <code>String</code>, <code>Array</code>, <code>Number</code>.</td>
+</tr>
+<tr>
+<td><strong>Manejo de eventos</strong></td>
+<td>Responde a acciones del usuario y del navegador.</td>
+</tr>
+<tr>
+<td><strong>Débilmente tipado</strong></td>
+<td>La misma variable puede cambiar de tipo en ejecución.</td>
+</tr>
+<tr>
+<td>Integración</td>
+<td>Base de <strong>AJAX</strong>; se combina con XML, DHTML, ActiveX.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>4. Cliente vs. servidor</h2>
+<h3>Del lado del cliente</h3>
+<ul>
+<li>Se incluye en el documento HTML y <strong>se descarga con él</strong>.</li>
+<li>Funciones y variables dentro de <code>&lt;script&gt;...&lt;/script&gt;</code>, más atributos de eventos en las etiquetas HTML.</li>
+<li>Lo interpretan <strong>la mayoría de los navegadores</strong>:</li>
+<li>las funciones se definen cuando <strong>carga la página</strong>;</li>
+<li>se invocan ante <strong>eventos</strong> (clic, cambio de valor, submit...).</li>
+<li>Acceso a objetos y operaciones:</li>
+<li><code>window</code> (abrir ventanas, cargar URLs), <code>frames</code> (hoy obsoletos);</li>
+<li>elementos de un <code>form</code> (al cambiar el valor o al hacer submit);</li>
+<li><code>links</code> (cambiar <code>href</code>).</li>
+<li>Puede crear <strong>HTML dinámico</strong>.</li>
+</ul>
+<h3>Del lado del servidor</h3>
+<ul>
+<li>Se incluye en el documento HTML "original" (<code>&lt;script&gt;</code> con funciones y variables).</li>
+<li>Lo compilan y ejecutan servidores como <strong>Netscape LiveWire</strong>, <strong>Node.js</strong>, Jaxer, EJScript, RingoJS, AppengineJS.</li>
+<li>Acceso a: estado del servidor, estado por usuario, requerimientos HTTP concurrentes (chequeos de usuarios y dominios), bases de datos (consultas SQL).</li>
+<li>Puede usarse con <strong>cualquier navegador</strong>.</li>
+</ul>
+<blockquote>
+<p>En la materia el foco está en el <strong>cliente</strong>: el código viaja al navegador y allí se ejecuta.</p>
+</blockquote>
+<hr>
+<h2>5. Cómo incluir JavaScript en HTML</h2>
+<h3>Embebido (código en la propia página)</h3>
+<pre><code class="language-html">&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;SCRIPT language=&quot;JavaScript&quot;&gt;
+      alert(&quot;Hola JavaScript&quot;);
+    &lt;/SCRIPT&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+    &lt;P&gt;Esto es una simple alerta JavaScript&lt;/P&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<blockquote>
+<p>Antes se encerraba el código entre comentarios <code>&lt;!-- ... --&gt;</code> para que los navegadores viejos no lo mostraran. Hoy <strong>no es necesario</strong>.</p>
+</blockquote>
+<h3>Enlazado (archivo externo <code>.js</code>)</h3>
+<pre><code class="language-html">&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;SCRIPT language=&quot;JavaScript&quot; SRC=&quot;codigo.js&quot;&gt;&lt;/SCRIPT&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<h3>¿En el <code>HEAD</code> o en el <code>BODY</code>?</h3>
+<p><strong>Colocar los scripts al final del <code>&lt;body&gt;</code> mejora la velocidad de visualización</strong>, porque la interpretación de los scripts <strong>ralentiza</strong> el renderizado de la página.</p>
+<pre><code class="language-html">&lt;HTML&gt;
+  &lt;HEAD&gt;&lt;/HEAD&gt;
+  &lt;BODY&gt;
+    &lt;!-- contenido visible primero --&gt;
+    &lt;SCRIPT language=&quot;JavaScript&quot; SRC=&quot;codigo.js&quot;&gt;&lt;/SCRIPT&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Ventaja</th>
+<th>Desventaja</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embebido</td>
+<td>Todo en un archivo; útil para pruebas.</td>
+<td>Se mezcla con el HTML, no se reutiliza.</td>
+</tr>
+<tr>
+<td>Enlazado</td>
+<td>Reutilizable y cacheable; HTML limpio.</td>
+<td>Una petición más al servidor.</td>
+</tr>
+<tr>
+<td>En <code>head</code></td>
+<td>Disponible antes de dibujar el body.</td>
+<td>Bloquea el renderizado.</td>
+</tr>
+<tr>
+<td>Al final del <code>body</code></td>
+<td>La página se muestra antes.</td>
+<td>El DOM ya está listo al ejecutarse.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>6. JavaScript vs. Java</h2>
+<table>
+<thead>
+<tr>
+<th>JAVA</th>
+<th>JAVASCRIPT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requiere <strong>compilación</strong>.</td>
+<td><strong>No</strong> requiere compilación: lo interpreta el navegador del lado del cliente.</td>
+</tr>
+<tr>
+<td>Lenguaje <strong>pesado, potente y robusto</strong>.</td>
+<td>Lenguaje <strong>ligero, ágil y poco robusto</strong>.</td>
+</tr>
+<tr>
+<td><strong>Orientado a objetos</strong> completamente.</td>
+<td>No se clasifica bajo un paradigma concreto.</td>
+</tr>
+<tr>
+<td>Requiere <strong>JDK y máquina virtual</strong>.</td>
+<td>Solo un <strong>navegador</strong> y un editor de texto.</td>
+</tr>
+<tr>
+<td><strong>Fuertemente tipado</strong>.</td>
+<td><strong>Débilmente tipado</strong>: las variables cambian de tipo en ejecución.</td>
+</tr>
+<tr>
+<td>Clases e instancias son entidades <strong>distintas</strong>.</td>
+<td><strong>Todos los objetos son instancias</strong>.</td>
+</tr>
+<tr>
+<td>Clase con definición y <strong>constructor</strong>.</td>
+<td>Objetos con <strong>funciones constructoras</strong>.</td>
+</tr>
+<tr>
+<td>Jerarquía por <strong>subclases</strong>.</td>
+<td>Jerarquía por <strong>prototipos</strong>.</td>
+</tr>
+<tr>
+<td>Herencia por <strong>cadena de clases</strong>.</td>
+<td>Herencia por <strong>cadena de prototipos</strong>.</td>
+</tr>
+<tr>
+<td>La clase define <strong>todas</strong> las propiedades de sus instancias.</td>
+<td>El constructor/prototipo define un conjunto <strong>inicial</strong>; se pueden <strong>agregar o quitar propiedades</strong> en ejecución.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Moraleja para el parcial: <strong>Java ≠ JavaScript</strong>. Solo comparten parte de la sintaxis y el nombre.</p>
+</blockquote>
+<hr>
+<h2>7. Comentarios y sentencias</h2>
+<pre><code class="language-javascript">// Esta es una línea de comentario
+
+/* Este es un
+   comentario multilínea */
+
+var x = 10;   // sentencias separadas por ;
+</code></pre>
+<ul>
+<li>Los comentarios son <strong>ignorados por el intérprete</strong>.</li>
+<li>El <code>;</code> es <strong>opcional</strong>, pero <strong>clarifica</strong> la separación de instrucciones.</li>
+<li>JavaScript <strong>distingue mayúsculas y minúsculas</strong> (<code>nombre</code>, <code>Nombre</code> y <code>NOMBRE</code> son distintas).</li>
+</ul>
+<hr>
+<h2>8. Salida: <code>document.write</code>, <code>alert</code>, <code>console.log</code>, <code>innerHTML</code></h2>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Para qué</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document.write()</code></td>
+<td>Escribe en el documento <strong>mientras se carga</strong>.</td>
+<td><code>document.write("Hola&lt;br&gt;");</code></td>
+</tr>
+<tr>
+<td><code>alert()</code></td>
+<td>Ventana modal con un mensaje y botón <strong>OK</strong>.</td>
+<td><code>alert("Hola JavaScript");</code></td>
+</tr>
+<tr>
+<td><code>console.log()</code></td>
+<td>Salida por consola, para <strong>depuración</strong>.</td>
+<td><code>console.log(5 + 6);</code></td>
+</tr>
+<tr>
+<td><code>innerHTML</code> / <code>innerText</code></td>
+<td>Escribe <strong>dentro de un elemento</strong>.</td>
+<td><code>document.getElementById("demo").innerHTML = "Hola";</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;SCRIPT&gt;
+  document.write(&quot;Hola Mundo&quot; + &quot;&lt;BR&gt;&quot;);
+&lt;/SCRIPT&gt;
+</code></pre>
+<ul>
+<li>El texto puede ir con <strong>comillas simples o dobles</strong>.</li>
+<li>Se pueden <strong>embeber etiquetas HTML</strong> en el texto: el navegador las interpreta.</li>
+<li>Para que las etiquetas se <strong>vean</strong> en pantalla hay que usar <strong>caracteres de escape</strong> <code>&amp;lt;</code> y <code>&amp;gt;</code>:</li>
+</ul>
+<pre><code class="language-javascript">document.write(&quot;&lt;B&gt;Hola JavaScript&lt;/B&gt;&quot;);              // se ve en negrita
+document.write(&quot;&amp;lt;B&amp;gt;Hola JavaScript&amp;lt;/B&amp;gt;&quot;);  // se ve la etiqueta
+</code></pre>
+<blockquote>
+<p><code>document</code> es el objeto documento y <code>write</code> es un <strong>método</strong> de ese objeto: <code>objeto.metodo()</code>.</p>
+</blockquote>
+<h3><code>document.write</code> vs. <code>innerHTML</code></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>document.write</code></th>
+<th><code>innerHTML</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dónde escribe</td>
+<td>En la página actual, <strong>borrando</strong> lo que había.</td>
+<td><strong>Dentro</strong> de un elemento existente.</td>
+</tr>
+<tr>
+<td>Cuándo usarlo</td>
+<td>Al generar la página mientras carga.</td>
+<td>Para actualizar una parte de la página.</td>
+</tr>
+<tr>
+<td>Uso moderno</td>
+<td>Poco recomendado.</td>
+<td>Muy usado (y base de librerías como jQuery).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>9. Jerarquía de objetos del navegador</h2>
+<pre><code>window
+ ├── parent, frames, self, top, location, history
+ └── document
+      ├── forms
+      │    └── elements
+      │         (text, textarea, checkbox, radio, password,
+      │          select, button, submit, reset)
+      ├── links
+      └── anchors
+</code></pre>
+<ul>
+<li>El <strong>DOM</strong> se puede <strong>acceder y manipular</strong> con JavaScript.</li>
+<li>Cada objeto tiene <strong>propiedades y métodos</strong>.</li>
+<li>La jerarquía <strong>refleja la estructura</strong> de la página HTML: los descendientes de un objeto son <strong>propiedades</strong> de ese objeto.</li>
+</ul>
+<pre><code class="language-javascript">document.title = &quot;un simple documento&quot;;
+document.myform.length = 5;
+document.forms[0].buttons[0].value = &quot;Aceptar&quot;;
+</code></pre>
+<hr>
+<h2>10. Variables: <code>var</code>, <code>let</code>, <code>const</code></h2>
+<h3>Las 4 formas de definir una variable</h3>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Ejemplo</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>var</code></td>
+<td><code>var pepe;</code></td>
+<td>Ámbito <strong>global</strong> o de <strong>función</strong>.</td>
+</tr>
+<tr>
+<td><code>const</code></td>
+<td><code>const PI = 3.14159;</code></td>
+<td>Valor <strong>fijo</strong>; no se puede redefinir.</td>
+</tr>
+<tr>
+<td><code>let</code></td>
+<td><code>let x = 5;</code></td>
+<td>Valor <strong>variable</strong>; no se puede <strong>redeclarar</strong>.</td>
+</tr>
+<tr>
+<td>Sin declarar</td>
+<td><code>x = 2;</code></td>
+<td><strong>Mala práctica</strong>: crea una global.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>let</code> y <code>const</code> se agregaron en <strong>2015</strong> y <strong>no funcionan</strong> en navegadores que no contemplen el estándar.</p>
+</blockquote>
+<h3>Declaración y asignación</h3>
+<pre><code class="language-javascript">var pepe;                  // declaración
+pepe = &quot;Ser o no ser&quot;;     // asignación
+
+var primerNombre = &quot;&quot;;     // conviene inicializar con el tipo esperado
+var anio = 0;
+var vive = true;
+</code></pre>
+<ul>
+<li>La asignación es <strong>siempre de derecha a izquierda</strong>.</li>
+<li>Las variables <strong>pueden reasignarse</strong> y <strong>cambiar de tipo</strong>:</li>
+</ul>
+<pre><code class="language-javascript">var dato = 0;
+dato = &quot;hola mundo&quot;;   // válido: JS no es tipado
+</code></pre>
+<h3><code>const</code> no se redefine</h3>
+<pre><code class="language-javascript">const PI = 3.141592653589793;
+
+PI = 3.14;      // ❌ no válido
+PI = PI * 3;    // ❌ no válido
+</code></pre>
+<h3><code>let</code> no se redeclara, pero sí se reasigna</h3>
+<pre><code class="language-javascript">let x = 4;
+let x = 54;   // ❌ ERROR: ya fue declarada con let
+
+let y = 4;
+y = 54;       // ✅ válido: es reasignación, no redeclaración
+</code></pre>
+<blockquote>
+<p><strong>Redefinir</strong> (volver a declarar) ≠ <strong>reasignar</strong> (cambiar el valor).</p>
+</blockquote>
+<h3>Ámbito por bloque</h3>
+<ul>
+<li><code>var</code> (o una variable sin declarar) tiene ámbito <strong>global</strong> o de la <strong>función</strong>.</li>
+<li><code>let</code> y <code>const</code> pueden limitarse a un <strong>bloque <code>{ }</code></strong>.</li>
+</ul>
+<pre><code class="language-javascript">let x = 5;
+
+{
+  let x = 10;    // otra x, solo dentro del bloque
+  console.log(x); // 10
+}
+
+console.log(x);   // 5  (al salir del bloque se conserva la de afuera)
+</code></pre>
+<h3>Reglas de nombres</h3>
+<ul>
+<li>Distinguen <strong>mayúsculas/minúsculas</strong>: <code>PEPE</code>, <code>Pepe</code> y <code>pepe</code> son distintas.</li>
+<li>Deben empezar con <strong>letra</strong> o <strong>guion bajo</strong> <code>_</code>; luego letras, números o <code>_</code>.</li>
+<li>No pueden empezar con número ni usar palabras reservadas.</li>
+</ul>
+<h3>Caracteres especiales en cadenas</h3>
+<table>
+<thead>
+<tr>
+<th>Escape</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\n</code></td>
+<td>Salto de línea</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>Tabulación</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>Retorno de carro</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>Retroceso</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>Salto de página</td>
+</tr>
+<tr>
+<td><code>\"</code></td>
+<td>Comilla doble</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>11. Tipos de datos y coerciones</h2>
+<h3>Tres tipos de datos</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>String</strong> (cadena)</td>
+<td><code>"Hola JavaScript"</code>, <code>'Hola JavaScript'</code>, <code>""</code></td>
+</tr>
+<tr>
+<td><strong>Number</strong> (número)</td>
+<td><code>1</code>, <code>5</code>, <code>3.14</code>, <code>65000</code></td>
+</tr>
+<tr>
+<td><strong>Boolean</strong> (booleano)</td>
+<td><code>true</code>, <code>false</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Además existen <code>null</code>, <code>undefined</code>, <code>object</code>, <code>function</code> y (moderno) <code>symbol</code>/<code>bigint</code>.</p>
+</blockquote>
+<h3>No es tipado: conversión automática</h3>
+<pre><code class="language-javascript">var r = 2;
+r = r + 5;          // 7        (suma)
+
+var r = &quot;2&quot;;
+r = r + 5;          // &quot;25&quot;     (concatena string + número)
+
+var r = &quot;2&quot;;
+r = r * 5;          // 10       (multiplica)
+
+var r = &quot;2&quot;;
+r = r - 5 + r;      // &quot;-32&quot;    (resta 2-5 = -3, luego concatena)
+
+var r = &quot;ra&quot; + 16;  // &quot;ra16&quot;
+var r = 2 * 3 + &quot;ra&quot;; // &quot;6ra&quot;
+</code></pre>
+<h3>Reglas prácticas de la coerción</h3>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code> con un string</td>
+<td><strong>Concatena</strong> (convierte el otro operando a string).</td>
+</tr>
+<tr>
+<td><code>-</code>, <code>*</code>, <code>/</code>, <code>%</code></td>
+<td><strong>Convierte a número</strong> y opera.</td>
+</tr>
+<tr>
+<td><code>"5" == 5</code></td>
+<td><code>true</code> (compara valor, convirtiendo).</td>
+</tr>
+<tr>
+<td><code>"5" === 5</code></td>
+<td><code>false</code> (compara valor <strong>y tipo</strong>).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Como JS no es tipado, <strong>hay que respetar el contenido</strong> de las variables. Un tipo inesperado produce resultados raros.</p>
+</blockquote>
+<p><code>prompt()</code> <strong>siempre devuelve string</strong>: hay que convertir con <code>parseInt()</code>, <code>parseFloat()</code> o <code>Number()</code>.</p>
+<hr>
+<h2>12. Operadores</h2>
+<h3>String</h3>
+<pre><code class="language-javascript">var texto = &quot;Hola&quot; + &quot; &quot; + &quot;mundo&quot;;   // concatenación con +
+</code></pre>
+<h3>Numéricos</h3>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>Suma</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>Resta</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>Multiplicación</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>División</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>Módulo (resto de la división)</td>
+</tr>
+<tr>
+<td><code>++</code></td>
+<td>Incremento en 1</td>
+</tr>
+<tr>
+<td><code>--</code></td>
+<td>Decremento en 1</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">y = x++;   // usa x y luego incrementa
+y = ++x;   // incrementa y luego usa x
+</code></pre>
+<h3>Igualdad y comparación</h3>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>==</code></td>
+<td>Igual a (compara valor)</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>Distinto</td>
+</tr>
+<tr>
+<td><code>&gt;</code> / <code>&gt;=</code></td>
+<td>Mayor / mayor o igual</td>
+</tr>
+<tr>
+<td><code>&lt;</code> / <code>&lt;=</code></td>
+<td>Menor / menor o igual</td>
+</tr>
+<tr>
+<td><code>===</code> / <code>!==</code></td>
+<td>Igualdad / desigualdad <strong>estricta</strong> (valor y tipo)</td>
+</tr>
+</tbody>
+</table>
+<h3>Lógicos</h3>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>AND lógico</td>
+</tr>
+<tr>
+<td><code>||</code></td>
+<td>OR lógico</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>NOT</td>
+</tr>
+</tbody>
+</table>
+<h3>Ternario</h3>
+<pre><code class="language-javascript">var mensaje = (edad &gt;= 18) ? &quot;Mayor&quot; : &quot;Menor&quot;;
+</code></pre>
+<h3>Precedencia (resumen)</h3>
+<pre><code>!  ++  --
+*  /  %
++  -
+&lt;  &lt;=  &gt;  &gt;=
+==  !=  ===  !==
+&amp;&amp;
+||
+=  +=  -=  ...
+</code></pre>
+<blockquote>
+<p>Ante la duda, <strong>paréntesis</strong>.</p>
+</blockquote>
+<hr>
+<h2>13. Palabras reservadas</h2>
+<table>
+<thead>
+<tr>
+<th>Palabra</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>break</code></td>
+<td>Termina (corta) el bucle actual y pasa a la sentencia siguiente.</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td>Anotaciones del autor; el intérprete las ignora.</td>
+</tr>
+<tr>
+<td><code>continue</code></td>
+<td>Termina la iteración actual y continúa con la próxima.</td>
+</tr>
+</tbody>
+</table>
+<p>Otras de uso habitual: <code>var</code>, <code>let</code>, <code>const</code>, <code>function</code>, <code>return</code>, <code>if</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>switch</code>, <code>case</code>, <code>default</code>, <code>new</code>, <code>this</code>, <code>true</code>, <code>false</code>, <code>null</code>, <code>typeof</code>, <code>delete</code>, <code>in</code>, <code>do</code>.</p>
+<hr>
+<h2>14. Control de flujo</h2>
+<h3><code>if</code> / <code>else if</code> / <code>else</code></h3>
+<pre><code class="language-javascript">var color = &quot;azul&quot;;
+
+if (color == &quot;rojo&quot;) {
+  document.write(&quot;el color es rojo&quot;);
+  document.write(&quot;&lt;HR&gt;&quot;);
+} else if (color == &quot;azul&quot;) {
+  document.write(&quot;el color es azul&quot;);
+} else {
+  document.write(&quot;el color no es ni rojo ni azul&quot;);
+}
+</code></pre>
+<h3><code>switch</code></h3>
+<pre><code class="language-javascript">switch (color) {
+  case &quot;rojo&quot;:
+    document.write(&quot;Rojo&quot;);
+    break;
+  case &quot;azul&quot;:
+    document.write(&quot;Azul&quot;);
+    break;
+  default:
+    document.write(&quot;Otro color&quot;);
+}
+</code></pre>
+<h3><code>for</code></h3>
+<pre><code class="language-javascript">for (var i = 0; i &lt;= 1000; i = i + 100) {
+  document.write(i + &quot;&lt;BR&gt;&quot;);
+}
+</code></pre>
+<h3><code>for...in</code></h3>
+<p>Itera una variable sobre <strong>todas las propiedades de un objeto</strong> (o los índices de un arreglo).</p>
+<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot;&gt;
+  var x;
+  var misautos = new Array();
+  misautos[0] = &quot;Ferrari&quot;;
+  misautos[1] = &quot;Volvo&quot;;
+  misautos[2] = &quot;BMW&quot;;
+
+  for (x in misautos) {
+    document.write(misautos[x] + &quot;&lt;br /&gt;&quot;);
+  }
+&lt;/script&gt;
+</code></pre>
+<h3><code>while</code></h3>
+<pre><code class="language-javascript">var i = 0;
+while (i &lt;= 1000) {
+  document.write(i + &quot;&lt;BR&gt;&quot;);
+  i = i + 100;
+}
+</code></pre>
+<h3><code>do...while</code></h3>
+<pre><code class="language-javascript">var i = 0;
+do {
+  document.write(i + &quot;&lt;BR&gt;&quot;);
+  i++;
+} while (i &lt;= 10);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Bucle</th>
+<th>Cuándo usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>for</code></td>
+<td>Cantidad de iteraciones conocida.</td>
+</tr>
+<tr>
+<td><code>for...in</code></td>
+<td>Recorrer propiedades de un objeto o índices de un arreglo.</td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td>Mientras se cumpla una condición (puede no ejecutarse).</td>
+</tr>
+<tr>
+<td><code>do...while</code></td>
+<td>Al menos una ejecución garantizada.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>15. Entrada de datos: <code>prompt</code> y <code>confirm</code></h2>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Comportamiento</th>
+<th>Devuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alert(mensaje)</code></td>
+<td>Muestra un mensaje; se cierra con <strong>OK</strong>.</td>
+<td>Nada</td>
+</tr>
+<tr>
+<td><code>confirm(mensaje)</code></td>
+<td>Dos botones: <strong>Aceptar</strong> / <strong>Cancelar</strong>.</td>
+<td><code>true</code> / <code>false</code></td>
+</tr>
+<tr>
+<td><code>prompt(str1, str2)</code></td>
+<td>Pide un dato. <code>str1</code> = pregunta, <code>str2</code> = texto por defecto.</td>
+<td><strong>String</strong> (o <code>null</code>)</td>
+</tr>
+<tr>
+<td><code>console.log(x)</code></td>
+<td>Escribe en la consola (depuración).</td>
+<td>Nada</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">if (confirm(&quot;¿Quiere imprimir texto grande en rojo?&quot;) == true) {
+  document.write(&quot;&lt;DIV STYLE='color:red;font-size:36pt;'&gt;texto grande en rojo&lt;/DIV&gt;&quot;);
+} else {
+  document.write(&quot;texto pequeño en negro&quot;);
+}
+</code></pre>
+<pre><code class="language-javascript">var suNombre = prompt(
+  &quot;Por favor escriba su nombre&quot;,
+  &quot;(sobreescriba este texto con su nombre)&quot;
+);
+document.write(&quot;Su nombre es: &quot; + suNombre);
+</code></pre>
+<blockquote>
+<p><code>prompt</code> devuelve <strong>texto</strong>. Para operar: <code>var edad = parseInt(prompt("Edad", ""));</code></p>
+</blockquote>
+<hr>
+<h2>16. Arreglos</h2>
+<h3>Creación</h3>
+<pre><code class="language-javascript">var nombreArray = new Array();     // arreglo vacío
+var nombreArray = new Array(10);   // 10 posiciones para almacenar
+</code></pre>
+<h3>Carga y acceso</h3>
+<pre><code class="language-javascript">var gatos = new Array(4);
+gatos[0] = &quot;Tom&quot;;
+gatos[1] = &quot;Lucas&quot;;
+gatos[2] = &quot;Adam&quot;;
+gatos[3] = &quot;Luis&quot;;
+
+// O directamente:
+var gatos = new Array(&quot;Tom&quot;, &quot;Lucas&quot;, &quot;Adam&quot;, &quot;Luis&quot;);
+
+// Sintaxis moderna:
+var gatos = [&quot;Tom&quot;, &quot;Lucas&quot;, &quot;Adam&quot;, &quot;Luis&quot;];
+</code></pre>
+<h3><code>length</code> y extensión</h3>
+<pre><code class="language-javascript">var n = gatos.length;   // 4
+
+gatos[9] = &quot;Nuevo&quot;;     // el arreglo se extiende solo
+gatos.length = 2;       // también se puede recortar
+</code></pre>
+<blockquote>
+<p>Los arreglos son <strong>útiles para crear, ordenar y manipular listas</strong> usando bucles.</p>
+</blockquote>
+<h3>Métodos y propiedades</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length</code></td>
+<td>Cantidad de elementos (propiedad).</td>
+</tr>
+<tr>
+<td><code>sort()</code></td>
+<td>Ordena alfabéticamente (modifica el arreglo).</td>
+</tr>
+<tr>
+<td><code>reverse()</code></td>
+<td>Invierte el orden.</td>
+</tr>
+<tr>
+<td><code>pop()</code></td>
+<td>Quita el <strong>último</strong> elemento.</td>
+</tr>
+<tr>
+<td><code>push()</code></td>
+<td>Agrega al <strong>final</strong>.</td>
+</tr>
+<tr>
+<td><code>join(sep)</code></td>
+<td>Une los elementos en un string.</td>
+</tr>
+<tr>
+<td><code>toString()</code></td>
+<td>Convierte el arreglo a string separado por comas.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">var frutas = [&quot;pera&quot;, &quot;manzana&quot;, &quot;kiwi&quot;];
+
+frutas.sort();           // [&quot;kiwi&quot;, &quot;manzana&quot;, &quot;pera&quot;]
+frutas.reverse();        // [&quot;pera&quot;, &quot;manzana&quot;, &quot;kiwi&quot;]
+frutas.push(&quot;uva&quot;);      // agrega al final
+var ultima = frutas.pop(); // &quot;uva&quot;
+var texto = frutas.join(&quot; - &quot;);  // &quot;pera - manzana - kiwi&quot;
+</code></pre>
+<hr>
+<h2>17. Funciones</h2>
+<ul>
+<li>Hacen cualquier cosa: desde imprimir un mensaje hasta calcular y <strong>retornar un valor</strong>.</li>
+<li>Pueden <strong>recibir datos</strong>, manipularlos y <strong>devolver</strong> un resultado.</li>
+</ul>
+<h3>Declaración y llamada</h3>
+<pre><code class="language-javascript">function nombreFuncion() {
+  // código de la función
+}
+
+var x = nombreFuncion();   // llamada
+</code></pre>
+<h3>Ejemplo sin parámetros</h3>
+<pre><code class="language-javascript">function warning() {
+  document.write(&quot;&lt;DIV STYLE='color:red;text-align:center;font-size:32pt;'&gt;Warning!&lt;/DIV&gt;&quot;);
+  document.write(&quot;&lt;BR&gt;&lt;DIV STYLE='color:green;text-align:center;font-size:24pt;'&gt;Ud. ha sido avisado!&lt;/DIV&gt;&quot;);
+}
+
+warning();
+</code></pre>
+<h3>Ejemplo con parámetros y <code>return</code></h3>
+<pre><code class="language-javascript">function multiplicar(a, b) {
+  var producto = 0;
+  producto = a * b;
+  return producto;
+}
+
+var x = multiplicar(3, 5);
+document.write(x);   // 15
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parámetros</td>
+<td>Se declaran entre paréntesis y sin tipo.</td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td>Devuelve un valor y <strong>corta</strong> la ejecución de la función.</td>
+</tr>
+<tr>
+<td>Sin <code>return</code></td>
+<td>La función devuelve <code>undefined</code>.</td>
+</tr>
+<tr>
+<td>Orden</td>
+<td>La función debe estar <strong>definida antes</strong> de ejecutarse (o usar <em>hoisting</em> de declaraciones).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>18. Objetos</h2>
+<h3>Objetos personalizados con <code>new Object</code></h3>
+<pre><code class="language-javascript">var remera = new Object();
+remera.color = &quot;roja&quot;;
+remera.size = 8;
+remera.type = &quot;algodon&quot;;
+
+document.write(remera.color + &quot;&lt;BR&gt;&quot;);
+document.write(remera.size + &quot;&lt;BR&gt;&quot;);
+document.write(remera.type + &quot;&lt;BR&gt;&quot;);
+</code></pre>
+<h3>Qué es un objeto</h3>
+<ul>
+<li>Son <strong>variables que pueden almacenar tanto valores como funciones</strong>.</li>
+<li>Son <strong>colecciones de propiedades</strong>, y las propiedades se pueden <strong>modificar, añadir y eliminar</strong>.</li>
+<li>Los objetos <strong>preconstruidos</strong> ya traen funciones para manejarlos (por ejemplo <code>Date</code> y <code>Math</code>).</li>
+</ul>
+<h3>Tres formas de declarar un objeto</h3>
+<pre><code class="language-javascript">// 1. Objeto literal
+const person = {
+  firstName: &quot;John&quot;,
+  lastName: &quot;Doe&quot;,
+  age: 50,
+  eyeColor: &quot;blue&quot;
+};
+
+// 2. Crear vacío y agregar propiedades
+const person = {};
+person.firstName = &quot;John&quot;;
+person.lastName = &quot;Doe&quot;;
+person.age = 50;
+person.eyeColor = &quot;blue&quot;;
+
+// 3. Con new Object y un literal
+const person = new Object({
+  firstName: &quot;John&quot;,
+  lastName: &quot;Doe&quot;,
+  age: 50,
+  eyeColor: &quot;blue&quot;
+});
+</code></pre>
+<pre><code class="language-javascript">const car = {
+  type: &quot;Fiat&quot;,
+  model: &quot;500&quot;,
+  color: &quot;white&quot;
+};
+</code></pre>
+<h3>Métodos y <code>this</code></h3>
+<pre><code class="language-javascript">const person = {
+  firstName: &quot;John&quot;,
+  lastName: &quot;Doe&quot;,
+  age: 50,
+  fullName: function () {
+    return this.firstName + &quot; &quot; + this.lastName;
+  }
+};
+
+person.fullName();   // &quot;John Doe&quot;
+</code></pre>
+<pre><code class="language-javascript">const persona = {
+  firstName: &quot;John&quot;,
+  lastName: &quot;Doe&quot;,
+  id: 5566,
+  getId: function () {
+    return this.id;
+  }
+};
+
+let number = persona.getId();   // 5566
+</code></pre>
+<h3>Agregar un método después</h3>
+<pre><code class="language-javascript">person.name = function () {
+  return this.firstName + &quot; &quot; + this.lastName;
+};
+
+// Reutilizando métodos de string
+person.name = function () {
+  return (this.firstName + &quot; &quot; + this.lastName).toUpperCase();
+};
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Propiedad</strong></td>
+<td>Par <code>clave: valor</code> (o <code>objeto.clave = valor</code>).</td>
+</tr>
+<tr>
+<td><strong>Método</strong></td>
+<td>Propiedad cuyo valor es una <strong>función</strong>.</td>
+</tr>
+<tr>
+<td><strong><code>this</code></strong></td>
+<td>Dentro de un método, referencia <strong>al objeto</strong> que lo contiene.</td>
+</tr>
+<tr>
+<td>Acceso</td>
+<td><code>objeto.propiedad</code> o <code>objeto["propiedad"]</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>19. Objetos preconstruidos: <code>Math</code> y <code>Date</code></h2>
+<h3><code>Math</code></h3>
+<p><strong>Constantes:</strong> <code>E</code>, <code>LN10</code>, <code>LN2</code>, <code>LOG10E</code>, <code>LOG2E</code>, <code>PI</code>, <code>SQRT1_2</code>, <code>SQRT2</code>.</p>
+<p><strong>Métodos:</strong> <code>abs</code>, <code>acos</code>, <code>asin</code>, <code>atan</code>, <code>atan2</code>, <code>ceil</code>, <code>cos</code>, <code>exp</code>, <code>floor</code>, <code>log</code>, <code>max</code>, <code>min</code>, <code>pow</code>, <code>random</code>, <code>round</code>, <code>sin</code>, <code>sqrt</code>, <code>tan</code>.</p>
+<pre><code class="language-javascript">Math.PI;                  // 3.141592653589793
+Math.max(3, 7, 2);        // 7
+Math.round(4.6);          // 5
+Math.floor(4.9);          // 4
+Math.ceil(4.1);           // 5
+Math.sqrt(16);            // 4
+Math.pow(2, 8);           // 256
+Math.random();            // 0 &lt;= x &lt; 1
+parseInt(Math.random() * 10);   // 0 a 9
+</code></pre>
+<h3><code>Date</code></h3>
+<pre><code class="language-javascript">var miDia = new Date();
+document.write(miDia + &quot;&lt;BR&gt;&quot;);
+
+var x = miDia.toGMTString();
+document.write(x + &quot;&lt;BR&gt;&quot;);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Devuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getFullYear()</code></td>
+<td>Año (4 cifras).</td>
+</tr>
+<tr>
+<td><code>getMonth()</code></td>
+<td>Mes (<strong>0–11</strong>).</td>
+</tr>
+<tr>
+<td><code>getDate()</code></td>
+<td>Día del mes (1–31).</td>
+</tr>
+<tr>
+<td><code>getDay()</code></td>
+<td>Día de la semana (<strong>0 = domingo</strong>).</td>
+</tr>
+<tr>
+<td><code>getHours()</code> / <code>getMinutes()</code> / <code>getSeconds()</code></td>
+<td>Hora.</td>
+</tr>
+<tr>
+<td><code>toGMTString()</code></td>
+<td>Fecha en formato GMT.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>getMonth()</code> arranca en <strong>0</strong>: hay que sumarle 1 para mostrar el mes real.</p>
+</blockquote>
+<hr>
+<h2>20. Eventos</h2>
+<h3>Niveles de eventos</h3>
+<ol>
+<li>A nivel del <strong>documento HTML</strong>.</li>
+<li>A nivel de un <strong>formulario</strong>.</li>
+<li>A nivel de un <strong>elemento de un formulario</strong>.</li>
+</ol>
+<p>El evento lo gestiona una sección de código JavaScript: el <strong>gestor (manejador) de eventos</strong>.</p>
+<h3>Declaración de gestores</h3>
+<p>Igual que los atributos HTML:</p>
+<pre><code class="language-html">&lt;BODY onLoad=&quot;cargarfuncion()&quot; onUnload=&quot;descargarfuncion()&quot;&gt;
+
+&lt;FORM name=&quot;nombre_del_formulario&quot; onSubmit=&quot;funcion_o_sentencia&quot;&gt;
+
+&lt;INPUT type=&quot;button&quot; name=&quot;mycheck&quot; value=&quot;HA!&quot;
+       onClick=&quot;alert('Te he dicho que no me aprietes')&quot;&gt;
+</code></pre>
+<h3>Ejemplo básico</h3>
+<pre><code class="language-html">&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;SCRIPT&gt;
+      function funcionClick() {
+        alert(&quot;Ud ha cliqueado&quot;);
+      }
+    &lt;/SCRIPT&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+    &lt;H2 onclick=&quot;funcionClick()&quot;&gt;Cliqueame&lt;/H2&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<h3>Validar un link antes de navegar</h3>
+<pre><code class="language-html">&lt;a href=&quot;mi_pagina.html&quot;
+   onclick=&quot;return confirm('Ud. Quiere ir a mi_pagina.html?');&quot;&gt;
+  ir a mi pagina
+&lt;/a&gt;
+
+&lt;!-- O con una función que devuelva true/false --&gt;
+&lt;a href=&quot;mi_pagina.html&quot; onclick=&quot;return confirmar();&quot;&gt;ir a mi pagina&lt;/a&gt;
+</code></pre>
+<blockquote>
+<p>El <code>return</code> es clave: devuelve al comportamiento de la etiqueta el <code>true</code>/<code>false</code>. Si devuelve <code>false</code>, <strong>no navega</strong>.</p>
+</blockquote>
+<h3>Validar un formulario</h3>
+<pre><code class="language-html">&lt;script&gt;
+function validateForm() {
+  var x = document.forms[&quot;myForm&quot;][&quot;fname&quot;].value;
+
+  if (x == &quot;&quot;) {
+    alert(&quot;Name must be filled out&quot;);
+    return false;
+  }
+}
+&lt;/script&gt;
+
+&lt;form name=&quot;myForm&quot; action=&quot;/action_page.php&quot;
+      onsubmit=&quot;return validateForm()&quot; method=&quot;post&quot;&gt;
+  Name: &lt;input type=&quot;text&quot; name=&quot;fname&quot;&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote>
+<p>Hoy la mayoría de estas validaciones se hacen con <strong>HTML5</strong> (<code>required</code>), que evita todo el código anterior.</p>
+</blockquote>
+<h3>Tabla de eventos y manejadores</h3>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Manejador</th>
+<th>Cuándo se ejecuta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abort</td>
+<td><code>onAbort</code></td>
+<td>El usuario aborta la carga de una imagen.</td>
+</tr>
+<tr>
+<td>Blur</td>
+<td><code>onBlur</code></td>
+<td>Un elemento de formulario, ventana o frame <strong>pierde el foco</strong>.</td>
+</tr>
+<tr>
+<td>Change</td>
+<td><code>onChange</code></td>
+<td>Select, text o textarea pierde el foco y <strong>el valor cambió</strong>.</td>
+</tr>
+<tr>
+<td>Click</td>
+<td><code>onClick</code></td>
+<td>Se hace clic sobre un objeto.</td>
+</tr>
+<tr>
+<td>DblClick</td>
+<td><code>onDblClick</code></td>
+<td>Doble clic sobre un elemento o enlace.</td>
+</tr>
+<tr>
+<td>Mouse Over</td>
+<td><code>onMouseOver</code></td>
+<td>El puntero pasa <strong>por encima</strong> de un objeto o área.</td>
+</tr>
+<tr>
+<td>Mouse Out</td>
+<td><code>onMouseOut</code></td>
+<td>El puntero <strong>sale</strong> del objeto.</td>
+</tr>
+<tr>
+<td>Load</td>
+<td><code>onLoad</code></td>
+<td>Termina la carga del documento.</td>
+</tr>
+<tr>
+<td>Unload</td>
+<td><code>onUnload</code></td>
+<td>Se descarga el documento.</td>
+</tr>
+<tr>
+<td>Submit</td>
+<td><code>onSubmit</code></td>
+<td>Se envía un formulario.</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td><code>onReset</code></td>
+<td>Se resetea un formulario.</td>
+</tr>
+<tr>
+<td>Focus</td>
+<td><code>onFocus</code></td>
+<td>El elemento <strong>recibe</strong> el foco.</td>
+</tr>
+<tr>
+<td>KeyDown / KeyPress / KeyUp</td>
+<td><code>onKeyDown</code> / <code>onKeyPress</code> / <code>onKeyUp</code></td>
+<td>Se presiona / tipea / suelta una tecla.</td>
+</tr>
+<tr>
+<td>MouseDown / MouseUp</td>
+<td><code>onMouseDown</code> / <code>onMouseUp</code></td>
+<td>Se presiona / suelta un botón del mouse.</td>
+</tr>
+<tr>
+<td>MouseMove</td>
+<td><code>onMouseMove</code></td>
+<td>El mouse se mueve.</td>
+</tr>
+<tr>
+<td>Select</td>
+<td><code>onSelect</code></td>
+<td>Se selecciona texto.</td>
+</tr>
+<tr>
+<td>Resize</td>
+<td><code>onResize</code></td>
+<td>Se redimensiona la ventana.</td>
+</tr>
+<tr>
+<td>Error</td>
+<td><code>onError</code></td>
+<td>Ocurre un error al cargar una imagen o script.</td>
+</tr>
+<tr>
+<td>Move</td>
+<td><code>onMove</code></td>
+<td>Se mueve la ventana.</td>
+</tr>
+<tr>
+<td>DragDrop</td>
+<td><code>onDragDrop</code></td>
+<td>Se arrastra y suelta un objeto.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>this</code> en los eventos</h3>
+<p><code>this</code> hace referencia <strong>al objeto que produjo el evento</strong>, y permite acceder a sus atributos (por ejemplo <code>value</code>).</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; onChange=&quot;checaCampo(this)&quot;&gt;
+</code></pre>
+<h3>Varias instrucciones en un manejador</h3>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; onChange=&quot;
+  if ( parseInt(this.value) &lt;= 5 ) {
+    alert('Ponga un número mayor que 5.');
+  }
+&quot;&gt;
+</code></pre>
+<h3><code>onLoad</code> y <code>onUnload</code></h3>
+<pre><code class="language-html">&lt;body onLoad=&quot;alert('Bienvenido!');&quot;
+      onUnload=&quot;alert('Adios!');&quot;&gt;
+  &lt;h1&gt;Página efusiva&lt;/h1&gt;
+&lt;/body&gt;
+</code></pre>
+<pre><code class="language-javascript">// Abrir una ventana al descargar la página
+onUnload=&quot;window.open('publicidad.html');&quot;
+</code></pre>
+<blockquote>
+<p>Algunos navegadores <strong>bloquean</strong> las ventanas emergentes según la configuración de confianza del cliente.</p>
+</blockquote>
+<h3>Cambiar una imagen con <code>onMouseOver</code> / <code>onMouseOut</code></h3>
+<pre><code class="language-html">&lt;a href=&quot;#&quot;
+   onMouseOver=&quot;document.the_image.src='stuff/js_on.gif';&quot;
+   onMouseOut=&quot;document.the_image.src='stuff/js_off.gif';&quot;&gt;
+  &lt;img src=&quot;stuff/js_des.gif&quot; name=&quot;the_image&quot; border=&quot;0&quot;&gt;
+&lt;/a&gt;
+</code></pre>
+<blockquote>
+<p>La imagen cambia al pasar por encima y <strong>vuelve</strong> al salir.</p>
+</blockquote>
+<hr>
+<h2>21. Strings</h2>
+<p>Un <strong>string</strong> es cero o más caracteres entre comillas (dobles o simples).</p>
+<pre><code class="language-javascript">var cad  = &quot;esto es una cadena&quot;;
+var cad2 = &quot;&quot;;
+var cad3 = 'hola';
+
+let largo = cad.length;   // 16
+</code></pre>
+<h3>Métodos de extracción y búsqueda</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length</code></td>
+<td>Longitud (propiedad).</td>
+</tr>
+<tr>
+<td><code>slice(inicio, fin)</code></td>
+<td>Extrae una parte (acepta negativos).</td>
+</tr>
+<tr>
+<td><code>substring(inicio, fin)</code></td>
+<td>Extrae una parte.</td>
+</tr>
+<tr>
+<td><code>substr(inicio, largo)</code></td>
+<td>Extrae desde <code>inicio</code> la cantidad indicada.</td>
+</tr>
+<tr>
+<td><code>charAt(pos)</code></td>
+<td>Carácter en la posición.</td>
+</tr>
+<tr>
+<td><code>charCodeAt(pos)</code></td>
+<td>Código Unicode del carácter.</td>
+</tr>
+<tr>
+<td><code>indexOf(texto)</code></td>
+<td>Posición de la <strong>primera</strong> aparición (-1 si no está).</td>
+</tr>
+<tr>
+<td><code>lastIndexOf(texto)</code></td>
+<td>Posición de la <strong>última</strong> aparición.</td>
+</tr>
+<tr>
+<td><code>search(texto)</code></td>
+<td>Busca y devuelve la posición.</td>
+</tr>
+<tr>
+<td><code>match(regex)</code></td>
+<td>Busca coincidencias con una expresión regular.</td>
+</tr>
+<tr>
+<td><code>matchAll(regex)</code></td>
+<td>Todas las coincidencias.</td>
+</tr>
+<tr>
+<td><code>includes(texto)</code></td>
+<td>¿Contiene el texto? (<code>true</code>/<code>false</code>).</td>
+</tr>
+<tr>
+<td><code>startsWith(texto)</code> / <code>endsWith(texto)</code></td>
+<td>¿Empieza / termina con?</td>
+</tr>
+</tbody>
+</table>
+<h3>Métodos de transformación</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>replace(a, b)</code></td>
+<td>Reemplaza la <strong>primera</strong> aparición.</td>
+</tr>
+<tr>
+<td><code>replaceAll(a, b)</code></td>
+<td>Reemplaza <strong>todas</strong>.</td>
+</tr>
+<tr>
+<td><code>toUpperCase()</code> / <code>toLowerCase()</code></td>
+<td>Mayúsculas / minúsculas.</td>
+</tr>
+<tr>
+<td><code>concat(texto)</code></td>
+<td>Concatena (equivalente a <code>+</code>).</td>
+</tr>
+<tr>
+<td><code>trim()</code></td>
+<td>Quita espacios al inicio y al final.</td>
+</tr>
+<tr>
+<td><code>trimStart()</code> / <code>trimEnd()</code></td>
+<td>Quita solo al inicio / solo al final.</td>
+</tr>
+<tr>
+<td><code>padStart(largo, relleno)</code> / <code>padEnd(...)</code></td>
+<td>Rellena al inicio / al final.</td>
+</tr>
+<tr>
+<td><code>split(separador)</code></td>
+<td>Divide el string en un <strong>arreglo</strong>.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">let texto = &quot;  Hola Mundo  &quot;;
+
+texto.trim();               // &quot;Hola Mundo&quot;
+texto.trim().toUpperCase(); // &quot;HOLA MUNDO&quot;
+&quot;Hola Mundo&quot;.includes(&quot;Mundo&quot;);   // true
+&quot;Hola Mundo&quot;.indexOf(&quot;o&quot;);        // 1
+&quot;Hola Mundo&quot;.slice(0, 4);         // &quot;Hola&quot;
+&quot;a,b,c&quot;.split(&quot;,&quot;);               // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+&quot;5&quot;.padStart(3, &quot;0&quot;);             // &quot;005&quot;
+</code></pre>
+<hr>
+<h2>22. Template literals</h2>
+<ul>
+<li>Usan <strong>comillas invertidas</strong> (<code>`</code>).</li>
+<li>Las comillas simples o dobles <strong>dentro</strong> se muestran sin escapar.</li>
+<li>Permiten <strong>multilínea</strong> (con comillas comunes no se puede).</li>
+<li>Permiten <strong>interpolar</strong> variables y expresiones con <code>${...}</code>.</li>
+</ul>
+<pre><code class="language-javascript">var nombre = `el nombre es &quot;pep&quot; `;
+
+var texto = `esto es
+un texto`;
+</code></pre>
+<pre><code class="language-javascript">let nombre = &quot;Juan&quot;;
+let apellido = &quot;Perez&quot;;
+let texto = `mi nombre es ${nombre} ${apellido}`;
+
+let price = 10;
+let VAT = 0.25;
+let total = `Total: ${(price * (1 + VAT)).toFixed(2)}`;   // &quot;Total: 12.50&quot;
+</code></pre>
+<blockquote>
+<p>Los <em>template literals</em> son la forma moderna de <strong>armar cadenas con variables</strong>; reemplazan a la concatenación con <code>+</code>.</p>
+</blockquote>
+<hr>
+<h2>23. DOM: qué es</h2>
+<p><strong>DOM</strong> = <em>Document Object Model</em> ("Modelo de Objetos del Documento" / "Modelo en Objetos para la Representación de Documentos").</p>
+<ul>
+<li>Es una <strong>API</strong> que proporciona un conjunto <strong>estándar de objetos</strong> para representar documentos <strong>HTML y XML</strong>.</li>
+<li>Define un modelo estándar de <strong>cómo se combinan</strong> esos objetos y una <strong>interfaz estándar</strong> para accederlos y manipularlos.</li>
+<li>A través del DOM los programas pueden <strong>acceder y modificar el contenido, la estructura y el estilo</strong> de los documentos HTML y XML.</li>
+<li>El responsable del DOM es el <strong>W3C</strong> (<em>World Wide Web Consortium</em>).</li>
+<li>Es la interfaz que usa <strong>ECMAScript (JavaScript)</strong> para trabajar con documentos estructurados.</li>
+</ul>
+<h3>Instanciación: del HTML a los objetos</h3>
+<pre><code class="language-html">&lt;HTML&gt;
+  &lt;HEAD&gt;
+    &lt;TITLE&gt;Ejemplo sencillo de página HTML&lt;/TITLE&gt;
+  &lt;/HEAD&gt;
+  &lt;BODY&gt;
+    &lt;A name=&quot;principio&quot;&gt;Este es el principio de la página&lt;/A&gt;   &lt;!-- ancla --&gt;
+    &lt;HR&gt;
+    &lt;FORM method=&quot;POST&quot;&gt;
+      &lt;P&gt;Introduzca su nombre: &lt;INPUT type=&quot;text&quot; name=&quot;me&quot; size=&quot;70&quot;&gt;&lt;/P&gt;
+      &lt;INPUT type=&quot;reset&quot; value=&quot;Borrar Datos&quot;&gt;
+      &lt;INPUT type=&quot;submit&quot; value=&quot;OK&quot;&gt;
+    &lt;/FORM&gt;
+    &lt;HR&gt;
+    Clica aquí para ir al
+    &lt;A href=&quot;#principio&quot;&gt;principio&lt;/A&gt; de la página               &lt;!-- link --&gt;
+  &lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+<pre><code class="language-javascript">document.title                    // &quot;Ejemplo sencillo de página HTML&quot;
+document.anchors[0].name          // &quot;principio&quot;
+document.forms[0].method          // &quot;post&quot;
+document.forms[0].elements[1].value
+document.links[0].href
+</code></pre>
+<h3>Jerarquía de objetos del navegador</h3>
+<pre><code>window
+  + history
+  + location
+  + document          &lt;BODY&gt; ... &lt;/BODY&gt;
+     - anchor          &lt;A NAME=&quot;...&quot;&gt; ... &lt;/A&gt;
+     - applet          &lt;APPLET&gt; ... &lt;/APPLET&gt;
+     - area            &lt;MAP&gt; ... &lt;/MAP&gt;
+     - form            &lt;FORM&gt; ... &lt;/FORM&gt;
+        + button       &lt;INPUT TYPE=&quot;button&quot;&gt;
+        + checkbox     &lt;INPUT TYPE=&quot;checkbox&quot;&gt;
+        + fileUpload   &lt;INPUT TYPE=&quot;file&quot;&gt;
+        + hidden       &lt;INPUT TYPE=&quot;hidden&quot;&gt;
+        + password     &lt;INPUT TYPE=&quot;password&quot;&gt;
+        + radio        &lt;INPUT TYPE=&quot;radio&quot;&gt;
+        + reset        &lt;INPUT TYPE=&quot;reset&quot;&gt;
+        + select       &lt;SELECT&gt; ... &lt;/SELECT&gt;
+           - options   &lt;OPTION&gt; ... &lt;/OPTION&gt;
+        + submit       &lt;INPUT TYPE=&quot;submit&quot;&gt;
+        + text         &lt;INPUT TYPE=&quot;text&quot;&gt;
+        + textarea     &lt;TEXTAREA&gt; ... &lt;/TEXTAREA&gt;
+     - image           &lt;IMG SRC=&quot;...&quot;&gt;
+     - link            &lt;A HREF=&quot;...&quot;&gt; ... &lt;/A&gt;
+     - plugin          &lt;EMBED SRC=&quot;...&quot;&gt;
+  + frame              &lt;FRAME&gt;
+</code></pre>
+<h3>Objeto <code>window</code>: propiedades</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>closed</code></td>
+<td><code>true</code> si la ventana está cerrada.</td>
+</tr>
+<tr>
+<td><code>defaultStatus</code></td>
+<td>Texto por defecto de la barra de estado (hoy deshabilitada).</td>
+</tr>
+<tr>
+<td><code>frames</code></td>
+<td>Array con los frames de la ventana.</td>
+</tr>
+<tr>
+<td><code>history</code></td>
+<td>Array con las URLs visitadas.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>Cantidad de frames de la ventana.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>URL de la barra de dirección.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Nombre de la ventana o frame.</td>
+</tr>
+<tr>
+<td><code>opener</code></td>
+<td>Referencia a la ventana que la abrió con <code>open()</code>.</td>
+</tr>
+<tr>
+<td><code>parent</code></td>
+<td>Ventana que contiene el frameset.</td>
+</tr>
+<tr>
+<td><code>self</code></td>
+<td>Nombre alternativo de la ventana actual.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Mensaje de la barra de estado.</td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td>Ventana de nivel superior.</td>
+</tr>
+<tr>
+<td><code>window</code></td>
+<td>Igual a <code>self</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Objeto <code>window</code>: métodos</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alert(mensaje)</code></td>
+<td>Cuadro de diálogo con el mensaje.</td>
+</tr>
+<tr>
+<td><code>confirm(mensaje)</code></td>
+<td>Aceptar / Cancelar → <code>true</code> / <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>prompt(mensaje, porDefecto)</code></td>
+<td>Cuadro con caja de texto.</td>
+</tr>
+<tr>
+<td><code>blur()</code> / <code>focus()</code></td>
+<td>Quita / captura el foco de la ventana.</td>
+</tr>
+<tr>
+<td><code>close()</code></td>
+<td>Cierra la ventana actual.</td>
+</tr>
+<tr>
+<td><code>open(URL, nombre, características)</code></td>
+<td>Abre una ventana nueva.</td>
+</tr>
+<tr>
+<td><code>moveBy(x, y)</code> / <code>moveTo(x, y)</code></td>
+<td>Mueve la ventana.</td>
+</tr>
+<tr>
+<td><code>scroll(x, y)</code> / <code>scrollBy(x, y)</code> / <code>scrollTo(x, y)</code></td>
+<td>Desplaza la ventana.</td>
+</tr>
+<tr>
+<td><code>setInterval(expr, ms)</code></td>
+<td>Ejecuta la expresión <strong>cada</strong> <code>ms</code> ms.</td>
+</tr>
+<tr>
+<td><code>setTimeout(expr, ms)</code></td>
+<td>Ejecuta la expresión <strong>una vez</strong>, tras <code>ms</code> ms.</td>
+</tr>
+<tr>
+<td><code>clearInterval(id)</code> / <code>clearTimeout(id)</code></td>
+<td>Cancela el temporizador.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>window.open()</code>: características</h3>
+<pre><code class="language-javascript">window.open(&quot;pagina.html&quot;, &quot;miVentana&quot;,
+  &quot;width=400,height=300,toolbar=no,scrollbars=yes,resizable=yes&quot;);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Valores</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>toolbar</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Barra de herramientas.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Campo de localización.</td>
+</tr>
+<tr>
+<td><code>directories</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Botones de dirección.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Barra de estado.</td>
+</tr>
+<tr>
+<td><code>menubar</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Barra de menús.</td>
+</tr>
+<tr>
+<td><code>scrollbars</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Barras de desplazamiento.</td>
+</tr>
+<tr>
+<td><code>resizable</code></td>
+<td><code>yes/no/1/0</code></td>
+<td>Se puede redimensionar.</td>
+</tr>
+<tr>
+<td><code>width</code>, <code>height</code></td>
+<td>px</td>
+<td>Tamaño de la ventana.</td>
+</tr>
+<tr>
+<td><code>outerWidth</code>, <code>outerHeight</code></td>
+<td>px</td>
+<td>Tamaño <strong>total</strong> de la ventana.</td>
+</tr>
+<tr>
+<td><code>left</code>, <code>top</code></td>
+<td>px</td>
+<td>Posición en pantalla.</td>
+</tr>
+</tbody>
+</table>
+<h3>Temporizadores</h3>
+<pre><code class="language-javascript">// Reloj: actualiza cada segundo
+setInterval(function () {
+  document.getElementById(&quot;reloj&quot;).innerHTML = new Date().toLocaleTimeString();
+}, 1000);
+
+// Una sola vez
+setTimeout(function () {
+  alert(&quot;Pasaron 2 segundos&quot;);
+}, 2000);
+</code></pre>
+<blockquote>
+<p><code>setInterval</code> devuelve un <strong>id</strong> que se puede cancelar con <code>clearInterval(id)</code>.</p>
+</blockquote>
+<hr>
+<h2>24. Acceso a los nodos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Devuelve</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getElementById(id)</code></td>
+<td><strong>Un</strong> elemento (el <code>id</code> es único). <strong>El más usado.</strong></td>
+<td><code>document.getElementById("encabezado")</code></td>
+</tr>
+<tr>
+<td><code>getElementsByTagName(etiqueta)</code></td>
+<td><strong>Colección</strong> de elementos con esa etiqueta.</td>
+<td><code>document.getElementsByTagName("p")</code></td>
+</tr>
+<tr>
+<td><code>getElementsByName(name)</code></td>
+<td>Colección con ese atributo <code>name</code>.</td>
+<td><code>document.getElementsByName("teoria")</code></td>
+</tr>
+<tr>
+<td><code>getElementsByClassName(clase)</code></td>
+<td>Colección con esa clase.</td>
+<td><code>document.getElementsByClassName("logo")</code></td>
+</tr>
+<tr>
+<td><code>querySelector(selector)</code></td>
+<td><strong>El primer</strong> elemento que coincide con el selector CSS.</td>
+<td><code>document.querySelector("p")</code></td>
+</tr>
+<tr>
+<td><code>querySelectorAll(selector)</code></td>
+<td><strong>Todos</strong> los que coinciden (colección).</td>
+<td><code>document.querySelectorAll("p.intro")</code></td>
+</tr>
+</tbody>
+</table>
+<h3><code>getElementsByTagName</code></h3>
+<pre><code class="language-javascript">var parrafos = document.getElementsByTagName(&quot;p&quot;);
+var primerParrafo = parrafos[0];
+
+for (var i = 0; i &lt; parrafos.length; i++) {
+  var parrafo = parrafos[i];
+}
+</code></pre>
+<pre><code class="language-javascript">// También se puede buscar dentro de un elemento
+var enlaces = primerParrafo.getElementsByTagName(&quot;a&quot;);
+</code></pre>
+<h3><code>getElementsByName</code></h3>
+<pre><code class="language-javascript">var parrafoEspecial = document.getElementsByName(&quot;teoria&quot;);
+</code></pre>
+<pre><code class="language-html">&lt;p name=&quot;Evaluación&quot;&gt;...&lt;/p&gt;
+&lt;p name=&quot;teoria&quot;&gt;...&lt;/p&gt;
+&lt;p&gt;...&lt;/p&gt;
+</code></pre>
+<blockquote>
+<p>Normalmente <code>name</code> es único, así que sirve para acceder directo al nodo. En <strong>radiobuttons</strong>, todos los relacionados comparten <code>name</code>, por lo que devuelve una <strong>colección</strong>.</p>
+</blockquote>
+<h3><code>getElementById</code></h3>
+<pre><code class="language-javascript">var cabecera = document.getElementById(&quot;encabezado&quot;);
+</code></pre>
+<pre><code class="language-html">&lt;div id=&quot;encabezado&quot;&gt;
+  &lt;a href=&quot;/&quot; id=&quot;logo&quot;&gt;...&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>Como el <code>id</code> es <strong>único</strong>, devuelve solo el nodo deseado.</p>
+</blockquote>
+<h3><code>querySelector</code> / <code>querySelectorAll</code></h3>
+<pre><code class="language-javascript">document.querySelector(&quot;p&quot;);
+document.querySelector(&quot;.clase&quot;);
+document.querySelector(&quot;#papa&quot;);
+</code></pre>
+<pre><code class="language-html">&lt;h3&gt;Add a background color to the first p element:&lt;/h3&gt;
+&lt;p&gt;This is a p element.&lt;/p&gt;
+&lt;p&gt;This is a p element.&lt;/p&gt;
+
+&lt;script&gt;
+  document.querySelector(&quot;p&quot;).style.backgroundColor = &quot;red&quot;;
+&lt;/script&gt;
+</code></pre>
+<pre><code class="language-html">&lt;p class=&quot;intro&quot;&gt;Hola Mundo.&lt;/p&gt;
+&lt;p class=&quot;intro&quot;&gt;Este es un ejemplo&lt;/p&gt;
+&lt;p id=&quot;demo&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  const x = document.querySelectorAll(&quot;p.intro&quot;);
+  document.getElementById(&quot;demo&quot;).innerHTML =
+    'El primer parrafo (index 0) con class=&quot;intro&quot;: ' + x[0].innerHTML;
+&lt;/script&gt;
+</code></pre>
+<blockquote>
+<p><code>querySelectorAll</code> acepta <strong>cualquier selector CSS</strong>: id, clase, tipo, atributos, valores de atributos.</p>
+</blockquote>
+<hr>
+<h2>25. Crear y eliminar nodos</h2>
+<h3>Crear elementos</h3>
+<pre><code class="language-javascript">// 1. Crear nodo de tipo Element
+var parrafo = document.createElement(&quot;p&quot;);
+
+// 2. Crear nodo de tipo Text
+var contenido = document.createTextNode(&quot;Hola Mundo!&quot;);
+
+// 3. Añadir el texto como hijo del párrafo
+parrafo.appendChild(contenido);
+
+// 4. Añadir el párrafo como hijo del body
+document.body.appendChild(parrafo);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Qué crea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>createElement(etiqueta)</code></td>
+<td>Nodo <strong>Element</strong> (<code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>...).</td>
+</tr>
+<tr>
+<td><code>createTextNode(texto)</code></td>
+<td>Nodo <strong>Text</strong> (contenido).</td>
+</tr>
+<tr>
+<td><code>appendChild(hijo)</code></td>
+<td>Agrega el nodo como <strong>último hijo</strong>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Eliminar nodos</h3>
+<p><code>removeChild()</code> requiere el nodo a eliminar y <strong>debe invocarse desde el padre</strong>. La forma más segura de llegar al padre es <code>parentNode</code>.</p>
+<pre><code class="language-javascript">var parrafo = document.getElementById(&quot;sacame&quot;);
+parrafo.parentNode.removeChild(parrafo);
+</code></pre>
+<pre><code class="language-html">&lt;p id=&quot;sacame&quot;&gt;...&lt;/p&gt;
+</code></pre>
+<hr>
+<h2>26. Atributos, <code>innerHTML</code> y <code>style</code></h2>
+<h3><code>getAttribute</code> / <code>setAttribute</code></h3>
+<pre><code class="language-html">&lt;img src=&quot;stratocaster.jpg&quot; alt=&quot;Guitarra Electrica&quot; id=&quot;fender&quot;&gt;
+</code></pre>
+<pre><code class="language-javascript">var imagenGrande = document.getElementById(&quot;fender&quot;);
+
+alert(imagenGrande.getAttribute(&quot;src&quot;));      // &quot;stratocaster.jpg&quot;
+
+imagenGrande.setAttribute(&quot;src&quot;, &quot;GuitarraElectrica.jpg&quot;);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getAttribute(nombre)</code></td>
+<td>Obtiene el valor de un atributo.</td>
+</tr>
+<tr>
+<td><code>setAttribute(nombre, valor)</code></td>
+<td>Fija el valor de un atributo.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>innerHTML</code></h3>
+<ul>
+<li>Es una de las formas que tiene JavaScript para <strong>mostrar información</strong>; se usa en librerías como <strong>jQuery</strong>.</li>
+<li>Sirve para <strong>acceder y cambiar el texto HTML dentro de un elemento</strong>.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;h1&gt;Mi Pagina&lt;/h1&gt;
+  &lt;p&gt;Esto es un parrafo&lt;/p&gt;
+  &lt;p id=&quot;demo&quot;&gt;&lt;/p&gt;
+
+  &lt;script&gt;
+    document.getElementById(&quot;demo&quot;).innerHTML = 5 + 6;
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<blockquote>
+<p><code>document.write</code> <strong>borra</strong> el contenido de la página; <code>innerHTML</code> escribe <strong>dentro</strong> de un elemento.</p>
+</blockquote>
+<h3><code>style</code></h3>
+<p>Permite <strong>acceder, cambiar y remover CSS</strong> dentro de un elemento.</p>
+<pre><code class="language-javascript">document.getElementById(&quot;intro&quot;).style.color = &quot;#fff&quot;;
+document.getElementById(&quot;intro&quot;).style.backgroundColor = &quot;#f58220&quot;;
+
+var brandColor = document.getElementById(&quot;intro&quot;).style.backgroundColor;
+</code></pre>
+<blockquote>
+<p>Las propiedades CSS con guion pasan a <strong>camelCase</strong>: <code>background-color</code> → <code>backgroundColor</code>, <code>font-size</code> → <code>fontSize</code>.</p>
+</blockquote>
+<hr>
+<h2>27. <code>addEventListener</code></h2>
+<p>Permite <strong>agregar eventos a elementos HTML</strong>. Sintaxis general:</p>
+<pre><code class="language-javascript">elemento.addEventListener(evento, funcion);
+</code></pre>
+<pre><code class="language-html">&lt;button id=&quot;myBtn&quot;&gt;Apretar&lt;/button&gt;
+&lt;p id=&quot;demo&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  document.getElementById(&quot;myBtn&quot;).addEventListener(&quot;click&quot;, displayDate);
+
+  function displayDate() {
+    document.getElementById(&quot;demo&quot;).innerHTML = Date();
+  }
+&lt;/script&gt;
+</code></pre>
+<pre><code class="language-html">&lt;button id=&quot;myboton&quot;&gt;Try it&lt;/button&gt;
+&lt;p id=&quot;demo&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  const element = document.getElementById(&quot;myboton&quot;);
+  element.addEventListener(&quot;click&quot;, myFunction);
+
+  function myFunction() {
+    document.getElementById(&quot;demo&quot;).innerHTML = &quot;Hola mundo&quot;;
+  }
+&lt;/script&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Ventaja</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Separa HTML de JS</td>
+<td>No se usan atributos <code>onclick</code> en el HTML.</td>
+</tr>
+<tr>
+<td>Varios listeners</td>
+<td>Se pueden registrar <strong>varios</strong> manejadores para el mismo evento.</td>
+</tr>
+<tr>
+<td>Remoción</td>
+<td>Se quita con <code>removeEventListener(evento, funcion)</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>28. Errores típicos y checklist</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X is not defined</code></td>
+<td>La variable no existe o está mal escrita.</td>
+<td>Revisar mayúsculas y el ámbito.</td>
+</tr>
+<tr>
+<td><code>Cannot read properties of null</code></td>
+<td>El elemento no existe <strong>todavía</strong> al ejecutar el script.</td>
+<td>Poner el script al final del <code>body</code> o esperar <code>DOMContentLoaded</code>.</td>
+</tr>
+<tr>
+<td><code>let</code> redeclarado da error</td>
+<td><code>let x</code> dos veces en el mismo ámbito.</td>
+<td>Usar <code>var</code> o reasignar sin <code>let</code>.</td>
+</tr>
+<tr>
+<td><code>const</code> da error al cambiar</td>
+<td>Se intenta redefinir una constante.</td>
+<td>Usar <code>let</code> si el valor cambia.</td>
+</tr>
+<tr>
+<td><code>"2" + 5</code> da <code>"25"</code></td>
+<td>Coerción de tipos (concatenación).</td>
+<td>Convertir con <code>parseInt()</code> / <code>Number()</code>.</td>
+</tr>
+<tr>
+<td><code>prompt</code> suma mal</td>
+<td><code>prompt</code> devuelve <strong>string</strong>.</td>
+<td><code>parseInt(prompt(...))</code>.</td>
+</tr>
+<tr>
+<td><code>is not a function</code></td>
+<td>Se llamó a una propiedad que no es función o el objeto no cargó.</td>
+<td>Verificar el nombre del método.</td>
+</tr>
+<tr>
+<td>Cambia la imagen equivocada</td>
+<td>El <code>name</code>/<code>id</code> no coincide.</td>
+<td>Revisar el atributo y la ruta.</td>
+</tr>
+<tr>
+<td>La validación no frena el envío</td>
+<td>Falta <code>return</code> en el <code>onsubmit</code>.</td>
+<td><code>onsubmit="return validar()"</code>.</td>
+</tr>
+<tr>
+<td><code>onclick</code> no hace nada</td>
+<td>Error de sintaxis dentro del atributo o función no definida.</td>
+<td>Revisar la consola del navegador.</td>
+</tr>
+<tr>
+<td><code>document.write</code> borra la página</td>
+<td>Se ejecutó después de cargar el documento.</td>
+<td>Usar <code>innerHTML</code>.</td>
+</tr>
+<tr>
+<td><code>new Array(3)</code> no tiene 3 elementos</td>
+<td><code>new Array(n)</code> fija el <strong>largo</strong>, no los valores.</td>
+<td>Asignar cada posición o usar <code>[a, b, c]</code>.</td>
+</tr>
+<tr>
+<td><code>getElementsByClassName</code> no existe</td>
+<td>Nombre mal escrito (<code>getElementByClassName</code>).</td>
+<td>Es <strong>Elements</strong> en plural.</td>
+</tr>
+<tr>
+<td>Fecha con mes incorrecto</td>
+<td><code>getMonth()</code> devuelve 0–11.</td>
+<td>Sumar 1.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>[ ] Scripts <strong>al final del <code>body</code></strong> o dentro de <code>DOMContentLoaded</code>.</li>
+<li>[ ] Variables declaradas con <code>let</code>/<code>const</code> (o <code>var</code> si el navegador es viejo).</li>
+<li>[ ] Nombres coherentes y sin palabras reservadas.</li>
+<li>[ ] Conversión explícita de datos que vienen de <code>prompt</code> o de formularios.</li>
+<li>[ ] Comparaciones con <code>===</code> cuando importa el tipo.</li>
+<li>[ ] Bucles con condición de corte clara (evitar bucles infinitos).</li>
+<li>[ ] Eventos con <code>return false</code> cuando deben frenar la acción por defecto.</li>
+<li>[ ] Probado en la <strong>consola del navegador</strong> sin errores.</li>
+<li>[ ] Sin <code>console.log</code> de depuración en la entrega.</li>
+<li>[ ] Código indentado y comentado en las partes no obvias.</li>
+<li>[ ] Funciona con el documento ya cargado (DOM disponible).</li>
+</ul>
+<hr>
+<h2>29. Plantilla completa</h2>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;JavaScript — Plantilla&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Ejemplo JavaScript&lt;/h1&gt;
+
+  &lt;p id=&quot;saludo&quot;&gt;&lt;/p&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; placeholder=&quot;Tu nombre&quot;&gt;
+  &lt;button id=&quot;btnSaludar&quot;&gt;Saludar&lt;/button&gt;
+
+  &lt;ul id=&quot;lista&quot;&gt;&lt;/ul&gt;
+
+  &lt;script&gt;
+    // 1. Datos y funciones
+    const nombres = [&quot;Ana&quot;, &quot;Beto&quot;, &quot;Carla&quot;];
+
+    function saludar(nombre) {
+      return `Hola, ${nombre}!`;
+    }
+
+    function pintarLista() {
+      const lista = document.getElementById(&quot;lista&quot;);
+      lista.innerHTML = &quot;&quot;;
+
+      for (let i = 0; i &lt; nombres.length; i++) {
+        const item = document.createElement(&quot;li&quot;);
+        item.textContent = nombres[i];
+        lista.appendChild(item);
+      }
+    }
+
+    // 2. Eventos cuando el DOM ya existe
+    document.getElementById(&quot;btnSaludar&quot;).addEventListener(&quot;click&quot;, function () {
+      const nombre = document.getElementById(&quot;nombre&quot;).value.trim();
+
+      if (nombre === &quot;&quot;) {
+        alert(&quot;Escribí un nombre&quot;);
+        return;
+      }
+
+      document.getElementById(&quot;saludo&quot;).innerHTML = saludar(nombre);
+      nombres.push(nombre);
+      pintarLista();
+    });
+
+    // 3. Inicialización
+    pintarLista();
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>Versión mínima "de cátedra" (script en el body)</h3>
+<pre><code class="language-html">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Mi página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;Datos&lt;/h2&gt;
+  &lt;div id=&quot;salida&quot;&gt;&lt;/div&gt;
+
+  &lt;script language=&quot;JavaScript&quot;&gt;
+    var nombre = prompt(&quot;¿Su nombre?&quot;, &quot;&quot;);
+    document.getElementById(&quot;salida&quot;).innerHTML =
+      &quot;&lt;p&gt;Hola &quot; + nombre + &quot;&lt;/p&gt;&quot;;
+
+    var hoy = new Date();
+    document.write(&quot;&lt;p&gt;Hoy es &quot; + hoy + &quot;&lt;/p&gt;&quot;);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr>
+<h2>30. Ejercicios de repaso</h2>
+<ol>
+<li><strong>Salida:</strong> mostrar por pantalla los números del 1 al 100 de 10 en 10 con <code>for</code> y con <code>while</code>.</li>
+<li><strong>Coerción:</strong> predecir el resultado de <code>"2" + 5</code>, <code>"2" * 5</code>, <code>"2" - 5 + "2"</code> y <code>2 * 3 + "ra"</code>.</li>
+<li><strong>Variables:</strong> explicar la diferencia entre <code>var</code>, <code>let</code> y <code>const</code> y qué pasa al redeclarar cada una.</li>
+<li><strong>Funciones:</strong> escribir <code>multiplicar(a, b)</code> que retorne el producto y usarla con <code>document.write</code>.</li>
+<li><strong>Objetos:</strong> crear un objeto <code>auto</code> con <code>marca</code>, <code>modelo</code> y un método <code>descripcion()</code> que use <code>this</code>.</li>
+<li><strong>Arreglos:</strong> cargar 5 frutas en un arreglo, ordenarlas con <code>sort()</code> y mostrarlas con <code>for...in</code>.</li>
+<li><strong>Eventos:</strong> validar con <code>onsubmit</code> que un campo no esté vacío y frenar el envío con <code>return false</code>.</li>
+<li><strong>DOM:</strong> crear un <code>&lt;p&gt;</code> con <code>createElement</code> + <code>createTextNode</code>, agregarlo con <code>appendChild</code> y luego eliminarlo con <code>removeChild</code>.</li>
+<li><strong>String:</strong> contar cuántas veces aparece la letra "a" en una frase usando <code>indexOf</code> o <code>split</code>.</li>
+<li><strong>Template literal:</strong> armar <code>"Total: $12.50"</code> a partir de <code>price</code> y <code>VAT</code> con <code>${}</code> y <code>toFixed(2)</code>.</li>
+<li><strong><code>querySelectorAll</code>:</strong> pintar de rojo todos los párrafos con <code>class="intro"</code>.</li>
+<li><strong>Temporizador:</strong> mostrar un reloj que se actualice cada segundo con <code>setInterval</code>.</li>
+</ol>
+<hr>
+<p><strong>Fin del cheatsheet.</strong><br>
+Si tenés que priorizar para el parcial: qué es JavaScript y sus características, diferencias con Java, las 4 formas de declarar variables (<code>var</code>/<code>let</code>/<code>const</code>), tipos y coerciones, operadores, control de flujo (<code>if</code>, <code>for</code>, <code>for...in</code>, <code>while</code>), funciones, objetos con <code>this</code>, <code>Math</code>/<code>Date</code>, <strong>eventos</strong> (niveles, <code>onClick</code>/<code>onChange</code>/<code>onSubmit</code>, <code>this</code>, <code>return false</code>), <strong>strings</strong> y template literals, y <strong>DOM</strong> (<code>getElementById</code>, <code>getElementsByTagName</code>, <code>querySelector(All)</code>, <code>createElement</code>/<code>appendChild</code>/<code>removeChild</code>, <code>getAttribute</code>/<code>setAttribute</code>, <code>innerHTML</code>, <code>style</code>, <code>addEventListener</code>).</p>
+</body>
+</html>

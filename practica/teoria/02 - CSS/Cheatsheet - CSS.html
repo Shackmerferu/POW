@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - CSS</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #0f4c81; margin: 0 0 5px;
+  border-bottom: 3px solid #0f4c81; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #0f4c81; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #1e3a5f; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #1e3a5f; }
+blockquote {
+  background: #f1f7fb; border-left: 4px solid #0f4c81;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #0f4c81;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #e8f1f8; color: #0f4c81; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #0f4c81; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — CSS</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido y consulta durante el parcial.<br>
+<strong>Base:</strong> CSS 2.1 + módulos de CSS3 (selectores modernos, tipografía, box model, layout y responsive).</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Sintaxis y formas de inclusión</li>
+<li>Selectores</li>
+<li>Combinadores</li>
+<li>Pseudo-clases</li>
+<li>Pseudo-elementos</li>
+<li>Cascada, herencia y especificidad</li>
+<li>Variables, <code>@layer</code> y <code>@import</code></li>
+<li>Unidades y colores</li>
+<li>Tipografía</li>
+<li>Propiedades de texto</li>
+<li>Modelo de caja</li>
+<li>Fondos</li>
+<li><code>display</code>, <code>position</code>, <code>float</code> y <code>z-index</code></li>
+<li>Flexbox</li>
+<li>Grid</li>
+<li>Responsive: media queries</li>
+<li>Transiciones, transformaciones y animaciones</li>
+<li>Extras de CSS3</li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+</ol>
+<hr>
+<h2>1. Sintaxis y formas de inclusión</h2>
+<h3>Regla CSS</h3>
+<pre><code class="language-css">selector {
+  propiedad: valor;
+  otra-propiedad: valor;
+}
+</code></pre>
+<pre><code class="language-css">h1 {
+  color: #0f4c81;
+  font-size: 24px;
+  text-align: center;
+}
+</code></pre>
+<ul>
+<li><strong>Selector:</strong> a qué elementos se aplica.</li>
+<li><strong>Declaración:</strong> par <code>propiedad: valor</code>.</li>
+<li>Cada declaración termina en <code>;</code>.</li>
+<li><strong>Comentarios:</strong> <code>/* ... */</code> (pueden ocupar varias líneas; no se anidan).</li>
+</ul>
+<h3>Las tres formas de incluir CSS</h3>
+<p><strong>1. En línea (inline)</strong> — sobre un elemento:</p>
+<pre><code class="language-html">&lt;p style=&quot;color: red; font-weight: bold;&quot;&gt;Texto rojo&lt;/p&gt;
+</code></pre>
+<p><strong>2. Interna (en el <code>head</code>)</strong> — para un solo documento:</p>
+<pre><code class="language-html">&lt;head&gt;
+  &lt;style&gt;
+    h1 { color: red; font-style: italic; }
+  &lt;/style&gt;
+&lt;/head&gt;
+</code></pre>
+<p><strong>3. Externa (enlazada)</strong> — la forma recomendada:</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;css/estilos.css&quot; type=&quot;text/css&quot; media=&quot;screen&quot;&gt;
+</code></pre>
+<p><strong>4. Importada</strong> — desde otra hoja o dentro de <code>&lt;style&gt;</code>:</p>
+<pre><code class="language-css">@import url(&quot;base.css&quot;);
+@import url(&quot;print.css&quot;) print;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Alcance</th>
+<th>Recomendación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inline</td>
+<td>Un elemento</td>
+<td>Evitar; difícil de mantener.</td>
+</tr>
+<tr>
+<td>Interna</td>
+<td>Un documento</td>
+<td>Casos puntuales.</td>
+</tr>
+<tr>
+<td>Externa</td>
+<td>Varios documentos</td>
+<td><strong>Preferida.</strong></td>
+</tr>
+<tr>
+<td><code>@import</code></td>
+<td>Varias hojas</td>
+<td>Útil para organizar; puede demorar la carga.</td>
+</tr>
+</tbody>
+</table>
+<h3>Atributo <code>media</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Medio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>screen</code></td>
+<td>Pantalla (por defecto).</td>
+</tr>
+<tr>
+<td><code>print</code></td>
+<td>Impresora.</td>
+</tr>
+<tr>
+<td><code>projection</code></td>
+<td>Proyector.</td>
+</tr>
+<tr>
+<td><code>aural</code></td>
+<td>Sintetizador de voz.</td>
+</tr>
+<tr>
+<td><code>braille</code></td>
+<td>Dispositivos braille.</td>
+</tr>
+<tr>
+<td><code>tty</code></td>
+<td>Terminal de caracteres.</td>
+</tr>
+<tr>
+<td><code>tv</code></td>
+<td>Televisión.</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>Todos.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;impresion.css&quot; media=&quot;print&quot;&gt;
+</code></pre>
+<h3>Estilos persistentes, preferidos y alternos</h3>
+<pre><code class="language-html">&lt;!-- Persistente: sin title --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;base.css&quot; type=&quot;text/css&quot; media=&quot;screen&quot;&gt;
+
+&lt;!-- Preferido: con title --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;color.css&quot; type=&quot;text/css&quot; title=&quot;Color&quot;&gt;
+
+&lt;!-- Alterno --&gt;
+&lt;link rel=&quot;alternate stylesheet&quot; href=&quot;alto-contraste.css&quot; title=&quot;Alto contraste&quot;&gt;
+</code></pre>
+<hr>
+<h2>2. Selectores</h2>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Sintaxis</th>
+<th>Selecciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Universal</td>
+<td><code>*</code></td>
+<td>Todos los elementos.</td>
+</tr>
+<tr>
+<td>Tipo</td>
+<td><code>p</code></td>
+<td>Todos los <code>&lt;p&gt;</code>.</td>
+</tr>
+<tr>
+<td>Clase</td>
+<td><code>.destacado</code></td>
+<td>Elementos con <code>class="destacado"</code>.</td>
+</tr>
+<tr>
+<td>Clase + tipo</td>
+<td><code>p.destacado</code></td>
+<td><code>&lt;p&gt;</code> con esa clase.</td>
+</tr>
+<tr>
+<td>ID</td>
+<td><code>#principal</code></td>
+<td>El elemento con <code>id="principal"</code>.</td>
+</tr>
+<tr>
+<td>Atributo</td>
+<td><code>input[type="email"]</code></td>
+<td>Elementos con ese atributo/valor.</td>
+</tr>
+<tr>
+<td>Atributo parcial</td>
+<td><code>a[href^="https"]</code></td>
+<td><code>href</code> que <strong>empieza</strong> con <code>https</code>.</td>
+</tr>
+<tr>
+<td>Agrupación</td>
+<td><code>h1, h2, h3</code></td>
+<td>Todos los de la lista.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">* { box-sizing: border-box; }
+
+p { line-height: 1.5; }
+
+.destacado { background: #fff3cd; }
+
+p.destacado { font-weight: bold; }
+
+#principal { max-width: 960px; margin: 0 auto; }
+
+input[type=&quot;email&quot;] { border-color: #0f4c81; }
+
+a[href^=&quot;https&quot;]::after { content: &quot; ↗&quot;; }
+a[href$=&quot;.pdf&quot;]::after { content: &quot; (PDF)&quot;; }
+a[href*=&quot;w3.org&quot;] { color: green; }
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operador de atributo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[attr]</code></td>
+<td>Tiene el atributo.</td>
+</tr>
+<tr>
+<td><code>[attr="x"]</code></td>
+<td>Valor exacto.</td>
+</tr>
+<tr>
+<td><code>[attr~="x"]</code></td>
+<td>Contiene la palabra <code>x</code>.</td>
+</tr>
+<tr>
+<td><code>[attr|="x"]</code></td>
+<td>Empieza con <code>x</code> o <code>x-</code>.</td>
+</tr>
+<tr>
+<td><code>[attr^="x"]</code></td>
+<td>Empieza con <code>x</code>.</td>
+</tr>
+<tr>
+<td><code>[attr$="x"]</code></td>
+<td>Termina con <code>x</code>.</td>
+</tr>
+<tr>
+<td><code>[attr*="x"]</code></td>
+<td>Contiene <code>x</code>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Clases vs ID:</strong> la clase se reutiliza y agrupa elementos con el mismo estilo; el <code>id</code> es <strong>único</strong> en el documento y sirve también para anclas y JavaScript.</p>
+</blockquote>
+<hr>
+<h2>3. Combinadores</h2>
+<table>
+<thead>
+<tr>
+<th>Combinador</th>
+<th>Sintaxis</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Descendiente</td>
+<td><code>article p</code></td>
+<td>Todo <code>&lt;p&gt;</code> dentro de <code>&lt;article&gt;</code> (cualquier nivel).</td>
+</tr>
+<tr>
+<td>Hijo directo</td>
+<td><code>article &gt; p</code></td>
+<td>Solo hijos directos.</td>
+</tr>
+<tr>
+<td>Hermano adyacente</td>
+<td><code>h2 + p</code></td>
+<td>El <code>&lt;p&gt;</code> inmediatamente después de un <code>&lt;h2&gt;</code>.</td>
+</tr>
+<tr>
+<td>Hermanos posteriores</td>
+<td><code>h2 ~ p</code></td>
+<td>Todos los <code>&lt;p&gt;</code> hermanos que siguen a un <code>&lt;h2&gt;</code>.</td>
+</tr>
+<tr>
+<td>Agrupación</td>
+<td><code>h1, h2</code></td>
+<td>Ambos selectores.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">nav a { color: white; }          /* descendientes */
+nav &gt; ul { list-style: none; }   /* hijos directos */
+h2 + p { margin-top: 0; }        /* hermano siguiente */
+h2 ~ p { color: #475569; }       /* todos los siguientes */
+</code></pre>
+<blockquote>
+<p><code>h3 em</code> <strong>no</strong> es lo mismo que <code>h3, em</code>: el primero aplica solo a <code>&lt;em&gt;</code> dentro de <code>&lt;h3&gt;</code>; el segundo, a todos los <code>&lt;h3&gt;</code> y a todos los <code>&lt;em&gt;</code>.</p>
+</blockquote>
+<hr>
+<h2>4. Pseudo-clases</h2>
+<p>Sintaxis: <code>selector:pseudo-clase { ... }</code></p>
+<h3>Enlaces y acción</h3>
+<table>
+<thead>
+<tr>
+<th>Pseudo-clase</th>
+<th>Cuándo se aplica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:link</code></td>
+<td>Enlace no visitado.</td>
+</tr>
+<tr>
+<td><code>:visited</code></td>
+<td>Enlace visitado.</td>
+</tr>
+<tr>
+<td><code>:hover</code></td>
+<td>Mouse encima.</td>
+</tr>
+<tr>
+<td><code>:active</code></td>
+<td>Mientras se hace clic.</td>
+</tr>
+<tr>
+<td><code>:focus</code></td>
+<td>Tiene el foco (teclado o clic).</td>
+</tr>
+<tr>
+<td><code>:focus-visible</code></td>
+<td>Foco visible por teclado.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">a:link    { color: #0f4c81; }
+a:visited { color: #6b21a8; }
+a:hover   { text-decoration: underline; }
+a:active  { color: #dc2626; }
+
+/* Orden recomendado: LVHA */
+/* :link → :visited → :hover → :active */
+</code></pre>
+<h3>Formularios y estado</h3>
+<table>
+<thead>
+<tr>
+<th>Pseudo-clase</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:checked</code></td>
+<td>Checkbox/radio marcado.</td>
+</tr>
+<tr>
+<td><code>:disabled</code> / <code>:enabled</code></td>
+<td>Deshabilitado / habilitado.</td>
+</tr>
+<tr>
+<td><code>:required</code> / <code>:optional</code></td>
+<td>Con o sin <code>required</code>.</td>
+</tr>
+<tr>
+<td><code>:valid</code> / <code>:invalid</code></td>
+<td>Validación del navegador.</td>
+</tr>
+<tr>
+<td><code>:in-range</code> / <code>:out-of-range</code></td>
+<td>Dentro/fuera de <code>min</code>-<code>max</code>.</td>
+</tr>
+<tr>
+<td><code>:read-only</code> / <code>:read-write</code></td>
+<td>Solo lectura / editable.</td>
+</tr>
+<tr>
+<td><code>:placeholder-shown</code></td>
+<td>Se muestra el placeholder.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">input:required { border-left: 3px solid #dc2626; }
+input:valid    { border-left: 3px solid #16a34a; }
+input:invalid  { background: #fef2f2; }
+input:focus    { outline: 2px solid #0f4c81; }
+</code></pre>
+<h3>Estructurales</h3>
+<table>
+<thead>
+<tr>
+<th>Pseudo-clase</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:first-child</code></td>
+<td>Primer hijo de su padre.</td>
+</tr>
+<tr>
+<td><code>:last-child</code></td>
+<td>Último hijo.</td>
+</tr>
+<tr>
+<td><code>:only-child</code></td>
+<td>Único hijo.</td>
+</tr>
+<tr>
+<td><code>:nth-child(n)</code></td>
+<td>n-ésimo hijo.</td>
+</tr>
+<tr>
+<td><code>:nth-last-child(n)</code></td>
+<td>n-ésimo desde el final.</td>
+</tr>
+<tr>
+<td><code>:first-of-type</code></td>
+<td>Primero de su tipo.</td>
+</tr>
+<tr>
+<td><code>:last-of-type</code></td>
+<td>Último de su tipo.</td>
+</tr>
+<tr>
+<td><code>:nth-of-type(n)</code></td>
+<td>n-ésimo de su tipo.</td>
+</tr>
+<tr>
+<td><code>:only-of-type</code></td>
+<td>Único de su tipo.</td>
+</tr>
+<tr>
+<td><code>:empty</code></td>
+<td>Sin hijos ni texto.</td>
+</tr>
+<tr>
+<td><code>:root</code></td>
+<td>Elemento raíz (<code>&lt;html&gt;</code>).</td>
+</tr>
+<tr>
+<td><code>:target</code></td>
+<td>Elemento apuntado por la URL (<code>#id</code>).</td>
+</tr>
+<tr>
+<td><code>:not(selector)</code></td>
+<td>Todo lo que <strong>no</strong> coincide.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">li:nth-child(odd)  { background: #f1f5f9; }  /* impares */
+li:nth-child(even) { background: #ffffff; }  /* pares */
+li:nth-child(3n+1) { font-weight: bold; }    /* 1, 4, 7, ... */
+p:not(.nota)       { margin-bottom: 1rem; }
+</code></pre>
+<h3>Lógicas modernas</h3>
+<pre><code class="language-css">:is(h1, h2, h3) { text-wrap: balance; }
+
+:where(nav, footer) a { color: inherit; }
+
+.card:has(img) { grid-template-columns: 8rem 1fr; }
+
+form:has(input[type=&quot;checkbox&quot;]:checked) {
+  border: 2px solid green;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Qué hace</th>
+<th>Especificidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:is(a, b)</code></td>
+<td>Agrupa selectores.</td>
+<td>La del más específico del grupo.</td>
+</tr>
+<tr>
+<td><code>:where(a, b)</code></td>
+<td>Agrupa selectores.</td>
+<td><strong>Siempre 0.</strong></td>
+</tr>
+<tr>
+<td><code>:has(sel)</code></td>
+<td>Selecciona el padre según su contenido.</td>
+<td>La del selector interno.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>:where()</code> es ideal para resets y estilos base porque no “gana” ninguna guerra de especificidad. <code>:has()</code> permite estilar un contenedor según lo que tiene adentro.</p>
+</blockquote>
+<hr>
+<h2>5. Pseudo-elementos</h2>
+<p>Sintaxis: <code>selector::pseudo-elemento { ... }</code></p>
+<table>
+<thead>
+<tr>
+<th>Pseudo-elemento</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>::before</code></td>
+<td>Inserta contenido antes del elemento.</td>
+</tr>
+<tr>
+<td><code>::after</code></td>
+<td>Inserta contenido después.</td>
+</tr>
+<tr>
+<td><code>::first-line</code></td>
+<td>Primera línea del texto.</td>
+</tr>
+<tr>
+<td><code>::first-letter</code></td>
+<td>Primera letra.</td>
+</tr>
+<tr>
+<td><code>::selection</code></td>
+<td>Porción seleccionada por el usuario.</td>
+</tr>
+<tr>
+<td><code>::placeholder</code></td>
+<td>Texto del placeholder.</td>
+</tr>
+<tr>
+<td><code>::marker</code></td>
+<td>Viñeta o número de un ítem de lista.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">h1::before {
+  content: &quot;★ &quot;;
+  color: #f59e0b;
+}
+
+a.externo::after {
+  content: &quot; ↗&quot;;
+}
+
+p::first-letter {
+  font-size: 3em;
+  float: left;
+  line-height: 1;
+}
+
+::selection {
+  background: #fde68a;
+  color: #111827;
+}
+</code></pre>
+<blockquote>
+<p><code>::before</code> y <code>::after</code> <strong>requieren</strong> la propiedad <code>content</code>, incluso si es <code>content: ""</code>. No se debe poner información indispensable solo ahí: el contenido esencial va en el HTML.</p>
+</blockquote>
+<hr>
+<h2>6. Cascada, herencia y especificidad</h2>
+<h3>La cascada</h3>
+<p>Cuando varias reglas afectan al mismo elemento, el navegador decide en este orden:</p>
+<ol>
+<li><strong>Origen e importancia</strong> (agente de usuario, usuario, autor; <code>!important</code> invierte parte del orden).</li>
+<li><strong>Capas</strong> (<code>@layer</code>).</li>
+<li><strong>Especificidad</strong> del selector.</li>
+<li><strong>Orden de aparición</strong> (si empatan, gana la última regla).</li>
+</ol>
+<p><strong>Orígenes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agente de usuario</td>
+<td>Estilos por defecto del navegador.</td>
+</tr>
+<tr>
+<td>Usuario</td>
+<td>Preferencias o extensiones.</td>
+</tr>
+<tr>
+<td>Autor</td>
+<td>La hoja de estilos del sitio.</td>
+</tr>
+</tbody>
+</table>
+<h3>Herencia</h3>
+<ul>
+<li><strong>Se heredan:</strong> color, <code>font-family</code>, <code>font-size</code>, <code>line-height</code>, <code>text-align</code>, <code>visibility</code>, etc.</li>
+<li><strong>No se heredan:</strong> <code>margin</code>, <code>padding</code>, <code>border</code>, <code>background</code>, <code>width</code>, <code>height</code>, <code>display</code>, <code>position</code>.</li>
+</ul>
+<pre><code class="language-css">body {
+  color: #1f2937;
+  font-family: system-ui, sans-serif;
+}
+
+/* .card hereda color y tipografía, pero no el borde */
+.card { border: 1px solid #cbd5e1; }
+</code></pre>
+<p><strong>Valores de control:</strong> <code>inherit</code> (hereda del padre), <code>initial</code> (valor inicial), <code>unset</code> (hereda si es heredable, si no <code>initial</code>), <code>revert</code> (vuelve al estilo del origen anterior).</p>
+<h3>Especificidad</h3>
+<p>Se calcula por columnas <code>(ID, clases/atributos/pseudo-clases, tipos/pseudo-elementos)</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Especificidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*</code></td>
+<td><code>0,0,0</code></td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td><code>0,0,1</code></td>
+</tr>
+<tr>
+<td><code>.card</code></td>
+<td><code>0,1,0</code></td>
+</tr>
+<tr>
+<td><code>p.card</code></td>
+<td><code>0,1,1</code></td>
+</tr>
+<tr>
+<td><code>#main</code></td>
+<td><code>1,0,0</code></td>
+</tr>
+<tr>
+<td><code>#main .card p</code></td>
+<td><code>1,1,1</code></td>
+</tr>
+<tr>
+<td><code>style="..."</code> (inline)</td>
+<td>Gana a las hojas (sin <code>!important</code>).</td>
+</tr>
+<tr>
+<td><code>!important</code></td>
+<td>Se impone sobre lo anterior.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">/* De menor a mayor peso */
+article p        { color: #334155; }  /* 0,0,2 */
+.card p          { color: #0f766e; }  /* 0,1,1 */
+.card .titulo    { color: #b91c1c; }  /* 0,2,0 */
+#catalogo .titulo{ color: #7c3aed; }  /* 1,1,0 */
+</code></pre>
+<blockquote>
+<p>La especificidad <strong>no es una suma decimal</strong>: <code>0,1,0</code> le gana a <code>0,0,10</code>. Se compara columna por columna.</p>
+</blockquote>
+<h3><code>!important</code></h3>
+<pre><code class="language-css">.alerta { color: red !important; }
+</code></pre>
+<ul>
+<li>Se usa como <strong>excepción</strong>, no como solución habitual.</li>
+<li>Dificulta el mantenimiento y las sobrescrituras.</li>
+<li>Antes de usarlo, revisar capas, origen y especificidad.</li>
+</ul>
+<h3><code>@layer</code></h3>
+<pre><code class="language-css">@layer reset, base, components, utilities;
+
+@layer base {
+  body { font-family: system-ui, sans-serif; }
+}
+
+@layer components {
+  .button { background: #0f4c81; color: white; }
+}
+</code></pre>
+<ul>
+<li>El orden se declara al principio.</li>
+<li>En reglas normales, la capa <strong>posterior</strong> gana.</li>
+<li>Los estilos <strong>sin capa</strong> superan a los normales en capas.</li>
+</ul>
+<hr>
+<h2>7. Variables, <code>@layer</code> y <code>@import</code></h2>
+<h3>Variables CSS (custom properties)</h3>
+<pre><code class="language-css">:root {
+  --color-primario: #0f4c81;
+  --color-texto: #1f2937;
+  --radio: 8px;
+  --espacio: 1rem;
+}
+
+.button {
+  background: var(--color-primario);
+  color: white;
+  border-radius: var(--radio);
+  padding: var(--espacio);
+}
+
+/* Valor de respaldo */
+.titulo { color: var(--color-titulo, #111827); }
+</code></pre>
+<ul>
+<li>Se declaran con <code>--nombre</code> y se usan con <code>var(--nombre)</code>.</li>
+<li>Se heredan y se pueden redefinir por contexto (tema claro/oscuro).</li>
+<li>Son la base de los <em>design tokens</em>.</li>
+</ul>
+<h3>Organización sugerida</h3>
+<pre><code class="language-css">@import url(&quot;reset.css&quot;);
+@import url(&quot;base.css&quot;);
+@import url(&quot;layout.css&quot;);
+@import url(&quot;componentes.css&quot;);
+@import url(&quot;utilidades.css&quot;);
+</code></pre>
+<hr>
+<h2>8. Unidades y colores</h2>
+<h3>Unidades de longitud</h3>
+<table>
+<thead>
+<tr>
+<th>Unidad</th>
+<th>Tipo</th>
+<th>Referencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>px</code></td>
+<td>Relativa (práctica)</td>
+<td>Píxel del dispositivo.</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td>Relativa</td>
+<td>Tamaño de fuente del elemento.</td>
+</tr>
+<tr>
+<td><code>rem</code></td>
+<td>Relativa</td>
+<td>Tamaño de fuente de la raíz (<code>html</code>).</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>Relativa</td>
+<td>Depende de la propiedad.</td>
+</tr>
+<tr>
+<td><code>vw</code> / <code>vh</code></td>
+<td>Relativa</td>
+<td>1 % del ancho / alto del viewport.</td>
+</tr>
+<tr>
+<td><code>vmin</code> / <code>vmax</code></td>
+<td>Relativa</td>
+<td>El menor / mayor de <code>vw</code> y <code>vh</code>.</td>
+</tr>
+<tr>
+<td><code>ch</code> / <code>ex</code></td>
+<td>Relativa</td>
+<td>Ancho de “0” / altura de “x”.</td>
+</tr>
+<tr>
+<td><code>cm</code>, <code>mm</code>, <code>in</code>, <code>pt</code>, <code>pc</code></td>
+<td>Absoluta</td>
+<td>Medidas físicas (impresión).</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">html { font-size: 16px; }      /* 1rem = 16px */
+h1   { font-size: 2rem; }      /* 32px */
+p    { font-size: 1.125rem; }  /* 18px */
+.hero { min-height: 60vh; }
+</code></pre>
+<blockquote>
+<p><code>0</code> no necesita unidad: <code>margin: 0;</code> es válido. <code>1.3 em</code> <strong>no</strong> es válido; <code>1.3em</code> sí.</p>
+</blockquote>
+<h3>Colores</h3>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre</td>
+<td><code>red</code>, <code>blue</code>, <code>teal</code></td>
+</tr>
+<tr>
+<td>Hexadecimal</td>
+<td><code>#ff0000</code>, <code>#f00</code></td>
+</tr>
+<tr>
+<td>RGB</td>
+<td><code>rgb(255, 0, 0)</code></td>
+</tr>
+<tr>
+<td>RGBA</td>
+<td><code>rgba(255, 0, 0, 0.5)</code></td>
+</tr>
+<tr>
+<td>HSL</td>
+<td><code>hsl(0, 100%, 50%)</code></td>
+</tr>
+<tr>
+<td>HSLA</td>
+<td><code>hsla(0, 100%, 50%, 0.5)</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">:root {
+  --primario: #0f4c81;
+  --texto: rgb(31, 41, 55);
+  --fondo: hsl(210, 40%, 98%);
+  --sombra: rgba(0, 0, 0, 0.15);
+}
+</code></pre>
+<p><strong>Transparencia:</strong> <code>opacity: 0.5</code> afecta al elemento completo (incluidos hijos); <code>rgba()</code>/<code>hsla()</code> solo al color.</p>
+<hr>
+<h2>9. Tipografía</h2>
+<pre><code class="language-css">body {
+  font-family: &quot;Segoe UI&quot;, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+h1 {
+  font-family: Georgia, &quot;Times New Roman&quot;, serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.codigo {
+  font-family: Consolas, &quot;Courier New&quot;, monospace;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valores principales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>font-family</code></td>
+<td>Lista de fuentes + familia genérica de respaldo.</td>
+</tr>
+<tr>
+<td><code>font-size</code></td>
+<td><code>px</code>, <code>rem</code>, <code>em</code>, <code>%</code>, <code>small</code>, <code>large</code>, etc.</td>
+</tr>
+<tr>
+<td><code>font-weight</code></td>
+<td><code>normal</code> (400), <code>bold</code> (700), <code>100</code>–<code>900</code>, <code>bolder</code>, <code>lighter</code>.</td>
+</tr>
+<tr>
+<td><code>font-style</code></td>
+<td><code>normal</code>, <code>italic</code>, <code>oblique</code>.</td>
+</tr>
+<tr>
+<td><code>font-variant</code></td>
+<td><code>normal</code>, <code>small-caps</code>.</td>
+</tr>
+<tr>
+<td><code>line-height</code></td>
+<td>Número, longitud o porcentaje.</td>
+</tr>
+<tr>
+<td><code>letter-spacing</code></td>
+<td>Espacio entre letras.</td>
+</tr>
+<tr>
+<td><code>word-spacing</code></td>
+<td>Espacio entre palabras.</td>
+</tr>
+</tbody>
+</table>
+<h3>Familias genéricas</h3>
+<table>
+<thead>
+<tr>
+<th>Genérica</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serif</code></td>
+<td>Times, Georgia.</td>
+</tr>
+<tr>
+<td><code>sans-serif</code></td>
+<td>Arial, Helvetica, Segoe UI.</td>
+</tr>
+<tr>
+<td><code>monospace</code></td>
+<td>Courier, Consolas.</td>
+</tr>
+<tr>
+<td><code>cursive</code></td>
+<td>Zapf-Chancery.</td>
+</tr>
+<tr>
+<td><code>fantasy</code></td>
+<td>Western.</td>
+</tr>
+</tbody>
+</table>
+<h3>Shorthand <code>font</code></h3>
+<pre><code class="language-css">p { font: italic bold 12pt/1.5 &quot;Times New Roman&quot;, serif; }
+/* estilo  peso  tamaño/line-height  familia */
+</code></pre>
+<blockquote>
+<p>El shorthand <code>font</code> <strong>resetea</strong> las propiedades no indicadas a su valor inicial. Cuidado al usarlo.</p>
+</blockquote>
+<h3><code>@font-face</code> (Web Fonts)</h3>
+<pre><code class="language-css">@font-face {
+  font-family: &quot;Museo Sans&quot;;
+  src: url(&quot;/fonts/museo-sans.woff2&quot;) format(&quot;woff2&quot;);
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: &quot;Museo Sans&quot;, Arial, sans-serif;
+}
+</code></pre>
+<ul>
+<li>Cada peso/estilo necesita su propia declaración (<code>400</code>, <code>700</code>, etc.).</li>
+<li><code>font-display: swap</code> muestra el texto con la fuente de respaldo mientras carga.</li>
+<li>Formatos: <strong>WOFF2/WOFF</strong> (recomendados), TTF, EOT (IE antiguo), SVG (obsoleto).</li>
+<li>Fuentes gratuitas: Google Fonts, Font Squirrel.</li>
+</ul>
+<hr>
+<h2>10. Propiedades de texto</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valores</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>Color</td>
+<td><code>color: #1f2937;</code></td>
+</tr>
+<tr>
+<td><code>text-align</code></td>
+<td><code>left</code>, <code>right</code>, <code>center</code>, <code>justify</code></td>
+<td><code>text-align: center;</code></td>
+</tr>
+<tr>
+<td><code>text-decoration</code></td>
+<td><code>none</code>, <code>underline</code>, <code>overline</code>, <code>line-through</code></td>
+<td><code>text-decoration: none;</code></td>
+</tr>
+<tr>
+<td><code>text-transform</code></td>
+<td><code>none</code>, <code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code></td>
+<td><code>text-transform: uppercase;</code></td>
+</tr>
+<tr>
+<td><code>text-indent</code></td>
+<td>Longitud / %</td>
+<td><code>text-indent: 2em;</code></td>
+</tr>
+<tr>
+<td><code>text-shadow</code></td>
+<td><code>x y blur color</code></td>
+<td><code>text-shadow: 1px 1px 2px #000;</code></td>
+</tr>
+<tr>
+<td><code>line-height</code></td>
+<td>Número / longitud / %</td>
+<td><code>line-height: 1.6;</code></td>
+</tr>
+<tr>
+<td><code>vertical-align</code></td>
+<td><code>baseline</code>, <code>middle</code>, <code>top</code>, <code>bottom</code>, <code>sub</code>, <code>super</code></td>
+<td><code>vertical-align: middle;</code></td>
+</tr>
+<tr>
+<td><code>white-space</code></td>
+<td><code>normal</code>, <code>nowrap</code>, <code>pre</code>, <code>pre-wrap</code></td>
+<td><code>white-space: nowrap;</code></td>
+</tr>
+<tr>
+<td><code>overflow-wrap</code></td>
+<td><code>normal</code>, <code>break-word</code>, <code>anywhere</code></td>
+<td><code>overflow-wrap: break-word;</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.articulo p {
+  text-align: justify;
+  text-indent: 2em;
+  line-height: 1.7;
+}
+</code></pre>
+<hr>
+<h2>11. Modelo de caja</h2>
+<p>Cada elemento es una caja con cuatro capas:</p>
+<pre><code>+--------------------------- margin ---------------------------+
+| +------------------------ border -------------------------+ |
+| | +--------------------- padding -----------------------+ | |
+| | |                  contenido                        | | |
+| | +---------------------------------------------------+ | |
+| +-------------------------------------------------------+ |
++-----------------------------------------------------------+
+</code></pre>
+<pre><code class="language-css">.caja {
+  width: 300px;
+  padding: 16px;
+  border: 2px solid #0f4c81;
+  margin: 24px auto;
+  box-sizing: border-box;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Qué controla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td>Tamaño del contenido (o de la caja con <code>border-box</code>).</td>
+</tr>
+<tr>
+<td><code>min-width</code> / <code>max-width</code></td>
+<td>Límites de ancho.</td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td>Espacio interno (entre contenido y borde).</td>
+</tr>
+<tr>
+<td><code>border</code></td>
+<td>Borde.</td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>Espacio externo.</td>
+</tr>
+<tr>
+<td><code>box-sizing</code></td>
+<td>Cómo se calcula el tamaño total.</td>
+</tr>
+<tr>
+<td><code>overflow</code></td>
+<td>Qué pasa si el contenido no entra (<code>visible</code>, <code>hidden</code>, <code>scroll</code>, <code>auto</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3>Shorthands</h3>
+<pre><code class="language-css">/* Todos los lados */
+margin: 10px;
+
+/* vertical | horizontal */
+margin: 10px 20px;
+
+/* arriba | horizontal | abajo */
+margin: 10px 20px 30px;
+
+/* arriba | derecha | abajo | izquierda (sentido horario) */
+margin: 10px 20px 30px 40px;
+
+/* Lados individuales */
+margin-top: 10px;
+margin-right: 20px;
+margin-bottom: 30px;
+margin-left: 40px;
+</code></pre>
+<p>Igual lógica para <code>padding</code> y <code>border-width</code>.</p>
+<h3><code>box-sizing</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th><code>width</code> incluye...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>content-box</code> (por defecto)</td>
+<td>Solo el contenido. Padding y borde <strong>suman</strong>.</td>
+</tr>
+<tr>
+<td><code>border-box</code></td>
+<td>Contenido + padding + borde. <strong>Recomendado.</strong></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">*, *::before, *::after {
+  box-sizing: border-box;
+}
+</code></pre>
+<h3>Bordes</h3>
+<pre><code class="language-css">.borde {
+  border: 2px solid #0f4c81;       /* ancho estilo color */
+  border-top: 4px dashed red;
+  border-radius: 8px;              /* esquinas redondeadas */
+}
+
+.circulo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+</code></pre>
+<p><strong>Estilos de borde:</strong> <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>double</code>, <code>groove</code>, <code>ridge</code>, <code>inset</code>, <code>outset</code>, <code>none</code>.</p>
+<h3><code>border-radius</code> con varios valores</h3>
+<table>
+<thead>
+<tr>
+<th>Valores</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>15px</code></td>
+<td>Las cuatro esquinas iguales.</td>
+</tr>
+<tr>
+<td><code>15px 50px</code></td>
+<td>Superior-izq. e inferior-der. / superior-der. e inferior-izq.</td>
+</tr>
+<tr>
+<td><code>15px 50px 30px</code></td>
+<td>Sup-izq. / sup-der. e inf-izq. / inf-der.</td>
+</tr>
+<tr>
+<td><code>15px 50px 30px 5px</code></td>
+<td>Sup-izq. / sup-der. / inf-der. / inf-izq. (horario).</td>
+</tr>
+</tbody>
+</table>
+<h3>Sombras</h3>
+<pre><code class="language-css">box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* desplazamiento-x desplazamiento-y desenfoque color */
+
+box-shadow: inset 0 0 8px #cbd5e1;
+</code></pre>
+<hr>
+<h2>12. Fondos</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>background-color</code></td>
+<td>Color de fondo.</td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>Imagen de fondo (<code>url(...)</code>).</td>
+</tr>
+<tr>
+<td><code>background-repeat</code></td>
+<td><code>repeat</code>, <code>repeat-x</code>, <code>repeat-y</code>, <code>no-repeat</code>.</td>
+</tr>
+<tr>
+<td><code>background-position</code></td>
+<td>Posición (<code>left top</code>, <code>center</code>, <code>50% 50%</code>, etc.).</td>
+</tr>
+<tr>
+<td><code>background-attachment</code></td>
+<td><code>scroll</code> (se mueve) o <code>fixed</code> (fijo).</td>
+</tr>
+<tr>
+<td><code>background-size</code></td>
+<td><code>auto</code>, <code>cover</code>, <code>contain</code>, medidas.</td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td>Shorthand.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">body {
+  background-color: #f8fafc;
+  background-image: url(&quot;img/fondo.png&quot;);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+/* Shorthand */
+.hero {
+  background: #0f4c81 url(&quot;img/hero.jpg&quot;) no-repeat center / cover;
+}
+</code></pre>
+<pre><code class="language-css">/* Múltiples fondos (CSS3) */
+.multifondo {
+  background-image: url(&quot;img/flores.png&quot;), url(&quot;img/papel.png&quot;);
+  background-position: right bottom, left top;
+  background-repeat: no-repeat, repeat;
+}
+</code></pre>
+<h3>Degradados</h3>
+<pre><code class="language-css">.lineal {
+  background: linear-gradient(to right, #0f4c81, #38bdf8);
+}
+
+.radial {
+  background: radial-gradient(circle, #fde68a, #f59e0b);
+}
+</code></pre>
+<hr>
+<h2>13. <code>display</code>, <code>position</code>, <code>float</code> y <code>z-index</code></h2>
+<h3><code>display</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>block</code></td>
+<td>Ocupa todo el ancho, empieza en línea nueva.</td>
+</tr>
+<tr>
+<td><code>inline</code></td>
+<td>Ocupa solo su contenido, no acepta <code>width/height</code> verticales.</td>
+</tr>
+<tr>
+<td><code>inline-block</code></td>
+<td>En línea, pero acepta <code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code>.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>No se muestra ni ocupa lugar.</td>
+</tr>
+<tr>
+<td><code>flex</code></td>
+<td>Contenedor Flexbox.</td>
+</tr>
+<tr>
+<td><code>grid</code></td>
+<td>Contenedor Grid.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">.oculto { display: none; }        /* desaparece del layout */
+.invisible { visibility: hidden; } /* ocupa lugar, pero no se ve */
+</code></pre>
+<h3><code>position</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Referencia</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>—</td>
+<td>Flujo normal (por defecto).</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>Su posición original</td>
+<td>Se desplaza sin salir del flujo.</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Ancestro posicionado más cercano</td>
+<td>Sale del flujo.</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Viewport</td>
+<td>Queda fijo al hacer scroll.</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>Scroll + contenedor</td>
+<td>Se “pega” al llegar a un punto.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">.contenedor { position: relative; }
+
+.badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.barra {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.encabezado {
+  position: sticky;
+  top: 0;
+}
+</code></pre>
+<p><strong>Propiedades de desplazamiento:</strong> <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code>, <code>z-index</code>.</p>
+<h3><code>float</code> y <code>clear</code></h3>
+<pre><code class="language-css">.imagen {
+  float: left;
+  margin-right: 1rem;
+}
+
+.limpiar {
+  clear: both;   /* left | right | both */
+}
+</code></pre>
+<blockquote>
+<p><code>float</code> se usó históricamente para layout; hoy se usa <strong>Flexbox/Grid</strong>. <code>float</code> queda para texto que rodea una imagen.</p>
+</blockquote>
+<h3><code>z-index</code></h3>
+<pre><code class="language-css">.modal {
+  position: fixed;
+  z-index: 1000;
+}
+</code></pre>
+<ul>
+<li>Solo funciona en elementos <strong>posicionados</strong> (o con <code>flex</code>/<code>grid</code> en ciertos casos).</li>
+<li>Mayor número = más adelante.</li>
+<li>Crea “contextos de apilamiento”; un hijo no puede superar el <code>z-index</code> de su padre.</li>
+</ul>
+<hr>
+<h2>14. Flexbox</h2>
+<pre><code class="language-css">.contenedor {
+  display: flex;
+  flex-direction: row;        /* row | row-reverse | column | column-reverse */
+  flex-wrap: wrap;            /* nowrap | wrap | wrap-reverse */
+  justify-content: space-between; /* eje principal */
+  align-items: center;        /* eje transversal */
+  gap: 1rem;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Propiedad (contenedor)</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-direction</code></td>
+<td><code>row</code>, <code>row-reverse</code>, <code>column</code>, <code>column-reverse</code>.</td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td><code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code>.</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td><code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code>.</td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td><code>stretch</code>, <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>baseline</code>.</td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td>Para varias líneas.</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>Espacio entre ítems.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Propiedad (ítem)</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-grow</code></td>
+<td>Cuánto crece (0 por defecto).</td>
+</tr>
+<tr>
+<td><code>flex-shrink</code></td>
+<td>Cuánto se encoge (1 por defecto).</td>
+</tr>
+<tr>
+<td><code>flex-basis</code></td>
+<td>Tamaño base (<code>auto</code>).</td>
+</tr>
+<tr>
+<td><code>flex</code></td>
+<td>Shorthand: <code>flex: 1 1 200px</code>.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>Orden visual.</td>
+</tr>
+<tr>
+<td><code>align-self</code></td>
+<td>Alineación individual.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">/* Barra de navegación */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Tarjetas que se reparten el ancho */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1 1 240px;   /* crece, se encoge, base 240px */
+}
+</code></pre>
+<blockquote>
+<p><strong>Eje principal</strong> = <code>flex-direction</code>; <code>justify-content</code> lo recorre. <strong>Eje transversal</strong> = perpendicular; <code>align-items</code> lo recorre.</p>
+</blockquote>
+<hr>
+<h2>15. Grid</h2>
+<pre><code class="language-css">.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Propiedad (contenedor)</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grid-template-columns</code> / <code>rows</code></td>
+<td>Define las pistas (columnas/filas).</td>
+</tr>
+<tr>
+<td><code>grid-template-areas</code></td>
+<td>Layout con nombres.</td>
+</tr>
+<tr>
+<td><code>gap</code> (<code>row-gap</code>, <code>column-gap</code>)</td>
+<td>Espacio entre celdas.</td>
+</tr>
+<tr>
+<td><code>justify-items</code> / <code>align-items</code></td>
+<td>Alineación dentro de cada celda.</td>
+</tr>
+<tr>
+<td><code>justify-content</code> / <code>align-content</code></td>
+<td>Alineación de la grilla completa.</td>
+</tr>
+<tr>
+<td><code>grid-auto-flow</code></td>
+<td>Cómo se acomodan los ítems automáticos.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Propiedad (ítem)</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grid-column</code></td>
+<td><code>1 / 3</code>, <code>span 2</code>.</td>
+</tr>
+<tr>
+<td><code>grid-row</code></td>
+<td><code>1 / 2</code>, <code>span 3</code>.</td>
+</tr>
+<tr>
+<td><code>grid-area</code></td>
+<td>Nombre o <code>fila / columna / fila-fin / columna-fin</code>.</td>
+</tr>
+<tr>
+<td><code>justify-self</code> / <code>align-self</code></td>
+<td>Alineación individual.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    &quot;header header&quot;
+    &quot;sidebar main&quot;
+    &quot;footer footer&quot;;
+  gap: 1rem;
+  min-height: 100vh;
+}
+
+.layout &gt; header { grid-area: header; }
+.layout &gt; aside  { grid-area: sidebar; }
+.layout &gt; main   { grid-area: main; }
+.layout &gt; footer { grid-area: footer; }
+</code></pre>
+<pre><code class="language-css">/* Responsive sin media query */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flexbox</th>
+<th>Grid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Una dimensión (fila <strong>o</strong> columna).</td>
+<td>Dos dimensiones (filas <strong>y</strong> columnas).</td>
+</tr>
+<tr>
+<td>Basado en el contenido.</td>
+<td>Basado en la grilla.</td>
+</tr>
+<tr>
+<td>Ideal para barras y grupos.</td>
+<td>Ideal para layouts completos.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>16. Responsive: media queries</h2>
+<pre><code class="language-css">/* Mobile first: estilos base para pantallas chicas */
+body { font-size: 16px; }
+
+@media (min-width: 768px) {
+  body { font-size: 17px; }
+  .layout { grid-template-columns: 240px 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .layout { grid-template-columns: 280px 1fr; }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min-width</code></td>
+<td><code>@media (min-width: 768px)</code></td>
+</tr>
+<tr>
+<td><code>max-width</code></td>
+<td><code>@media (max-width: 767px)</code></td>
+</tr>
+<tr>
+<td>Rango</td>
+<td><code>@media (width &gt;= 600px) and (width &lt; 900px)</code></td>
+</tr>
+<tr>
+<td>Orientación</td>
+<td><code>@media (orientation: landscape)</code></td>
+</tr>
+<tr>
+<td>Preferencia</td>
+<td><code>@media (prefers-color-scheme: dark)</code></td>
+</tr>
+<tr>
+<td>Impresión</td>
+<td><code>@media print</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-css">@media print {
+  nav, footer, .no-print { display: none; }
+  body { font-size: 12pt; color: black; }
+  a::after { content: &quot; (&quot; attr(href) &quot;)&quot;; }
+}
+</code></pre>
+<p><strong>Breakpoints habituales:</strong> 576 px, 768 px, 992 px, 1200 px. No son obligatorios: se eligen según el contenido.</p>
+<pre><code class="language-html">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+</code></pre>
+<blockquote>
+<p>Sin la meta <code>viewport</code>, el celular simula un ancho de escritorio y las media queries no funcionan como se espera.</p>
+</blockquote>
+<hr>
+<h2>17. Transiciones, transformaciones y animaciones</h2>
+<h3>Transiciones</h3>
+<pre><code class="language-css">.boton {
+  background: #0f4c81;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.boton:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+</code></pre>
+<pre><code class="language-css">transition: propiedad duración timing-function retardo;
+transition: all 0.3s ease 0s;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Timing function</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>linear</code></td>
+<td>Velocidad constante.</td>
+</tr>
+<tr>
+<td><code>ease</code></td>
+<td>Suave (por defecto).</td>
+</tr>
+<tr>
+<td><code>ease-in</code></td>
+<td>Empieza lento.</td>
+</tr>
+<tr>
+<td><code>ease-out</code></td>
+<td>Termina lento.</td>
+</tr>
+<tr>
+<td><code>ease-in-out</code></td>
+<td>Lento en ambos extremos.</td>
+</tr>
+<tr>
+<td><code>cubic-bezier(...)</code></td>
+<td>Personalizada.</td>
+</tr>
+</tbody>
+</table>
+<h3>Transformaciones</h3>
+<pre><code class="language-css">.transformar:hover {
+  transform: translate(10px, 0) rotate(5deg) scale(1.1);
+}
+
+.transformar {
+  transform-origin: center;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>translate(x, y)</code></td>
+<td>Mueve.</td>
+</tr>
+<tr>
+<td><code>translateX</code> / <code>translateY</code></td>
+<td>Mueve en un eje.</td>
+</tr>
+<tr>
+<td><code>scale(n)</code></td>
+<td>Escala.</td>
+</tr>
+<tr>
+<td><code>rotate(deg)</code></td>
+<td>Rota.</td>
+</tr>
+<tr>
+<td><code>skew(deg)</code></td>
+<td>Inclina.</td>
+</tr>
+<tr>
+<td><code>matrix(...)</code></td>
+<td>Transformación completa.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>transform</code> no modifica el flujo del documento: el espacio original se conserva.</p>
+</blockquote>
+<h3>Animaciones</h3>
+<pre><code class="language-css">@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tarjeta {
+  animation: aparecer 0.4s ease-out forwards;
+}
+</code></pre>
+<pre><code class="language-css">animation: nombre duración timing delay iteraciones dirección fill-mode;
+animation: aparecer 0.4s ease-out 0s 1 normal forwards;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>animation-iteration-count</code></td>
+<td><code>1</code>, <code>infinite</code>, número.</td>
+</tr>
+<tr>
+<td><code>animation-direction</code></td>
+<td><code>normal</code>, <code>reverse</code>, <code>alternate</code>.</td>
+</tr>
+<tr>
+<td><code>animation-fill-mode</code></td>
+<td><code>none</code>, <code>forwards</code>, <code>backwards</code>, <code>both</code>.</td>
+</tr>
+<tr>
+<td><code>animation-play-state</code></td>
+<td><code>running</code>, <code>paused</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>18. Extras de CSS3</h2>
+<h3>Esquinas redondeadas</h3>
+<pre><code class="language-css">#rcorners {
+  border-radius: 25px;
+  background: #8ac007;
+  padding: 20px;
+  width: 200px;
+  height: 150px;
+}
+</code></pre>
+<h3>Bordes con imagen</h3>
+<pre><code class="language-css">#borderimg {
+  border: 10px solid transparent;
+  padding: 15px;
+  border-image: url(&quot;img/border.png&quot;) 30 round;
+  /* round | stretch | repeat */
+}
+</code></pre>
+<h3>Múltiples fondos</h3>
+<pre><code class="language-css">#ejemplo {
+  background-image: url(&quot;img/flores.png&quot;), url(&quot;img/papel.png&quot;);
+  background-position: right bottom, left top;
+  background-repeat: no-repeat, repeat;
+}
+</code></pre>
+<h3>Otros módulos de CSS3</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSS Color</td>
+<td>Colores, <code>rgba</code>, <code>hsl</code>.</td>
+</tr>
+<tr>
+<td>CSS Selectors</td>
+<td>Selectores avanzados.</td>
+</tr>
+<tr>
+<td>CSS Media Queries</td>
+<td>Diseño responsive.</td>
+</tr>
+<tr>
+<td>CSS Backgrounds &amp; Borders</td>
+<td>Fondos, bordes, sombras.</td>
+</tr>
+<tr>
+<td>CSS 2D/3D Transformations</td>
+<td><code>transform</code>.</td>
+</tr>
+<tr>
+<td>CSS Transitions / Animations</td>
+<td>Movimiento.</td>
+</tr>
+<tr>
+<td>CSS Flexible Box Layout</td>
+<td>Flexbox.</td>
+</tr>
+<tr>
+<td>CSS Grid Layout</td>
+<td>Grillas.</td>
+</tr>
+<tr>
+<td>CSS Fonts</td>
+<td><code>@font-face</code>, fuentes.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>19. Errores típicos y checklist</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>El estilo no se aplica</td>
+<td>Selector mal escrito o ruta incorrecta.</td>
+<td>Revisar selector y <code>href</code>; abrir DevTools.</td>
+</tr>
+<tr>
+<td>“Gana” una regla que no esperaba</td>
+<td>Especificidad o <code>!important</code>.</td>
+<td>Inspeccionar la cascada en DevTools.</td>
+</tr>
+<tr>
+<td>El <code>padding</code> agranda la caja</td>
+<td><code>box-sizing: content-box</code>.</td>
+<td><code>box-sizing: border-box</code>.</td>
+</tr>
+<tr>
+<td>Márgenes que se “colapsan”</td>
+<td>Márgenes verticales entre bloques.</td>
+<td>Usar <code>padding</code>, <code>gap</code> o <code>overflow: auto</code>.</td>
+</tr>
+<tr>
+<td><code>z-index</code> no funciona</td>
+<td>El elemento no está posicionado.</td>
+<td>Agregar <code>position: relative/absolute/fixed</code>.</td>
+</tr>
+<tr>
+<td><code>absolute</code> se sale del contenedor</td>
+<td>El padre no está posicionado.</td>
+<td><code>position: relative</code> en el contenedor.</td>
+</tr>
+<tr>
+<td>El layout se rompe en mobile</td>
+<td>Falta <code>viewport</code> o media queries.</td>
+<td>Agregar meta viewport y <code>@media</code>.</td>
+</tr>
+<tr>
+<td><code>height: 100%</code> no funciona</td>
+<td>El padre no tiene altura definida.</td>
+<td>Usar <code>100vh</code> o <code>min-height</code>.</td>
+</tr>
+<tr>
+<td>El texto no se centra verticalmente</td>
+<td>Se usó <code>vertical-align</code> en un bloque.</td>
+<td>Flexbox: <code>align-items: center</code>.</td>
+</tr>
+<tr>
+<td><code>::before</code> no aparece</td>
+<td>Falta <code>content</code>.</td>
+<td>Agregar <code>content: ""</code>.</td>
+</tr>
+<tr>
+<td>La fuente web no carga</td>
+<td>Ruta o formato incorrecto, o CORS.</td>
+<td>Revisar <code>src</code>, <code>format()</code> y <code>font-display</code>.</td>
+</tr>
+<tr>
+<td>La animación no se repite</td>
+<td>Falta <code>animation-iteration-count</code>.</td>
+<td><code>infinite</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>[ ] CSS externo enlazado con <code>&lt;link&gt;</code>.</li>
+<li>[ ] <code>box-sizing: border-box</code> global.</li>
+<li>[ ] Variables para colores y espaciados.</li>
+<li>[ ] Selectores cortos y por función (<code>.alerta</code>, no <code>.rojo</code>).</li>
+<li>[ ] Sin <code>!important</code> innecesarios.</li>
+<li>[ ] Sin estilos inline salvo excepciones.</li>
+<li>[ ] Tipografía con familia de respaldo.</li>
+<li>[ ] Contraste y foco visibles (accesibilidad).</li>
+<li>[ ] Layout probado en móvil, tablet y escritorio.</li>
+<li>[ ] Meta <code>viewport</code> presente.</li>
+<li>[ ] Sin desplazamiento horizontal en mobile.</li>
+<li>[ ] <code>:hover</code> acompañado de <code>:focus-visible</code>.</li>
+</ul>
+<hr>
+<h2>20. Plantilla completa</h2>
+<pre><code class="language-css">/* ===== 1. Reset y variables ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-primario: #0f4c81;
+  --color-acento: #0ea5e9;
+  --color-texto: #1f2937;
+  --color-fondo: #f8fafc;
+  --color-borde: #cbd5e1;
+  --radio: 8px;
+  --sombra: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --espacio: 1rem;
+  --ancho-max: 1100px;
+}
+
+/* ===== 2. Base ===== */
+html { font-size: 16px; }
+
+body {
+  font-family: &quot;Segoe UI&quot;, Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--color-primario); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3 { line-height: 1.2; color: var(--color-primario); }
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+/* ===== 3. Layout ===== */
+.contenedor {
+  width: min(100% - 2rem, var(--ancho-max));
+  margin-inline: auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio);
+  padding-block: 2rem;
+}
+
+@media (min-width: 768px) {
+  .layout { grid-template-columns: 240px 1fr; }
+}
+
+/* ===== 4. Componentes ===== */
+.card {
+  background: #fff;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: var(--espacio);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.boton {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--radio);
+  background: var(--color-primario);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.boton:hover { background: var(--color-acento); }
+
+/* ===== 5. Utilidades ===== */
+.oculto { display: none; }
+.texto-centro { text-align: center; }
+
+@media print {
+  .no-print { display: none; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+}
+</code></pre>
+<hr>
+<p><strong>Fin del cheatsheet.</strong><br>
+Si tenés que priorizar para el parcial: sintaxis y formas de inclusión, selectores y combinadores, pseudo-clases/elementos, cascada y especificidad, <code>box-sizing</code> y modelo de caja, <code>display</code>/<code>position</code>, Flexbox, Grid, media queries y <code>@font-face</code>.</p>
+</body>
+</html>

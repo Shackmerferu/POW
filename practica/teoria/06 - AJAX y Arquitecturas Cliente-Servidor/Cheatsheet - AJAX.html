@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - AJAX</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #0f766e; margin: 0 0 5px;
+  border-bottom: 3px solid #0f766e; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #0f766e; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #134e4a; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #134e4a; }
+blockquote {
+  background: #f1f7fb; border-left: 4px solid #0f766e;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #0f766e;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #e8f1f8; color: #0f766e; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #0f766e; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — AJAX y Arquitecturas Cliente-Servidor</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido y consulta durante el parcial.<br>
+<strong>Base:</strong> teoría de la cátedra (XMLHttpRequest clásico) + Fetch API moderna.</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Qué es AJAX</li>
+<li>Tecnologías que lo componen</li>
+<li>Modelo tradicional vs. modelo AJAX</li>
+<li>Cómo funciona: el ciclo completo</li>
+<li>El objeto <code>XMLHttpRequest</code></li>
+<li>Métodos de <code>XMLHttpRequest</code></li>
+<li>Propiedades de <code>XMLHttpRequest</code></li>
+<li><code>readyState</code> y <code>status</code></li>
+<li><code>onreadystatechange</code> vs. <code>onload</code></li>
+<li>GET vs. POST</li>
+<li>Asíncrono (<code>true</code>) vs. síncrono (<code>false</code>)</li>
+<li>Primer ejemplo completo</li>
+<li>Ejemplo: modificar un <code>div</code></li>
+<li>Ejemplo: menú que carga contenidos</li>
+<li>AJAX con formularios</li>
+<li>Ejemplo: validar un nickname</li>
+<li>AJAX con librerías (Prototype)</li>
+<li>Fetch API (método moderno)</li>
+<li>Same Origin Policy y CORS</li>
+<li>Códigos de estado HTTP</li>
+<li>Ventajas, desventajas y consideraciones</li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+</ol>
+<hr>
+<h2>1. Qué es AJAX</h2>
+<p><strong>AJAX</strong> = <em>Asynchronous JavaScript + XML</em> ("JavaScript asíncrono + XML").</p>
+<blockquote>
+<p>"AJAX no es una tecnología en sí mismo (no es un lenguaje de programación). En realidad, se trata de varias tecnologías independientes que se unen de formas nuevas y sorprendentes."</p>
+</blockquote>
+<ul>
+<li>Es una <strong>técnica de desarrollo web</strong> para crear aplicaciones interactivas o <strong>RIA</strong> (<em>Rich Internet Applications</em>).</li>
+<li>La aplicación se ejecuta en el <strong>cliente</strong> (navegador) y se comunica de forma <strong>asíncrona</strong> con el <strong>servidor</strong> en segundo plano.</li>
+<li>Permite <strong>modificar partes de la página sin recargarla</strong>, mejorando interactividad, velocidad y usabilidad.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Concepto clave</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Asíncrono</strong></td>
+<td>Los datos se piden y cargan en segundo plano sin bloquear la página.</td>
+</tr>
+<tr>
+<td><strong>Sin recarga</strong></td>
+<td>El usuario no ve una ventana vacía esperando respuesta.</td>
+</tr>
+<tr>
+<td><strong>Basado en estándares</strong></td>
+<td>Funciona en múltiples plataformas, sistemas operativos y navegadores.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Tecnologías que lo componen</h2>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Rol dentro de AJAX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>XHTML / HTML</strong></td>
+<td>Estructura y contenido.</td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>Presentación basada en estándares.</td>
+</tr>
+<tr>
+<td><strong>DOM</strong></td>
+<td>Interacción y manipulación dinámica de la presentación.</td>
+</tr>
+<tr>
+<td><strong>XML / XSLT / JSON</strong></td>
+<td>Intercambio y manipulación de información (también texto plano).</td>
+</tr>
+<tr>
+<td><strong><code>XMLHttpRequest</code></strong></td>
+<td>Intercambio asíncrono de información con el servidor.</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>Une todas las demás tecnologías (y habla con PHP, ASP, etc.).</td>
+</tr>
+</tbody>
+</table>
+<pre><code>        XHTML   CSS
+           \     /
+            DOM
+              |
+     XML / JSON / texto
+              |
+      XMLHttpRequest
+              |
+         JAVASCRIPT
+</code></pre>
+<hr>
+<h2>3. Modelo tradicional vs. modelo AJAX</h2>
+<h3>Modelo tradicional</h3>
+<ol>
+<li>El usuario realiza una acción (clic en un botón, elegir una opción).</li>
+<li>El navegador envía la petición al servidor.</li>
+<li>El servidor procesa y devuelve una <strong>página HTML completa</strong>.</li>
+<li>El navegador <strong>recarga</strong> toda la página.</li>
+</ol>
+<p>Consecuencia: el usuario espera, la pantalla se pone en blanco y se pierde el estado de la página.</p>
+<h3>Modelo AJAX</h3>
+<ol>
+<li>Ocurre un evento en el navegador.</li>
+<li>Se crea el objeto <code>XMLHttpRequest</code>.</li>
+<li>Se envía la petición HTTP al servidor.</li>
+<li>El servidor la procesa y responde <strong>en segundo plano</strong>.</li>
+<li>JavaScript procesa la respuesta.</li>
+<li>Se actualiza <strong>solo la parte necesaria</strong> del DOM.</li>
+</ol>
+<p>Consecuencia: no hay recarga, la interacción no se interrumpe y la respuesta se percibe inmediata.</p>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Tradicional</th>
+<th>AJAX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recarga de página</td>
+<td>Sí, completa</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Espera del usuario</td>
+<td>Visible (pantalla en blanco)</td>
+<td>No visible</td>
+</tr>
+<tr>
+<td>Datos transferidos</td>
+<td>Página HTML completa</td>
+<td>Solo los datos necesarios</td>
+</tr>
+<tr>
+<td>Estado de la página</td>
+<td>Se pierde</td>
+<td>Se conserva</td>
+</tr>
+<tr>
+<td>Interactividad</td>
+<td>Baja</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Uso del servidor</td>
+<td>Renderiza HTML</td>
+<td>Puede delegar el render al cliente</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Las peticiones HTTP completas se reemplazan por <strong>peticiones JavaScript</strong> al elemento encargado de AJAX. Las peticiones más simples ni siquiera requieren intervención del servidor, por lo que la respuesta es inmediata.</p>
+</blockquote>
+<hr>
+<h2>4. Cómo funciona: el ciclo completo</h2>
+<pre><code>NAVEGADOR (cliente)                         SERVIDOR
+   |                                           |
+   | 1. Ocurre un evento                       |
+   | 2. Se crea XMLHttpRequest                 |
+   | 3. open() + send()  --- HTTP Request ---&gt; |
+   |                                           | 4. Procesa la petición
+   | &lt;--- HTTP Response (texto/XML/JSON) ----- | 5. Crea la respuesta
+   | 6. JavaScript procesa la respuesta        |
+   | 7. Actualiza el contenido del DOM         |
+</code></pre>
+<p>Los <strong>cuatro bloques</strong> de toda aplicación AJAX:</p>
+<ol>
+<li><strong>Instanciar</strong> el objeto <code>XMLHttpRequest</code>.</li>
+<li><strong>Preparar</strong> la función de respuesta.</li>
+<li><strong>Realizar</strong> la petición al servidor.</li>
+<li><strong>Ejecutar</strong> la función de respuesta cuando llega la respuesta.</li>
+</ol>
+<hr>
+<h2>5. El objeto <code>XMLHttpRequest</code></h2>
+<p>Es el objeto clave: permite comunicarse con el servidor en segundo plano sin recargar la página.</p>
+<p>La implementación depende de cada navegador, por eso la forma clásica de crearlo incluye una verificación:</p>
+<pre><code class="language-javascript">var peticion_http;
+
+if (window.XMLHttpRequest) {
+  // Navegadores que siguen los estándares
+  peticion_http = new XMLHttpRequest();
+} else if (window.ActiveXObject) {
+  // Navegadores obsoletos (Internet Explorer antiguo)
+  peticion_http = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+}
+</code></pre>
+<p>Versión con <code>try/catch</code> para las distintas versiones de IE:</p>
+<pre><code class="language-javascript">function nuevoAjax() {
+  var xmlhttp = false;
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();          // Opera, Safari, Firefox, Chrome
+  } else if (window.ActiveXObject) {
+    try {
+      xmlhttp = new ActiveXObject(&quot;Msxml2.XMLHTTP&quot;);
+    } catch (e) {
+      try {
+        xmlhttp = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+      } catch (e) {
+        xmlhttp = false;
+      }
+    }
+  }
+  return xmlhttp;
+}
+</code></pre>
+<blockquote>
+<p>Hoy alcanza con <code>const xhttp = new XMLHttpRequest();</code>. El código de compatibilidad se mantiene porque la cátedra lo muestra.</p>
+</blockquote>
+<hr>
+<h2>6. Métodos de <code>XMLHttpRequest</code></h2>
+<h3><code>open(método, URL, asíncrono)</code></h3>
+<p>Prepara la petición. <strong>No la envía.</strong></p>
+<pre><code class="language-javascript">peticion_http.open('GET', 'http://localhost/prueba.txt', true);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>método</code></td>
+<td><code>'GET'</code> o <code>'POST'</code> (también <code>PUT</code>, <code>DELETE</code>, etc.).</td>
+</tr>
+<tr>
+<td><code>URL</code></td>
+<td>Dirección del recurso solicitado.</td>
+</tr>
+<tr>
+<td><code>asíncrono</code></td>
+<td><code>true</code> = asíncrona (recomendado), <code>false</code> = síncrona.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>send(datos)</code></h3>
+<p>Envía la petición.</p>
+<pre><code class="language-javascript">peticion_http.send(null);        // GET: sin cuerpo
+peticion_http.send(&quot;t1=&quot; + t1);  // POST: datos en el cuerpo
+</code></pre>
+<h3><code>setRequestHeader(nombre, valor)</code></h3>
+<p>Agrega cabeceras HTTP. <strong>Obligatorio</strong> para POST con formulario:</p>
+<pre><code class="language-javascript">peticion_http.setRequestHeader(&quot;Content-Type&quot;,
+                               &quot;application/x-www-form-urlencoded&quot;);
+</code></pre>
+<h3><code>abort()</code></h3>
+<p>Cancela la petición en curso.</p>
+<h3><code>getAllResponseHeaders()</code> / <code>getResponseHeader(nombre)</code></h3>
+<p>Devuelven las cabeceras de la respuesta.</p>
+<hr>
+<h2>7. Propiedades de <code>XMLHttpRequest</code></h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readyState</code></td>
+<td>Valor numérico entero con el estado de la petición (0 a 4).</td>
+</tr>
+<tr>
+<td><code>responseText</code></td>
+<td>Contenido de la respuesta como <strong>cadena de texto</strong>.</td>
+</tr>
+<tr>
+<td><code>responseXML</code></td>
+<td>Contenido de la respuesta en formato <strong>XML</strong> (se procesa como DOM).</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><strong>Código de estado HTTP</strong> devuelto por el servidor (200, 404, 500...).</td>
+</tr>
+<tr>
+<td><code>statusText</code></td>
+<td>El mismo estado, pero como texto: <code>"OK"</code>, <code>"Not Found"</code>, etc.</td>
+</tr>
+<tr>
+<td><code>onreadystatechange</code></td>
+<td>Función que se ejecuta <strong>cada vez</strong> que cambia <code>readyState</code>.</td>
+</tr>
+<tr>
+<td><code>onload</code></td>
+<td>Función que se ejecuta <strong>solo</strong> cuando la respuesta terminó de cargar.</td>
+</tr>
+<tr>
+<td><code>onerror</code></td>
+<td>Función que se ejecuta si la petición falla.</td>
+</tr>
+<tr>
+<td><code>timeout</code> / <code>ontimeout</code></td>
+<td>Tiempo máximo de espera y su manejador.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>8. <code>readyState</code> y <code>status</code></h2>
+<h3>Valores de <code>readyState</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Nombre</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>No inicializado</td>
+<td>Objeto creado, pero no se invocó <code>open()</code>.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>Cargando</td>
+<td>Se invocó <code>open()</code>, pero no <code>send()</code>.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Cargado</td>
+<td>Se invocó <code>send()</code>, pero el servidor aún no respondió.</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>Interactivo</td>
+<td>Se recibieron algunos datos; todavía no se puede usar <code>responseText</code>.</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>Completo</td>
+<td>Se recibieron <strong>todos</strong> los datos de la respuesta.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>La condición habitual es <code>readyState == 4</code>, porque en ese momento la respuesta está disponible.</p>
+</blockquote>
+<h3>Códigos <code>status</code> más comunes</h3>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200</code></td>
+<td>OK — respuesta correcta.</td>
+</tr>
+<tr>
+<td><code>201</code></td>
+<td>Created — recurso creado.</td>
+</tr>
+<tr>
+<td><code>301</code> / <code>302</code></td>
+<td>Redirección permanente / temporal.</td>
+</tr>
+<tr>
+<td><code>304</code></td>
+<td>Not Modified — sin cambios (caché).</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>Bad Request — petición mal formada.</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>Unauthorized — no autenticado.</td>
+</tr>
+<tr>
+<td><code>403</code></td>
+<td>Forbidden — sin permisos.</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Not Found — recurso no encontrado.</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td>Internal Server Error — error del servidor.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-javascript">if (peticion_http.readyState == 4 &amp;&amp; peticion_http.status == 200) {
+  // respuesta correcta: procesar
+}
+</code></pre>
+<hr>
+<h2>9. <code>onreadystatechange</code> vs. <code>onload</code></h2>
+<h3><code>onreadystatechange</code></h3>
+<p>Se ejecuta en <strong>cada cambio</strong> de estado y permite conocer el estado de la llamada.</p>
+<pre><code class="language-javascript">peticion_http.onreadystatechange = muestraContenido;
+
+function muestraContenido() {
+  if (peticion_http.readyState == 4) {
+    if (peticion_http.status == 200) {
+      alert(peticion_http.responseText);
+    }
+  }
+}
+</code></pre>
+<p>También admite una función anónima:</p>
+<pre><code class="language-javascript">xhttp.onreadystatechange = function () {
+  if (this.readyState == 4 &amp;&amp; this.status == 200) {
+    document.getElementById(&quot;demo&quot;).innerHTML = this.responseText;
+  }
+};
+</code></pre>
+<h3><code>onload</code></h3>
+<p>Se ejecuta <strong>una sola vez</strong>, cuando la respuesta ya está cargada. No contempla los estados intermedios: es más corto, pero no permite reaccionar a los estados 1, 2 y 3.</p>
+<pre><code class="language-javascript">peticion_http.onload = muestraContenido;
+
+function muestraContenido() {
+  alert(peticion_http.responseText);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>onreadystatechange</code></th>
+<th><code>onload</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Se ejecuta</td>
+<td>En cada cambio de estado</td>
+<td>Solo al terminar la carga</td>
+</tr>
+<tr>
+<td>Permite ver estados intermedios</td>
+<td>Sí</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Verifica <code>status</code></td>
+<td>Se hace a mano</td>
+<td>También conviene hacerlo</td>
+</tr>
+<tr>
+<td>Código</td>
+<td>Más largo</td>
+<td>Más corto y moderno</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>10. GET vs. POST</h2>
+<h3>GET simple (sin parámetros)</h3>
+<pre><code class="language-javascript">peticion_http.open('GET', 'http://localhost/prueba.txt', true);
+peticion_http.send(null);
+</code></pre>
+<h3>GET con parámetros</h3>
+<p>Los datos viajan <strong>en la URL</strong>:</p>
+<pre><code class="language-javascript">ajax.open(&quot;GET&quot;, &quot;ejemploajax2.php?variable=valor&quot;, true);
+// varios parámetros: ?a=1&amp;b=2
+</code></pre>
+<h3>POST con parámetros</h3>
+<p>Los datos viajan en el <strong>cuerpo</strong> de la petición:</p>
+<pre><code class="language-javascript">ajax.open(&quot;POST&quot;, &quot;ejemploajax2.php&quot;, true);
+ajax.setRequestHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+ajax.send(&quot;t1=&quot; + t1 + &quot;&amp;t2=&quot; + t2);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Velocidad / simplicidad</td>
+<td>Más simple y rápido</td>
+<td>Un poco más pesado</td>
+</tr>
+<tr>
+<td>Dónde van los datos</td>
+<td>En la URL</td>
+<td>En el cuerpo</td>
+</tr>
+<tr>
+<td>Límite de tamaño</td>
+<td>Limitado por la URL</td>
+<td>Sin limitaciones prácticas</td>
+</tr>
+<tr>
+<td>Visibilidad</td>
+<td>Visible en la URL y el historial</td>
+<td>No visible</td>
+</tr>
+<tr>
+<td>Caché</td>
+<td>Puede usar caché</td>
+<td>Normalmente no</td>
+</tr>
+<tr>
+<td>Seguridad de datos sensibles</td>
+<td>Mala</td>
+<td>Mejor</td>
+</tr>
+<tr>
+<td>Uso recomendado</td>
+<td>Consultar / recuperar datos</td>
+<td>Enviar datos, actualizar archivos o BD</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regla de la cátedra:</strong> usar POST siempre que se actualice un archivo o una base de datos, se envíen muchos datos o se envíe entrada del usuario (más robusto y seguro que GET).</p>
+</blockquote>
+<hr>
+<h2>11. Asíncrono (<code>true</code>) vs. síncrono (<code>false</code>)</h2>
+<pre><code class="language-javascript">peticion_http.open('GET', 'datos.txt', true);   // asíncrona
+peticion_http.open('GET', 'datos.txt', false);  // síncrona
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Asíncrona (<code>true</code>)</th>
+<th>Síncrona (<code>false</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript espera</td>
+<td>No</td>
+<td>Sí, se bloquea</td>
+</tr>
+<tr>
+<td>Interacción del usuario</td>
+<td>Continúa</td>
+<td>Se congela</td>
+</tr>
+<tr>
+<td>Rendimiento</td>
+<td>Bueno</td>
+<td>Malo</td>
+</tr>
+<tr>
+<td>Recomendación</td>
+<td><strong>Usar siempre</strong></td>
+<td>Evitar</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Con <code>false</code>, si el servidor es lento, la ejecución de JavaScript se detiene hasta que llegue la respuesta. La función puede colgarse o dejar de ejecutarse.</p>
+</blockquote>
+<hr>
+<h2>12. Primer ejemplo completo</h2>
+<p>Adaptación del clásico "Hola Mundo": descargar un archivo del servidor y mostrar su contenido sin recargar.</p>
+<pre><code class="language-javascript">var peticion_http;
+
+// 1. Crear el objeto
+if (window.XMLHttpRequest) {
+  peticion_http = new XMLHttpRequest();
+} else if (window.ActiveXObject) {
+  peticion_http = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+}
+
+// 2. Preparar la función de respuesta
+peticion_http.onreadystatechange = muestraContenido;
+
+function muestraContenido() {
+  if (peticion_http.readyState == 4 &amp;&amp; peticion_http.status == 200) {
+    alert(peticion_http.responseText);
+  }
+}
+
+// 3. Realizar la petición
+peticion_http.open('GET', 'http://localhost/prueba.txt', true);
+peticion_http.send(null);
+</code></pre>
+<hr>
+<h2>13. Ejemplo: modificar un <code>div</code></h2>
+<pre><code class="language-html">&lt;div id=&quot;demo&quot;&gt;
+  &lt;h1&gt;AJAX cambiando el contenido de una página&lt;/h1&gt;
+  &lt;button type=&quot;button&quot; onclick=&quot;cargar_documento()&quot;&gt;
+    Cargar archivo holamundo.txt
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function cargar_documento() {
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 &amp;&amp; this.status == 200) {
+      document.getElementById(&quot;demo&quot;).innerHTML = this.responseText;
+    }
+  };
+
+  xhttp.open(&quot;GET&quot;, &quot;holamundo.txt&quot;, true);
+  xhttp.send();
+}
+&lt;/script&gt;
+</code></pre>
+<h3>Variante con <code>onload</code></h3>
+<pre><code class="language-javascript">function loadDoc() {
+  const xhttp = new XMLHttpRequest();
+
+  xhttp.onload = function () {
+    document.getElementById(&quot;demo&quot;).innerHTML = this.responseText;
+  };
+
+  xhttp.open(&quot;GET&quot;, &quot;holamundo.txt&quot;);
+  xhttp.send();
+}
+</code></pre>
+<hr>
+<h2>14. Ejemplo: menú que carga contenidos</h2>
+<p>Se cargan los contenidos de los enlaces sin volver a cargar el menú.</p>
+<pre><code class="language-html">&lt;div id=&quot;menu&quot;&gt;
+  &lt;a href=&quot;javascript:llamadasin('ejemplos/ej1.html', 'contenido');&quot;&gt;Ejemplo 1&lt;/a&gt;
+  &lt;a href=&quot;javascript:llamadasin('ejemplos/ej2.html', 'contenido');&quot;&gt;Ejemplo 2&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;contenido&quot;&gt;
+  &lt;h3 class=&quot;titulo&quot;&gt;Aquí se cargará asíncronamente el contenido&lt;/h3&gt;
+  &lt;p&gt;Elegí una opción del menú...&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-javascript">function llamadasin(url, contenedor) {
+  var pagina_requerida = false;
+
+  if (window.XMLHttpRequest) {
+    pagina_requerida = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    try {
+      pagina_requerida = new ActiveXObject(&quot;Msxml2.XMLHTTP&quot;);
+    } catch (e) {
+      try {
+        pagina_requerida = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+      } catch (e) {
+        pagina_requerida = false;
+      }
+    }
+  }
+
+  pagina_requerida.onreadystatechange = function () {
+    pintapagina(pagina_requerida, contenedor);
+  };
+
+  pagina_requerida.open('GET', url, true);
+  pagina_requerida.send(null);
+}
+
+function pintapagina(pagina_requerida, contenedor) {
+  if (pagina_requerida.readyState == 4 &amp;&amp;
+      (pagina_requerida.status == 200 ||
+       window.location.href.indexOf(&quot;http&quot;) == -1)) {
+    document.getElementById(contenedor).innerHTML =
+      pagina_requerida.responseText;
+  }
+}
+</code></pre>
+<blockquote>
+<p>El chequeo extra <code>window.location.href.indexOf("http") == -1</code> permite que funcione también abierto como archivo local (<code>file://</code>), donde no hay código de estado HTTP.</p>
+</blockquote>
+<hr>
+<h2>15. AJAX con formularios</h2>
+<p>Hay que tomar <strong>cada campo</strong> del formulario y concatenarlo como <code>variable=valor</code>.</p>
+<pre><code class="language-javascript">function cargarContenido() {
+  var t1, t2, contenedor;
+
+  contenedor = document.getElementById('contenedor');
+  t1 = document.getElementById('texto1').value;
+  t2 = document.getElementById('texto2').value;
+
+  ajax = nuevoAjax();
+
+  ajax.open(&quot;POST&quot;, &quot;ejemploajax2.php&quot;, true);
+
+  ajax.onreadystatechange = function () {
+    if (ajax.readyState == 4) {
+      contenedor.innerHTML = ajax.responseText;
+    }
+  };
+
+  ajax.setRequestHeader(&quot;Content-Type&quot;,
+                        &quot;application/x-www-form-urlencoded&quot;);
+  ajax.send(&quot;t1=&quot; + t1 + &quot;&amp;t2=&quot; + t2);
+}
+</code></pre>
+<h3>Equivalente con GET</h3>
+<pre><code class="language-javascript">ajax.open(&quot;GET&quot;, &quot;ejemploajax2.php?variable=valor&quot;, true);
+ajax.send(null);
+</code></pre>
+<h3>Serializar todos los campos</h3>
+<pre><code class="language-javascript">var formulario = document.getElementById(&quot;formulario&quot;);
+var datos = new FormData(formulario);
+
+// Con XMLHttpRequest: NO se setea Content-Type a mano
+ajax.open(&quot;POST&quot;, &quot;procesar.php&quot;, true);
+ajax.send(datos);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Cuándo usarla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Concatenar <code>clave=valor&amp;...</code></td>
+<td>Pocos campos de texto. Hay que escapar valores.</td>
+</tr>
+<tr>
+<td><code>FormData</code></td>
+<td>Formularios completos o con archivos.</td>
+</tr>
+<tr>
+<td>Librería (jQuery, Prototype)</td>
+<td>Cuando ya se usa la librería.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>16. Ejemplo: validar un nickname</h2>
+<p>Se consulta la base de datos <strong>mientras el usuario escribe</strong>, sin enviar el formulario.</p>
+<pre><code class="language-html">&lt;form&gt;
+  Nickname:
+  &lt;input type=&quot;text&quot; onkeyup=&quot;comprobar_nick(this.value)&quot;&gt;
+  &lt;span id=&quot;mensaje&quot;&gt;&lt;/span&gt;
+&lt;/form&gt;
+</code></pre>
+<pre><code class="language-javascript">function comprobar_nick(str) {
+  if (str.length == 0) {
+    document.getElementById(&quot;mensaje&quot;).innerHTML = &quot;&quot;;
+    return;
+  }
+
+  var xmlhttp = new XMLHttpRequest();
+
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 &amp;&amp; this.status == 200) {
+      document.getElementById(&quot;mensaje&quot;).innerHTML = this.responseText;
+    }
+  };
+
+  xmlhttp.open(&quot;GET&quot;, &quot;ajax_comprobar_nick.php?nickname=&quot; + str, true);
+  xmlhttp.send();
+}
+</code></pre>
+<blockquote>
+<p>El PHP recibe <code>$_GET['nickname']</code> (o <code>$_POST['nickname']</code> si se usa POST), consulta la base y devuelve un texto tipo <code>"Disponible"</code> o <code>"Ya existe"</code>.</p>
+</blockquote>
+<hr>
+<h2>17. AJAX con librerías (Prototype)</h2>
+<p>Existen frameworks que ya resuelven la instanciación y el uso de AJAX: <strong>Prototype.js</strong>, <strong>jQuery</strong>, <strong>AngularJS</strong>, <strong>xajax</strong> (PHP).</p>
+<p>Ejemplo con <code>Ajax.Updater</code> de Prototype:</p>
+<pre><code class="language-html">&lt;script src=&quot;prototype.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+function comprobar(nick) {
+  var url = 'http://' + location.host + '/ajax/ajax_comprobar_nick.php';
+  var pars = (&quot;nickname=&quot; + nick);
+
+  var myAjax = new Ajax.Updater('comprobar_mensaje', url, {
+    method: 'get',
+    parameters: pars
+  });
+}
+&lt;/script&gt;
+
+&lt;input name=&quot;nickname&quot; onkeyup=&quot;comprobar(this.value)&quot;&gt;
+&lt;span id=&quot;comprobar_mensaje&quot;&gt;&lt;/span&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Objeto Prototype</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ajax.Request(url, opciones)</code></td>
+<td>Realiza la petición y entrega la respuesta a un callback.</td>
+</tr>
+<tr>
+<td><code>Ajax.Updater(id, url, opciones)</code></td>
+<td>Realiza la petición y vuelca la respuesta en el elemento con ese <code>id</code>.</td>
+</tr>
+<tr>
+<td><code>parameters</code></td>
+<td>Datos a enviar (<code>"clave=valor"</code> o un objeto).</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td><code>'get'</code> o <code>'post'</code>.</td>
+</tr>
+<tr>
+<td><code>onSuccess</code> / <code>onFailure</code> / <code>onComplete</code></td>
+<td>Callbacks de resultado.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Usar una librería <strong>no obliga</strong> a abandonar AJAX "a mano": se puede combinar.</p>
+</blockquote>
+<hr>
+<h2>18. Fetch API (método moderno)</h2>
+<p>Actualmente se usa un método basado en <strong>promesas</strong>. <code>fetch()</code> es más simple que <code>XMLHttpRequest</code>.</p>
+<ul>
+<li><code>XMLHttpRequest</code> es la API heredada (aún útil para control estricto de la carga o muchas conexiones sincrónicas).</li>
+<li><code>fetch()</code> es la API moderna para obtener datos de un servidor HTTP.</li>
+</ul>
+<h3>Con <code>.then()</code></h3>
+<pre><code class="language-javascript">fetch(file)
+  .then(function (response) {
+    return response.text();
+  })
+  .then(function (data) {
+    myDisplayer(data);
+  });
+</code></pre>
+<h3>Con funciones flecha</h3>
+<pre><code class="language-javascript">fetch(file)
+  .then(response =&gt; response.text())
+  .then(data =&gt; myDisplayer(data));
+</code></pre>
+<h3>Con <code>async</code> / <code>await</code></h3>
+<pre><code class="language-javascript">async function loadText(file) {
+  const response = await fetch(file);
+  myDisplayer(await response.text());
+}
+
+loadText(&quot;fetch.txt&quot;);
+</code></pre>
+<h3>Objeto <code>Response</code></h3>
+<p><code>fetch()</code> devuelve una <strong>promesa</strong> que se resuelve en un objeto <code>Response</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad / método</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>response.ok</code></td>
+<td><code>true</code> si el estado HTTP está entre 200 y 299.</td>
+</tr>
+<tr>
+<td><code>response.status</code></td>
+<td>Código HTTP.</td>
+</tr>
+<tr>
+<td><code>response.statusText</code></td>
+<td>Texto del estado.</td>
+</tr>
+<tr>
+<td><code>response.text()</code></td>
+<td>Devuelve el cuerpo como texto (promesa).</td>
+</tr>
+<tr>
+<td><code>response.json()</code></td>
+<td>Parsea el cuerpo como JSON (promesa).</td>
+</tr>
+<tr>
+<td><code>response.blob()</code></td>
+<td>Devuelve datos binarios.</td>
+</tr>
+<tr>
+<td><code>response.headers</code></td>
+<td>Cabeceras de la respuesta.</td>
+</tr>
+</tbody>
+</table>
+<h3>JSON</h3>
+<pre><code class="language-javascript">async function loadCustomer() {
+  const response = await fetch(&quot;customer.json&quot;);
+  const customer = await response.json();
+  myDisplayer(customer.name);
+}
+
+loadCustomer();
+</code></pre>
+<h3>Manejo de errores</h3>
+<pre><code class="language-javascript">async function cargar(url) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(&quot;HTTP &quot; + response.status);
+    }
+
+    const datos = await response.json();
+    console.log(datos);
+  } catch (error) {
+    console.error(&quot;Falló la petición:&quot;, error);
+  }
+}
+</code></pre>
+<blockquote>
+<p><code>fetch()</code> <strong>no rechaza</strong> la promesa ante un 404 o un 500: solo falla ante errores de red. Por eso hay que revisar <code>response.ok</code> a mano.</p>
+</blockquote>
+<h3>Enviar datos con Fetch</h3>
+<pre><code class="language-javascript">// JSON
+await fetch(&quot;/api/usuarios&quot;, {
+  method: &quot;POST&quot;,
+  headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+  body: JSON.stringify({ nombre: &quot;Ana&quot;, edad: 25 })
+});
+
+// Formulario / archivos
+const fd = new FormData(document.getElementById(&quot;form&quot;));
+await fetch(&quot;/subir.php&quot;, { method: &quot;POST&quot;, body: fd });
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>XMLHttpRequest</code></th>
+<th><code>fetch()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estilo</td>
+<td>Callbacks y eventos</td>
+<td>Promesas / <code>async-await</code></td>
+</tr>
+<tr>
+<td>Verbosidad</td>
+<td>Alta</td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Progreso de descarga</td>
+<td><code>onprogress</code></td>
+<td>No directo (requiere streams)</td>
+</tr>
+<tr>
+<td>Rechaza en 404/500</td>
+<td>No</td>
+<td>No (hay que mirar <code>ok</code>)</td>
+</tr>
+<tr>
+<td>Cancelación</td>
+<td><code>abort()</code></td>
+<td><code>AbortController</code></td>
+</tr>
+<tr>
+<td>Recomendación actual</td>
+<td>Casos heredados</td>
+<td><strong>Preferido</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>19. Same Origin Policy y CORS</h2>
+<p><strong>Same Origin Policy (Política del Mismo Origen):</strong> medida de seguridad que impide que un script de un origen acceda a recursos de otro origen distinto.</p>
+<p>Dos URLs tienen el <strong>mismo origen</strong> si coinciden los tres componentes:</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocolo</td>
+<td><code>http</code> vs. <code>https</code></td>
+</tr>
+<tr>
+<td>Host / dominio</td>
+<td><code>localhost</code> vs. <code>midominio.com</code></td>
+</tr>
+<tr>
+<td>Puerto</td>
+<td><code>:80</code> vs. <code>:8080</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code>http://localhost/app/index.html
+http://localhost/app/datos.php     ✅ mismo origen
+http://localhost:8080/datos.php    ❌ distinto puerto
+https://localhost/datos.php        ❌ distinto protocolo
+http://otro.com/datos.php          ❌ distinto dominio
+</code></pre>
+<ul>
+<li>Por seguridad, los navegadores modernos <strong>no permiten</strong> el acceso entre dominios.</li>
+<li>La página y el archivo que se intenta cargar deben estar en el <strong>mismo servidor</strong>.</li>
+<li>Solución: <strong>CORS</strong> (<em>Cross-Origin Resource Sharing</em>), que el servidor habilita con cabeceras.</li>
+</ul>
+<pre><code class="language-php">// En el servidor PHP
+header(&quot;Access-Control-Allow-Origin: https://midominio.com&quot;);
+header(&quot;Access-Control-Allow-Methods: GET, POST, OPTIONS&quot;);
+header(&quot;Access-Control-Allow-Headers: Content-Type&quot;);
+</code></pre>
+<blockquote>
+<p>La alternativa histórica eran los <em>scripts firmados</em>, pero la mayoría no están firmados y las versiones viejas de Internet Explorer no los soportan.</p>
+</blockquote>
+<hr>
+<h2>20. Códigos de estado HTTP</h2>
+<table>
+<thead>
+<tr>
+<th>Rango</th>
+<th>Categoría</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1xx</code></td>
+<td>Informativo</td>
+<td><code>100 Continue</code></td>
+</tr>
+<tr>
+<td><code>2xx</code></td>
+<td>Éxito</td>
+<td><code>200 OK</code>, <code>201 Created</code></td>
+</tr>
+<tr>
+<td><code>3xx</code></td>
+<td>Redirección</td>
+<td><code>301</code>, <code>302</code>, <code>304</code></td>
+</tr>
+<tr>
+<td><code>4xx</code></td>
+<td>Error del cliente</td>
+<td><code>400</code>, <code>401</code>, <code>403</code>, <code>404</code></td>
+</tr>
+<tr>
+<td><code>5xx</code></td>
+<td>Error del servidor</td>
+<td><code>500</code>, <code>503</code></td>
+</tr>
+</tbody>
+</table>
+<p>En AJAX, <code>status == 200</code> es la verificación básica de éxito. Para uploads suele aceptarse también <code>201</code>.</p>
+<hr>
+<h2>21. Ventajas, desventajas y consideraciones</h2>
+<h3>Ventajas</h3>
+<ul>
+<li>Mejora la <strong>experiencia de usuario</strong>: sin recargas ni pantallas en blanco.</li>
+<li><strong>Respuestas más rápidas</strong> para acciones simples.</li>
+<li>Se transfiere <strong>solo lo necesario</strong>, no páginas completas.</li>
+<li>Se puede <strong>delegar el renderizado al cliente</strong> y aliviar al servidor.</li>
+<li>Aplicaciones más <strong>interactivas</strong> tipo RIA (autocompletado, validaciones en vivo, carritos).</li>
+</ul>
+<h3>Desventajas y consideraciones</h3>
+<table>
+<thead>
+<tr>
+<th>Problema</th>
+<th>Detalle</th>
+<th>Posible solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Historial del navegador</strong></td>
+<td>Las páginas creadas dinámicamente no se registran; "Volver" no restaura el estado anterior.</td>
+<td><code>History API</code> (<code>pushState</code>), <em>iframes</em> invisibles.</td>
+</tr>
+<tr>
+<td><strong>Motores de búsqueda</strong></td>
+<td>No analizan JavaScript; el contenido dinámico no se indexa.</td>
+<td>Renderizado en servidor, contenido accesible por URL.</td>
+</tr>
+<tr>
+<td><strong>Same Origin Policy</strong></td>
+<td>Bloquea peticiones entre dominios distintos.</td>
+<td>CORS.</td>
+</tr>
+<tr>
+<td><strong>Sobrecarga del servidor</strong></td>
+<td>Muchas llamadas AJAX pueden saturarlo.</td>
+<td>Cachear, agrupar peticiones, <em>debounce</em>.</td>
+</tr>
+<tr>
+<td><strong>Dispositivos</strong></td>
+<td>Puede no funcionar en teléfonos viejos, PDA u otros aparatos.</td>
+<td>Diseño progresivo.</td>
+</tr>
+<tr>
+<td><strong>Accesibilidad</strong></td>
+<td>No es compatible con todos los lectores de pantalla.</td>
+<td>Alternativas sin JS, ARIA.</td>
+</tr>
+<tr>
+<td><strong>Dependencia de JS</strong></td>
+<td>Si JavaScript falla o está deshabilitado, la app no funciona.</td>
+<td>Contenido base en HTML.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>22. Errores típicos y checklist</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readyState == 4</code> pero no pasa nada</td>
+<td>Falta verificar <code>status == 200</code>.</td>
+<td>Agregar la condición de estado.</td>
+</tr>
+<tr>
+<td>El callback nunca se ejecuta</td>
+<td>Se asignó el handler <strong>después</strong> de <code>send()</code>.</td>
+<td>Asignar <code>onreadystatechange</code> antes de <code>send()</code>.</td>
+</tr>
+<tr>
+<td>El POST llega vacío al servidor</td>
+<td>Falta <code>Content-Type</code> o los datos no están serializados.</td>
+<td><code>setRequestHeader("Content-Type", "application/x-www-form-urlencoded")</code> y <code>send("a=1&amp;b=2")</code>.</td>
+</tr>
+<tr>
+<td>El navegador bloquea la petición</td>
+<td>Distinto origen (protocolo, host o puerto).</td>
+<td>Servir todo desde el mismo origen o habilitar CORS.</td>
+</tr>
+<tr>
+<td><code>responseText</code> vacío</td>
+<td>Se quiso leer en <code>readyState == 3</code>.</td>
+<td>Leer en <code>readyState == 4</code>.</td>
+</tr>
+<tr>
+<td>Funciona en local pero no en el servidor</td>
+<td>Se abrió con <code>file://</code>.</td>
+<td>Usar <code>http://localhost/...</code>.</td>
+</tr>
+<tr>
+<td>Se muestran etiquetas HTML como texto</td>
+<td>Se usó <code>textContent</code> o el servidor escapó el HTML.</td>
+<td>Usar <code>innerHTML</code> si corresponde.</td>
+</tr>
+<tr>
+<td>El acento se ve mal</td>
+<td>Codificación distinta entre cliente y servidor.</td>
+<td>UTF-8 en ambos lados.</td>
+</tr>
+<tr>
+<td>La página "se cuelga"</td>
+<td>Se usó <code>async = false</code>.</td>
+<td>Usar <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>fetch</code> no detecta el 404</td>
+<td><code>fetch</code> no rechaza en errores HTTP.</td>
+<td>Verificar <code>response.ok</code>.</td>
+</tr>
+<tr>
+<td>Cambios no visibles</td>
+<td>Se modificó el elemento equivocado o no existe aún.</td>
+<td>Revisar <code>id</code> y ejecutar después del <code>DOMContentLoaded</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>[ ] <code>XMLHttpRequest</code> creado antes de usarlo (con verificación de navegador).</li>
+<li>[ ] <code>onreadystatechange</code> (u <code>onload</code>) asignado <strong>antes</strong> de <code>send()</code>.</li>
+<li>[ ] Se verifica <code>readyState == 4</code> <strong>y</strong> <code>status == 200</code>.</li>
+<li>[ ] <code>open()</code> con el método correcto: GET para consultar, POST para modificar.</li>
+<li>[ ] POST con <code>Content-Type: application/x-www-form-urlencoded</code>.</li>
+<li>[ ] <code>async = true</code>.</li>
+<li>[ ] URL correcta y accesible desde el mismo origen.</li>
+<li>[ ] La respuesta se inserta en el contenedor correcto (<code>innerHTML</code> / <code>textContent</code>).</li>
+<li>[ ] Manejo de errores (<code>onerror</code>, <code>try/catch</code> o <code>.catch()</code>).</li>
+<li>[ ] Funciona con y sin datos; probado el caso de error.</li>
+<li>[ ] Codificación UTF-8 en cliente, servidor y base de datos.</li>
+</ul>
+<hr>
+<h2>23. Plantilla completa</h2>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;AJAX — Plantilla&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;button type=&quot;button&quot; onclick=&quot;cargar('datos.txt')&quot;&gt;Cargar&lt;/button&gt;
+  &lt;div id=&quot;salida&quot;&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+  function cargar(url) {
+    const salida = document.getElementById(&quot;salida&quot;);
+
+    // 1. Crear el objeto
+    const xhttp = new XMLHttpRequest();
+
+    // 2. Preparar la respuesta
+    xhttp.onreadystatechange = function () {
+      if (this.readyState !== 4) return;
+
+      if (this.status === 200) {
+        salida.innerHTML = this.responseText;
+      } else {
+        salida.textContent = &quot;Error HTTP &quot; + this.status;
+      }
+    };
+
+    xhttp.onerror = function () {
+      salida.textContent = &quot;Error de red&quot;;
+    };
+
+    // 3. Realizar la petición
+    xhttp.open(&quot;GET&quot;, url, true);
+    xhttp.send();
+  }
+
+  // Variante POST
+  function enviar(url, datos) {
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+      if (this.readyState === 4 &amp;&amp; this.status === 200) {
+        document.getElementById(&quot;salida&quot;).innerHTML = this.responseText;
+      }
+    };
+
+    xhttp.open(&quot;POST&quot;, url, true);
+    xhttp.setRequestHeader(&quot;Content-Type&quot;,
+                           &quot;application/x-www-form-urlencoded&quot;);
+    xhttp.send(datos);   // &quot;clave1=valor1&amp;clave2=valor2&quot;
+  }
+
+  // Variante moderna con Fetch
+  async function cargarModerno(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(&quot;HTTP &quot; + response.status);
+      document.getElementById(&quot;salida&quot;).textContent = await response.text();
+    } catch (error) {
+      console.error(error);
+      document.getElementById(&quot;salida&quot;).textContent = &quot;Error al cargar&quot;;
+    }
+  }
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr>
+<p><strong>Fin del cheatsheet.</strong><br>
+Si tenés que priorizar para el parcial: qué es AJAX y qué tecnologías lo componen, diferencias con el modelo tradicional, los cuatro bloques de una aplicación AJAX, <code>open()</code>/<code>send()</code>, <code>readyState</code> (0–4) y <code>status</code>, <code>onreadystatechange</code> vs. <code>onload</code>, GET vs. POST, Same Origin Policy/CORS y <code>fetch()</code>.</p>
+</body>
+</html>
