@@ -1,0 +1,349 @@
+<!-- 1. El Formulario -->
+<div class="formulario">
+    <label>Codigo (ID): <br><input type="number" id="codigo"></label><br><br>
+    <label>Cantidad: <br><input type="number" id="cantidad"></label><br><br>
+    <label>Precio: <br><input type="number" id="precio"></label><br><br>
+</div>
+
+<!-- 2. Los Botones (Fijate que cada uno tiene su 'id' para que JS los encuentre) -->
+<div class="botones">
+    <button id="btn-alta">ALTA</button>
+    <button id="btn-baja">BAJA</button>
+    <button id="btn-stockbajo">STOCK BAJO</button>
+    <button id="btn-mostrar">MOSTRAR</button>
+    <button id="btn-agregar">AGREGAR</button>
+</div>
+
+<!-- 3. La pantalla donde volcamos los datos (la tabla va a aparecer acá adentro) -->
+<div id="pantalla-resultados" style="margin-top: 20px;"></div>
+
+
+
+<!-- VENTANA MODAL PARA AGREGAR (Oculta por defecto) -->
+<div id="modal-agregar" style="display: none; position: fixed; top: 20%; left: 30%; background: #f3f4f6; padding: 20px; border: 1px solid #ccc; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);">
+    <h3>Agregar Producto</h3>
+    <label>Codigo: <input type="number" id="mod-codigo"></label><br><br>
+    <label>Descripcion: <input type="text" id="mod-desc"></label><br><br>
+    <label>Cantidad: <input type="number" id="mod-cant"></label><br><br>
+    <label>Precio Costo: <input type="number" id="mod-precio"></label><br><br>
+    <label>Cant. Minima: <input type="number" id="mod-min"></label><br><br>
+    <button id="btn-guardar-nuevo" style="background: #10b981; color: white; padding: 5px 10px;">GUARDAR</button>
+    <button id="btn-cerrar-modal" style="margin-left: 10px;">Cancelar</button>
+</div>
+
+
+
+<script>
+    // 1. Enganchamos el botón MOSTRAR y el div donde va la tabla
+    const btnMostrar = document.getElementById('btn-mostrar');
+    const pantalla = document.getElementById('pantalla-resultados');
+
+    btnMostrar.addEventListener('click', function() {
+        
+        // 2. Llamamos a la API usando fetch (el PHP por defecto ejecuta 'listar' si no le pasamos accion)[cite: 277]
+        fetch('api_almacen/almacen_api.php')
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            
+            // 3. Verificamos si el PHP nos devolvió un status 200 (éxito)[cite: 277]
+            if (datos.status === 200) {
+                
+                // Armamos la cabecera de la tabla que pide el PDF[cite: 280]
+                let html = `<table border="1" cellpadding="5">
+                              <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Cant</th>
+                                <th>Precio $</th>
+                                <th>cant mínima</th>
+                                <th>Valor $$</th>
+                              </tr>`;
+                
+                // Recorremos cada producto que nos mandó la base de datos
+                datos.productos.forEach(prod => {
+                    
+                    // El PDF pide calcular el "Valor $$" (Cantidad * Precio)[cite: 280]
+                    let valorTotal = prod.cantidad * prod.precio_costo; 
+
+                    html += `<tr>
+                                <td>${prod.codigo}</td>
+                                <td>${prod.nombre}</td>
+                                <td>${prod.cantidad}</td>
+                                <td>${prod.precio_costo}</td>
+                                <td>${prod.cantidad_minima}</td>
+                                <td>${valorTotal}</td>
+                             </tr>`;
+                });
+
+                html += `</table>`;
+                
+                // Inyectamos todo el HTML armado en la pantalla
+                pantalla.innerHTML = html;
+
+            } else {
+                // Si hubo un error (ej. status 500), mostramos el mensaje[cite: 277]
+                pantalla.innerHTML = `<p>Error: ${datos.menssage}</p>`;
+            }
+        })
+        .catch(error => console.error("Error en la conexión:", error));
+    });
+
+
+
+    const btnStockBajo = document.getElementById('btn-stockbajo');
+
+btnStockBajo.addEventListener('click', function() {
+    fetch('api_almacen/almacen_api.php?action=listar')
+    .then(res => res.json())
+    .then(datos => {
+        if (datos.status === 200) {
+            let html = `<h3>Productos por debajo de la cantidad mínima</h3>
+                        <table border="1" cellpadding="5">
+                          <tr><th>ID</th><th>Nombre</th><th>Cant</th><th>Precio $</th><th>cant mínima</th></tr>`;
+            
+            let contador = 0;
+
+            datos.productos.forEach(prod => {
+                // Filtramos solo los que tienen stock bajo[cite: 17]
+                if (parseInt(prod.cantidad) <= parseInt(prod.cantidad_minima)) {
+                    html += `<tr>
+                                <td>${prod.codigo}</td>
+                                <td>${prod.nombre}</td>
+                                <td>${prod.cantidad}</td>
+                                <td>${prod.precio_costo}</td>
+                                <td>${prod.cantidad_minima}</td>
+                             </tr>`;
+                    contador++; 
+                }
+            });
+            html += `</table>`;
+            html += `<p>Cantidad de productos: ${contador}</p>`; // Requisito del PDF[cite: 17]
+            
+            document.getElementById('pantalla-resultados').innerHTML = html;
+        }
+    });
+});
+const btnBaja = document.getElementById('btn-baja');
+
+btnBaja.addEventListener('click', function() {
+    let codigoBaja = document.getElementById('codigo').value;
+    let cantRestar = parseInt(document.getElementById('cantidad').value);
+    const pantalla = document.getElementById('pantalla-resultados');
+
+    // Validación básica: que haya ingresado números positivos[cite: 17, 18]
+    if (!codigoBaja || cantRestar <= 0) {
+        alert("Ingrese un Código y una Cantidad mayor a 0");
+        return;
+    }
+
+    // PASO 1: Le pedimos al PHP que busque SOLO este código
+    fetch(`api_almacen/almacen_api.php?action=listar&codigo=${codigoBaja}`)
+    .then(res => res.json())
+    .then(datos => {
+        
+        // Si el status es 200, el producto existe
+        if (datos.status === 200 && datos.cantidad > 0) {
+            let prod = datos.productos[0]; // Capturamos los datos originales del producto
+
+            // Control B: Verificamos si la cantidad a retirar supera el stock
+            if (cantRestar > parseInt(prod.cantidad)) {
+                pantalla.innerHTML = `<h3>La cantidad a retirar es superior al Stock(${prod.cantidad})</h3>`;
+                return;
+            }
+
+            // PASO 2: Calculamos la nueva cantidad y mandamos a modificar
+            let nuevoStock = parseInt(prod.cantidad) - cantRestar;
+            
+            // Armamos la URL con la acción "modificar" y TODOS los datos originales para no borrarlos[cite: 18]
+            let urlUpdate = `api_almacen/almacen_api.php?action=modificar&codigo=${prod.codigo}&nombre=${prod.nombre}&precio_costo=${prod.precio_costo}&cantidad_minima=${prod.cantidad_minima}&cantidad=${nuevoStock}`;
+
+            fetch(urlUpdate)
+            .then(resUpdate => resUpdate.json())
+            .then(updateData => {
+                if (updateData.status === 200) {
+                    pantalla.innerHTML = `<h3>Actualizado</h3>`; // Mensaje de éxito requerido[cite: 18]
+                }
+            });
+
+        } else {
+            // Control A: Si el PHP devuelve error, el código no existe[cite: 17, 18]
+            pantalla.innerHTML = `<h3>Código Inexistente</h3>`;
+        }
+    });
+});
+
+const modalAgregar = document.getElementById('modal-agregar');
+const btnAgregar = document.getElementById('btn-agregar');
+const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+const btnGuardarNuevo = document.getElementById('btn-guardar-nuevo');
+
+// 1. Mostrar y ocultar la ventanita
+btnAgregar.addEventListener('click', () => modalAgregar.style.display = 'block');
+btnCerrarModal.addEventListener('click', () => modalAgregar.style.display = 'none');
+
+// 2. La lógica fuerte de Guardar
+btnGuardarNuevo.addEventListener('click', function() {
+    let cod = document.getElementById('mod-codigo').value;
+    let desc = document.getElementById('mod-desc').value;
+    let cant = parseInt(document.getElementById('mod-cant').value);
+    let precio = parseInt(document.getElementById('mod-precio').value);
+    let min = parseInt(document.getElementById('mod-min').value);
+
+    // Todos los campos son obligatorios y positivos[cite: 8]
+    if(!cod || !desc || cant < 0 || precio < 0 || min < 0) {
+        alert("Completá todos los campos con valores positivos.");
+        return;
+    }
+
+    // PASO A: Verificar si el código ya existe[cite: 8]
+    fetch(`api_almacen/almacen_api.php?action=listar&codigo=${cod}`)
+    .then(res => res.json())
+    .then(datos => {
+        if (datos.status === 200 && datos.cantidad > 0) {
+            // Ya existe un producto con ese ID
+            alert("El producto ya existe en la base de datos.");
+        } else {
+            // PASO B: Si no existe, lo insertamos armando la URL exacta que pide el PHP[cite: 8]
+            let urlInsertar = `api_almacen/almacen_api.php?action=insertar&codigo=${cod}&nombre=${desc}&cantidad=${cant}&precio_costo=${precio}&cantidad_minima=${min}`;
+            
+            fetch(urlInsertar)
+            .then(resInsert => resInsert.json())
+            .then(dataInsert => {
+                if (dataInsert.status === 200) {
+                    alert("Producto guardado exitosamente");
+                    modalAgregar.style.display = 'none'; // Cerramos el modal
+                    document.getElementById('btn-mostrar').click(); // Simulamos un clic en MOSTRAR para refrescar la tabla[cite: 8]
+                }
+            });
+        }
+    });
+});
+
+// 1. BUSCAMOS EL BOTÓN EN EL HTML:
+// document (el archivo html) . getElementById (buscá el elemento que tenga este ID)
+const btnBorrar = document.getElementById('btn-borrar');
+
+// 2. LE DECIMOS QUÉ HACER CUANDO LE HAGAN CLIC:
+// addEventListener significa "quedate escuchando un evento". El evento es 'click'.
+// Cuando haya un clic, se ejecuta la function() { ... }
+btnBorrar.addEventListener('click', function() {
+    
+    // 3. CAPTURAMOS EL CÓDIGO QUE ESCRIBIÓ EL USUARIO:
+    // Buscamos el input del código y con ".value" sacamos lo que tipeó adentro.
+    let codigoBorrar = document.getElementById('codigo').value;
+    
+    // 4. VERIFICAMOS QUE NO ESTÉ VACÍO:
+    // Si el código es igual a nada (""), cortamos la ejecución con "return".
+    if (codigoBorrar === "") {
+        alert("Escribí un código para borrar");
+        return; 
+    }
+
+    // 5. ARMAMOS LA URL PARA EL PHP:
+    // Usamos comillas invertidas (`) para poder meter la variable ${codigoBorrar} adentro del texto.
+    // Le pasamos action=borrar como pide el pdf[cite: 9].
+    let urlBorrar = `api_almacen/almacen_api.php?action=borrar&codigo=${codigoBorrar}`;
+
+    // 6. HACEMOS LA LLAMADA AL PHP (El cadete):
+    // fetch manda la orden a la URL que armamos arriba.
+    fetch(urlBorrar)
+    // 7. TRADUCIMOS LA RESPUESTA:
+    // El PHP contesta en texto. res.json() lo convierte a un formato que JS entiende.
+    .then(res => res.json())
+    // 8. LEEMOS LOS DATOS TRADUCIDOS:
+    // "datosBorrar" es la caja con la respuesta final del PHP.
+    .then(datosBorrar => {
+        
+        // 9. VERIFICAMOS SI SALIÓ BIEN:
+        // status 200 significa "OK" en el mundo web.
+        if (datosBorrar.status === 200) {
+            
+            // 10. MOSTRAMOS EL MENSAJE:
+            // innerHTML reemplaza todo lo que haya adentro del div de la pantalla por este nuevo texto[cite: 9].
+            document.getElementById('pantalla-resultados').innerHTML = `<h3>eliminado</h3>`;
+            
+        }
+    });
+});
+
+
+// 1. BUSCAMOS EL BOTÓN ALTA:
+const btnAlta = document.getElementById('btn-alta');
+
+// 2. ESCUCHAMOS EL CLIC:
+btnAlta.addEventListener('click', function() {
+    
+    // 3. CAPTURAMOS LOS TRES DATOS DEL FORMULARIO PRINCIPAL:
+    let codAlta = document.getElementById('codigo').value;
+    
+    // parseInt convierte el texto que ingresó el usuario a un Número Entero (sin comas).
+    let cantComprada = parseInt(document.getElementById('cantidad').value);
+    
+    // parseFloat convierte el texto a un Número Decimal (porque el precio puede tener centavos).
+    let precioCompra = parseFloat(document.getElementById('precio').value);
+
+    // 4. VALIDAMOS LOS DATOS:
+    // El PDF exige que los tres datos estén presentes y sean números positivos[cite: 7].
+    // || significa "Ó". (Si no hay código, Ó la cantidad es menor a 1, Ó el precio es menor a 1).
+    if (!codAlta || cantComprada <= 0 || precioCompra <= 0) {
+        alert("El código, cantidad y precio deben ser valores positivos.");
+        return;
+    }
+
+    // 5. PRIMER FETCH (LECTURA): 
+    // Vamos a buscar cómo está el producto AHORA en la base de datos para saber su stock y precio actual[cite: 7].
+    fetch(`api_almacen/almacen_api.php?action=listar&codigo=${codAlta}`)
+    .then(res => res.json())
+    .then(datosBD => {
+        
+        // 6. VERIFICAMOS QUE EL PRODUCTO EXISTA:
+        if (datosBD.status === 200 && datosBD.cantidad > 0) {
+            
+            // 7. GUARDAMOS EL PRODUCTO ORIGINAL EN UNA VARIABLE:
+            // [0] significa "agarrá el primer elemento de la lista de productos" (como buscamos por ID, es el único).
+            let prod = datosBD.productos[0];
+            
+            // 8. CONVERTIMOS LOS DATOS VIEJOS A NÚMEROS:
+            // La base de datos nos los manda como texto, así que aseguramos que sean números para hacer matemática.
+            let stockViejo = parseInt(prod.cantidad);
+            let precioViejo = parseFloat(prod.precio_costo);
+
+            // 9. CALCULAMOS EL NUEVO STOCK:
+            // Sumamos lo que había más lo que estamos comprando.
+            let stockActualizado = stockViejo + cantComprada;
+
+            // 10. CALCULAMOS EL PRECIO PROMEDIO PONDERADO (Fórmula de Contabilidad):
+            // Multiplicamos la plata que teníamos invertida antes.
+            let valorViejo = stockViejo * precioViejo;
+            
+            // Multiplicamos la plata que estamos invirtiendo en esta compra.
+            let valorNuevo = cantComprada * precioCompra;
+            
+            // Sumamos la plata total y la dividimos por la nueva cantidad de mercadería.
+            let precioPromedio = (valorViejo + valorNuevo) / stockActualizado;
+
+            // 11. ARMAMOS LA URL DEL SEGUNDO FETCH (ESCRITURA):
+            // Le mandamos la acción "modificar" con el stockActualizado y el precioPromedio nuevo.
+            // Los demás datos (nombre, cantidad_minima) se los mandamos iguales para no borrarlos[cite: 8].
+            let urlUpdate = `api_almacen/almacen_api.php?action=modificar&codigo=${prod.codigo}&nombre=${prod.nombre}&precio_costo=${precioPromedio}&cantidad_minima=${prod.cantidad_minima}&cantidad=${stockActualizado}`;
+
+            // 12. HACEMOS EL SEGUNDO FETCH (El que realmente guarda los cambios):
+            fetch(urlUpdate)
+            .then(resUpdate => resUpdate.json()) // Traducimos la respuesta
+            .then(datosUpdate => {
+                
+                // 13. SI SE MODIFICÓ CORRECTAMENTE:
+                if (datosUpdate.status === 200) {
+                    // Mostramos el mensaje que exige el PDF[cite: 8].
+                    document.getElementById('pantalla-resultados').innerHTML = `<h3>Actualizado</h3>`;
+                }
+            });
+
+        } else {
+            // 14. SI EL PRODUCTO NO EXISTE:
+            // Si buscamos el código y el PHP nos dijo que no hay nada, mostramos error.
+            document.getElementById('pantalla-resultados').innerHTML = `<h3>Código Inexistente</h3>`;
+        }
+    });
+});
+</script>
