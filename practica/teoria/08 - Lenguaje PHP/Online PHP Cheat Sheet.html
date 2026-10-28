@@ -1,0 +1,1347 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Online PHP Cheat Sheet</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">			<!-- hilite.me / colorful -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Free online interactive PHP cheat sheet, perfect for both beginners and experienced programmers. Refresh your knowledge of PHP syntax and access the most commonly used code snippets at your fingertips.">
+<meta name="keywords" content="php,cheat,sheet">
+<link rel="canonical" href="https://htmlcheatsheet.com/php/">
+<meta property="og:title" content="Online PHP Cheat Sheet">
+<meta property="og:description" content="Free online interactive PHP cheat sheet, perfect for both beginners and experienced programmers. Refresh your knowledge of PHP syntax and access the most commonly used code snippets at your fingertips">
+<meta property="og:url" content="https://htmlcheatsheet.com/php/">
+<meta property="og:image" content="https://htmlcheatsheet.com/images/php-cheat-sheet-screenshot.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="https://htmlcheatsheet.com/favicon.ico">
+<link rel="stylesheet" href="https://htmlcheatsheet.com/codemirror/doc/docs.css">
+<link rel="stylesheet" href="https://htmlcheatsheet.com/codemirror/lib/codemirror.css">
+<script src="/assets/jscolor.min.js"></script>
+<script src="/tinymce/tinymce.gzip.js"></script>
+<script src="/assets/jquery.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+<script src="/codemirror/lib/codemirror.js"></script>
+<script src="/codemirror/addon/fold/xml-fold.js"></script>
+<script src="/codemirror/addon/edit/matchtags.js"></script>
+<script src="/codemirror/addon/selection/active-line.js"></script>
+<script src="/codemirror/mode/xml/xml.js"></script>
+<script src="/codemirror/mode/css/css.js"></script>
+<script src="/codemirror/mode/php/php.js"></script>
+<script src="/codemirror/mode/clike/clike.js"></script>	
+<script src="/cheatsheet.js"></script>
+<link rel="stylesheet" href="https://htmlcheatsheet.com/cheatsheet.css">
+<script src="php.js"></script>
+<link rel="stylesheet" href="php.css">
+<script src="https://cmp.setupcmp.com/cmp/cmp/cmp-stub.js" data-prop-id="1813"></script>
+<script src="https://cmp.setupcmp.com/cmp/cmp/cmp-v1.js" data-prop-stpd-cmp-id="1813" async></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H511WG5CL2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-H511WG5CL2');</script>
+</head>
+<body class="htmlpage">
+	<div id="pagewrap">		
+		<div id="tabContainer">
+		</div>
+		<a href="/" title="HTML Cheat Sheet Home" class="homeMenu">HTML Cheat Sheet</a>
+		<div class="mainContent">			
+			<div class="header">
+				<div class="navigationtabs"><span class="naviTitle">Cheat Sheets: </span>
+					<nav>
+						<ul>
+<li><a href="/" class="htmlColor" title="HTML Cheat Sheet">HTML</a></li>
+<li><a href="/css/" class="cssColor" title="CSS Cheat Sheet">CSS</a></li>
+<li><a href="/js/" class="jsColor" title="JS Cheat Sheet">JS</a></li>
+<li><a href="#" class="phpColor" title="PHP Cheat Sheet">PHP</a></li>
+<li><a href="/jquery/" class="jqColor" title="jQuery Cheat Sheet">&nbsp;&nbsp;&nbsp;jQ</a></li>
+<li><a href="/amp/" class="ampColor" title="AMP HTML Cheat Sheet"><span>⚡</span>&nbsp;AMP</a></li>
+<li><a href="/seo/" class="seoColor" title="SEO Cheat Sheet"><strong>S</strong><strong>E</strong><strong>O</strong></a></li>
+						</ul>
+					</nav>
+				</div>
+				<h1><a href="/" class="phpColor"><img src="/images/phpicon.png" height="50" width="36" alt="Cheat Sheet"> PHP Cheat Sheet</a></h1>
+			</div>
+		
+			<div id="minimizedPanels">
+			</div>
+			
+			<div class="masonryPanels">
+				<div class="masonryPanelWrap noPencil" id="firstGridItem">
+				</div>
+
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Editor 🖍</h2>
+						<div class="panelHelper">Syntax-highlighted code editor</div>
+						<div class="panelInner">
+				<div id="phpFieldecske"></div>
+				<script>
+					var phpFieldecske = CodeMirror(document.getElementById("phpFieldecske"), {
+						value: '<?php\n$i = "World!";\necho "Hello " . $i;\n\n// This is a comment\n$prime = array(2,3,5,7,11);\nfor( $i = 0; $i < 5; $i += 1) { \n  echo "\\n" . $prime[$i]; \n}\n\nfunction add($a, $b) {\n    return $a + $b;\n}\necho "\\n30 + 7 = " . add(30, 7);\n?>',
+						lineNumbers: true,
+						matchBrackets: true,
+						mode: "application/x-httpd-php",
+						indentUnit: 4,
+						indentWithTabs: true
+					  });
+				</script>
+				<p class="textRight"><textarea cols="10" id="copyTextArea" rows="1" spellcheck="false"></textarea><span class="button" id="copyButton">Copy</span></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="masonryPanelWrap noPencil" id="phpsyntax">
+					<div class="masonryPanel">
+						<h2>Basics &#128700;</h2>
+						<div class="panelHelper">Basic PHP syntax</div>
+						<div class="panelInner">
+<h4>Hello World!</h4>
+<div class="preWrap"><pre><span class="c557799">&lt;?php </span>
+<span class="c996633">$i</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;World!&quot;</span>;
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello &quot;</span><span class="c333333">.</span><span class="c996633">$i</span>; 
+<span class="c557799">?&gt; </span>
+</pre></div>
+
+
+<h4>Comments</h4>
+<div class="preWrap"><pre><span class="c557799">&lt;?php </span>
+<span class="c888888">// One liner</span>
+
+<span class="c888888"># another one liner</span>
+
+<span class="c888888">/* This is</span>
+<span class="c888888">a multiline</span>
+<span class="c888888">comment</span>
+<span class="c888888">*/</span>
+<span class="c557799">?&gt; </span>
+</pre></div>
+
+<h4>Defining Functions</h4>
+<div class="preWrap"><pre><span class="c008800">function</span> <span class="c0066BB">sayHello</span>() {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello!&quot;</span>;
+}
+sayHello(); <span class="c888888">// Outputs: Hello!</span>
+</pre></div>
+
+
+<h4>Variables</h4>
+<div class="preWrap"><pre>
+<span class="c996633">$i</span> <span class="c333333">=</span> <span class="c0000DD">1</span>;
+<span class="c996633">$pi</span> <span class="c333333">=</span> <span class="c6600EE">3.14</span>;
+<span class="c996633">$stringName</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;value&quot;</span>;
+<span class="c996633">$names</span> <span class="c333333">=</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;John&quot;</span>,<span class="bfff0f0">&quot;Jane&quot;</span>,<span class="bfff0f0">&quot;Jack&quot;</span>);
+<span class="c007020">var_dump</span>(<span class="c996633">$names</span>);
+</pre></div>
+
+
+<h4>var_dump</h4>
+<p>Dumps information about a variable.</p>
+<div class="preWrap"><pre>
+<span class="c996633">$a</span> <span class="c333333">=</span> <span class="c008800">array</span>(<span class="c0000DD">1</span>, <span class="c0000DD">2</span>, <span class="c008800">array</span>(<span class="bfff0f0">&quot;a&quot;</span>, <span class="bfff0f0">&quot;b&quot;</span>, <span class="bfff0f0">&quot;c&quot;</span>));
+<span class="c007020">var_dump</span>(<span class="c996633">$a</span>);
+</pre></div>
+
+<h4>Objects</h4>
+<div class="preWrap"><pre>
+<span class="c008800">class</span> <span class="cBB0066">foo</span> {
+   <span class="c008800">function</span> <span class="c0066BB">do_foo</span>() {
+     <span class="c008800">echo</span> <span class="bfff0f0">&quot;Doing foo.&quot;</span>; 
+    }
+ }
+<span class="c996633">$bar</span> <span class="c333333">=</span> <span class="c008800">new</span> foo;
+<span class="c996633">$bar</span><span class="c333333">-&gt;</span><span class="c0000CC">do_foo</span>();
+</pre></div>
+
+<h4>Escaping characters</h4>
+<div class="preWrap"><pre>
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>; <span class="c888888">//New line</span>
+</pre></div>
+<table>
+<tbody>
+<tr>
+<td>Line feed</td>
+<td><strong>\n</strong></td>
+</tr>
+<tr>
+<td>Carriage return</td>
+<td><strong>\r</strong></td>
+</tr>
+<tr>
+<td>Horizontal tab space</td>
+<td><strong>\t</strong></td>
+</tr>
+<tr>
+<td>Vertical tab</td>
+<td><strong>\v</strong></td>
+</tr>
+<tr>
+<td>Escape characters</td>
+<td><strong>\e</strong></td>
+</tr>
+<tr>
+<td>Form (page or section separator)&nbsp;</td>
+<td><strong>\f</strong></td>
+</tr>
+<tr>
+<td>Backslash</td>
+<td><strong>\\</strong></td>
+</tr>
+<tr>
+<td>Dollar sign</td>
+<td><strong>\$</strong></td>
+</tr>
+<tr>
+<td>Single quote</td>
+<td><strong>\'</strong></td>
+</tr>
+<tr>
+<td>Double quote</td>
+<td><strong>\"</strong></td>
+</tr>
+</tbody>
+</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Loops &#10160;</h2>
+						<div class="panelHelper">For and while loops in PHP </div>
+						<div class="panelInner">
+							<h4>For Loop</h4>
+<div class="preWrap"><pre><span class="c888888">// For loop count to 10</span>
+<span class="c008800">for</span>( <span class="c996633">$i</span> <span class="c333333">=</span> <span class="c0000DD">0</span>; <span class="c996633">$i</span> <span class="c333333">&lt;</span> <span class="c0000DD">10</span>; <span class="c996633">$i</span> <span class="c333333">+=</span> <span class="c0000DD">1</span>) { 
+    <span class="c008800">echo</span> <span class="c996633">$i</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>; 
+} 
+</pre></div>
+							<h4>Foreach Loop</h4>
+<div class="preWrap"><pre><span class="c888888">// Declare an array </span>
+<span class="c996633">$arr</span> <span class="c333333">=</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;tesla&quot;</span>, <span class="bfff0f0">&quot;bmw&quot;</span>, <span class="bfff0f0">&quot;audi&quot;</span>);  
+<span class="c888888">// Loop through the array elements </span>
+<span class="c008800">foreach</span> (<span class="c996633">$arr</span> <span class="c008800">as</span> <span class="c996633">$element</span>) { 
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;</span><span class="beeeeee">$element</span><span class="bfff0f0"> &quot;</span>; 
+} 
+</pre></div>
+							<h4>While Loop</h4>
+<div class="preWrap"><pre><span class="c888888">// Declare a number </span>
+<span class="c996633">$i</span> <span class="c333333">=</span> <span class="c0000DD">10</span>; 
+<span class="c888888">// Counting down to 0</span>
+<span class="c008800">while</span> (<span class="c996633">$i</span> <span class="c333333">&gt;=</span> <span class="c0000DD">0</span>) { 
+  <span class="c008800">echo</span> <span class="c996633">$i</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>; 
+  <span class="c996633">$i</span><span class="c333333">--</span>; 
+} 
+</pre></div>
+
+							<h4>Do-While Loop</h4>
+<div class="preWrap"><pre><span class="c996633">$i</span> <span class="c333333">=</span> <span class="c0000DD">10</span>; 
+<span class="c888888">// Counting back to 0</span>
+<span class="c008800">do</span> { 
+    <span class="c008800">echo</span> <span class="c996633">$i</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>; 
+    <span class="c996633">$i</span><span class="c333333">--</span>; 
+} <span class="c008800">while</span> (<span class="c996633">$i</span> <span class="c333333">&gt;=</span> <span class="c0000DD">0</span>); 
+</pre></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Useful Links 🔗</h2>
+						<div class="panelHelper">A list of free useful resources. </div>
+						<div class="panelInner">
+							<div class="buttonkaLista">
+<a href="https://www.php.net/" target="_blank" rel="nofollow">PHP.net</a>
+<a href="https://onlinephp.io/" target="_blank" rel="nofollow">PHP Compiler Online</a>
+<a href="https://copilot.microsoft.com/" target="_blank" rel="nofollow">MS Copilot</a>
+<a href="https://stackoverflow.com/questions/tagged/php" target="_blank" rel="nofollow">Stack Overflow</a>
+<a href="https://dev.to/t/php">DEV .to</a>
+<a href="https://phptherightway.com/" target="_blank" rel="nofollow">PHP The Right Way</a>
+<a href="https://codecanyon.net/category/php-scripts" target="_blank" rel="nofollow">Buy Scripts from CodeCanyon</a>
+<a href="https://www.sitepoint.com/php/" target="_blank" rel="nofollow">SitePoint</a>
+<a href="https://phpbuilder.com/" target="_blank" rel="nofollow">PHP Builder</a>
+<a href="https://www.reddit.com/r/PHP/" target="_blank" rel="nofollow">Reddit r/PHP</a>
+<a href="https://www.tutorialspoint.com/php/index.htm" target="_blank" rel="nofollow">Tutorials Point</a>
+<a href="https://www.geeksforgeeks.org/php-tutorial/" target="_blank" rel="nofollow">Geeks For Geeks</a>
+<a href="https://www.phpclasses.org/" target="_blank" rel="nofollow">PHP Classes</a>
+<a href="https://www.phpmyadmin.net/" target="_blank" rel="nofollow">phpMyAdmin</a>
+<a href="https://codebeautify.org/php-beautifier" target="_blank" rel="nofollow">PHP Beautifier</a>
+<!--
+<a href="#" target="_blank" rel="nofollow">LINK</a>
+	-->							
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Ads</h2>
+						<div class="panelHelper">We show ads to support this free website. </div>
+						<div class="panelInner">
+							<div class="reklamocska">
+<div class="minh280"><iframe id="htmlcheatsheet.com_336x280_responsive_1_DFP" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" topmargin="0" leftmargin="0" width="1" height="1"></iframe><script>(function () {var size='300x250',adunit = 'htmlcheatsheet.com_336x280_responsive_1_DFP',childNetworkId = '22366645410',xmlhttp = new XMLHttpRequest();xmlhttp.onreadystatechange = function(){if(xmlhttp.readyState==4 && xmlhttp.status==200){var iframe=document.getElementById(adunit).contentWindow.document;iframe.open();iframe.write(xmlhttp.responseText);iframe.close();}};var child=childNetworkId.trim()?','+childNetworkId.trim():'';xmlhttp.open("GET", 'https://pubads.g.doubleclick.net/gampad/adx?iu=/147246189'+child+'/'+adunit+'&sz='+encodeURI(size)+'&t=Placement_type%3Dserving&'+Date.now(), true);xmlhttp.send();})();</script></div>
+							</div>					
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Operators &#128291;</h2>
+						<div class="panelHelper">The compiler performs specific mathematical or logical manipulations. </div>
+						<div class="panelInner">
+<p>Hover your mouse for explanation.</p>
+<table>
+	<tbody>
+		<tr title="Sum of $x and $y">
+			<td><strong>$x + $y</strong></td>
+			<td>Addition</td>
+		</tr>
+		<tr title="Difference between $x and $y">
+			<td><strong>$x - $y</strong></td>
+			<td>Subtraction</td>
+		</tr>
+		<tr title="Product of $x and $y">
+			<td><strong>$x * $y</strong></td>
+			<td>Multiplication</td>
+		</tr>
+		<tr title="Quotient of $x and $y">
+			<td><strong>$x / $y</strong></td>
+			<td>Division</td>
+		</tr>
+		<tr title="The remainder of $x divided by $y">
+			<td><strong>$x % $y</strong></td>
+			<td>Modulus</td>
+		</tr>
+		<tr title="Raising $x to the $yth power">
+			<td><strong>$x ** $y</strong></td>
+			<td>Exponentiation</td>
+		</tr>
+		<tr></tr>
+	</tbody>
+</table>
+<h4>Assignment</h4>
+<table>
+	<tbody>
+		<tr title="Sets the left variable to the value of the right variable">
+			<td><strong>x = y</strong></td>
+			<td>x = y</td>
+		</tr>
+		<tr title="Addition">
+			<td><strong>x = x + y</strong></td>
+			<td>x += y</td>
+		</tr>
+		<tr title="Subtraction">
+			<td><strong>x = x - y</strong></td>
+			<td>x -= y</td>
+		</tr>
+		<tr title="Multiplication">
+			<td><strong>x = x * y</strong></td>
+			<td>x *= y</td>
+		</tr>
+		<tr title="Division">
+			<td><strong>x = x / y</strong></td>
+			<td>x /= y</td>
+		</tr>
+		<tr title="Modulus">
+			<td><strong>x = x % y</strong></td>
+			<td>x %= y</td>
+		</tr>
+	</tbody>
+</table>
+<h4>Comparison</h4>
+<table>
+	<tbody>
+		<tr title="Returns true if $x is equal to $y">
+			<td><strong>$x == $y</strong></td>
+			<td>Equal</td>
+		</tr>
+		<tr title="True if $x is equal to $y, and of the same type">
+			<td><strong>$x === $y</strong></td>
+			<td>Identical</td>
+		</tr>
+		<tr title="Returns true if $x is not equal to $y">
+			<td><strong>$x != $y</strong></td>
+			<td>Not equal</td>
+		</tr>
+		<tr title="Returns true if $x is not equal to $y">
+			<td><strong>$x &lt;&gt; $y</strong></td>
+			<td>Not equal</td>
+		</tr>
+		<tr title="Returns true if $x is not equal to $y, OR they are not of the same type">
+			<td><strong>$x !== $y</strong></td>
+			<td>Not identical</td>
+		</tr>
+		<tr title="Returns true if $x is greater than $y">
+			<td><strong>$x &gt; $y</strong></td>
+			<td>Greater than</td>
+		</tr>
+		<tr title="Returns true if $x is less than $y">
+			<td><strong>$x &lt; $y</strong></td>
+			<td>Less than</td>
+		</tr>
+		<tr title="Returns true if $x is greater than or equal to $y">
+			<td><strong>$x &gt;= $y</strong></td>
+			<td>Greater than or equal to</td>
+		</tr>
+		<tr title="Returns true if $x is less than or equal to $y">
+			<td><strong>$x &lt;= $y</strong></td>
+			<td>Less than or equal to</td>
+		</tr>
+		<tr title="&quot;Increment" decrement="" td=""></tr>
+		<tr title="Increments $x by one, then returns $x">
+			<td><strong>=++$x</strong></td>
+			<td>Pre-increment</td>
+		</tr>
+		<tr title="Returns $x, then increments $x by one">
+			<td><strong>$x++</strong></td>
+			<td>Post-increment</td>
+		</tr>
+		<tr title="Decrements $x by one, then returns $x">
+			<td><strong>--$x</strong></td>
+			<td>Pre-decrement</td>
+		</tr>
+		<tr title="Returns $x, then decrements $x by one">
+			<td><strong>$x--</strong></td>
+			<td>Post-decrement</td>
+		</tr>
+	</tbody>
+</table>
+<h4>Logical</h4>
+<table>
+	<tbody>
+		<tr title="True if $x is not true">
+			<td><strong>!$x</strong></td>
+			<td></td>
+			<td>Not</td>
+		</tr>
+		<tr title="True if both $x and $y are true">
+			<td><strong>$x and $y</strong></td>
+			<td><strong>$x &amp;&amp; $y</strong></td>
+			<td>And</td>
+		</tr>
+		<tr title="True if either $x or $y is true">
+			<td><strong>$x or $y</strong></td>
+			<td><strong>$x || $y</strong></td>
+			<td>Or</td>
+		</tr>
+		<tr title="True if either $x or $y is true, but not both">
+			<td><strong>$x xor $y</strong></td>
+			<td></td>
+			<td>Xor</td>
+		</tr>
+	</tbody>
+</table>
+<h4>String</h4>
+<table>
+	<tbody>
+		<tr title="Concatenation of $s1 and $s2">
+			<td><strong>$s1 . $s2</strong></td>
+			<td>Concatenation</td>
+		</tr>
+		<tr title="Appends $s2 to $s1">
+			<td><strong>$s1 .= $s2</strong></td>
+			<td>Concatenation assignment</td>
+		</tr>
+	</tbody>
+</table>
+<h4>Arrays</h4>
+<table>
+	<tbody>
+		<tr title="Union of $x and $y">
+			<td><strong>$x + $y</strong></td>
+			<td>Union</td>
+		</tr>
+		<tr title="Returns true if $x and $y have the same key/value pairs">
+			<td><strong>$x == $y</strong></td>
+			<td>Equality</td>
+		</tr>
+		<tr title="True if $x and $y have the same key/value pairs in the same order and of the same types">
+			<td><strong>$x === $y</strong></td>
+			<td>Identity</td>
+		</tr>
+		<tr title="Returns true if $x is not equal to $y">
+			<td><strong>$x != $y</strong></td>
+			<td>Inequality</td>
+		</tr>
+		<tr title="Returns true if $x is not equal to $y">
+			<td><strong>$x &lt;&gt; $y</strong></td>
+			<td>Inequality</td>
+		</tr>
+		<tr title="Returns true if $x is not identical to $y">
+			<td><strong>$x !== $y</strong></td>
+			<td>Non-identity</td>
+		</tr>
+	</tbody>
+</table>
+
+
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Conditions &#10541;</h2>
+						<div class="panelHelper">Conditional Assignment Operators </div>
+						<div class="panelInner">
+							<h4>If statement</h4>
+<div class="preWrap"><pre><span class="c008800">if</span> (condition) { 
+<span class="c888888">// execute this if condition is true</span>
+}
+</pre></div>
+							<h4>If - Else</h4>
+<div class="preWrap"><pre><span class="c008800">if</span> (condition) { 
+  <span class="c888888">// do this if condition is true</span>
+} <span class="c008800">else</span> { 
+  <span class="c888888">// do this if condition is false</span>
+}
+</pre></div>
+							<h4>If - Elseif - Else</h4>
+<div class="preWrap"><pre><span class="c008800">if</span> (condition) { 
+  <span class="c888888">// code if condition is true</span>
+} <span class="c008800">elseif</span> (condition2) { 
+  <span class="c888888">// condition is false and condition2 is true</span>
+} <span class="c008800">else</span> { 
+  <span class="c888888">// if none of the conditions are met </span>
+}
+</pre></div>
+							<h4>Switch Statement</h4>
+<div class="preWrap"><pre><span class="c008800">switch</span> (n) { 
+<span class="c008800">case</span> a<span class="c333333">:</span> 
+  <span class="c888888">//code to execute if n=a; </span>
+<span class="c008800">break</span>; 
+<span class="c008800">case</span> b<span class="c333333">:</span> 
+  <span class="c888888">//code to execute if n=b; </span>
+<span class="c008800">break</span>; 
+<span class="c008800">case</span> c<span class="c333333">:</span> 
+  <span class="c888888">//code to execute if n=c; </span>
+<span class="c008800">break</span>; 
+  <span class="c888888">// more cases as needed </span>
+<span class="c008800">default</span><span class="c333333">:</span> 
+  <span class="c888888">// if n is neither of the above; </span>
+}
+</pre></div>
+							<h4>Ternary</h4>
+							<p>Variable = (Condition) ? (Statement1) : (Statement2);</p>
+<div class="preWrap"><pre><span class="c996633">$result</span> <span class="c333333">=</span> condition <span class="c333333">?</span> value1 <span class="c333333">:</span> value2;
+</pre></div>
+<p>Is the same as:</p>
+<div class="preWrap"><pre><span class="c008800">if</span> (condition) {
+	<span class="c996633">$result</span> <span class="c333333">=</span> value1;
+} <span class="c008800">else</span> {
+	<span class="c996633">$result</span> <span class="c333333">=</span> value2;
+}
+</pre></div>
+						</div>
+					</div>
+				</div>
+				
+
+				<div class="masonryPanelWrap noPencil" id="phpfunctions">
+					<div class="masonryPanel">
+						<h2>Functions ♞</h2>
+						<div class="panelHelper">Functions are reusable blocks of code that perform specific tasks </div>
+						<div class="panelInner">
+							<h4>Parameters</h4>
+<div class="preWrap"><pre><span class="c008800">function</span> <span class="c0066BB">greet</span>(<span class="c996633">$name</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello &quot;</span> <span class="c333333">.</span> <span class="c996633">$name</span>;
+}
+greet(<span class="bfff0f0">&quot;John&quot;</span>); 
+<span class="c888888">// Outputs: Hello John</span>
+</pre></div>
+
+							<h4>Default Parameters</h4>
+<div class="preWrap"><pre><span class="c008800">function</span> <span class="c0066BB">greet</span>(<span class="c996633">$name</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;Visitor&quot;</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello, &quot;</span> <span class="c333333">.</span> <span class="c996633">$name</span>;
+}
+greet(); <span class="c888888">// Outputs: Hello, Visitor</span>
+</pre></div>
+
+							<h4>Return Values</h4>
+<div class="preWrap"><pre><span class="c008800">function</span> <span class="c0066BB">add</span>(<span class="c996633">$a</span>, <span class="c996633">$b</span>) {
+    <span class="c008800">return</span> <span class="c996633">$a</span> <span class="c333333">+</span> <span class="c996633">$b</span>;
+}
+<span class="c996633">$result</span> <span class="c333333">=</span> add(<span class="c0000DD">3</span>, <span class="c0000DD">5</span>); 
+<span class="c888888">// $result is 8</span>
+</pre></div>
+							<h4>Variable Scope</h4>
+<div class="preWrap"><pre><span class="c996633">$number</span> <span class="c333333">=</span> <span class="c0000DD">10</span>;
+<span class="c008800">function</span> <span class="c0066BB">multiplyByTwo</span>() {
+    <span class="c008800">global</span> <span class="c996633">$number</span>;
+    <span class="c996633">$number</span> <span class="c333333">*=</span> <span class="c0000DD">2</span>;
+}
+multiplyByTwo();
+<span class="c008800">echo</span> <span class="c996633">$number</span>; <span class="c888888">// Outputs: 20</span>
+</pre></div>
+
+							<h4>Anonymous Functions</h4>
+<div class="preWrap"><pre><span class="c996633">$greet</span> <span class="c333333">=</span> <span class="c008800">function</span>(<span class="c996633">$name</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello, &quot;</span> <span class="c333333">.</span> <span class="c996633">$name</span>;
+};
+<span class="c996633">$greet</span>(<span class="bfff0f0">&quot;Alice&quot;</span>); <span class="c888888">// Outputs: Hello, Alice</span>
+</pre></div>
+
+							<h4>Built-in Functions</h4>
+<p>Built-in functions for various tasks, such as string manipulation, array handling, file operations etc..</p>
+<ul>
+<li><strong>String</strong>: strlen(), str_replace(), substr()</li>
+<li><strong>Array</strong>: array_merge(), array_pop(), array_keys()</li>
+<li><strong>Math</strong>: abs(), ceil(), floor()</li>
+<li><strong>Date</strong>: date(), strtotime(), mktime()</li>
+<li><strong>File</strong>: fopen(), fwrite(), fread()</li>
+</ul>
+						</div>
+					</div>
+				</div>
+				
+
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Arrays &#10714;</h2>
+						<div class="panelHelper">A PHP array is a data structure that can store multiple values of different types under a single variable name, indexed either numerically or associatively.</div>
+						<div class="panelInner">
+							<h4>Indexed arrays</h4>
+<div class="preWrap"><pre>
+<span class="c996633">$colors</span> <span class="c333333">=</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;Red&quot;</span>, <span class="bfff0f0">&quot;Green&quot;</span>, <span class="bfff0f0">&quot;Blue&quot;</span>);
+<span class="c008800">echo</span> <span class="c996633">$colors</span>[<span class="c0000DD">0</span>]; <span class="c888888">// Outputs: Red</span>
+</pre></div>
+							<h4>Associative arrays</h4>
+<div class="preWrap"><pre>
+<span class="c996633">$age</span> <span class="c333333">=</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;Peter&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">35</span>, <span class="bfff0f0">&quot;Ben&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">37</span>, <span class="bfff0f0">&quot;Joe&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">43</span>);
+<span class="c008800">echo</span> <span class="c996633">$age</span>[<span class="bfff0f0">&#39;Peter&#39;</span>]; <span class="c888888">// Outputs: 35</span>
+</pre></div>
+
+							<h4>Multidimensional arrays</h4>
+<div class="preWrap"><pre>
+<span class="c996633">$students</span> <span class="c333333">=</span> <span class="c008800">array</span>(
+  <span class="bfff0f0">&quot;John&quot;</span> <span class="c333333">=&gt;</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;Math&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">123</span>, <span class="bfff0f0">&quot;Science&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">456</span>),
+  <span class="bfff0f0">&quot;Jane&quot;</span> <span class="c333333">=&gt;</span> <span class="c008800">array</span>(<span class="bfff0f0">&quot;Math&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">789</span>, <span class="bfff0f0">&quot;Science&quot;</span> <span class="c333333">=&gt;</span> <span class="c0000DD">987</span>)
+);
+<span class="c008800">echo</span> <span class="c996633">$students</span>[<span class="bfff0f0">&#39;John&#39;</span>][<span class="bfff0f0">&#39;Math&#39;</span>]; <span class="c888888">// Outputs: 123</span>
+</pre></div>
+						<h4>Array Functions</h4>
+					<p>Hover your mouse for explanation</p>
+<p><strong title="Changes all keys in an array to lowercase or uppercase">array_change_key_case</strong>, <strong title="Splits an array into smaller chunks">array_chunk</strong>, <strong title="Retrieves the values from a single column in an array">array_column</strong>, <strong title="Merges the keys from one array and the values from another into a new array">array_combine</strong>, <strong title="Counts all values in an array">array_count_values</strong>, <strong title="Compares arrays, returns the difference">array_diff</strong>, <strong title="Compares arrays, returns the difference (values and keys)">array_diff_assoc</strong>, <strong title="Compares arrays, returns the difference (keys only)">array_diff_key</strong>, <strong title="Compares arrays (keys and values) through a user callback function">array_diff_uassoc</strong>, <strong title="Compares arrays (keys only) through a user callback function">array_diff_ukey</strong>, <strong title="Fills an array with values">array_fill</strong>, <strong title="Fills an array with values, specifying keys">array_fill_keys</strong>, <strong title="Filters the elements of an array via a callback function">array_filter</strong>, <strong title="Exchanges all keys in an array with their associated values">array_flip</strong>, <strong title="Compare arrays and return their matches (values only)">array_intersect</strong>, <strong title="Compare arrays and return their matches (keys and values)">array_intersect_assoc</strong>, <strong title="Compare arrays and return their matches (keys only)">array_intersect_key</strong>, <strong title="Compare arrays via a user-defined callback function (keys and values)">array_intersect_uassoc</strong>, <strong title="Compare arrays via a user-defined callback function (keys only)">array_intersect_ukey</strong>, <strong title="Checks if a specified key exists in an array, alternative: key_exists">array_key_exists</strong>, <strong title="Returns all keys or a subset of keys in an array">array_keys</strong>, <strong title="Applies a callback to the elements of a given array">array_map</strong>, <strong title="Merge one or several arrays">array_merge</strong>, <strong title="Merge one or more arrays recursively">array_merge_recursive</strong>, <strong title="Sorts of multiple or multi-dimensional arrays">array_multisort</strong>, <strong title="Inserts a specified number of items (with a specified value) into an array">array_pad</strong>, <strong title="Deletes an element from the end of an array">array_pop</strong>, <strong title="Calculate the product of all values in an array">array_product</strong>, <strong title="Push one or several elements to the end of the array">array_push</strong>, <strong title="Pick one or more random entries out of an array">array_rand</strong>, <strong title="Reduce the array to a single string using a user-defined function">array_reduce</strong>, <strong title="Replaces elements in the first array with values from following arrays">array_replace</strong>, <strong title="Recursively replaces elements from later arrays into the first array">array_replace_recursive</strong>, <strong title="Returns an array in reverse order">array_reverse</strong>, <strong title="Searches the array for a given value and returns the first key if successful">array_search</strong>, <strong title="Shifts an element from the beginning of an array">array_shift</strong>, <strong title="Extracts a slice of an array">array_slice</strong>, <strong title="Removes a portion of the array and replaces it">array_splice</strong>, <strong title="Calculate the sum of the values in an array">array_sum</strong>, <strong title="Compare arrays and return the difference using a user function (values only)">array_udiff</strong>, <strong title="Compare arrays and return the difference using default and a user function (keys and values)">array_udiff_assoc</strong>, <strong title="Compare arrays and return the difference using two user functions (values and keys)">array_udiff_uassoc</strong>, <strong title="Compare arrays and return the matches via user function (values only)">array_uintersect</strong>, <strong title="Compare arrays and return the matches via a default user function (keys and values)">array_uintersect_assoc</strong>, <strong title="Compare arrays and return the matches via two user functions (keys and values)">array_uintersect_uassoc</strong>, <strong title="Removes duplicate values from an array">array_unique</strong>, <strong title="Adds one or more elements to the beginning of an array">array_unshift</strong>, <strong title="Returns all values of an array">array_values</strong>, <strong title="Applies a user function to every element in an array">array_walk</strong>, <strong title="Recursively applies a user function to every element of an array">array_walk_recursive</strong>, <strong title="Sorts an associative array in descending order according to the value">arsort</strong>, <strong title="Sorts an associative array in ascending order according to the value">asort</strong>, <strong title="Create an array containing variables and their values">compact</strong>, <strong title="Count all elements in an array, alternatively use&lt;strong&gt;sizeof&lt;/strong&gt;">count</strong>, <strong title="Returns the current element in an array, an alternative is&lt;strong&gt;pos&lt;/strong&gt;">current</strong>, <strong title="Return the current key and value pair from an array">each</strong>, <strong title="Set the internal pointer to the last element of an array">end</strong>, <strong title="Import variables from an array into the current symbol table">extract</strong>, <strong title="Checks if a value exists in an array">in_array</strong>, <strong title="Fetches a key from an array">key</strong>, <strong title="Sorts an associative array by key in reverse order">krsort</strong>, <strong title="Sorts an associative array by key">ksort</strong>, <strong title="Assigns variables as if they were an array">list</strong>, <strong title="Sorts an array using a &ldquo;natural order&rdquo; algorithm independent of case">natcasesort</strong>, <strong title="Sorts an array using a &ldquo;natural order&rdquo; algorithm">natsort</strong>, <strong title="Advance the internal pointer of an array">next</strong>, <strong title="Move the internal array pointer backward">prev</strong>, <strong title="Creates an array from a range of elements">range</strong>, <strong title="Set the internal array pointer to its first element">reset</strong>, <strong title="Sort an array in reverse order">rsort</strong>, <strong title="Shuffle an array">shuffle</strong>, <strong title="Sorts an indexed array in ascending order">sort</strong>, <strong title="Sorts an array with a user-defined comparison function">uasort</strong>, <strong title="Arrange an array by keys using a user-defined comparison function">uksort</strong>, <strong title="Categorize an array by values using a comparison function defined by the user">usort</strong></p>
+						</div>
+					</div>
+				</div>
+				
+
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Predefined Variables &#127758;</h2>
+						<div class="panelHelper">PHP offers a wide range of predefined variables to all scripts, encompassing everything from external inputs to built-in environment variables, last error messages, and more. This information is accessible through these variables.</div>
+						<div class="panelInner">
+							<h4>$GLOBALS</h4>
+							<p>They can be accessed from any scope. Variables in the outermost scope are automatically global and can be used inside functions. To use a global variable within a function, you must either declare it with the global keyword or use the $GLOBALS syntax.</p>
+<div class="preWrap"><pre><span class="c996633">$a</span> <span class="c333333">=</span> <span class="c0000DD">5</span>; 
+<span class="c996633">$b</span> <span class="c333333">=</span> <span class="c0000DD">10</span>; 
+<span class="c008800">function</span> <span class="c0066BB">addition</span>() { 
+  <span class="c996633">$GLOBALS</span>[<span class="bfff0f0">&#39;sum&#39;</span>] <span class="c333333">=</span> <span class="c996633">$GLOBALS</span>[<span class="bfff0f0">&#39;a&#39;</span>] <span class="c333333">+</span> <span class="c996633">$GLOBALS</span>[<span class="bfff0f0">&#39;b&#39;</span>]; 
+} 
+addition(); 
+<span class="c008800">echo</span> <span class="c996633">$sum</span>; 
+</pre></div>
+
+							<h4>Super Global Variables</h4>
+							<p>Hover your mouse for explanation</p>
+<p><strong title="This is a super global variable which holds information about headers, paths, and script locations">$_SERVER</strong>, <strong title="Superglobal variable that contains the filename of the currently executing script, relative to the document root">$_SERVER['PHP_SELF']</strong>, <strong title="Common Gateway Interface version of the the server:&lt;br /&gt;">$_SERVER['GATEWAY_INTERFACE']</strong>, <strong title="IP address of the host server:&lt;br /&gt;">$_SERVER['SERVER_ADDR']</strong>, <strong title="Host server name:&lt;br /&gt;">$_SERVER['SERVER_NAME']</strong>, <strong title="Server identification string:&lt;br /&gt;">$_SERVER['SERVER_SOFTWARE']</strong>, <strong title="Information protocol name and revision:&lt;br /&gt;">$_SERVER['SERVER_PROTOCOL']</strong>, <strong title="The request method used to access the page (like POST):&lt;br /&gt;">$_SERVER['REQUEST_METHOD']</strong>, <strong title="The timestamp of the start of the request:&lt;br /&gt;">$_SERVER['REQUEST_TIME']</strong>, <strong title="The query string if the page is accessed via a query string:&lt;br /&gt;">$_SERVER['QUERY_STRING']</strong>, <strong title="Accept header from the current request:&lt;br /&gt;">$_SERVER['HTTP_ACCEPT']</strong>, <strong title="The Accept_Charset header from the current request:&lt;br /&gt;">$_SERVER['HTTP_ACCEPT_CHARSET']</strong>, <strong title="The Host header from the current request:&lt;br /&gt;">$_SERVER['HTTP_HOST']</strong>, <strong title="The complete URL of the current page (not all user-agents support it):&lt;br /&gt;">$_SERVER['HTTP_REFERER']</strong>, <strong title="Is the script queried through a secure HTTP protocol:&lt;br /&gt;">$_SERVER['HTTPS']</strong>, <strong title="The IP address from where the user is viewing the current page:&lt;br /&gt;">$_SERVER['REMOTE_ADDR']</strong>, <strong title="The Hostname from where the user is viewing the current page:&lt;br /&gt;">$_SERVER['REMOTE_HOST']</strong>, <strong title="The port being used on the user's machine to communicate with the server:&lt;br /&gt;">$_SERVER['REMOTE_PORT']</strong>, <strong title="Absolute pathname of the executing script:&lt;br /&gt;">$_SERVER['SCRIPT_FILENAME']</strong>, <strong title="The value given to the SERVER_ADMIN directive in the web server configuration file:&lt;br /&gt;">$_SERVER['SERVER_ADMIN']</strong>, <strong title="The port on the server being used by the webserver for communication:&lt;br /&gt;">$_SERVER['SERVER_PORT']</strong>, <strong title="The server version and virtual hostname which are added to server-generated pages:&lt;br /&gt;">$_SERVER['SERVER_SIGNATURE']</strong>, <strong title="The file system based path to the current script:&lt;br /&gt;">$_SERVER['PATH_TRANSLATED']</strong>, <strong title="The path of the current script:&lt;br /&gt;">$_SERVER['SCRIPT_NAME']</strong>, <strong title="The URI of the current page:&lt;br /&gt;">$_SERVER['SCRIPT_URI']</strong></p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>PHP Forms &#9997;</h2>
+						<div class="panelHelper">An associative array of variables passed to the current script via the URL parameters (query string).</div>
+						<div class="panelInner">
+							<h4>$_GET</h4>
+							<p>It's used for retrieving data from URL parameters (query string).</p>
+<div class="preWrap"><pre>
+<span class="c888888">// URL: html6.com?x=1&amp;y=2</span>
+<span class="c996633">$x</span> <span class="c333333">=</span> <span class="c996633">$_GET</span>[<span class="bfff0f0">&#39;x&#39;</span>];  <span class="c888888">// $x will be 1</span>
+</pre></div>
+
+							<h4>$_POST</h4>
+							<p>Used for retrieving data from form submissions via HTTP POST method.</p>
+<div class="preWrap"><pre>
+<span class="c996633">$username</span> <span class="c333333">=</span> <span class="c996633">$_POST</span>[<span class="bfff0f0">&#39;username&#39;</span>]; 
+<span class="c888888">// Variable will contain the value entered in the form</span>
+</pre></div>
+							<p>Sent through form.php</p>
+<div class="preWrap"><pre><span style="color: #007700">&lt;form</span> <span class="c0000CC">method=</span><span class="bfff0f0">&quot;post&quot;</span> <span class="c0000CC">action=</span><span class="bfff0f0">&quot;form.php&quot;</span><span style="color: #007700">&gt;</span>
+  <span style="color: #007700">&lt;input</span> <span class="c0000CC">type=</span><span class="bfff0f0">&quot;text&quot;</span> <span class="c0000CC">name=</span><span class="bfff0f0">&quot;username&quot;</span><span style="color: #007700">&gt;</span>
+   <span style="color: #007700">&lt;input</span> <span class="c0000CC">type=</span><span class="bfff0f0">&quot;submit&quot;</span><span style="color: #007700">&gt;</span>
+<span style="color: #007700">&lt;/form&gt;</span>
+</pre></div>
+							<h4>$_REQUEST</h4>
+							<p>A general-purpose array that combines $_GET, $_POST, and $_COOKIE.</p>
+							<p>Example for the same HTML as above:</p>
+<div class="preWrap"><pre>
+<span class="c008800">if</span> (<span class="c996633">$_SERVER</span>[<span class="bfff0f0">&#39;REQUEST_METHOD&#39;</span>] <span class="c333333">==</span> <span class="bfff0f0">&#39;POST&#39;</span>) {
+    <span class="c996633">$username</span> <span class="c333333">=</span> <span class="c996633">$_REQUEST</span>[<span class="bfff0f0">&#39;username&#39;</span>];
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Hello, &quot;</span> <span class="c333333">.</span> <span class="c007020">htmlspecialchars</span>(<span class="c996633">$username</span>);
+}
+</pre></div>
+<h4>Security &#128110;</h4>
+<p>Always sanitize and validate user input on the server-side</p>
+<ul>
+<li><strong>htmlspecialchars()</strong>: This function converts special characters to HTML entities.&nbsp;</li>
+<li><strong>trim()</strong>: This function removes whitespace (or other characters specified) from the beginning and end of a string.</li>
+<li><strong>stripslashes()</strong>: This function removes backslashes (<strong>\</strong>) from a string.</li>
+</ul>
+<div class="preWrap"><pre><span class="c888888">// Assuming form submission</span>
+<span class="c008800">if</span> (<span class="c996633">$_SERVER</span>[<span class="bfff0f0">&quot;REQUEST_METHOD&quot;</span>] <span class="c333333">==</span> <span class="bfff0f0">&quot;POST&quot;</span>) {
+    <span class="c888888">// Sanitize and trim input</span>
+    <span class="c996633">$input</span> <span class="c333333">=</span> <span class="c007020">htmlspecialchars</span>(<span class="c996633">$_POST</span>[<span class="bfff0f0">&#39;input_field&#39;</span>], ENT_QUOTES, <span class="bfff0f0">&#39;UTF-8&#39;</span>);
+    <span class="c996633">$input</span> <span class="c333333">=</span> trim(<span class="c996633">$input</span>);
+    <span class="c888888">// Handle magic_quotes_gpc scenario if needed</span>
+    <span class="c008800">if</span> (<span class="c007020">get_magic_quotes_gpc</span>()) {
+        <span class="c996633">$input</span> <span class="c333333">=</span> <span class="c007020">stripslashes</span>(<span class="c996633">$input</span>);
+    }
+    <span class="c888888">// $input is now safe to use for further processing or storage</span>
+}
+</pre></div>
+
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Predefined Functions</h2>
+						<div class="panelHelper">These PHP variable handling functions are part of the PHP core and there's no installation required to use them.</div>
+						<div class="panelInner">
+							<h4>boolval</h4>
+							<p>Returns the boolean value of a variable</p>
+<table><thead><tr><td>input</td><td>boolval(input)</td></tr></thead><tbody><tr><td>0</td><td>false</td></tr><tr><td>12</td><td>true</td></tr><tr><td>0.0</td><td>false</td></tr><tr><td>1.2</td><td>true</td></tr><tr><td>""</td><td>false</td></tr><tr><td>"hello"</td><td>true</td></tr><tr><td>"0"</td><td>false</td></tr><tr><td>"1"</td><td>true</td></tr><tr><td>[1, 2]</td><td>true</td></tr><tr><td>[]</td><td>false</td></tr><tr><td>new stdClass</td><td>true</td></tr></tbody></table>
+							<h4>isset</h4>
+							<p>To check whether a variable is empty</p>
+<div class="preWrap"><pre><span class="c996633">$x</span> <span class="c333333">=</span> <span class="c0000DD">0</span>; 
+<span class="c008800">if</span> (<span class="c007020">isset</span>(<span class="c996633">$x</span>)) { 
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;x is set&quot;</span>; 
+} 
+<span class="c888888">// True because $x is set </span>
+</pre></div>
+							<h4>unset</h4>
+							<p>Unsets variable</p>
+<div class="preWrap"><pre><span class="c996633">$x</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;Hello world!&quot;</span>; 
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;before unset: &quot;</span> <span class="c333333">.</span> <span class="c996633">$x</span>; 
+<span class="c007020">unset</span>(<span class="c996633">$x</span>); 
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;after unset: &quot;</span> <span class="c333333">.</span> <span class="c996633">$a</span>;
+<span class="c888888">// Throws warning for undefined variable</span>
+</pre></div>
+
+							<h4>debug_zval_dump</h4>
+							<p>Provides a detailed dump of a variable's reference count and type information.</p>
+<div class="preWrap"><pre>
+<span class="c996633">$a</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;Hello, World!&quot;</span>;
+<span class="c996633">$b</span> <span class="c333333">=</span> <span class="c996633">$a</span>;
+<span class="c996633">$c</span> <span class="c333333">=</span> <span class="c333333">&amp;</span><span class="c996633">$a</span>;
+<span class="c007020">debug_zval_dump</span>(<span class="c996633">$a</span>);
+</pre></div>
+
+<p><em>string(13) "Hello, World!" interned</em></p>
+							<h4>empty</h4>
+							<p>Check whether a variable is empty or not</p>
+<table>
+<thead>
+<tr>
+<td>input</td>
+<td>empty(input)</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>""</td>
+<td>true</td>
+</tr>
+<tr>
+<td>0</td>
+<td>true</td>
+</tr>
+<tr>
+<td>php</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+							<h4>floatval</h4>
+							<p>Converts a given variable to a floating-point number</p>
+<table>
+<thead>
+<tr>
+<td>input</td>
+<td>floatval(input)</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12.3</td>
+<td>12.3</td>
+</tr>
+<tr>
+<td>"12.3abc"</td>
+<td>12.3</td>
+</tr>
+<tr>
+<td>true</td>
+<td>1</td>
+</tr>
+<tr>
+<td>"abc"</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+							<h4>get_defined_vars</h4>
+							<p>Returns the resource type of a given resource variable</p>
+<div class="preWrap"><pre><span class="c888888">// prints: stream </span>
+<span class="c996633">$fp</span> <span class="c333333">=</span> <span class="c007020">fopen</span>(<span class="bfff0f0">&quot;file&quot;</span>, <span class="bfff0f0">&quot;w&quot;</span>); 
+<span class="c008800">echo</span> <span class="c007020">get_resource_type</span>(<span class="c996633">$fp</span>) <span class="c333333">.</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>; 
+<span class="c888888">// prints: curl </span>
+<span class="c996633">$c</span> <span class="c333333">=</span> <span class="c007020">curl_init</span> (); 
+<span class="c008800">echo</span> <span class="c007020">get_resource_type</span>(<span class="c996633">$c</span>) <span class="c333333">.</span> <span class="bfff0f0">&quot;</span><span class="c666666">\n</span><span class="bfff0f0">&quot;</span>;
+</pre></div>
+
+							<h4>get_resource_type</h4>
+							<p>Used to obtain the type of a given resource</p>
+<div class="preWrap"><pre>
+<span class="c888888">// Open a file handle</span>
+<span class="c996633">$file</span> <span class="c333333">=</span> <span class="c007020">fopen</span>(<span class="bfff0f0">&quot;example.txt&quot;</span>, <span class="bfff0f0">&quot;r&quot;</span>);
+<span class="c888888">// Get the type of the resource</span>
+<span class="c008800">echo</span> <span class="c007020">get_resource_type</span>(<span class="c996633">$file</span>); <span class="c888888">// Outputs: &quot;stream&quot;</span>
+<span class="c888888">// Close the file handle</span>
+<span class="c007020">fclose</span>(<span class="c996633">$file</span>);
+</pre></div>
+
+							<h4>gettype</h4>
+							<p>Used to determine the type of a given variable</p>
+<table><thead><tr><td>$variable</td><td>gettype($variable)</td></tr></thead><tbody><tr><td>12</td><td>integer</td></tr><tr><td>12.3</td><td>double</td></tr><tr><td>"HTML Cheat Sheet"</td><td>string</td></tr><tr><td>array(1, 2, 3)</td><td>array</td></tr><tr><td>fopen("file.txt", "r")</td><td>resource</td></tr></tbody></table>
+							<h4>intval</h4>
+							<p>Integer value of a variable</p>
+<table><thead><tr><td>$variable</td><td><span class="hljs-title function_ invoke__">intval</span>($variable)</td></tr></thead><tbody><tr><td>12</td><td>12</td></tr><tr><td>12.3</td><td>12</td></tr><tr><td>"12.3"</td><td>12</td></tr><tr><td>"101010"</td><td><span class="hljs-title function_ invoke__">intval</span>(<span class="hljs-variable">"101010"</span>, 2) =&gt; 42</td></tr><tr><td>"Hello"</td><td>0</td></tr></tbody></table>
+							<h4>is_array</h4>
+							<p>To check whether a given variable is an array</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Database &#128423;</h2>
+						<div class="panelHelper">MySQLi (MySQL Improved) is an extension for PHP that provides an interface for interacting with MySQL databases.</div>
+						<div class="panelInner">
+							<h4>Connecting to DB</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$mysqli</span> <span class="c333333">=</span> <span class="c007020">mysqli_connect</span>(<span class="bfff0f0">&quot;localhost&quot;</span>, <span class="bfff0f0">&quot;username&quot;</span>, <span class="bfff0f0">&quot;password&quot;</span>, <span class="bfff0f0">&quot;database&quot;</span>);
+<span class="c008800">if</span> (<span class="c333333">!</span><span class="c996633">$mysqli</span>) {
+    <span class="c008800">die</span>(<span class="bfff0f0">&quot;Connection failed: &quot;</span> <span class="c333333">.</span> mysqli_connect_error());
+}
+</pre></div>
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$mysqli</span> <span class="c333333">=</span> <span class="c008800">new</span> mysqli(<span class="bfff0f0">&quot;localhost&quot;</span>, <span class="bfff0f0">&quot;username&quot;</span>, <span class="bfff0f0">&quot;password&quot;</span>, <span class="bfff0f0">&quot;database&quot;</span>);
+<span class="c008800">if</span> (<span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">connect_error</span>) {
+    <span class="c008800">die</span>(<span class="bfff0f0">&quot;Connection failed: &quot;</span> <span class="c333333">.</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">connect_error</span>);
+}
+</pre></div>
+
+							<h4>Queries</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$result</span> <span class="c333333">=</span> mysqli_query(<span class="c996633">$mysqli</span>, <span class="bfff0f0">&quot;SELECT * FROM table_name&quot;</span>);
+<span class="c008800">if</span> (<span class="c996633">$result</span>) {
+    <span class="c008800">while</span> (<span class="c996633">$row</span> <span class="c333333">=</span> mysqli_fetch_assoc(<span class="c996633">$result</span>)) {
+        <span class="c008800">echo</span> <span class="c996633">$row</span>[<span class="bfff0f0">&quot;column_name&quot;</span>];
+    }
+}
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$result</span> <span class="c333333">=</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">query</span>(<span class="bfff0f0">&quot;SELECT * FROM table_name&quot;</span>);
+<span class="c008800">if</span> (<span class="c996633">$result</span>) {
+    <span class="c008800">while</span> (<span class="c996633">$row</span> <span class="c333333">=</span> <span class="c996633">$result</span><span class="c333333">-&gt;</span><span class="c0000CC">fetch_assoc</span>()) {
+        <span class="c008800">echo</span> <span class="c996633">$row</span>[<span class="bfff0f0">&quot;column_name&quot;</span>];
+    }
+}
+</pre></div>
+
+							<h4>Prepared Statements</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$stmt</span> <span class="c333333">=</span> mysqli_prepare(<span class="c996633">$mysqli</span>, <span class="bfff0f0">&quot;SELECT * FROM table_name WHERE column_name = ?&quot;</span>);
+mysqli_stmt_bind_param(<span class="c996633">$stmt</span>, <span class="bfff0f0">&quot;s&quot;</span>, <span class="c996633">$value</span>);
+mysqli_stmt_execute(<span class="c996633">$stmt</span>);
+<span class="c996633">$result</span> <span class="c333333">=</span> mysqli_stmt_get_result(<span class="c996633">$stmt</span>);
+<span class="c008800">while</span> (<span class="c996633">$row</span> <span class="c333333">=</span> mysqli_fetch_assoc(<span class="c996633">$result</span>)) {
+    <span class="c008800">echo</span> <span class="c996633">$row</span>[<span class="bfff0f0">&quot;column_name&quot;</span>];
+}
+mysqli_stmt_close(<span class="c996633">$stmt</span>);
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$stmt</span> <span class="c333333">=</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">prepare</span>(<span class="bfff0f0">&quot;SELECT * FROM table_name WHERE column_name = ?&quot;</span>);
+<span class="c996633">$stmt</span><span class="c333333">-&gt;</span><span class="c0000CC">bind_param</span>(<span class="bfff0f0">&quot;s&quot;</span>, <span class="c996633">$value</span>);
+<span class="c996633">$stmt</span><span class="c333333">-&gt;</span><span class="c0000CC">execute</span>();
+<span class="c996633">$result</span> <span class="c333333">=</span> <span class="c996633">$stmt</span><span class="c333333">-&gt;</span><span class="c0000CC">get_result</span>();
+<span class="c008800">while</span> (<span class="c996633">$row</span> <span class="c333333">=</span> <span class="c996633">$result</span><span class="c333333">-&gt;</span><span class="c0000CC">fetch_assoc</span>()) {
+    <span class="c008800">echo</span> <span class="c996633">$row</span>[<span class="bfff0f0">&quot;column_name&quot;</span>];
+}
+<span class="c996633">$stmt</span><span class="c333333">-&gt;</span><span class="c0000CC">close</span>();
+</pre></div>
+
+							<h4>Inserting Data</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;INSERT INTO table_name (column1, column2) VALUES (&#39;value1&#39;, &#39;value2&#39;)&quot;</span>;
+<span class="c008800">if</span> (mysqli_query(<span class="c996633">$mysqli</span>, <span class="c996633">$sql</span>)) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;New record created successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> mysqli_error(<span class="c996633">$mysqli</span>);
+}
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;INSERT INTO table_name (column1, column2) VALUES (&#39;value1&#39;, &#39;value2&#39;)&quot;</span>;
+<span class="c008800">if</span> (<span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">query</span>(<span class="c996633">$sql</span>) <span class="c333333">===</span> <span class="c008800">TRUE</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;New record created successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">error</span>;
+}
+</pre></div>
+
+							<h4>Updating Data</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;UPDATE table_name SET column1 = &#39;value&#39; WHERE condition&quot;</span>;
+<span class="c008800">if</span> (mysqli_query(<span class="c996633">$mysqli</span>, <span class="c996633">$sql</span>)) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Record updated successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> mysqli_error(<span class="c996633">$mysqli</span>);
+}
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;UPDATE table_name SET column1 = &#39;value&#39; WHERE condition&quot;</span>;
+<span class="c008800">if</span> (<span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">query</span>(<span class="c996633">$sql</span>) <span class="c333333">===</span> <span class="c008800">TRUE</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Record updated successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">error</span>;
+}
+</pre></div>
+
+							<h4>Deleting Data</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;DELETE FROM table_name WHERE condition&quot;</span>;
+<span class="c008800">if</span> (mysqli_query(<span class="c996633">$mysqli</span>, <span class="c996633">$sql</span>)) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Record deleted successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> mysqli_error(<span class="c996633">$mysqli</span>);
+}
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$sql</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;DELETE FROM table_name WHERE condition&quot;</span>;
+<span class="c008800">if</span> (<span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">query</span>(<span class="c996633">$sql</span>) <span class="c333333">===</span> <span class="c008800">TRUE</span>) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Record deleted successfully&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Error: &quot;</span> <span class="c333333">.</span> <span class="c996633">$sql</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span> <span class="c333333">.</span> <span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">error</span>;
+}
+</pre></div>
+
+							<h4>Closing the Connection</h4>
+<h5>Procedural:</h5>
+<div class="preWrap"><pre>mysqli_close(<span class="c996633">$mysqli</span>);
+</pre></div>
+
+<h5>Object-Oriented:</h5>
+<div class="preWrap"><pre><span class="c996633">$mysqli</span><span class="c333333">-&gt;</span><span class="c0000CC">close</span>();
+</pre></div>
+<h4>Common Functions Overview</h4>
+<ul>
+<li><strong>Connecting</strong>: mysqli_connect, mysqli_connect_error, mysqli_close</li>
+<li><strong>Queries</strong>: mysqli_query, mysqli_fetch_assoc, mysqli_num_rows</li>
+<li><strong>Prepared Statemen</strong>: mysqli_prepare, mysqli_stmt_bind_param, mysqli_stmt_execute, mysqli_stmt_get_result, mysqli_stmt_close</li>
+<li><strong>Error Handling</strong>: mysqli_error, mysqli_stmt_error</li>
+</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Ads</h2>
+						<div class="panelHelper">We show ads to support this free website.</div>
+						<div class="panelInner">
+							<div class="reklamocska">
+<div class="minh600"><iframe id="htmlcheatsheet.com_300x600_left_responsive_3_DFP" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" topmargin="0" leftmargin="0" width="1" height="1"></iframe><script>(function () {var size='300x600|300x250',adunit = 'htmlcheatsheet.com_300x600_left_responsive_3_DFP',childNetworkId = '22366645410',xmlhttp = new XMLHttpRequest();xmlhttp.onreadystatechange = function(){if(xmlhttp.readyState==4 && xmlhttp.status==200){var iframe=document.getElementById(adunit).contentWindow.document;iframe.open();iframe.write(xmlhttp.responseText);iframe.close();}};var child=childNetworkId.trim()?','+childNetworkId.trim():'';xmlhttp.open("GET", 'https://pubads.g.doubleclick.net/gampad/adx?iu=/147246189'+child+'/'+adunit+'&sz='+encodeURI(size)+'&t=Placement_type%3Dserving&'+Date.now(), true);xmlhttp.send();})();</script></div>
+							</div>					
+						</div>
+					</div>
+				</div>		
+						
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Regular Exprressions &#129327;</h2>
+						<div class="panelHelper">RegEx syntax and functions </div>
+						<div class="panelInner">
+<h4>Syntax</h4>
+<p><strong>$exp = "/cheatsheet/i";</strong></p>
+<div class="preWrap"><pre><span class="c996633">$email</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;admin@htmlcheatsheet.com&quot;</span>;
+<span class="c008800">if</span> (<span class="c007020">preg_match</span>(<span class="bfff0f0">&#39;/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/&#39;</span>, <span class="c996633">$email</span>)) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Valid email address&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Invalid email&quot;</span>;
+}
+</pre></div>
+<h4>RegEx Functions</h4>
+<p><strong>preg_match()</strong> - Returns 1 if the pattern was found in the string and 0 if not</p>
+<p><strong>preg_match_all()</strong> - Returns the number of times the pattern was found in the string, which may also be 0</p>
+<p><strong>preg_replace()</strong> - Returns a new string where matched patterns have been replaced with another string</p>
+<h4>Modifiers</h4>
+<p><strong>i</strong> -&nbsp;Performs a case-insensitive search</p>
+<p><strong>m</strong> - Performs a multiline search (patterns that search for the beginning or end of a string will match the beginning or end of each line)</p>
+<p><strong>u</strong> -&nbsp;Enables correct matching of UTF-8 encoded patterns</p>
+<h4>Patterns</h4>
+<p><strong>[abc]</strong><span>&nbsp;</span>&ndash; Find one character from the options between the brackets</p>
+<p><strong>[^abc]</strong><span>&nbsp;</span>&ndash; Find any character NOT between the brackets</p>
+<p><strong>[0-9]</strong><span>&nbsp;</span>&ndash; Find one character from the range 0 to 9</p>
+<h4>Metacharacters</h4>
+<p><strong>|</strong> - Find a match for any one of the patterns separated by | as in: cat|dog|fish</p>
+<p><strong>.&nbsp;</strong> - Find just one instance of any character</p>
+<p><strong>^</strong> - Finds a match as the beginning of a string as in: ^Hello</p>
+<p><strong>$</strong> -&nbsp;Finds a match at the end of the string as in: World$</p>
+<p><strong>\d</strong> -&nbsp;Find a digit</p>
+<p><strong>\s -</strong>Find a whitespace character</p>
+<p><strong>\b</strong> -&nbsp;Find a match at the beginning of a word like this: \bWORD, or at the end of a word like this: WORD\b</p>
+<p><strong>\uxxxx</strong> -&nbsp;Find the Unicode character specified by the hexadecimal number xxxx</p>
+<h4>Quantifiers</h4>
+<p><strong>n+</strong> - Matches any string that contains at least one n</p>
+<p><strong>n*</strong> -&nbsp;Matches any string that contains zero or more occurrences of n</p>
+<p><strong>n?</strong> -&nbsp;Matches any string that contains zero or one occurrences of n</p>
+<p><strong>n{x}</strong> -&nbsp;Matches any string that contains a sequence of X n&rsquo;s</p>
+<p><strong>n{x,y}</strong> -&nbsp;Matches any string that contains a sequence of X to Y n&rsquo;s</p>
+<p><strong>n{x,}</strong> -&nbsp;Matches any string that contains a sequence of at least X n&rsquo;s</p>
+<h4>Grouping</h4>
+<p>Use parentheses ( ) to apply quantifiers to entire patterns or select parts of the pattern to be used as a match.</p>
+<h4>Examples</h4>
+<div class="preWrap"><pre><span class="c996633">$password</span> <span class="c333333">=</span> <span class="bfff0f0">&quot;HTMLcheatSheet123!&quot;</span>;
+<span class="c008800">if</span> (<span class="c007020">preg_match</span>(<span class="bfff0f0">&#39;/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}$/&#39;</span>, <span class="c996633">$password</span>)) {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Valid password&quot;</span>;
+} <span class="c008800">else</span> {
+    <span class="c008800">echo</span> <span class="bfff0f0">&quot;Not strong enough&quot;</span>;
+}
+</pre></div>
+
+
+
+						</div>
+					</div>
+				</div>
+<!--
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>TITLE___</h2>
+						<div class="panelHelper">__helptext__ </div>
+						<div class="panelInner">
+							<h4>title</h4>
+
+							<h4>title</h4>
+
+							<h4>title</h4>
+
+							<h4>title</h4>
+
+							<h4>title</h4>
+
+							<h4>title</h4>
+
+						</div>
+					</div>
+				</div>
+-->
+
+				<div class="masonryPanelWrap noPencil" id="bestpractices">
+					<div class="masonryPanel">
+						<h2>Common Errors &#10071;</h2>
+						<div class="panelHelper">Tips to keep your code error-free.</div>
+						<div class="panelInner">
+<h3 class="textCenter"><img src="/images/semicolon-warning.png" alt="semicolon warning"> Don't forget the semicolon!</h3>
+<ul>
+	<li>Mismatched brackets <strong>()</strong></li>
+	<li>Incorrect quotes: <strong>" '</strong></li>
+	<li>Undefined variables</li>
+	<li>Case sensitivity <strong>$Var</strong> &ne; <strong>$var</strong></li>
+	<li>Incorrect function calls that does not exist or with incorrect parameters.</li>
+</ul>
+<h4>File Inclusion Errors</h4>
+<p>Using <strong>include</strong> or <strong>require</strong> with an incorrect file path. Use absolute paths or ensure relative paths are correct.</p>
+<h4>SQL Injection</h4>
+<p>Failing to sanitize user inputs can lead to <strong>SQL injection attacks</strong>. Use prepared statements and parameterized queries.</p>
+<h4>Error Handling</h4>
+<p>Use <strong>try-catch</strong> blocks and implementing proper error handling mechanisms.</p>
+<h4>Incorrect Array Usage</h4>
+<p>Check if array keys exist before accessing them.</p>
+<h4>Session Handling</h4>
+<p>Start sessions with <strong>session_start()</strong> and handle session variables correctly.</p>
+<h4>Output Buffering</h4>
+<p>Unintentional output before headers are sent can cause "headers already sent" errors. Use output buffering or ensure no output before <strong>header()</strong> calls.</p>
+<h4>Scope Issues</h4>
+<p>Variable scope misunderstandings, such as trying to access a variable outside its defined scope. Use <strong>global</strong> keyword or pass variables as function arguments.</p>
+<h4>Misconfigured php.ini</h4>
+<p>Incorrect settings in the <strong>php.ini</strong> file can lead to various issues. Ensure configuration settings are appropriate for your environment.</p>
+<h4>Deprecated Features</h4>
+<p>Using deprecated functions or features that may be removed in future PHP versions. Refer to the latest PHP documentation.</p>
+<h4>Incorrect Timezone Configuration</h4>
+<p>Set the default timezone using <strong>date_default_timezone_set()</strong>.</p>
+<h4>Missing or Incorrect Encoding</h4>
+<p>Ensure correct character encoding is used, especially with multibyte strings.</p>
+<h4>Memory Limit Issues</h4>
+<p>Increase memory limit in <strong>php.ini</strong> or optimize code to use less memory.</p>
+<h3>Best Practices to Avoid Common PHP Errors</h3>
+<ul>
+	<li><strong>Use Error Reporting</strong>: Enable error reporting during development using <strong>error_reporting(E_ALL)</strong> and <strong>ini_set('display_errors', 1)</strong>.</li>
+	<li><strong>Code Reviews</strong>: Regular code reviews can catch errors early.</li>
+	<li><strong>Testing</strong>: Write unit tests and integration tests to cover different code paths.</li>
+	<li><strong>Documentation</strong>: Keep your code well-documented for easier maintenance and understanding.</li>
+	<li><strong>Stay Updated</strong>: Keep up with the latest PHP versions and best practices.</li>
+</ul>
+						</div>
+					</div>
+				</div>
+				
+
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>PHP Filters ⚗️</h2>
+						<div class="panelHelper">Used to validate and filter data that is coming from insecure sources like user input. </div>
+						<div class="panelInner">
+<div class="preWrap"><pre><span class="c008800">if</span> (<span class="c996633">$_SERVER</span>[<span class="bfff0f0">&quot;REQUEST_METHOD&quot;</span>] <span class="c333333">==</span> <span class="bfff0f0">&quot;POST&quot;</span>) {
+    <span class="c888888">// Define filters</span>
+    <span class="c996633">$filters</span> <span class="c333333">=</span> <span class="c008800">array</span>(
+        <span class="bfff0f0">&#39;email&#39;</span> <span class="c333333">=&gt;</span> FILTER_VALIDATE_EMAIL,  
+<span class="c888888">// Validate email address and optionally, more filters</span>
+    );
+    <span class="c888888">// Apply filters to $_POST data</span>
+    <span class="c996633">$sanitized_inputs</span> <span class="c333333">=</span> <span class="c007020">filter_input_array</span>(INPUT_POST, <span class="c996633">$filters</span>);
+    <span class="c888888">// Check if email is valid</span>
+    <span class="c008800">if</span> (<span class="c996633">$sanitized_inputs</span>[<span class="bfff0f0">&#39;email&#39;</span>] <span class="c333333">===</span> <span class="c008800">false</span>) {
+        <span class="c008800">echo</span> <span class="bfff0f0">&quot;Invalid email address!&quot;</span>;
+    } <span class="c008800">else</span> {
+        <span class="c888888">// Use the sanitized input</span>
+        <span class="c996633">$email</span> <span class="c333333">=</span> <span class="c996633">$sanitized_inputs</span>[<span class="bfff0f0">&#39;email&#39;</span>];
+        <span class="c008800">echo</span> <span class="bfff0f0">&quot;Valid email address: &quot;</span> <span class="c333333">.</span> <span class="c996633">$email</span>;
+    }
+}
+</pre></div>
+
+<h4>Filter Functions</h4>
+<ul>
+<li><strong>filter_has_var()</strong> - To check if a variable of the specified type exists</li>
+<li><strong>filter_id()</strong> - &nbsp;Returns the ID belonging to a named filter</li>
+<li><strong>filter_input()</strong> - Retrieves a specified external variable by name and optionally filters it</li>
+<li><strong>filter_input_array()</strong> - Pulls external variables and optionally filters them</li>
+<li><strong>filter_list()</strong> - &nbsp;Returns a list of all supported filters</li>
+<li><strong>filter_var_array()</strong> - &nbsp;Gets multiple variables and optionally filters them</li>
+<li><strong>filter_var()</strong> - &nbsp;Filters a variable with a specified filter</li>
+</ul>
+<h4>Filter Constants</h4>
+<ul>
+<li><strong>FILTER_VALIDATE_BOOLEAN</strong> - Validates a boolean</li>
+<li><strong>FILTER_VALIDATE_EMAIL</strong> - Certifies an e-mail address</li>
+<li><strong>FILTER_VALIDATE_FLOAT</strong> - Confirms a float</li>
+<li><strong>FILTER_VALIDATE_INT</strong> - Verifies an integer</li>
+<li><strong>FILTER_VALIDATE_IP</strong> - Validates an IP address</li>
+<li><strong>FILTER_VALIDATE_REGEXP</strong> - Confirms a regular expression</li>
+<li><strong>FILTER_VALIDATE_URL</strong> - Validates a URL</li>
+<li><strong>FILTER_SANITIZE_EMAIL</strong> - Removes all illegal characters from an e-mail address</li>
+<li><strong>FILTER_SANITIZE_ENCODED</strong> - Removes/Encodes special characters</li>
+<li><strong>FILTER_SANITIZE_MAGIC_QUOTES</strong> - Applies&nbsp;<strong>addslashes()</strong></li>
+<li><strong>FILTER_SANITIZE_NUMBER_FLOAT</strong> - Removes all characters, except digits, +- and .,eE</li>
+<li><strong>FILTER_SANITIZE_NUMBER_INT</strong> - Gets rid of all characters except digits and + &ndash;</li>
+<li><strong>FILTER_SANITIZE_SPECIAL_CHARS</strong> - Removes special characters</li>
+<li><strong>FILTER_SANITIZE_FULL_SPECIAL_CHARS</strong> - Converts special characters to HTML entities</li>
+<li><strong>FILTER_SANITIZE_STRING</strong> - Removes tags/special characters from a string, same as: <strong>FILTER_SANITIZE_STRIPPED</strong></li>
+<li><strong>FILTER_SANITIZE_URL</strong> - Rids all illegal characters from a URL</li>
+<li><strong>FILTER_UNSAFE_RAW</strong> - Do nothing, optionally strip/encode special characters</li>
+<li><strong>FILTER_CALLBACK</strong> - Call a user-defined function to filter data</li>
+</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>Date and Time 📅</h2>
+						<div class="panelHelper">Working with date and time in PHP involves several useful functions from the date and DateTime classes</div>
+						<div class="panelInner">
+<div class="preWrap"><pre><span class="c888888">// Get current timestamp</span>
+<span class="c996633">$currentTimestamp</span> <span class="c333333">=</span> <span class="c007020">time</span>();
+<span class="c888888">// Format and display current date and time</span>
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;Current timestamp: &quot;</span> <span class="c333333">.</span> <span class="c996633">$currentTimestamp</span> <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span>;
+<span class="c888888">// Format date using date() function</span>
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;Current date: &quot;</span> <span class="c333333">.</span> <span class="c007020">date</span>(<span class="bfff0f0">&quot;Y-m-d&quot;</span>) <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span>;
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;Current time: &quot;</span> <span class="c333333">.</span> <span class="c007020">date</span>(<span class="bfff0f0">&quot;H:i:s&quot;</span>) <span class="c333333">.</span> <span class="bfff0f0">&quot;&lt;br&gt;&quot;</span>;
+<span class="c888888">// Format date and time with specific timezone</span>
+<span class="c007020">date_default_timezone_set</span>(<span class="bfff0f0">&#39;America/New_York&#39;</span>);
+<span class="c008800">echo</span> <span class="bfff0f0">&quot;Current date and time in New York: &quot;</span> <span class="c333333">.</span> <span class="c007020">date</span>(<span class="bfff0f0">&quot;Y-m-d H:i:s&quot;</span>);
+</pre></div>
+
+							<h4>Formatting</h4>
+<ul>
+<li><strong>d</strong> - Days from 01 to 31</li>
+<li><strong>j</strong> - Days 1 to 31</li>
+<li><strong>D</strong> - Mon through Sun</li>
+<li><strong>l</strong> - Sunday through Saturday</li>
+<li><strong>N</strong> - 1 (for Mon) through 7 (for Sat)</li>
+<li><strong>w</strong> - 0 (for Sun) through 6 (for Sat)</li>
+<li><strong>m</strong> - Months, 01 through 12</li>
+<li><strong>n</strong> - Months, 1 through 12</li>
+<li><strong>F</strong> - January through December</li>
+<li><strong>M</strong> - Jan through Dec</li>
+<li><strong>Y</strong> - Four digits year (e.g. 2018)</li>
+<li><strong>y</strong> - Two digits year (e.g. 18)</li>
+<li><strong>L</strong> - Defines whether it&rsquo;s a leap year (1 or 0)</li>
+<li><strong>a</strong> - am and pm</li>
+<li><strong>A</strong> - AM and PM</li>
+<li><strong>g</strong> - Hours 1 through 12</li>
+<li><strong>h</strong> - Hours 01 through 12</li>
+<li><strong>G</strong> - Hours 0 through 23</li>
+<li><strong>H</strong> - Hours 00 through 23</li>
+<li><strong>i</strong> - Minutes 00 to 59</li>
+<li><strong>s</strong> - Seconds 00 to 59</li>
+</ul>
+<h4>Functions</h4>
+<p>Hover your mouse for explanation:</p>
+<strong title="Checks the validity of a Gregorian date">checkdate</strong>, 
+<strong title="Adds a number of days, months, years, hours, minutes and seconds to a date object">date_add</strong>, 
+<strong title="Returns a formatted DateTime object">date_create_from_format</strong>, 
+<strong title="Creates a new DateTime object">date_create</strong>, 
+<strong title="Sets a new date">date_date_set</strong>, 
+<strong title="Returns the default timezone used by all functions">date_default_timezone_get</strong>, 
+<strong title="Sets the default timezone">date_default_timezone_set</strong>, 
+<strong title="Calculates the difference between two dates">date_diff</strong>, 
+<strong title="Returns a date formatted according to a specific format">date_format</strong>, 
+<strong title="Returns warnings or errors found in a date string">date_get_last_errors</strong>, 
+<strong title="Sets up a DateInterval from relative parts of a string">date_interval_create_from_date_string</strong>, 
+<strong title="Formats an interval">date_interval_format</strong>, 
+<strong title="Sets a date according to ISO 8601 standards">date_isodate_set</strong>, 
+<strong title="Modifies the timestamp">date_modify</strong>, 
+<strong title="Returns the offset of the timezone">date_offset_get</strong>, 
+<strong title="Returns an array with detailed information about a specified date, according to a specified format">date_parse_from_format</strong>, 
+<strong title="Returns an array with detailed information about a specified date">date_parse</strong>, 
+<strong title="Subtracts days, months, years, hours, minutes and seconds from a date">date_sub</strong>, 
+<strong title="Returns an array containing information about sunset/sunrise and twilight begin/end for a specified day and location">date_sun_info</strong>, 
+<strong title="The sunrise time for a specified day and location">date_sunrise</strong>, 
+<strong title="The sunset time for a specified day and location">date_sunset</strong>, 
+<strong title="Sets the time">date_time_set</strong>, 
+<strong title="Returns the Unix timestamp">date_timestamp_get</strong>, 
+<strong title="Sets the date and time based on a Unix timestamp">date_timestamp_set</strong>, 
+<strong title="Returns the time zone of a given DateTime object">date_timezone_get</strong>, 
+<strong title="Sets the time zone for a DateTime object">date_timezone_set</strong>, 
+<strong title="Formats a local date and time">date</strong>, 
+<strong title="Date/time information of a timestamp or the current local date/time">getdate</strong>, 
+<strong title="The current time">gettimeofday</strong>, 
+<strong title="Formats a GMT/UTC date and time">gmdate</strong>, 
+<strong title="The Unix timestamp for a GMT date">gmmktime</strong>, 
+<strong title="Formats a GMT/UTC date and time according to locale settings">gmstrftime</strong>, 
+<strong title="Formats a local time/date as an integer">idate</strong>, 
+<strong title="The local time">localtime</strong>, 
+<strong title="The current Unix timestamp with microseconds">microtime</strong>, 
+<strong title="The Unix timestamp for a date">mktime</strong>, 
+<strong title="Formats a local time and/or date according to locale settings">strftime</strong>, 
+<strong title="Parses a time/date generated with strftime">strptime</strong>, 
+<strong title="Transforms an English textual DateTime into a Unix timestamp">strtotime</strong>, 
+<strong title="The current time as a Unix timestamp">time</strong>, 
+<strong title="Returns an array containing dst, offset, and the timezone name">timezone_abbreviations_list</strong>, 
+<strong title="An indexed array with all timezone identifiers">timezone_identifiers_list</strong>, 
+<strong title="Location information for a specified timezone">timezone_location_get</strong>, 
+<strong title="Returns the timezone name from an abbreviation">timezone_name_from_abbr</strong>, 
+<strong title="The name of the timezone">timezone_name_get</strong>, 
+<strong title="The timezone offset from GMT">timezone_offset_get</strong>, 
+<strong title="Creates a new DateTimeZone object">timezone_open</strong>, 
+<strong title="Returns all transitions for the timezone">timezone_transitions_get</strong>, 
+<strong title="Returns the version of the timezonedb">timezone_version_get</strong>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="masonryPanelWrap noPencil">
+					<div class="masonryPanel">
+						<h2>TITLE___</h2>
+						<div class="panelHelper">__helptext__ </div>
+						<div class="panelInner">
+							<h4>title</h4>
+							
+							<h4>title</h4>
+							
+						</div>
+					</div>
+				</div>
+				-->
+
+			</div>
+			<a id="editorsAnchor"></a>
+			<div id="layover">
+			</div>
+			<div id="wrapPreviews" class="clearfix">
+				<div class="wrapPanelControls"><a class="undockPanel" title="Undock editors">&searr;</a></div>
+				<div class="sourceEditorWrap">
+					<div class="editorHeader"><abbr title="Real-Time Source Code Editor">HTML</abbr></div>
+					<div id="sourceFieldecske"></div>
+					<script>
+						var sourceEditorFricc = CodeMirror(document.getElementById("sourceFieldecske"), {
+							value: "",
+							lineNumbers: true,
+							styleActiveLine: true,
+							mode: "text/html",
+							lineWrapping: true,
+							matchTags: {bothTags: true},
+						  });		
+						sourceEditorFricc.on("change", function() {
+							inputChanged();
+						  });
+					</script>
+				</div>
+				
+				<div class="cssEditorWrap">
+					<div class="editorHeader"><abbr title="Style Sheets">CSS</abbr></div>
+					<div id="cssCodeFieldecske"></div>
+					<script>
+						var cssEditorFricc = CodeMirror(document.getElementById("cssCodeFieldecske"), {
+							value: "",
+							lineNumbers: true,
+							styleActiveLine: true,
+							lineWrapping: true,
+							mode: "text/css",
+							matchTags: {bothTags: true},
+						  });
+					</script>
+					<a id="applyCss" title="Apply CSS style">Apply CSS</a>
+				</div>
+				
+				<div class="visualWrap">
+					<div class="editorHeader">Preview</div>
+					<form method="post">
+						<textarea id="elm1" name="elm1"></textarea>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="article">
+<article>
+<h1>Online PHP Cheat Sheet</h1>
+<p><strong>Free online interactive PHP cheat sheet, perfect for both beginners and experienced programmers. Refresh your knowledge of PHP syntax and access the most commonly used code snippets at your fingertips. Download the <a target="_blank" href="/php/phpcheatsheet.pdf">PDF version&nbsp;here</a>.</strong></p>
+<p><a href="#"><img src="/images/php-cheat-sheet-screenshot.jpg" alt="php cheat sheet screenshot"></a></p>
+<p><a href="https://www.php.net/">PHP (Hypertext Preprocessor)</a> is a powerful and widely-used server-side scripting language designed for web development. Whether you're a beginner learning the basics or an experienced developer building complex applications, this PHP cheat sheet provides a quick reference to <a href="#phpsyntax">essential syntax</a>, <a href="#phpfunctions">functions</a>, and <a href="#bestpractices">best practices</a>. From variable handling and control structures to database interactions and advanced features like object-oriented programming, this cheat sheet covers fundamental concepts and practical examples to help you write efficient, secure, and maintainable PHP code. Use it to streamline your development process, troubleshoot issues, and deepen your understanding of PHP's capabilities.</p>
+<p>The syntax-highlighted code snippets in this PHP Cheat Sheet were created with <a href="http://hilite.me/" target="_blank" rel="nofollow">Hilite.me colorful</a> template.</p>
+<p>Make sure you save this link to help your next project.</p>
+</article>
+		</div>
+		<div class="footer">
+			HTML Cheat Sheet is using cookies. | <a href="https://html-css-js.com/terms-privacy/" target="_blank">Terms and Conditions, Privacy Policy</a><br>
+			&copy;&nbsp;HTMLCheatSheet.com				
+		</div>		
+		<a id="back2Top" title="Back to top" href="#">&#10148;</a>
+	</div> 
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"85995ddca8df4c9aa34d91d207e4204a","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
