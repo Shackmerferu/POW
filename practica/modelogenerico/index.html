@@ -1,34 +1,57 @@
+<!--
+    Documento de ejemplo: esta página combina HTML semántico con componentes y utilidades de Bootstrap.
+    Los comentarios explican el propósito de cada bloque y de los atributos que afectan su funcionamiento.
+-->
 <!DOCTYPE html>
+<!-- lang indica el idioma principal para lectores de pantalla y buscadores.
+     h-100 de Bootstrap aplica una altura del 100 % para permitir el diseño de página completa. -->
 <html lang="es" class="h-100">
 
 <head>
+    <!-- UTF-8 permite mostrar correctamente tildes, eñes y otros caracteres. -->
     <meta charset="UTF-8">
+    <!-- La escala inicial y el ancho del viewport hacen que el diseño se adapte a pantallas móviles. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Texto que aparece en la pestaña del navegador. -->
     <title>Plantilla Genérica Web - HTML5 & Bootstrap</title>
 
+    <!-- Estilos base de Bootstrap: grilla, formularios, botones, navegación, tarjetas y modal. -->
     <link href="../bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Enlace pensado para Font Awesome, pero sus atributos están invertidos:
+         href debería contener la ruta y rel debería ser "stylesheet" para que el navegador lo cargue como CSS. -->
     <link href="stylesheet" rel="../fontawesome-free-7.3.1-web/fontawesome-free-7.3.1-web/css/all.min.css">
+    <!-- Estilos propios del proyecto, que pueden complementar o sobrescribir Bootstrap. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
+<!-- Flexbox organiza la página en columna; h-100 ocupa la altura completa disponible. -->
 <body class="d-flex flex-column h-100">
 
+    <!-- Encabezado semántico: contiene la navegación principal del sitio. -->
     <header>
+        <!-- Barra fija arriba (fixed-top), oscura y adaptable a pantallas pequeñas. -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top custom-shadow">
+            <!-- container centra el contenido y limita su ancho según el tamaño de pantalla. -->
             <div class="container">
+                <!-- Marca del sitio; el icono y el nombre se alinean en una fila con separación. -->
                 <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                     <i class="fa-solid fa-layer-group text-primary"></i>
                     <span>MiSitioWeb</span>
                 </a>
 
+                <!-- Botón que abre y cierra el menú en pantallas pequeñas.
+                     data-bs-target apunta al id del menú; aria-* comunica el estado a tecnologías de asistencia. -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+                <!-- Bootstrap oculta o despliega este bloque según el ancho de pantalla y el botón anterior. -->
                 <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Lista de enlaces principales; me-auto empuja el contenido siguiente hacia la derecha. -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
+                            <!-- active marca la página actual; aria-current informa esa condición accesiblemente. -->
                             <a class="nav-link active" aria-current="page" href="#"><i
                                     class="fa-solid fa-house me-1"></i> Inicio</a>
                         </li>
@@ -36,11 +59,13 @@
                             <a class="nav-link" href="#"><i class="fa-solid fa-circle-info me-1"></i> Acerca de</a>
                         </li>
 
+                        <!-- Menú desplegable de servicios, activado por el atributo data-bs-toggle de Bootstrap. -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-list-check me-1"></i> Servicios
                             </a>
+                            <!-- Los enlaces del desplegable apuntan a destinos de ejemplo (#). -->
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#"><i class="fa-solid fa-code me-2"></i>Desarrollo
                                         Web</a></li>
@@ -55,9 +80,11 @@
                         </li>
                     </ul>
 
+                    <!-- Contenedor vacío reservado para que main.js pueda insertar enlaces dinámicamente. -->
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3" id="contenedor-menu">
                     </ul>
 
+                    <!-- Botón visual de contacto; actualmente no tiene un enlace ni un manejador asociado aquí. -->
                     <button class="btn btn-outline-light rounded-pill px-3" type="button">
                         <i class="fa-solid fa-paper-plane me-1"></i> Contacto
                     </button>
@@ -66,14 +93,19 @@
         </nav>
     </header>
 
+    <!-- Contenido principal de la página; py-4 agrega espacio vertical interno. -->
     <main class="py-4">
+        <!-- La grilla de Bootstrap centra una columna ancha en el área principal. -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
 
+                    <!-- article representa una unidad de contenido; card le da apariencia de tarjeta. -->
                     <article class="card border-0 custom-shadow rounded-3 mb-4">
+                        <!-- Padding interno responsivo: más espacio desde el breakpoint md. -->
                         <div class="card-body p-4 p-md-5">
 
+                            <!-- Presentación de la plantilla: título principal, descripción y separador decorativo. -->
                             <section class="mb-4 text-center">
                                 <h1 class="fw-bold text-primary">Plantilla Web Semántica</h1>
                                 <p class="text-muted">Una maqueta moderna, accesible y totalmente responsiva construida
@@ -81,16 +113,21 @@
                                 <hr class="w-25 mx-auto text-primary border-2">
                             </section>
 
+                            <!-- Formulario de demostración: sus campos se validan en el navegador; main.js puede procesarlos. -->
                             <section class="mb-5">
                                 <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">Controles Interactivos
                                 </h3>
 
+                                <!-- El id permite asociar botones externos mediante form="demoForm". -->
                                 <form id="demoForm">
+                                    <!-- row organiza las columnas; g-3 define el espacio entre campos. -->
                                     <div class="row g-3">
 
+                                        <!-- Categoría obligatoria: required impide enviar el valor vacío inicial. -->
                                         <div class="col-md-6">
                                             <label for="categorySelect" class="form-label fw-medium">Seleccionar
                                                 Categoría:</label>
+                                            <!-- selected muestra el texto inicial y disabled evita elegirlo como dato válido. -->
                                             <select class="form-select" id="categorySelect" required>
                                                 <option value="" selected disabled>Elija una opción...</option>
                                                 <option value="1">Opción 1: Desarrollo Frontend</option>
@@ -99,6 +136,7 @@
                                             </select>
                                         </div>
 
+                                        <!-- Prioridad opcional; Media es el valor seleccionado por defecto. -->
                                         <div class="col-md-6">
                                             <label for="prioritySelect" class="form-label fw-medium">Prioridad:</label>
                                             <select class="form-select" id="prioritySelect">
@@ -108,20 +146,24 @@
                                             </select>
                                         </div>
 
+                                        <!-- Cada casilla es independiente: se pueden seleccionar varias notificaciones. -->
                                         <div class="col-12 mt-4">
                                             <label class="form-label fw-medium d-block">Preferencias de
                                                 Notificación:</label>
+                                            <!-- checked deja activas inicialmente las preferencias de correo y push. -->
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox" id="checkEmail"
                                                     value="email" checked>
                                                 <label class="form-check-label" for="checkEmail">Correo
                                                     Electrónico</label>
                                             </div>
+                                            <!-- Esta segunda preferencia comienza desactivada porque no tiene checked. -->
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox" id="checkSms"
                                                     value="sms">
                                                 <label class="form-check-label" for="checkSms">Mensaje SMS</label>
                                             </div>
+                                            <!-- La tercera opción permite habilitar avisos push desde el inicio. -->
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox" id="checkPush"
                                                     value="push" checked>
@@ -130,6 +172,7 @@
                                             </div>
                                         </div>
 
+                                        <!-- Casilla obligatoria de aceptación; sin marcarla, el navegador bloquea el envío. -->
                                         <div class="col-12 mt-3">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="checkTerms"
@@ -144,62 +187,81 @@
                                 </form>
                             </section>
 
+                            <!-- Zona de controles para las operaciones de inventario implementadas en main.js. -->
                             <section class="mb-4">
                                 <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">Gestión de Inventario</h3>
                                 
-                                <!-- Formulario de Interacción Principal -->
+                                <!-- Datos que las acciones de inventario pueden consultar:
+                                     código identifica el producto, cantidad indica unidades y precio el costo/valor. -->
                                 <div class="row g-3 mb-4 p-3 border rounded bg-light">
                                     <div class="col-md-4">
                                         <label for="inputCodigo" class="form-label fw-bold small text-muted">Código (ID)</label>
+                                        <!-- number restringe la entrada a números; min=1 evita IDs menores que uno. -->
                                         <input type="number" class="form-control" id="inputCodigo" min="1" placeholder="Ej: 11">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="inputCantidad" class="form-label fw-bold small text-muted">Cantidad</label>
+                                        <!-- Cantidad entera positiva que se utilizará en altas o bajas. -->
                                         <input type="number" class="form-control" id="inputCantidad" min="1" placeholder="Cantidad a mover">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="inputPrecio" class="form-label fw-bold small text-muted">Precio <small>(*solo si es alta)</small></label>
+                                        <!-- step=0.01 admite centavos; min=0 impide ingresar precios negativos. -->
                                         <input type="number" class="form-control" id="inputPrecio" step="0.01" min="0" placeholder="Precio de costo">
                                     </div>
                                 </div>
 
+                                <!-- Botones de demostración para distintas respuestas o acciones de interfaz. -->
                                 <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">Botones de Acción</h3>
                                 <div class="d-flex flex-wrap gap-2">
+                                    <!-- Este botón envía demoForm aunque esté fuera del elemento form. -->
                                     <button type="submit" form="demoForm" class="btn btn-primary">
                                         <i class="fa-solid fa-check me-1"></i> Principal (Guardar)
                                     </button>
+                                    <!-- Los botones type=button no envían formularios automáticamente. Sus id permiten manejarlos en JavaScript. -->
                                     <button type="button" id="btnReset" class="btn btn-secondary">
                                         <i class="fa-solid fa-rotate-left me-1"></i> Secundario (Limpiar)
                                     </button>
+                                    <!-- Muestra una alerta de éxito de ejemplo; no modifica el inventario. -->
                                     <button type="button" id="btnSuccess" class="btn btn-success">
                                         <i class="fa-solid fa-circle-check me-1"></i> Éxito
                                     </button>
+                                    <!-- Muestra una alerta preventiva de ejemplo. -->
                                     <button type="button" id="btnWarning" class="btn btn-warning text-dark">
                                         <i class="fa-solid fa-triangle-exclamation me-1"></i> Advertencia
                                     </button>
+                                    <!-- Muestra una alerta de eliminación/cancelación; en este botón de ejemplo no borra datos. -->
                                     <button type="button" id="btnDanger" class="btn btn-danger">
                                         <i class="fa-solid fa-trash me-1"></i> Eliminar
                                     </button>
+                                    <!-- Muestra información de ejemplo en el área de alertas. -->
                                     <button type="button" id="btnInfo" class="btn btn-info text-dark">
                                         <i class="fa-solid fa-circle-info me-1"></i> Info
                                     </button>
                                 </div>
+                                <!-- Acciones de inventario: sus id son los puntos de conexión con los eventos de main.js. -->
                                 <div class="d-flex flex-wrap gap-2 mt-3">
+                                    <!-- Incrementa el stock indicado para el código ingresado y actualiza el precio ponderado. -->
                                     <button type="button" id="btnAlta" class="btn btn-outline-success fw-bold px-4">
                                         <i class="fa-solid fa-arrow-trend-up me-1"></i> ALTA
                                     </button>
+                                    <!-- Descuenta la cantidad ingresada si hay stock suficiente para ese producto. -->
                                     <button type="button" id="btnBaja" class="btn btn-outline-danger fw-bold px-4">
                                         <i class="fa-solid fa-arrow-trend-down me-1"></i> BAJA
                                     </button>
+                                    <!-- Consulta productos cuyo stock está por debajo del mínimo configurado. -->
                                     <button type="button" id="btnStockBajo" class="btn btn-outline-warning text-dark fw-bold px-4">
                                         <i class="fa-solid fa-boxes-stacked me-1"></i> STOCK BAJO
                                     </button>
+                                    <!-- Pide y muestra la lista de productos en el área principal de resultados. -->
                                     <button type="button" id="btnMostrar" class="btn btn-outline-info text-dark fw-bold px-4">
                                         <i class="fa-solid fa-list me-1"></i> MOSTRAR
                                     </button>
+                                    <!-- Abre un modal dinámico con el formulario para crear un producto nuevo. -->
                                     <button type="button" id="btnAgregar" class="btn btn-outline-primary fw-bold px-4">
                                         <i class="fa-solid fa-plus me-1"></i> AGREGAR
                                     </button>
+                                    <!-- Borra de la base el registro correspondiente al código ingresado. -->
                                     <button type="button" id="btnBorrar" class="btn btn-outline-secondary fw-bold px-4">
                                         <i class="fa-solid fa-trash-can me-1"></i> BORRAR
                                     </button>
@@ -207,6 +269,7 @@
                             </section>
                             
 
+                            <!-- Área inicialmente vacía donde el JavaScript puede mostrar alertas o resultados. -->
                             <div id="alertContainer" class="mt-4"></div>
 
                         </div>
@@ -217,14 +280,17 @@
         </div>
     </main>
 
+    <!-- Pie de página; mt-auto lo empuja al final cuando el contenido es más corto que la ventana. -->
     <footer class="bg-dark text-white py-4 mt-auto">
         <div class="container">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
 
+                <!-- Aviso de copyright. -->
                 <div class="text-center text-md-start">
                     <p class="mb-0 text-white">&copy; 2026 MiSitioWeb. Todos los derechos reservados.</p>
                 </div>
 
+                <!-- Enlaces informativos de ejemplo; # debe reemplazarse por páginas reales. -->
                 <div>
                     <ul class="nav justify-content-center list-unstyled d-flex gap-3 mb-0">
                         <li><a href="#" class="text-white text-decoration-none hover-white">Política de Privacidad</a>
@@ -236,6 +302,8 @@
                     </ul>
                 </div>
 
+                <!-- Enlace a WhatsApp abierto en otra pestaña.
+                     rel="noopener noreferrer" evita que la página abierta controle la pestaña de origen. -->
                 <div>
                     <a href="https://wa.me/"
                         class="btn btn-success rounded-circle d-flex align-items-center justify-content-center custom-shadow"
@@ -248,26 +316,34 @@
         </div>
     </footer>
 
+    <!-- Ventana modal de detalle; Bootstrap la mantiene oculta hasta que JavaScript la abra.
+         tabindex=-1 permite que el foco se gestione al mostrarla sin añadirla al orden normal de tabulación. -->
     <div class="modal fade" id="modalDetalle" tabindex="-1" aria-hidden="true">
+        <!-- modal-lg solicita un panel ancho en pantallas que lo permitan. -->
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                <!-- Encabezado oscuro con un título que JavaScript completa y un botón de cierre. -->
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modal-titulo-nombre"></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
+                <!-- Cuerpo del modal dividido en dos columnas a partir del tamaño md. -->
                 <div class="modal-body">
                     <div class="row">
+                        <!-- Columna de foto y apodo; los id dejan estos espacios disponibles para main.js. -->
                         <div class="col-md-4 text-center mb-3">
                             <img id="modal-img-foto" src="" class="img-fluid rounded mb-2 custom-shadow" alt="Foto">
                             <p class="fw-bold mb-0 mt-3">Apodo:</p>
                             <p id="modal-texto-apodo" class="text-muted text-uppercase"></p>
                         </div>
+                        <!-- Columna con biografía, trayectoria y formulario para agregar un logro. -->
                         <div class="col-md-8">
                             <h6 class="fw-bold text-warning border-bottom pb-1">Biografía</h6>
                             <p id="modal-texto-bio" class="small mb-4"></p>
 
                             <h6 class="fw-bold text-warning border-bottom pb-1">Trayectoria</h6>
+                            <!-- Tabla cuyo cuerpo se rellena con filas de trayectoria desde JavaScript. -->
                             <table class="table table-sm table-hover small mb-3">
                                 <thead class="table-light">
                                     <tr>
@@ -279,6 +355,7 @@
                                 </tbody>
                             </table>
 
+                            <!-- Campo de texto y botón para registrar un nuevo elemento de trayectoria. -->
                             <div class="mt-3 bg-light p-3 rounded border">
                                 <label for="input-nuevo-logro" class="form-label small fw-bold text-muted">Agregar nuevo
                                     ítem trayectoria:</label>
@@ -290,6 +367,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- data-bs-dismiss=cierra el modal usando el comportamiento de Bootstrap. -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar Panel</button>
                 </div>
@@ -297,7 +375,9 @@
         </div>
     </div>
 
+    <!-- Bootstrap bundle incluye los componentes interactivos y Popper, necesario para menús desplegables. -->
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Lógica propia: conecta los id de formularios, botones, alertas y modal con su comportamiento. -->
     <script src="main.js"></script>
 </body>
 
