@@ -1,0 +1,3930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet - Bootstrap 5.3</title>
+<style>
+@page { size: A4; margin: 11mm 10mm 12mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 9.1pt; line-height: 1.36; color: #1f2937;
+  max-width: 190mm; margin: 0 auto; padding: 0;
+}
+h1 {
+  font-size: 19.5pt; color: #0f4c81; margin: 0 0 5px;
+  border-bottom: 3px solid #0f4c81; padding-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+h2 {
+  font-size: 12.8pt; color: #0f4c81; margin: 12px 0 5px;
+  border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;
+  break-after: avoid; page-break-after: avoid;
+}
+h3 {
+  font-size: 10.6pt; color: #1e3a5f; margin: 9px 0 4px;
+  break-after: avoid; page-break-after: avoid;
+}
+p { margin: 3px 0 5px; orphans: 2; widows: 2; }
+ul, ol { margin: 3px 0 6px 18px; padding: 0; }
+li { margin: 1px 0; }
+li > ul, li > ol { margin: 1px 0 1px 16px; }
+strong { color: #1e3a5f; }
+blockquote {
+  background: #f1f7fb; border-left: 4px solid #0f4c81;
+  padding: 5px 8px; margin: 6px 0; color: #334155;
+  break-inside: avoid;
+}
+blockquote p { margin: 2px 0; }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1f5f9; color: #0f172a;
+  padding: 0 3px; border-radius: 3px; font-size: 8.1pt;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: #f8fafc; color: #0f172a;
+  border: 1px solid #cbd5e1; border-left: 4px solid #0f4c81;
+  border-radius: 4px; padding: 6px 8px; margin: 4px 0 7px;
+  font-size: 7.6pt; line-height: 1.3;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: auto; page-break-inside: auto;
+}
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+table {
+  border-collapse: collapse; width: 100%; margin: 4px 0 7px;
+  font-size: 8.1pt; break-inside: auto; page-break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+th {
+  background: #e8f1f8; color: #0f4c81; text-align: left;
+  border: 1px solid #cbd5e1; padding: 3px 5px; font-weight: 700;
+}
+td { border: 1px solid #cbd5e1; padding: 3px 5px; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+a { color: #0f4c81; text-decoration: none; }
+h2 + p, h3 + p { margin-top: 2px; }
+@media print {
+  body { max-width: none; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1>Cheatsheet — Bootstrap 5.3</h1>
+<blockquote>
+<p><strong>Materia:</strong> Programación Orientada a la Web<br>
+<strong>Uso:</strong> repaso rápido, consulta durante el parcial y guía de armado de páginas.<br>
+<strong>Base:</strong> Bootstrap 5.3 (mobile-first, grid de 12 columnas, utilidades, componentes y JavaScript sin jQuery).</p>
+</blockquote>
+<hr>
+<h2>Índice</h2>
+<ol>
+<li>Qué es Bootstrap</li>
+<li>Inclusión y archivos</li>
+<li>Variables y personalización</li>
+<li>Contenedores y Grid</li>
+<li>Tipografía</li>
+<li>Colores y opacidad</li>
+<li>Espaciado</li>
+<li>Bordes, sombras y tamaños</li>
+<li>Display, position, float, overflow y z-index</li>
+<li>Flexbox</li>
+<li>Responsive y breakpoints</li>
+<li>Formularios</li>
+<li>Botones</li>
+<li>Navegación</li>
+<li>Contenido: cards, listas y tablas</li>
+<li>Feedback: alerts, progress, spinners y toasts</li>
+<li>Interactivos: modal, offcanvas, collapse y carousel</li>
+<li>Imágenes y media</li>
+<li>Iconos</li>
+<li>JavaScript</li>
+<li>Helpers y utilidades</li>
+<li>Accesibilidad</li>
+<li>Modo oscuro (color modes)</li>
+<li>Personalización avanzada con Sass</li>
+<li>Errores típicos y checklist</li>
+<li>Plantilla completa</li>
+<li>Equivalencias CSS → Bootstrap</li>
+</ol>
+<hr>
+<h2>1. Qué es Bootstrap</h2>
+<p>Bootstrap es un <strong>framework de front-end</strong> (CSS + JavaScript) que provee un sistema de rejilla, componentes ya estilizados y cientos de clases utilitarias. La idea central es <strong>componer</strong> la interfaz con clases en el HTML en lugar de escribir todo el CSS desde cero.</p>
+<table>
+<thead>
+<tr>
+<th>CSS puro</th>
+<th>Bootstrap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.contenedor { max-width: 960px; margin: 0 auto; }</code></td>
+<td><code>&lt;div class="container"&gt;</code></td>
+</tr>
+<tr>
+<td><code>.col { width: 33.33%; padding: 0 12px; }</code></td>
+<td><code>&lt;div class="col-md-4"&gt;</code></td>
+</tr>
+<tr>
+<td><code>.boton { background: #0d6efd; color: #fff; padding: .375rem .75rem; }</code></td>
+<td><code>&lt;button class="btn btn-primary"&gt;</code></td>
+</tr>
+<tr>
+<td><code>.texto { font-weight: 700; text-align: center; }</code></td>
+<td><code>&lt;p class="fw-bold text-center"&gt;</code></td>
+</tr>
+<tr>
+<td><code>@media (min-width: 768px) { .menu { display: flex; } }</code></td>
+<td><code>&lt;div class="d-none d-md-flex"&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Características principales</h3>
+<ul>
+<li><strong>Mobile-first:</strong> los estilos base son para móvil y los breakpoints (<code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>xxl</code>) agregan comportamiento hacia arriba.</li>
+<li><strong>Grid de 12 columnas</strong> basado en Flexbox, con gutters y offsets.</li>
+<li><strong>Componentes:</strong> navbar, cards, modals, alerts, formularios, tablas, etc.</li>
+<li><strong>Utilidades:</strong> espaciado, color, tipografía, flex, display, bordes, sombras.</li>
+<li><strong>JavaScript propio</strong> (vanilla), sin jQuery. Usa <strong>Popper</strong> para dropdowns, tooltips y popovers.</li>
+<li><strong>Personalizable</strong> con variables CSS en tiempo de ejecución y con Sass en tiempo de compilación.</li>
+</ul>
+<h3>Ventajas y límites</h3>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Límites / cuidados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desarrollo rápido y consistente.</td>
+<td>Páginas clonadas si no se personaliza.</td>
+</tr>
+<tr>
+<td>Responsive resuelto con clases.</td>
+<td>HTML con muchas clases, a veces difícil de leer.</td>
+</tr>
+<tr>
+<td>Documentación extensa y comunidad grande.</td>
+<td>Peso extra si se usa el CSS completo.</td>
+</tr>
+<tr>
+<td>Accesibilidad y estados ya contemplados.</td>
+<td>Para diseños muy a medida conviene Sass o CSS propio.</td>
+</tr>
+<tr>
+<td>Compatible con cualquier backend (PHP, Node, etc.).</td>
+<td>No es un framework de lógica: solo interfaz.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Idea clave:</strong> Bootstrap no reemplaza a CSS; lo usa por debajo. Saber CSS permite entender qué hace cada clase, sobrescribirla y decidir cuándo conviene escribir estilos propios.</p>
+</blockquote>
+<hr>
+<h2>2. Inclusión y archivos</h2>
+<p>Bootstrap requiere <strong>obligatoriamente</strong> la etiqueta viewport para que el diseño responsive funcione:</p>
+<pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+</code></pre>
+<h3>Opción 1: CDN (la más rápida)</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Mi página&lt;/title&gt;
+  &lt;!-- CSS de Bootstrap --&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 class="text-primary"&gt;Hola Bootstrap&lt;/h1&gt;
+
+  &lt;!-- JS de Bootstrap (incluye Popper) --&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>Opción 2: descarga local</h3>
+<p>Se descarga el ZIP desde el sitio oficial y se copian las carpetas <code>css/</code> y <code>js/</code> al proyecto:</p>
+<pre><code class="language-html">&lt;link rel="stylesheet" href="css/bootstrap.min.css"&gt;
+&lt;script src="js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+</code></pre>
+<h3>Opción 3: npm (proyectos con build)</h3>
+<pre><code class="language-bash">npm install bootstrap
+</code></pre>
+<pre><code class="language-js">import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+</code></pre>
+<h3>Archivos que trae Bootstrap</h3>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Contenido / uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bootstrap.css</code></td>
+<td>Todo el framework sin minificar (para depurar).</td>
+</tr>
+<tr>
+<td><code>bootstrap.min.css</code></td>
+<td>Todo el framework minificado (producción).</td>
+</tr>
+<tr>
+<td><code>bootstrap-grid.css</code></td>
+<td>Solo grid y utilidades de layout.</td>
+</tr>
+<tr>
+<td><code>bootstrap-utilities.css</code></td>
+<td>Solo utilidades (colores, espaciado, etc.).</td>
+</tr>
+<tr>
+<td><code>bootstrap.bundle.min.js</code></td>
+<td>JS + Popper. <strong>Recomendado.</strong></td>
+</tr>
+<tr>
+<td><code>bootstrap.min.js</code></td>
+<td>JS sin Popper (requiere cargarlo aparte).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Si se usa <code>bootstrap.min.js</code> y no se carga Popper, los <strong>dropdowns, tooltips y popovers no funcionan</strong>. Para empezar conviene siempre <code>bootstrap.bundle.min.js</code>.</p>
+</blockquote>
+<h3>Orden de carga</h3>
+<ul>
+<li>El CSS de Bootstrap va en el <code>&lt;head&gt;</code>, <strong>antes</strong> del CSS propio (para poder sobrescribirlo).</li>
+<li>El JS va al final del <code>&lt;body&gt;</code> o con <code>defer</code> en el <code>&lt;head&gt;</code>.</li>
+<li>No cargar Bootstrap dos veces (CDN + local): duplica peso y puede generar conflictos.</li>
+</ul>
+<hr>
+<h2>3. Variables y personalización</h2>
+<p>Bootstrap 5 expone gran parte de su diseño como <strong>variables CSS</strong> en <code>:root</code>, con el prefijo <code>--bs-</code>. Permiten cambiar colores, tipografía o bordes sin recompilar.</p>
+<h3>Variables más usadas</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Valor por defecto</th>
+<th>Controla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bs-primary</code></td>
+<td><code>#0d6efd</code></td>
+<td>Color primario (texto, bordes, algunos fondos).</td>
+</tr>
+<tr>
+<td><code>--bs-primary-rgb</code></td>
+<td><code>13, 110, 253</code></td>
+<td>Mismo color para usar con <code>rgb()</code> / <code>rgba()</code>.</td>
+</tr>
+<tr>
+<td><code>--bs-body-bg</code></td>
+<td><code>#fff</code></td>
+<td>Fondo del <code>body</code>.</td>
+</tr>
+<tr>
+<td><code>--bs-body-color</code></td>
+<td><code>#212529</code></td>
+<td>Color de texto base.</td>
+</tr>
+<tr>
+<td><code>--bs-body-font-family</code></td>
+<td>stack <code>system-ui</code></td>
+<td>Familia tipográfica base.</td>
+</tr>
+<tr>
+<td><code>--bs-body-font-size</code></td>
+<td><code>1rem</code></td>
+<td>Tamaño de texto base.</td>
+</tr>
+<tr>
+<td><code>--bs-body-line-height</code></td>
+<td><code>1.5</code></td>
+<td>Altura de línea base.</td>
+</tr>
+<tr>
+<td><code>--bs-border-color</code></td>
+<td><code>#dee2e6</code></td>
+<td>Color de bordes por defecto.</td>
+</tr>
+<tr>
+<td><code>--bs-border-radius</code></td>
+<td><code>.375rem</code></td>
+<td>Radio de esquinas por defecto.</td>
+</tr>
+<tr>
+<td><code>--bs-link-color</code></td>
+<td><code>#0d6efd</code></td>
+<td>Color de enlaces.</td>
+</tr>
+<tr>
+<td><code>--bs-link-hover-color</code></td>
+<td><code>#0a58ca</code></td>
+<td>Color de enlaces en hover.</td>
+</tr>
+<tr>
+<td><code>--bs-font-monospace</code></td>
+<td><code>SFMono-Regular, ...</code></td>
+<td>Familia monoespaciada.</td>
+</tr>
+</tbody>
+</table>
+<h3>Cambiar variables en tiempo de ejecución</h3>
+<pre><code class="language-css">:root {
+  --bs-body-font-family: "Inter", system-ui, sans-serif;
+  --bs-body-font-size: 1.05rem;
+  --bs-body-line-height: 1.65;
+  --bs-primary: #6f42c1;
+  --bs-primary-rgb: 111, 66, 193;
+  --bs-border-radius: .75rem;
+}
+
+/* También se pueden redefinir en un componente */
+.mi-panel {
+  --bs-border-color: #6f42c1;
+  border: 1px solid var(--bs-border-color);
+}
+</code></pre>
+<blockquote>
+<p><strong>Ojo:</strong> cambiar <code>--bs-primary</code> <strong>no</strong> repinta <code>.btn-primary</code> ni <code>.text-primary</code>, porque esos colores se compilan con Sass. Las variables en runtime solo afectan a las reglas que las consumen (<code>body</code>, enlaces, bordes, etc.). Para cambiar la paleta completa hay que recompilar con Sass (ver sección 24).</p>
+</blockquote>
+<h3>Personalización rápida con Sass</h3>
+<pre><code class="language-bash">npm install bootstrap sass
+</code></pre>
+<pre><code class="language-scss">// custom.scss
+$primary: #6f42c1;
+$font-family-sans-serif: "Inter", system-ui, sans-serif;
+$font-size-base: 1.05rem;
+$border-radius: .75rem;
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<pre><code class="language-bash">sass scss/custom.scss css/custom.css --watch
+</code></pre>
+<p>Las variables de Sass se declaran <strong>antes</strong> del <code>@import</code>; si se declaran después, no tienen efecto.</p>
+<hr>
+<h2>4. Contenedores y Grid</h2>
+<p>El sistema de rejilla se apoya en tres piezas: <strong>contenedor</strong> (centra y limita el ancho), <strong>fila</strong> (<code>.row</code>) y <strong>columnas</strong> (<code>.col</code>).</p>
+<pre><code class="language-html">&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-6 col-lg-4"&gt;Columna 1&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-4"&gt;Columna 2&lt;/div&gt;
+    &lt;div class="col-12 col-md-12 col-lg-4"&gt;Columna 3&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<ul>
+<li>El <code>.container</code> aplica padding lateral y centra el contenido.</li>
+<li>El <code>.row</code> usa márgenes negativos para compensar el padding de las columnas (gutter).</li>
+<li>Cada columna tiene <strong>padding horizontal</strong>: por eso el contenido nunca va directo dentro de <code>.row</code>.</li>
+<li>Las columnas suman <strong>12</strong> por fila. Si se pasa, la columna baja a la línea siguiente.</li>
+</ul>
+<h3>Contenedores</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Comportamiento</th>
+<th>Ancho máximo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.container</code></td>
+<td>Ancho fijo según breakpoint, centrado.</td>
+<td>540 / 720 / 960 / 1140 / 1320 px</td>
+</tr>
+<tr>
+<td><code>.container-sm</code></td>
+<td>100% hasta <code>sm</code>; luego ancho fijo.</td>
+<td>540 px en adelante</td>
+</tr>
+<tr>
+<td><code>.container-md</code></td>
+<td>100% hasta <code>md</code>; luego ancho fijo.</td>
+<td>720 px en adelante</td>
+</tr>
+<tr>
+<td><code>.container-lg</code></td>
+<td>100% hasta <code>lg</code>; luego ancho fijo.</td>
+<td>960 px en adelante</td>
+</tr>
+<tr>
+<td><code>.container-xl</code></td>
+<td>100% hasta <code>xl</code>; luego ancho fijo.</td>
+<td>1140 px en adelante</td>
+</tr>
+<tr>
+<td><code>.container-xxl</code></td>
+<td>100% hasta <code>xxl</code>; luego ancho fijo.</td>
+<td>1320 px en adelante</td>
+</tr>
+<tr>
+<td><code>.container-fluid</code></td>
+<td>Siempre 100% del ancho disponible.</td>
+<td>Sin límite</td>
+</tr>
+</tbody>
+</table>
+<h3>Clases de columna</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.col</code></td>
+<td>Reparte el espacio en partes iguales entre las columnas de la fila.</td>
+</tr>
+<tr>
+<td><code>.col-6</code></td>
+<td>Ocupa 6 de 12 columnas (50%) desde móvil.</td>
+</tr>
+<tr>
+<td><code>.col-md-4</code></td>
+<td>Ocupa 4 de 12 (33%) desde <code>md</code>; antes se comporta como <code>.col-12</code>.</td>
+</tr>
+<tr>
+<td><code>.col-auto</code></td>
+<td>Ancho según el contenido.</td>
+</tr>
+<tr>
+<td><code>.col-md-auto</code></td>
+<td>Ancho según contenido desde <code>md</code>.</td>
+</tr>
+<tr>
+<td><code>.row-cols-1</code> … <code>.row-cols-6</code></td>
+<td>Define cuántas columnas por fila (el hijo no necesita <code>.col-*</code>).</td>
+</tr>
+<tr>
+<td><code>.row-cols-md-3</code></td>
+<td>3 columnas por fila desde <code>md</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Auto-layout y anchos iguales</h3>
+<pre><code class="language-html">&lt;!-- Todas las columnas miden lo mismo --&gt;
+&lt;div class="row"&gt;
+  &lt;div class="col"&gt;1&lt;/div&gt;
+  &lt;div class="col"&gt;2&lt;/div&gt;
+  &lt;div class="col"&gt;3&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Una columna fija al contenido y otra que ocupa el resto --&gt;
+&lt;div class="row"&gt;
+  &lt;div class="col-auto"&gt;Etiqueta&lt;/div&gt;
+  &lt;div class="col"&gt;Contenido flexible&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Gutters (separación entre columnas)</h3>
+<p>Por defecto el gutter es <code>1.5rem</code> (24 px). Se controla con <code>g-*</code>, <code>gx-*</code> (horizontal) y <code>gy-*</code> (vertical), con valores de <code>0</code> a <code>5</code>.</p>
+<pre><code class="language-html">&lt;div class="row g-4"&gt;        &lt;!-- 1.5rem en ambos ejes --&gt;
+  &lt;div class="col-md-6"&gt;...&lt;/div&gt;
+  &lt;div class="col-md-6"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="row gx-2 gy-4"&gt; &lt;!-- horizontal .5rem, vertical 1.5rem --&gt;
+  &lt;div class="col-6"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="row g-0"&gt;        &lt;!-- sin separación --&gt;
+  &lt;div class="col-6"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Offset, orden y alineación</h3>
+<pre><code class="language-html">&lt;!-- Desplazar 2 columnas --&gt;
+&lt;div class="col-md-4 offset-md-2"&gt;...&lt;/div&gt;
+
+&lt;!-- Orden visual --&gt;
+&lt;div class="col order-2"&gt;Primera en el HTML, segunda visualmente&lt;/div&gt;
+&lt;div class="col order-1"&gt;Segunda en el HTML, primera visualmente&lt;/div&gt;
+&lt;div class="col order-md-last"&gt;Al final desde md&lt;/div&gt;
+
+&lt;!-- Alineación vertical dentro de la fila --&gt;
+&lt;div class="row align-items-center"&gt;
+  &lt;div class="col"&gt;...&lt;/div&gt;
+  &lt;div class="col align-self-end"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Alineación horizontal --&gt;
+&lt;div class="row justify-content-center"&gt;
+  &lt;div class="col-md-6"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Anidamiento</h3>
+<p>Una columna puede contener otra <code>.row</code> con sus propias columnas. La fila interna vuelve a dividir en 12 el ancho de la columna padre.</p>
+<pre><code class="language-html">&lt;div class="row"&gt;
+  &lt;div class="col-md-6"&gt;
+    &lt;div class="row"&gt;
+      &lt;div class="col-6"&gt;Mitad izquierda&lt;/div&gt;
+      &lt;div class="col-6"&gt;Mitad derecha&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p><strong>Regla de oro:</strong> <code>.container</code> → <code>.row</code> → <code>.col</code>. No poner columnas sin fila, ni contenido directo dentro de una fila. Si una columna no tiene ancho definido y es la única, usar <code>.col-12</code>.</p>
+</blockquote>
+<hr>
+<h2>5. Tipografía</h2>
+<p>Bootstrap define una base tipográfica directamente en <code>body</code>. Todo lo demás (títulos, párrafos, listas, citas) hereda de ahí y se ajusta con clases utilitarias.</p>
+<pre><code class="language-css">body {
+  font-family: var(--bs-body-font-family);  /* system-ui, -apple-system, ... */
+  font-size: var(--bs-body-font-size);      /* 1rem = 16px */
+  font-weight: var(--bs-body-font-weight);  /* 400 */
+  line-height: var(--bs-body-line-height);  /* 1.5 */
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+}
+</code></pre>
+<h3>Variables tipográficas</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Valor por defecto</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bs-font-sans-serif</code></td>
+<td><code>system-ui, -apple-system, "Segoe UI", Roboto, ...</code></td>
+<td>Stack de fuentes sin serifa.</td>
+</tr>
+<tr>
+<td><code>--bs-font-monospace</code></td>
+<td><code>SFMono-Regular, Menlo, Monaco, Consolas, ...</code></td>
+<td>Stack monoespaciado.</td>
+</tr>
+<tr>
+<td><code>--bs-body-font-family</code></td>
+<td><code>var(--bs-font-sans-serif)</code></td>
+<td>Familia aplicada al <code>body</code>.</td>
+</tr>
+<tr>
+<td><code>--bs-body-font-size</code></td>
+<td><code>1rem</code></td>
+<td>Tamaño base; el resto de la escala está en <code>rem</code>.</td>
+</tr>
+<tr>
+<td><code>--bs-body-font-weight</code></td>
+<td><code>400</code></td>
+<td>Peso base del texto.</td>
+</tr>
+<tr>
+<td><code>--bs-body-line-height</code></td>
+<td><code>1.5</code></td>
+<td>Interlineado base.</td>
+</tr>
+<tr>
+<td><code>--bs-body-color</code></td>
+<td><code>#212529</code></td>
+<td>Color de texto base.</td>
+</tr>
+<tr>
+<td><code>--bs-heading-color</code></td>
+<td><code>inherit</code></td>
+<td>Color de los títulos.</td>
+</tr>
+<tr>
+<td><code>--bs-link-color</code></td>
+<td><code>#0d6efd</code></td>
+<td>Color de enlaces.</td>
+</tr>
+<tr>
+<td><code>--bs-link-hover-color</code></td>
+<td><code>#0a58ca</code></td>
+<td>Color de enlaces en hover.</td>
+</tr>
+</tbody>
+</table>
+<h3>Tipografía base personalizada</h3>
+<pre><code class="language-css">:root {
+  --bs-body-font-family: "Inter", system-ui, sans-serif;
+  --bs-body-font-size: 1.05rem;
+  --bs-body-font-weight: 400;
+  --bs-body-line-height: 1.65;
+  --bs-heading-color: #0f4c81;
+}
+</code></pre>
+<p>Alternativa con Sass, para que también cambien las medidas derivadas:</p>
+<pre><code class="language-scss">$font-family-sans-serif: "Inter", system-ui, sans-serif;
+$font-size-base: 1.05rem;
+$line-height-base: 1.65;
+$headings-font-family: "Poppins", sans-serif;
+$headings-font-weight: 600;
+$headings-color: #0f4c81;
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<h3>Cargar una tipografía web (Google Fonts)</h3>
+<p>Bootstrap no incluye fuentes: usa el stack del sistema. Para usar una fuente propia hay que cargarla y luego indicarla en la variable correspondiente.</p>
+<pre><code class="language-html">&lt;!-- En el &lt;head&gt;, antes del CSS de Bootstrap --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"&gt;
+</code></pre>
+<pre><code class="language-css">:root {
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bs-heading-font-family: "Poppins", "Inter", sans-serif;
+}
+
+/* Bootstrap no tiene una variable para la familia de los títulos:
+   se aplica con una regla propia. */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--bs-heading-font-family);
+}
+</code></pre>
+<ul>
+<li>Mantener siempre <strong>fuentes de respaldo</strong> (<code>system-ui</code>, <code>sans-serif</code>) por si la web font no carga.</li>
+<li><code>display=swap</code> evita que el texto quede invisible mientras se descarga la fuente.</li>
+<li>Cargar solo los pesos que se usan (cada peso extra suma peso a la página).</li>
+<li>Alternativa recomendada en producción: descargar la fuente y servirla con <code>@font-face</code> y <code>font-display: swap</code>.</li>
+</ul>
+<pre><code class="language-css">@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+</code></pre>
+<h3>Escala de títulos</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Clase equivalente</th>
+<th>Tamaño</th>
+<th>Peso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;h1&gt;</code></td>
+<td><code>.h1</code></td>
+<td><code>2.5rem</code> (40 px)</td>
+<td>500</td>
+</tr>
+<tr>
+<td><code>&lt;h2&gt;</code></td>
+<td><code>.h2</code></td>
+<td><code>2rem</code> (32 px)</td>
+<td>500</td>
+</tr>
+<tr>
+<td><code>&lt;h3&gt;</code></td>
+<td><code>.h3</code></td>
+<td><code>1.75rem</code> (28 px)</td>
+<td>500</td>
+</tr>
+<tr>
+<td><code>&lt;h4&gt;</code></td>
+<td><code>.h4</code></td>
+<td><code>1.5rem</code> (24 px)</td>
+<td>500</td>
+</tr>
+<tr>
+<td><code>&lt;h5&gt;</code></td>
+<td><code>.h5</code></td>
+<td><code>1.25rem</code> (20 px)</td>
+<td>500</td>
+</tr>
+<tr>
+<td><code>&lt;h6&gt;</code></td>
+<td><code>.h6</code></td>
+<td><code>1rem</code> (16 px)</td>
+<td>500</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Los títulos tienen <code>margin-bottom: .5rem</code> y <code>line-height: 1.2</code>.</li>
+<li>Las clases <code>.h1</code> … <code>.h6</code> permiten dar <strong>apariencia</strong> de título a un elemento que no lo es (por ejemplo, un <code>&lt;div&gt;</code>), sin romper la semántica.</li>
+<li>No usar un <code>&lt;h1&gt;</code> solo por su tamaño: la jerarquía de encabezados debe ser semántica (<code>h1</code> → <code>h2</code> → <code>h3</code>).</li>
+</ul>
+<h3>Display headings</h3>
+<p>Para títulos grandes de portada o hero. Tienen peso <code>300</code> y <code>line-height: 1.2</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Tamaño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.display-1</code></td>
+<td><code>5rem</code> (80 px)</td>
+</tr>
+<tr>
+<td><code>.display-2</code></td>
+<td><code>4.5rem</code> (72 px)</td>
+</tr>
+<tr>
+<td><code>.display-3</code></td>
+<td><code>4rem</code> (64 px)</td>
+</tr>
+<tr>
+<td><code>.display-4</code></td>
+<td><code>3.5rem</code> (56 px)</td>
+</tr>
+<tr>
+<td><code>.display-5</code></td>
+<td><code>3rem</code> (48 px)</td>
+</tr>
+<tr>
+<td><code>.display-6</code></td>
+<td><code>2.5rem</code> (40 px)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;h1 class="display-3 fw-bold text-primary"&gt;Título de portada&lt;/h1&gt;
+&lt;p class="lead"&gt;Subtítulo o bajada con la clase .lead.&lt;/p&gt;
+</code></pre>
+<h3>Tamaños utilitarios <code>.fs-*</code></h3>
+<p>Independientes de la etiqueta: sirven para cualquier elemento. No son responsive por defecto.</p>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Tamaño</th>
+<th>Equivalente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.fs-1</code></td>
+<td><code>2.5rem</code></td>
+<td>40 px</td>
+</tr>
+<tr>
+<td><code>.fs-2</code></td>
+<td><code>2rem</code></td>
+<td>32 px</td>
+</tr>
+<tr>
+<td><code>.fs-3</code></td>
+<td><code>1.75rem</code></td>
+<td>28 px</td>
+</tr>
+<tr>
+<td><code>.fs-4</code></td>
+<td><code>1.5rem</code></td>
+<td>24 px</td>
+</tr>
+<tr>
+<td><code>.fs-5</code></td>
+<td><code>1.25rem</code></td>
+<td>20 px</td>
+</tr>
+<tr>
+<td><code>.fs-6</code></td>
+<td><code>1rem</code></td>
+<td>16 px</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;p class="fs-4"&gt;Párrafo destacado&lt;/p&gt;
+&lt;span class="fs-6 text-body-secondary"&gt;Texto secundario&lt;/span&gt;
+</code></pre>
+<h3>.lead, .small y .mark</h3>
+<table>
+<thead>
+<tr>
+<th>Clase / etiqueta</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.lead</code></td>
+<td><code>font-size: 1.25rem</code> y <code>font-weight: 300</code>. Ideal para bajadas.</td>
+</tr>
+<tr>
+<td><code>&lt;small&gt;</code> / <code>.small</code></td>
+<td><code>font-size: .875em</code> (87.5% del padre).</td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code> / <code>.mark</code></td>
+<td>Fondo amarillo y padding mínimo (resaltado).</td>
+</tr>
+<tr>
+<td><code>&lt;strong&gt;</code></td>
+<td>Negrita semántica (importancia).</td>
+</tr>
+<tr>
+<td><code>&lt;em&gt;</code></td>
+<td>Énfasis en cursiva.</td>
+</tr>
+<tr>
+<td><code>&lt;abbr title="..."&gt;</code></td>
+<td>Abreviatura con tooltip nativo del navegador.</td>
+</tr>
+<tr>
+<td><code>.initialism</code></td>
+<td>Para abreviaturas en mayúsculas: <code>&lt;abbr class="initialism"&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;code&gt;</code></td>
+<td>Código en línea, con fondo y color rojizo.</td>
+</tr>
+<tr>
+<td><code>&lt;kbd&gt;</code></td>
+<td>Tecla o atajo, con fondo oscuro.</td>
+</tr>
+<tr>
+<td><code>&lt;samp&gt;</code></td>
+<td>Salida de un programa.</td>
+</tr>
+</tbody>
+</table>
+<h3>Peso, estilo y familia</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad CSS</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>font-weight: lighter</code></td>
+<td><code>.fw-lighter</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 300</code></td>
+<td><code>.fw-light</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 400</code></td>
+<td><code>.fw-normal</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 500</code></td>
+<td><code>.fw-medium</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 600</code></td>
+<td><code>.fw-semibold</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 700</code></td>
+<td><code>.fw-bold</code></td>
+</tr>
+<tr>
+<td><code>font-weight: bolder</code></td>
+<td><code>.fw-bolder</code></td>
+</tr>
+<tr>
+<td><code>font-style: italic</code></td>
+<td><code>.fst-italic</code></td>
+</tr>
+<tr>
+<td><code>font-style: normal</code></td>
+<td><code>.fst-normal</code></td>
+</tr>
+<tr>
+<td><code>font-family: monospace</code></td>
+<td><code>.font-monospace</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;p class="fw-bold"&gt;Negrita&lt;/p&gt;
+&lt;p class="fw-semibold text-primary"&gt;Seminegrita azul&lt;/p&gt;
+&lt;p class="fst-italic"&gt;Cursiva&lt;/p&gt;
+&lt;p class="font-monospace"&gt;console.log("hola");&lt;/p&gt;
+</code></pre>
+<h3>Altura de línea</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th><code>line-height</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.lh-1</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>.lh-sm</code></td>
+<td><code>1.25</code></td>
+</tr>
+<tr>
+<td><code>.lh-base</code></td>
+<td><code>1.5</code></td>
+</tr>
+<tr>
+<td><code>.lh-lg</code></td>
+<td><code>2</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Alineación y transformación</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad CSS</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text-align: left / center / right</code></td>
+<td><code>.text-start</code>, <code>.text-center</code>, <code>.text-end</code></td>
+</tr>
+<tr>
+<td>Responsive</td>
+<td><code>.text-md-center</code>, <code>.text-lg-end</code>, etc.</td>
+</tr>
+<tr>
+<td><code>text-transform: lowercase / uppercase / capitalize</code></td>
+<td><code>.text-lowercase</code>, <code>.text-uppercase</code>, <code>.text-capitalize</code></td>
+</tr>
+<tr>
+<td><code>text-decoration: none / underline / line-through</code></td>
+<td><code>.text-decoration-none</code>, <code>.text-decoration-underline</code>, <code>.text-decoration-line-through</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;p class="text-center text-md-start"&gt;Centrado en móvil, izquierda desde md.&lt;/p&gt;
+&lt;p class="text-uppercase fw-semibold"&gt;Texto en mayúsculas&lt;/p&gt;
+&lt;p class="text-decoration-line-through"&gt;Precio anterior&lt;/p&gt;
+</code></pre>
+<h3>Enlaces tipográficos</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.link-primary</code> … <code>.link-danger</code></td>
+<td>Color del enlace según tema.</td>
+</tr>
+<tr>
+<td><code>.link-opacity-10</code> … <code>.link-opacity-100</code></td>
+<td>Opacidad del enlace.</td>
+</tr>
+<tr>
+<td><code>.link-opacity-*-hover</code></td>
+<td>Opacidad solo en hover.</td>
+</tr>
+<tr>
+<td><code>.link-underline</code> / <code>.link-underline-opacity-0</code></td>
+<td>Subrayado visible / invisible.</td>
+</tr>
+<tr>
+<td><code>.link-offset-1</code>, <code>-2</code>, <code>-3</code></td>
+<td>Separa el subrayado del texto.</td>
+</tr>
+<tr>
+<td><code>.link-body-emphasis</code></td>
+<td>Color de énfasis del body.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;a href="#" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"&gt;
+  Enlace con subrayado al pasar el mouse
+&lt;/a&gt;
+</code></pre>
+<h3>Corte y desborde de texto</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.text-wrap</code></td>
+<td><code>white-space: normal</code> (permite cortar líneas).</td>
+</tr>
+<tr>
+<td><code>.text-nowrap</code></td>
+<td><code>white-space: nowrap</code> (no corta).</td>
+</tr>
+<tr>
+<td><code>.text-break</code></td>
+<td><code>word-wrap: break-word</code> para URLs o palabras largas.</td>
+</tr>
+<tr>
+<td><code>.text-truncate</code></td>
+<td>Corta con puntos suspensivos. Requiere <code>display: block</code> o <code>inline-block</code> y ancho limitado.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class="text-truncate" style="max-width: 200px;"&gt;
+  Un texto muy largo que se corta con puntos suspensivos.
+&lt;/div&gt;
+</code></pre>
+<h3>Listas</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.list-unstyled</code></td>
+<td>Quita viñetas y margen izquierdo (solo el <code>padding-left</code> del <code>ul</code>).</td>
+</tr>
+<tr>
+<td><code>.list-inline</code></td>
+<td>Convierte la lista en una fila horizontal.</td>
+</tr>
+<tr>
+<td><code>.list-inline-item</code></td>
+<td>Cada ítem de una <code>.list-inline</code>.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;ul class="list-unstyled"&gt;
+  &lt;li&gt;Ítem sin viñeta&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="list-inline"&gt;
+  &lt;li class="list-inline-item"&gt;Inicio&lt;/li&gt;
+  &lt;li class="list-inline-item"&gt;Productos&lt;/li&gt;
+  &lt;li class="list-inline-item"&gt;Contacto&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<h3>Citas y figuras</h3>
+<pre><code class="language-html">&lt;figure&gt;
+  &lt;blockquote class="blockquote"&gt;
+    &lt;p&gt;La simplicidad es la máxima sofisticación.&lt;/p&gt;
+  &lt;/blockquote&gt;
+  &lt;figcaption class="blockquote-footer"&gt;
+    Leonardo da Vinci en &lt;cite title="Fuente"&gt;Atribución&lt;/cite&gt;
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.blockquote</code></td>
+<td><code>font-size: 1.25rem</code> y margen inferior.</td>
+</tr>
+<tr>
+<td><code>.blockquote-footer</code></td>
+<td>Texto pequeño y gris, con guion largo automático antes.</td>
+</tr>
+<tr>
+<td><code>.figure</code>, <code>.figure-img</code>, <code>.figure-caption</code></td>
+<td>Imagen con epígrafe.</td>
+</tr>
+</tbody>
+</table>
+<h3>Alineación vertical en línea</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Equivalente CSS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.align-baseline</code></td>
+<td><code>vertical-align: baseline</code></td>
+</tr>
+<tr>
+<td><code>.align-top</code></td>
+<td><code>vertical-align: top</code></td>
+</tr>
+<tr>
+<td><code>.align-middle</code></td>
+<td><code>vertical-align: middle</code></td>
+</tr>
+<tr>
+<td><code>.align-bottom</code></td>
+<td><code>vertical-align: bottom</code></td>
+</tr>
+<tr>
+<td><code>.align-text-top</code></td>
+<td><code>vertical-align: text-top</code></td>
+</tr>
+<tr>
+<td><code>.align-text-bottom</code></td>
+<td><code>vertical-align: text-bottom</code></td>
+</tr>
+</tbody>
+</table>
+<p>Se usa en celdas de tabla o elementos inline, por ejemplo para alinear un icono con un texto: <code>&lt;i class="bi bi-check align-middle"&gt;&lt;/i&gt;</code>.</p>
+<h3>Utilidades de selección y puntero</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.user-select-all</code></td>
+<td>Al seleccionar, toma todo el texto del elemento.</td>
+</tr>
+<tr>
+<td><code>.user-select-auto</code></td>
+<td>Comportamiento normal.</td>
+</tr>
+<tr>
+<td><code>.user-select-none</code></td>
+<td>No se puede seleccionar.</td>
+</tr>
+<tr>
+<td><code>.pe-none</code></td>
+<td><code>pointer-events: none</code> (el elemento no recibe clics).</td>
+</tr>
+<tr>
+<td><code>.pe-auto</code></td>
+<td>Restaura los eventos de puntero.</td>
+</tr>
+</tbody>
+</table>
+<h3>Ejemplo integrador de tipografía</h3>
+<pre><code class="language-html">&lt;article class="p-4"&gt;
+  &lt;p class="text-uppercase text-primary fw-semibold small mb-1"&gt;Categoría&lt;/p&gt;
+  &lt;h2 class="display-5 fw-bold mb-3"&gt;Título de la nota&lt;/h2&gt;
+  &lt;p class="lead text-body-secondary"&gt;
+    Bajada que resume el contenido en una o dos líneas.
+  &lt;/p&gt;
+  &lt;p&gt;
+    Texto normal con &lt;strong&gt;negrita&lt;/strong&gt;, &lt;em&gt;énfasis&lt;/em&gt;,
+    &lt;mark&gt;resaltado&lt;/mark&gt; y &lt;code&gt;código en línea&lt;/code&gt;.
+  &lt;/p&gt;
+  &lt;ul class="list-unstyled"&gt;
+    &lt;li class="mb-1"&gt;&lt;i class="bi bi-check2 text-success align-middle"&gt;&lt;/i&gt; Primer punto&lt;/li&gt;
+    &lt;li&gt;&lt;i class="bi bi-check2 text-success align-middle"&gt;&lt;/i&gt; Segundo punto&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;figure&gt;
+    &lt;blockquote class="blockquote fs-5"&gt;
+      &lt;p&gt;Una cita que refuerza la idea principal.&lt;/p&gt;
+    &lt;/blockquote&gt;
+    &lt;figcaption class="blockquote-footer"&gt;Autor de la cita&lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/article&gt;
+</code></pre>
+<blockquote>
+<p><strong>RFS (Responsive Font Sizes):</strong> Bootstrap escala automáticamente los títulos y <code>.display-*</code> entre breakpoints mediante <code>clamp()</code>. Por eso un <code>h1</code> no mide exactamente <code>2.5rem</code> en un celular: se reduce solo. Las clases <code>.fs-*</code> también participan de RFS.</p>
+</blockquote>
+<hr>
+<h2>6. Colores y opacidad</h2>
+<p>Bootstrap parte de 8 <strong>colores semánticos</strong> (theme colors). Cada uno genera familias de clases para texto, fondo, borde, énfasis y contraste.</p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Texto</th>
+<th>Fondo</th>
+<th>Fondo sutil</th>
+<th>Texto énfasis</th>
+<th>Borde sutil</th>
+<th>Texto sobre color</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary</td>
+<td><code>.text-primary</code></td>
+<td><code>.bg-primary</code></td>
+<td><code>.bg-primary-subtle</code></td>
+<td><code>.text-primary-emphasis</code></td>
+<td><code>.border-primary-subtle</code></td>
+<td><code>.text-bg-primary</code></td>
+</tr>
+<tr>
+<td>Secondary</td>
+<td><code>.text-secondary</code></td>
+<td><code>.bg-secondary</code></td>
+<td><code>.bg-secondary-subtle</code></td>
+<td><code>.text-secondary-emphasis</code></td>
+<td><code>.border-secondary-subtle</code></td>
+<td><code>.text-bg-secondary</code></td>
+</tr>
+<tr>
+<td>Success</td>
+<td><code>.text-success</code></td>
+<td><code>.bg-success</code></td>
+<td><code>.bg-success-subtle</code></td>
+<td><code>.text-success-emphasis</code></td>
+<td><code>.border-success-subtle</code></td>
+<td><code>.text-bg-success</code></td>
+</tr>
+<tr>
+<td>Danger</td>
+<td><code>.text-danger</code></td>
+<td><code>.bg-danger</code></td>
+<td><code>.bg-danger-subtle</code></td>
+<td><code>.text-danger-emphasis</code></td>
+<td><code>.border-danger-subtle</code></td>
+<td><code>.text-bg-danger</code></td>
+</tr>
+<tr>
+<td>Warning</td>
+<td><code>.text-warning</code></td>
+<td><code>.bg-warning</code></td>
+<td><code>.bg-warning-subtle</code></td>
+<td><code>.text-warning-emphasis</code></td>
+<td><code>.border-warning-subtle</code></td>
+<td><code>.text-bg-warning</code></td>
+</tr>
+<tr>
+<td>Info</td>
+<td><code>.text-info</code></td>
+<td><code>.bg-info</code></td>
+<td><code>.bg-info-subtle</code></td>
+<td><code>.text-info-emphasis</code></td>
+<td><code>.border-info-subtle</code></td>
+<td><code>.text-bg-info</code></td>
+</tr>
+<tr>
+<td>Light</td>
+<td><code>.text-light</code></td>
+<td><code>.bg-light</code></td>
+<td><code>.bg-light-subtle</code></td>
+<td><code>.text-light-emphasis</code></td>
+<td><code>.border-light-subtle</code></td>
+<td><code>.text-bg-light</code></td>
+</tr>
+<tr>
+<td>Dark</td>
+<td><code>.text-dark</code></td>
+<td><code>.bg-dark</code></td>
+<td><code>.bg-dark-subtle</code></td>
+<td><code>.text-dark-emphasis</code></td>
+<td><code>.border-dark-subtle</code></td>
+<td><code>.text-bg-dark</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Colores del documento</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.text-body</code></td>
+<td>Color de texto base.</td>
+</tr>
+<tr>
+<td><code>.text-body-secondary</code></td>
+<td>Texto secundario (reemplaza al viejo <code>.text-muted</code>).</td>
+</tr>
+<tr>
+<td><code>.text-body-tertiary</code></td>
+<td>Aún más tenue.</td>
+</tr>
+<tr>
+<td><code>.text-body-emphasis</code></td>
+<td>Mayor contraste.</td>
+</tr>
+<tr>
+<td><code>.text-black</code> / <code>.text-white</code></td>
+<td>Negro o blanco puro.</td>
+</tr>
+<tr>
+<td><code>.text-black-50</code> / <code>.text-white-50</code></td>
+<td>Negro o blanco al 50%.</td>
+</tr>
+<tr>
+<td><code>.bg-body</code>, <code>.bg-body-secondary</code>, <code>.bg-body-tertiary</code></td>
+<td>Fondos coherentes con el modo claro/oscuro.</td>
+</tr>
+</tbody>
+</table>
+<h3>Opacidad</h3>
+<pre><code class="language-html">&lt;div class="bg-primary bg-opacity-50 text-white"&gt;Fondo azul al 50%&lt;/div&gt;
+&lt;p class="text-primary text-opacity-75"&gt;Texto azul al 75%&lt;/p&gt;
+&lt;div class="opacity-50"&gt;Todo el elemento al 50%&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.text-opacity-*</code></td>
+<td><code>25</code>, <code>50</code>, <code>75</code>, <code>100</code></td>
+</tr>
+<tr>
+<td><code>.bg-opacity-*</code></td>
+<td><code>10</code>, <code>25</code>, <code>50</code>, <code>75</code>, <code>100</code></td>
+</tr>
+<tr>
+<td><code>.opacity-*</code></td>
+<td><code>0</code>, <code>25</code>, <code>50</code>, <code>75</code>, <code>100</code></td>
+</tr>
+<tr>
+<td><code>.border-opacity-*</code></td>
+<td><code>10</code>, <code>25</code>, <code>50</code>, <code>75</code>, <code>100</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Degradados y contraste</h3>
+<pre><code class="language-html">&lt;div class="bg-dark bg-gradient text-white p-3"&gt;Fondo con gradiente&lt;/div&gt;
+&lt;div class="text-bg-success p-3"&gt;Fondo verde con texto de contraste automático&lt;/div&gt;
+&lt;div class="text-bg-warning p-3"&gt;Fondo amarillo con texto oscuro&lt;/div&gt;
+</code></pre>
+<ul>
+<li><code>.bg-gradient</code> agrega un degradado sutil sobre el color de fondo.</li>
+<li><code>.text-bg-*</code> combina fondo y color de texto con contraste calculado. Es la forma más segura de usar un color de tema como fondo.</li>
+<li>Para accesibilidad, verificar el contraste: texto normal debería tener al menos <strong>4.5:1</strong>.</li>
+</ul>
+<hr>
+<h2>7. Espaciado</h2>
+<p>Bootstrap genera márgenes y padding con una escala basada en <code>$spacer</code> (<code>1rem</code> por defecto).</p>
+<table>
+<thead>
+<tr>
+<th>Tamaño</th>
+<th>Valor</th>
+<th>Equivalente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td><code>0</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>.25rem</code></td>
+<td>4 px</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td><code>.5rem</code></td>
+<td>8 px</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td><code>1rem</code></td>
+<td>16 px</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td><code>1.5rem</code></td>
+<td>24 px</td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td><code>3rem</code></td>
+<td>48 px</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td><code>auto</code></td>
+<td>Solo para márgenes</td>
+</tr>
+</tbody>
+</table>
+<h3>Sintaxis</h3>
+<p><code>{propiedad}{lados}-{tamaño}</code> y, si es responsive, <code>{propiedad}{lados}-{breakpoint}-{tamaño}</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Valores</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propiedad</td>
+<td><code>m</code> / <code>p</code></td>
+<td>margin / padding</td>
+</tr>
+<tr>
+<td>Lados</td>
+<td><code>t</code>, <code>b</code>, <code>s</code>, <code>e</code>, <code>x</code>, <code>y</code></td>
+<td>top, bottom, start (left), end (right), eje horizontal, eje vertical</td>
+</tr>
+<tr>
+<td>Sin lado</td>
+<td><code>m-3</code>, <code>p-2</code></td>
+<td>Todos los lados</td>
+</tr>
+<tr>
+<td>Tamaño</td>
+<td><code>0</code> … <code>5</code>, <code>auto</code></td>
+<td>Escala de espaciado</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class="mt-3 mb-4 px-2 py-5"&gt;...&lt;/div&gt;
+&lt;div class="mx-auto" style="max-width: 600px;"&gt;Centrado horizontal&lt;/div&gt;
+&lt;div class="p-0 p-md-4"&gt;Sin padding en móvil, 1.5rem desde md&lt;/div&gt;
+</code></pre>
+<h3>Márgenes automáticos</h3>
+<p><code>.ms-auto</code> empuja el elemento a la derecha dentro de un flex; <code>.me-auto</code> lo empuja a la izquierda; <code>.mx-auto</code> lo centra horizontalmente.</p>
+<pre><code class="language-html">&lt;nav class="d-flex"&gt;
+  &lt;a class="me-auto" href="#"&gt;Logo&lt;/a&gt;
+  &lt;a class="ms-3" href="#"&gt;Ingresar&lt;/a&gt;
+&lt;/nav&gt;
+</code></pre>
+<h3>Márgenes negativos</h3>
+<p>Están <strong>deshabilitados por defecto</strong>. Se activan con Sass:</p>
+<pre><code class="language-scss">$enable-negative-margins: true;
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<p>Luego se usan como <code>.mt-n1</code>, <code>.ms-n2</code>, etc.</p>
+<h3>Gap y stacks</h3>
+<pre><code class="language-html">&lt;div class="d-flex gap-3"&gt;
+  &lt;div&gt;Uno&lt;/div&gt;
+  &lt;div&gt;Dos&lt;/div&gt;
+  &lt;div&gt;Tres&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="vstack gap-2"&gt;  &lt;!-- columna --&gt;
+  &lt;div&gt;Arriba&lt;/div&gt;
+  &lt;div&gt;Abajo&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="hstack gap-3"&gt; &lt;!-- fila --&gt;
+  &lt;span&gt;A&lt;/span&gt;
+  &lt;span&gt;B&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<hr>
+<h2>8. Bordes, sombras y tamaños</h2>
+<h3>Bordes</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad CSS</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>border</code></td>
+<td><code>.border</code></td>
+</tr>
+<tr>
+<td>Un lado</td>
+<td><code>.border-top</code>, <code>.border-end</code>, <code>.border-bottom</code>, <code>.border-start</code></td>
+</tr>
+<tr>
+<td>Quitar borde</td>
+<td><code>.border-0</code>, <code>.border-top-0</code>, <code>.border-end-0</code>, etc.</td>
+</tr>
+<tr>
+<td><code>border-color</code></td>
+<td><code>.border-primary</code>, <code>.border-danger</code>, <code>.border-white</code></td>
+</tr>
+<tr>
+<td><code>border-width</code></td>
+<td><code>.border-1</code> … <code>.border-5</code></td>
+</tr>
+<tr>
+<td><code>border-opacity</code></td>
+<td><code>.border-opacity-25</code>, <code>-50</code>, <code>-75</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Bordes redondeados</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.rounded-0</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>.rounded</code></td>
+<td><code>.375rem</code> (valor base)</td>
+</tr>
+<tr>
+<td><code>.rounded-1</code></td>
+<td><code>.25rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-2</code></td>
+<td><code>.375rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-3</code></td>
+<td><code>.5rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-4</code></td>
+<td><code>1rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-5</code></td>
+<td><code>2rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-circle</code></td>
+<td><code>50%</code></td>
+</tr>
+<tr>
+<td><code>.rounded-pill</code></td>
+<td><code>50rem</code></td>
+</tr>
+<tr>
+<td><code>.rounded-top</code>, <code>.rounded-bottom</code>, <code>.rounded-start</code>, <code>.rounded-end</code></td>
+<td>Solo algunas esquinas</td>
+</tr>
+</tbody>
+</table>
+<h3>Sombras</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.shadow-none</code></td>
+<td>Sin sombra.</td>
+</tr>
+<tr>
+<td><code>.shadow-sm</code></td>
+<td>Sombra sutil.</td>
+</tr>
+<tr>
+<td><code>.shadow</code></td>
+<td>Sombra media.</td>
+</tr>
+<tr>
+<td><code>.shadow-lg</code></td>
+<td>Sombra amplia.</td>
+</tr>
+</tbody>
+</table>
+<h3>Tamaños</h3>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ancho</td>
+<td><code>.w-25</code>, <code>.w-50</code>, <code>.w-75</code>, <code>.w-100</code>, <code>.w-auto</code></td>
+</tr>
+<tr>
+<td>Alto</td>
+<td><code>.h-25</code>, <code>.h-50</code>, <code>.h-75</code>, <code>.h-100</code>, <code>.h-auto</code></td>
+</tr>
+<tr>
+<td>Máximos</td>
+<td><code>.mw-100</code>, <code>.mh-100</code></td>
+</tr>
+<tr>
+<td>Viewport</td>
+<td><code>.vw-100</code>, <code>.vh-100</code>, <code>.min-vw-100</code>, <code>.min-vh-100</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class="w-50 mx-auto min-vh-100 d-flex align-items-center"&gt;
+  &lt;div class="p-4 border rounded-4 shadow-sm bg-body"&gt;Contenido centrado&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Proporción (ratio)</h3>
+<pre><code class="language-html">&lt;div class="ratio ratio-16x9"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/..." title="Video" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Variantes: <code>.ratio-1x1</code>, <code>.ratio-4x3</code>, <code>.ratio-16x9</code>, <code>.ratio-21x9</code>.</p>
+<h3>Ajuste de imágenes y objetos</h3>
+<pre><code class="language-html">&lt;img src="foto.jpg" class="w-100 object-fit-cover rounded" style="height: 240px;" alt="..."&gt;
+</code></pre>
+<p>Clases: <code>.object-fit-contain</code>, <code>.object-fit-cover</code>, <code>.object-fit-fill</code>, <code>.object-fit-scale-down</code>, <code>.object-fit-none</code>.</p>
+<hr>
+<h2>9. Display, position, float, overflow y z-index</h2>
+<h3><code>display</code></h3>
+<p>Sintaxis: <code>.d-{valor}</code>, con infijo responsive opcional: <code>.d-{breakpoint}-{valor}</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Valor CSS</th>
+<th>Clase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td><code>.d-none</code></td>
+</tr>
+<tr>
+<td><code>inline</code></td>
+<td><code>.d-inline</code></td>
+</tr>
+<tr>
+<td><code>inline-block</code></td>
+<td><code>.d-inline-block</code></td>
+</tr>
+<tr>
+<td><code>block</code></td>
+<td><code>.d-block</code></td>
+</tr>
+<tr>
+<td><code>grid</code></td>
+<td><code>.d-grid</code></td>
+</tr>
+<tr>
+<td><code>inline-grid</code></td>
+<td><em>No tiene utilidad propia</em>; se usa CSS: <code>display: inline-grid</code>.</td>
+</tr>
+<tr>
+<td><code>table</code> / <code>table-row</code> / <code>table-cell</code></td>
+<td><code>.d-table</code>, <code>.d-table-row</code>, <code>.d-table-cell</code></td>
+</tr>
+<tr>
+<td><code>flex</code></td>
+<td><code>.d-flex</code></td>
+</tr>
+<tr>
+<td><code>inline-flex</code></td>
+<td><code>.d-inline-flex</code></td>
+</tr>
+</tbody>
+</table>
+<p>También existen variantes de impresión: <code>.d-print-none</code>, <code>.d-print-block</code>, <code>.d-print-flex</code>, etc.</p>
+<pre><code class="language-html">&lt;!-- Oculto en móvil, visible como flex desde md --&gt;
+&lt;div class="d-none d-md-flex"&gt;...&lt;/div&gt;
+
+&lt;!-- Visible solo en pantalla, no al imprimir --&gt;
+&lt;div class="d-print-none"&gt;...&lt;/div&gt;
+</code></pre>
+<h3><code>position</code> y desplazamientos</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad / valor</th>
+<th>Clase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position: static</code></td>
+<td><code>.position-static</code></td>
+</tr>
+<tr>
+<td><code>position: relative</code></td>
+<td><code>.position-relative</code></td>
+</tr>
+<tr>
+<td><code>position: absolute</code></td>
+<td><code>.position-absolute</code></td>
+</tr>
+<tr>
+<td><code>position: fixed</code></td>
+<td><code>.position-fixed</code></td>
+</tr>
+<tr>
+<td><code>position: sticky</code></td>
+<td><code>.position-sticky</code></td>
+</tr>
+<tr>
+<td>Fijo arriba / abajo</td>
+<td><code>.fixed-top</code>, <code>.fixed-bottom</code></td>
+</tr>
+<tr>
+<td>Sticky arriba</td>
+<td><code>.sticky-top</code>, <code>.sticky-md-top</code></td>
+</tr>
+<tr>
+<td><code>top</code>, <code>bottom</code>, <code>start</code>, <code>end</code></td>
+<td><code>.top-0</code>, <code>.top-50</code>, <code>.top-100</code>, <code>.bottom-0</code>, <code>.start-0</code>, <code>.end-0</code></td>
+</tr>
+<tr>
+<td>Centrar con traslación</td>
+<td><code>.translate-middle</code>, <code>.translate-middle-x</code>, <code>.translate-middle-y</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- Badge sobre la esquina de un avatar --&gt;
+&lt;div class="position-relative d-inline-block"&gt;
+  &lt;img src="avatar.jpg" class="rounded-circle" width="64" height="64" alt="Perfil"&gt;
+  &lt;span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger"&gt;
+    3
+  &lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<h3><code>float</code> y <code>clearfix</code></h3>
+<pre><code class="language-html">&lt;img src="foto.jpg" class="float-start me-3 mb-2" alt="..."&gt;
+&lt;p&gt;El texto rodea la imagen.&lt;/p&gt;
+&lt;div class="clearfix"&gt;&lt;/div&gt;
+</code></pre>
+<p>Clases: <code>.float-start</code>, <code>.float-end</code>, <code>.float-none</code> y variantes responsive (<code>.float-md-end</code>). <code>.clearfix</code> contiene los flotantes.</p>
+<h3><code>overflow</code></h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.overflow-auto</code></td>
+<td><code>auto</code></td>
+</tr>
+<tr>
+<td><code>.overflow-hidden</code></td>
+<td><code>hidden</code></td>
+</tr>
+<tr>
+<td><code>.overflow-visible</code></td>
+<td><code>visible</code></td>
+</tr>
+<tr>
+<td><code>.overflow-scroll</code></td>
+<td><code>scroll</code></td>
+</tr>
+<tr>
+<td><code>.overflow-x-*</code> / <code>.overflow-y-*</code></td>
+<td>Solo un eje</td>
+</tr>
+</tbody>
+</table>
+<h3><code>z-index</code>, visibilidad y opacidad</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.z-n1</code></td>
+<td><code>z-index: -1</code></td>
+</tr>
+<tr>
+<td><code>.z-0</code>, <code>.z-1</code>, <code>.z-2</code>, <code>.z-3</code></td>
+<td><code>z-index: 0</code> a <code>3</code></td>
+</tr>
+<tr>
+<td><code>.visible</code> / <code>.invisible</code></td>
+<td><code>visibility: visible / hidden</code> (ocupa espacio).</td>
+</tr>
+<tr>
+<td><code>.opacity-0</code> … <code>.opacity-100</code></td>
+<td>Opacidad del elemento completo.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>.invisible</code> y <code>.opacity-0</code> <strong>siguen ocupando lugar</strong> y pueden recibir clics. Para sacar algo del flujo y de la interacción se usa <code>.d-none</code>.</p>
+</blockquote>
+<hr>
+<h2>10. Flexbox</h2>
+<p>Bootstrap envuelve Flexbox en clases utilitarias. Se activa con <code>.d-flex</code> o <code>.d-inline-flex</code> y se ajusta con las familias de abajo. Casi todas admiten infijo responsive (<code>.flex-md-row</code>, <code>.justify-content-lg-center</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad CSS</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-direction</code></td>
+<td><code>.flex-row</code>, <code>.flex-row-reverse</code>, <code>.flex-column</code>, <code>.flex-column-reverse</code></td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td><code>.justify-content-start</code>, <code>-end</code>, <code>-center</code>, <code>-between</code>, <code>-around</code>, <code>-evenly</code></td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td><code>.align-items-start</code>, <code>-end</code>, <code>-center</code>, <code>-baseline</code>, <code>-stretch</code></td>
+</tr>
+<tr>
+<td><code>align-self</code></td>
+<td><code>.align-self-start</code>, <code>-end</code>, <code>-center</code>, <code>-baseline</code>, <code>-stretch</code></td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td><code>.align-content-start</code>, <code>-end</code>, <code>-center</code>, <code>-between</code>, <code>-around</code>, <code>-stretch</code></td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td><code>.flex-wrap</code>, <code>.flex-nowrap</code>, <code>.flex-wrap-reverse</code></td>
+</tr>
+<tr>
+<td><code>flex-grow</code> / <code>flex-shrink</code></td>
+<td><code>.flex-grow-0</code>, <code>.flex-grow-1</code>, <code>.flex-shrink-0</code>, <code>.flex-shrink-1</code></td>
+</tr>
+<tr>
+<td><code>flex</code> (ocupar espacio)</td>
+<td><code>.flex-fill</code></td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td><code>.gap-0</code> … <code>.gap-5</code></td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td><code>.order-0</code> … <code>.order-5</code>, <code>.order-first</code>, <code>.order-last</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Patrones útiles</h3>
+<pre><code class="language-html">&lt;!-- Centrado perfecto (horizontal y vertical) --&gt;
+&lt;div class="d-flex justify-content-center align-items-center min-vh-100"&gt;
+  &lt;div class="p-4 bg-body rounded shadow"&gt;Contenido centrado&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Barra: logo a la izquierda, acciones a la derecha --&gt;
+&lt;div class="d-flex align-items-center"&gt;
+  &lt;strong class="me-auto"&gt;Mi sitio&lt;/strong&gt;
+  &lt;button class="btn btn-sm btn-outline-primary"&gt;Salir&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Columna en móvil, fila desde md --&gt;
+&lt;div class="d-flex flex-column flex-md-row gap-3"&gt;
+  &lt;div class="flex-fill"&gt;Bloque 1&lt;/div&gt;
+  &lt;div class="flex-fill"&gt;Bloque 2&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Tarjetas de igual alto --&gt;
+&lt;div class="row g-4"&gt;
+  &lt;div class="col-md-4 d-flex"&gt;
+    &lt;div class="card flex-fill"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p><code>.d-flex</code> + <code>.gap-*</code> reemplaza la vieja técnica de márgenes entre hijos. <code>.flex-fill</code> hace que un hijo crezca para ocupar el espacio libre. <code>.ms-auto</code> / <code>.me-auto</code> son la forma rápida de empujar elementos a un extremo.</p>
+</blockquote>
+<hr>
+<h2>11. Responsive y breakpoints</h2>
+<p>Bootstrap es <strong>mobile-first</strong>: lo que se escribe sin infijo vale para todos los tamaños; los infijos <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code> y <code>xxl</code> aplican <strong>desde</strong> ese ancho hacia arriba.</p>
+<table>
+<thead>
+<tr>
+<th>Breakpoint</th>
+<th>Infijo</th>
+<th>Ancho mínimo</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extra pequeño (móvil)</td>
+<td><em>ninguno</em></td>
+<td><code>&lt; 576px</code></td>
+<td><code>.d-none</code>, <code>.col-12</code>, <code>.p-2</code></td>
+</tr>
+<tr>
+<td>Pequeño</td>
+<td><code>sm</code></td>
+<td><code>≥ 576px</code></td>
+<td><code>.d-sm-block</code>, <code>.col-sm-6</code></td>
+</tr>
+<tr>
+<td>Mediano (tablet)</td>
+<td><code>md</code></td>
+<td><code>≥ 768px</code></td>
+<td><code>.text-md-center</code>, <code>.mt-md-5</code></td>
+</tr>
+<tr>
+<td>Grande (escritorio)</td>
+<td><code>lg</code></td>
+<td><code>≥ 992px</code></td>
+<td><code>.d-lg-flex</code>, <code>.col-lg-4</code></td>
+</tr>
+<tr>
+<td>Extra grande</td>
+<td><code>xl</code></td>
+<td><code>≥ 1200px</code></td>
+<td><code>.justify-content-xl-between</code></td>
+</tr>
+<tr>
+<td>Extra extra grande</td>
+<td><code>xxl</code></td>
+<td><code>≥ 1400px</code></td>
+<td><code>.col-xxl-2</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Sintaxis del infijo</h3>
+<pre><code class="language-html">&lt;!-- Base móvil: una columna. Desde md: dos. Desde lg: cuatro. --&gt;
+&lt;div class="row g-3"&gt;
+  &lt;div class="col-12 col-md-6 col-lg-3"&gt;...&lt;/div&gt;
+  &lt;div class="col-12 col-md-6 col-lg-3"&gt;...&lt;/div&gt;
+  &lt;div class="col-12 col-md-6 col-lg-3"&gt;...&lt;/div&gt;
+  &lt;div class="col-12 col-md-6 col-lg-3"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Ocultar en móvil, mostrar desde lg --&gt;
+&lt;nav class="d-none d-lg-block"&gt;Menú lateral&lt;/nav&gt;
+
+&lt;!-- Texto centrado en móvil, alineado a la izquierda desde md --&gt;
+&lt;h2 class="text-center text-md-start"&gt;Título&lt;/h2&gt;
+</code></pre>
+<h3>Equivalencia con media queries</h3>
+<pre><code class="language-css">/* Bootstrap genera esencialmente esto */
+@media (min-width: 768px) {
+  .col-md-6 { flex: 0 0 auto; width: 50%; }
+}
+</code></pre>
+<h3>Breakpoints personalizados (Sass)</h3>
+<pre><code class="language-scss">$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+  xxxl: 1500px
+);
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<blockquote>
+<p>Los breakpoints se definen con <strong>ancho mínimo</strong>. No existe <code>.col-xs-*</code> porque el tamaño base ya es el móvil. Si se agrega un breakpoint nuevo, hay que recompilar con Sass para que se generen las clases.</p>
+</blockquote>
+<hr>
+<h2>12. Formularios</h2>
+<p>Bootstrap normaliza controles, estados de foco y validación. La estructura básica usa <code>.form-label</code>, <code>.form-control</code> y un <code>id</code> que conecta label e input (obligatorio para accesibilidad).</p>
+<pre><code class="language-html">&lt;form&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="email" class="form-label"&gt;Correo electrónico&lt;/label&gt;
+    &lt;input type="email" class="form-control" id="email" placeholder="nombre@ejemplo.com" required&gt;
+    &lt;div class="form-text"&gt;Nunca compartiremos tus datos.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="mb-3"&gt;
+    &lt;label for="password" class="form-label"&gt;Contraseña&lt;/label&gt;
+    &lt;input type="password" class="form-control" id="password" required&gt;
+  &lt;/div&gt;
+
+  &lt;button type="submit" class="btn btn-primary"&gt;Ingresar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>Controles</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Se usa en</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.form-control</code></td>
+<td>input de texto, email, password, number, date, file, textarea.</td>
+</tr>
+<tr>
+<td><code>.form-control-plaintext</code></td>
+<td>Muestra el valor como texto (sin borde), útil en formularios de solo lectura.</td>
+</tr>
+<tr>
+<td><code>.form-select</code></td>
+<td><code>&lt;select&gt;</code> con flecha y estilos propios.</td>
+</tr>
+<tr>
+<td><code>.form-check-input</code></td>
+<td>checkbox, radio, switch.</td>
+</tr>
+<tr>
+<td><code>.form-check-label</code></td>
+<td>Etiqueta asociada.</td>
+</tr>
+<tr>
+<td><code>.form-range</code></td>
+<td><code>&lt;input type="range"&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>.form-control-color</code></td>
+<td><code>&lt;input type="color"&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>.form-control-sm</code> / <code>-lg</code></td>
+<td>Tamaño compacto / grande.</td>
+</tr>
+<tr>
+<td><code>.form-select-sm</code> / <code>-lg</code></td>
+<td>Tamaño compacto / grande del select.</td>
+</tr>
+<tr>
+<td><code>.form-text</code></td>
+<td>Texto de ayuda debajo del control.</td>
+</tr>
+<tr>
+<td><code>.form-label</code></td>
+<td>Etiqueta del control.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checkbox, radio y switch</h3>
+<pre><code class="language-html">&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" value="" id="acepto"&gt;
+  &lt;label class="form-check-label" for="acepto"&gt;Acepto los términos&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="plan" id="plan1" checked&gt;
+  &lt;label class="form-check-label" for="plan1"&gt;Plan básico&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="plan" id="plan2"&gt;
+  &lt;label class="form-check-label" for="plan2"&gt;Plan premium&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;!-- Switch --&gt;
+&lt;div class="form-check form-switch"&gt;
+  &lt;input class="form-check-input" type="checkbox" role="switch" id="notificaciones"&gt;
+  &lt;label class="form-check-label" for="notificaciones"&gt;Recibir notificaciones&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;!-- En línea --&gt;
+&lt;div class="form-check form-check-inline"&gt;...&lt;/div&gt;
+</code></pre>
+<ul>
+<li><code>name</code> agrupa los radios: solo se puede elegir uno por grupo.</li>
+<li><code>id</code> + <code>for</code> asocian label y control; además permiten hacer clic en el texto.</li>
+<li>El switch requiere <code>role="switch"</code> y la clase <code>.form-switch</code> en el contenedor.</li>
+</ul>
+<h3>Selects, textarea y archivos</h3>
+<pre><code class="language-html">&lt;select class="form-select mb-3" aria-label="Elegir provincia"&gt;
+  &lt;option selected&gt;Elegir provincia...&lt;/option&gt;
+  &lt;option value="1"&gt;Buenos Aires&lt;/option&gt;
+  &lt;option value="2"&gt;Córdoba&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;textarea class="form-control mb-3" rows="3" placeholder="Mensaje"&gt;&lt;/textarea&gt;
+
+&lt;input class="form-control" type="file" id="archivo"&gt;
+&lt;label for="archivo" class="form-label"&gt;Adjuntar archivo&lt;/label&gt;
+</code></pre>
+<h3>Grupos de entrada (input group)</h3>
+<pre><code class="language-html">&lt;div class="input-group mb-3"&gt;
+  &lt;span class="input-group-text"&gt;@&lt;/span&gt;
+  &lt;input type="text" class="form-control" placeholder="usuario" aria-label="Usuario"&gt;
+&lt;/div&gt;
+
+&lt;div class="input-group mb-3"&gt;
+  &lt;span class="input-group-text"&gt;$&lt;/span&gt;
+  &lt;input type="number" class="form-control" placeholder="Monto"&gt;
+  &lt;span class="input-group-text"&gt;.00&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="input-group"&gt;
+  &lt;button class="btn btn-outline-secondary" type="button"&gt;Buscar&lt;/button&gt;
+  &lt;input type="text" class="form-control" placeholder="Término"&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Etiquetas flotantes</h3>
+<pre><code class="language-html">&lt;div class="form-floating mb-3"&gt;
+  &lt;input type="email" class="form-control" id="floatingEmail" placeholder="nombre@ejemplo.com"&gt;
+  &lt;label for="floatingEmail"&gt;Correo electrónico&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div class="form-floating"&gt;
+  &lt;select class="form-select" id="floatingSelect"&gt;
+    &lt;option selected&gt;Elegir una opción&lt;/option&gt;
+    &lt;option value="1"&gt;Opción 1&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;label for="floatingSelect"&gt;Provincia&lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>En <code>.form-floating</code> el <strong>input va antes que el label</strong> y el input <strong>debe tener <code>placeholder</code></strong> (aunque sea un espacio), porque Bootstrap lo usa para la animación.</p>
+</blockquote>
+<h3>Layout del formulario con grid</h3>
+<pre><code class="language-html">&lt;form class="row g-3"&gt;
+  &lt;div class="col-md-6"&gt;
+    &lt;label for="nombre" class="form-label"&gt;Nombre&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="nombre"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-md-6"&gt;
+    &lt;label for="apellido" class="form-label"&gt;Apellido&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="apellido"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-12"&gt;
+    &lt;label for="direccion" class="form-label"&gt;Dirección&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="direccion"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-md-4"&gt;
+    &lt;label for="cp" class="form-label"&gt;Código postal&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="cp"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-12"&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Enviar&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>Validación</h3>
+<pre><code class="language-html">&lt;form class="row g-3 needs-validation" novalidate&gt;
+  &lt;div class="col-md-6"&gt;
+    &lt;label for="usuario" class="form-label"&gt;Usuario&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="usuario" required&gt;
+    &lt;div class="valid-feedback"&gt;¡Se ve bien!&lt;/div&gt;
+    &lt;div class="invalid-feedback"&gt;Elegí un nombre de usuario.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="col-12"&gt;
+    &lt;button class="btn btn-primary" type="submit"&gt;Enviar&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase / atributo</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.was-validated</code></td>
+<td>En el <code>&lt;form&gt;</code>: muestra validación tras el envío.</td>
+</tr>
+<tr>
+<td><code>.is-valid</code> / <code>.is-invalid</code></td>
+<td>Fuerza el estado de un control individual.</td>
+</tr>
+<tr>
+<td><code>.valid-feedback</code> / <code>.invalid-feedback</code></td>
+<td>Mensaje que aparece según el estado.</td>
+</tr>
+<tr>
+<td><code>.valid-tooltip</code> / <code>.invalid-tooltip</code></td>
+<td>Igual, pero como tooltip.</td>
+</tr>
+<tr>
+<td><code>novalidate</code></td>
+<td>Desactiva la validación nativa para usar la de Bootstrap.</td>
+</tr>
+<tr>
+<td><code>required</code>, <code>pattern</code>, <code>minlength</code>, <code>type</code></td>
+<td>Reglas HTML que el navegador evalúa.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- Estado inválido manual (por ejemplo, error del servidor) --&gt;
+&lt;input type="text" class="form-control is-invalid" value="dato incorrecto"&gt;
+&lt;div class="invalid-feedback"&gt;Ese valor ya está registrado.&lt;/div&gt;
+</code></pre>
+<h3>Estados y accesibilidad</h3>
+<ul>
+<li><code>disabled</code> desactiva el control; <code>readonly</code> permite leer pero no editar.</li>
+<li>Usar <code>aria-label</code> o <code>&lt;label&gt;</code> visible. Un placeholder <strong>no</strong> reemplaza a la etiqueta.</li>
+<li>Marcar errores con texto, no solo con color.</li>
+<li>Los grupos de radios conviene envolverlos en <code>&lt;fieldset&gt;</code> con <code>&lt;legend&gt;</code>.</li>
+</ul>
+<hr>
+<h2>13. Botones</h2>
+<p>La clase base es <code>.btn</code>. Siempre se combina con una variante de color. Funciona en <code>&lt;button&gt;</code>, <code>&lt;a&gt;</code> e <code>&lt;input&gt;</code>.</p>
+<pre><code class="language-html">&lt;button type="button" class="btn btn-primary"&gt;Primario&lt;/button&gt;
+&lt;button type="button" class="btn btn-outline-secondary"&gt;Outline&lt;/button&gt;
+&lt;a href="#" class="btn btn-success"&gt;Enlace con aspecto de botón&lt;/a&gt;
+&lt;button type="button" class="btn btn-link"&gt;Como enlace&lt;/button&gt;
+</code></pre>
+<h3>Variantes y tamaños</h3>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relleno</td>
+<td><code>.btn-primary</code>, <code>.btn-secondary</code>, <code>.btn-success</code>, <code>.btn-danger</code>, <code>.btn-warning</code>, <code>.btn-info</code>, <code>.btn-light</code>, <code>.btn-dark</code></td>
+</tr>
+<tr>
+<td>Borde</td>
+<td><code>.btn-outline-primary</code>, <code>.btn-outline-danger</code>, etc.</td>
+</tr>
+<tr>
+<td>Sin color</td>
+<td><code>.btn-link</code></td>
+</tr>
+<tr>
+<td>Tamaño</td>
+<td><code>.btn-sm</code>, <code>.btn-lg</code></td>
+</tr>
+<tr>
+<td>Ancho completo</td>
+<td><code>.w-100</code> o contenedor <code>.d-grid</code> (no existe <code>.btn-block</code> en v5)</td>
+</tr>
+</tbody>
+</table>
+<h3>Estados</h3>
+<pre><code class="language-html">&lt;button class="btn btn-primary" disabled&gt;Deshabilitado&lt;/button&gt;
+&lt;a href="#" class="btn btn-primary disabled" aria-disabled="true"&gt;Deshabilitado&lt;/a&gt;
+&lt;button class="btn btn-primary active" aria-pressed="true"&gt;Activo&lt;/button&gt;
+</code></pre>
+<ul>
+<li><code>.active</code> simula el estado presionado; en un botón real conviene además <code>aria-pressed</code>.</li>
+<li>En un <code>&lt;a&gt;</code>, <code>.disabled</code> es solo visual: hay que evitar el clic con <code>aria-disabled="true"</code> y JavaScript o quitando el <code>href</code>.</li>
+</ul>
+<h3>Botón con icono y estado de carga</h3>
+<pre><code class="language-html">&lt;button class="btn btn-primary d-inline-flex align-items-center gap-2"&gt;
+  &lt;i class="bi bi-download" aria-hidden="true"&gt;&lt;/i&gt;
+  Descargar
+&lt;/button&gt;
+
+&lt;button class="btn btn-primary" type="button" disabled&gt;
+  &lt;span class="spinner-border spinner-border-sm me-2" aria-hidden="true"&gt;&lt;/span&gt;
+  Guardando...
+&lt;/button&gt;
+</code></pre>
+<h3>Grupos de botones</h3>
+<pre><code class="language-html">&lt;div class="btn-group" role="group" aria-label="Opciones"&gt;
+  &lt;button type="button" class="btn btn-outline-primary"&gt;Izquierda&lt;/button&gt;
+  &lt;button type="button" class="btn btn-outline-primary"&gt;Centro&lt;/button&gt;
+  &lt;button type="button" class="btn btn-outline-primary"&gt;Derecha&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class="btn-group-vertical" role="group" aria-label="Vertical"&gt;
+  &lt;button type="button" class="btn btn-outline-dark"&gt;Uno&lt;/button&gt;
+  &lt;button type="button" class="btn btn-outline-dark"&gt;Dos&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class="btn-toolbar gap-2" role="toolbar" aria-label="Barra"&gt;
+  &lt;div class="btn-group" role="group"&gt;...&lt;/div&gt;
+  &lt;div class="btn-group" role="group"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>Toggle con <code>.btn-check</code></h3>
+<pre><code class="language-html">&lt;input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off"&gt;
+&lt;label class="btn btn-outline-primary" for="btncheck1"&gt;Opción A&lt;/label&gt;
+
+&lt;input type="radio" class="btn-check" name="opciones" id="btnradio1" autocomplete="off" checked&gt;
+&lt;label class="btn btn-outline-primary" for="btnradio1"&gt;Opción 1&lt;/label&gt;
+</code></pre>
+<p>El <code>input</code> queda visualmente oculto y el <code>label</code> hace de botón. No usar JavaScript para el cambio visual.</p>
+<h3>Botón de cierre</h3>
+<pre><code class="language-html">&lt;button type="button" class="btn-close" aria-label="Cerrar"&gt;&lt;/button&gt;
+</code></pre>
+<p>Se usa en alerts, modals, offcanvas y toasts. Se puede deshabilitar con <code>disabled</code>.</p>
+<blockquote>
+<p><strong>Accesibilidad:</strong> un botón que solo tiene un icono necesita <code>aria-label</code> (ej. <code>&lt;button class="btn" aria-label="Buscar"&gt;</code>). El icono decorativo va con <code>aria-hidden="true"</code>.</p>
+</blockquote>
+<hr>
+<h2>14. Navegación</h2>
+<h3>Navbar</h3>
+<pre><code class="language-html">&lt;nav class="navbar navbar-expand-lg bg-body-tertiary"&gt;
+  &lt;div class="container"&gt;
+    &lt;a class="navbar-brand" href="#"&gt;Mi sitio&lt;/a&gt;
+
+    &lt;button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú"&gt;
+      &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+
+    &lt;div class="collapse navbar-collapse" id="menuPrincipal"&gt;
+      &lt;ul class="navbar-nav me-auto mb-2 mb-lg-0"&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link active" aria-current="page" href="#"&gt;Inicio&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Productos&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="nav-item dropdown"&gt;
+          &lt;a class="nav-link dropdown-toggle" href="#" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false"&gt;Cuenta&lt;/a&gt;
+          &lt;ul class="dropdown-menu"&gt;
+            &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Perfil&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Salir&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;form class="d-flex" role="search"&gt;
+        &lt;input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"&gt;
+        &lt;button class="btn btn-outline-success" type="submit"&gt;Buscar&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase / atributo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.navbar-expand-{bp}</code></td>
+<td>Hasta ese breakpoint se muestra colapsado; desde ahí, horizontal.</td>
+</tr>
+<tr>
+<td><code>.navbar-brand</code></td>
+<td>Logo o nombre del sitio.</td>
+</tr>
+<tr>
+<td><code>.navbar-nav</code></td>
+<td>Lista de navegación.</td>
+</tr>
+<tr>
+<td><code>.navbar-toggler</code></td>
+<td>Botón hamburguesa (necesita <code>data-bs-toggle="collapse"</code>).</td>
+</tr>
+<tr>
+<td><code>.navbar-toggler-icon</code></td>
+<td>Icono de las tres líneas.</td>
+</tr>
+<tr>
+<td><code>.navbar-collapse</code> + <code>.collapse</code></td>
+<td>Contenedor que se colapsa.</td>
+</tr>
+<tr>
+<td><code>.fixed-top</code> / <code>.sticky-top</code></td>
+<td>Fija la barra arriba.</td>
+</tr>
+<tr>
+<td><code>data-bs-theme="dark"</code></td>
+<td>Variante oscura (reemplaza a <code>.navbar-dark</code>).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>La navbar colapsable <strong>necesita el JS de Bootstrap</strong>. Si no se carga el bundle, el botón hamburguesa no abre nada.</p>
+</blockquote>
+<h3>Dropdown</h3>
+<pre><code class="language-html">&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button"
+          data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Acciones
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;h6 class="dropdown-header"&gt;Opciones&lt;/h6&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Editar&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item active" href="#"&gt;Duplicar&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item text-danger" href="#"&gt;Eliminar&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Variantes: <code>.dropdown-menu-end</code> (alineado a la derecha), <code>.dropstart</code>, <code>.dropend</code>, <code>.dropup</code>, <code>.dropdown-item-text</code>. Se puede abrir con JS: <code>new bootstrap.Dropdown(el).toggle()</code>.</p>
+<h3>Navs y pestañas</h3>
+<pre><code class="language-html">&lt;!-- Pestañas --&gt;
+&lt;ul class="nav nav-tabs" id="miTab" role="tablist"&gt;
+  &lt;li class="nav-item" role="presentation"&gt;
+    &lt;button class="nav-link active" id="tab1-tab" data-bs-toggle="tab"
+            data-bs-target="#tab1" type="button" role="tab"
+            aria-controls="tab1" aria-selected="true"&gt;General&lt;/button&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item" role="presentation"&gt;
+    &lt;button class="nav-link" id="tab2-tab" data-bs-toggle="tab"
+            data-bs-target="#tab2" type="button" role="tab"
+            aria-controls="tab2" aria-selected="false"&gt;Detalles&lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="tab-content" id="miTabContent"&gt;
+  &lt;div class="tab-pane fade show active" id="tab1" role="tabpanel"&gt;Contenido 1&lt;/div&gt;
+  &lt;div class="tab-pane fade" id="tab2" role="tabpanel"&gt;Contenido 2&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Variantes: <code>.nav-pills</code> (botones), <code>.nav-fill</code> (reparte el ancho), <code>.nav-justified</code> (todos mismo ancho), <code>.nav-underline</code> (5.3).</p>
+<h3>Breadcrumb</h3>
+<pre><code class="language-html">&lt;nav aria-label="breadcrumb"&gt;
+  &lt;ol class="breadcrumb"&gt;
+    &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Categoría&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="breadcrumb-item active" aria-current="page"&gt;Producto&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+</code></pre>
+<p>El separador se cambia con la variable <code>--bs-breadcrumb-divider</code>:</p>
+<pre><code class="language-css">.breadcrumb {
+  --bs-breadcrumb-divider: ">";
+}
+</code></pre>
+<h3>Paginación</h3>
+<pre><code class="language-html">&lt;nav aria-label="Navegación de páginas"&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item disabled"&gt;
+      &lt;a class="page-link" href="#" aria-disabled="true"&gt;Anterior&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="page-item active" aria-current="page"&gt;
+      &lt;a class="page-link" href="#"&gt;1&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;Siguiente&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+<p>Tamaños: <code>.pagination-sm</code>, <code>.pagination-lg</code>. Alineación con <code>.justify-content-center</code> en el <code>ul</code>.</p>
+<hr>
+<h2>15. Contenido: cards, listas y tablas</h2>
+<h3>Cards</h3>
+<pre><code class="language-html">&lt;div class="card" style="width: 18rem;"&gt;
+  &lt;img src="foto.jpg" class="card-img-top" alt="Descripción"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Título de la tarjeta&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Texto breve que describe el contenido.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Ver más&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class="card-footer text-body-secondary"&gt;Actualizado hace 2 días&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.card</code></td>
+<td>Contenedor con borde, radio y fondo.</td>
+</tr>
+<tr>
+<td><code>.card-body</code></td>
+<td>Padding interno del contenido.</td>
+</tr>
+<tr>
+<td><code>.card-title</code> / <code>.card-subtitle</code></td>
+<td>Título y subtítulo con márgenes ajustados.</td>
+</tr>
+<tr>
+<td><code>.card-text</code></td>
+<td>Párrafo; el último no tiene margen inferior.</td>
+</tr>
+<tr>
+<td><code>.card-header</code> / <code>.card-footer</code></td>
+<td>Encabezado y pie con fondo diferenciado.</td>
+</tr>
+<tr>
+<td><code>.card-img-top</code> / <code>.card-img-bottom</code></td>
+<td>Imagen ajustada a los bordes.</td>
+</tr>
+<tr>
+<td><code>.card-img-overlay</code></td>
+<td>Contenido superpuesto sobre la imagen.</td>
+</tr>
+<tr>
+<td><code>.card-group</code></td>
+<td>Tarjetas pegadas de igual alto.</td>
+</tr>
+<tr>
+<td><code>.h-100</code> + <code>.row</code></td>
+<td>Tarjetas de igual altura en una grilla.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- Grilla de tarjetas de igual altura --&gt;
+&lt;div class="row row-cols-1 row-cols-md-3 g-4"&gt;
+  &lt;div class="col"&gt;
+    &lt;div class="card h-100 shadow-sm border-0"&gt;
+      &lt;div class="card-body"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>List group</h3>
+<pre><code class="language-html">&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item active" aria-current="true"&gt;Primer ítem&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Segundo ítem&lt;/li&gt;
+  &lt;li class="list-group-item disabled" aria-disabled="true"&gt;Deshabilitado&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class="list-group"&gt;
+  &lt;a href="#" class="list-group-item list-group-item-action"&gt;Acción uno&lt;/a&gt;
+  &lt;a href="#" class="list-group-item list-group-item-action active"&gt;Acción dos&lt;/a&gt;
+  &lt;a href="#" class="list-group-item list-group-item-action"&gt;Acción tres&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.list-group</code></td>
+<td>Contenedor de ítems apilados.</td>
+</tr>
+<tr>
+<td><code>.list-group-item</code></td>
+<td>Cada ítem con borde y padding.</td>
+</tr>
+<tr>
+<td><code>.list-group-item-action</code></td>
+<td>Hover y cursor para ítems clicables.</td>
+</tr>
+<tr>
+<td><code>.list-group-item-{color}</code></td>
+<td>Color semántico del ítem.</td>
+</tr>
+<tr>
+<td><code>.list-group-flush</code></td>
+<td>Sin borde exterior.</td>
+</tr>
+<tr>
+<td><code>.list-group-horizontal</code> / <code>-md</code></td>
+<td>Ítems en fila.</td>
+</tr>
+<tr>
+<td><code>.list-group-numbered</code></td>
+<td>Numeración automática.</td>
+</tr>
+</tbody>
+</table>
+<h3>Accordion</h3>
+<pre><code class="language-html">&lt;div class="accordion" id="preguntas"&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header" id="headingOne"&gt;
+      &lt;button class="accordion-button" type="button"
+              data-bs-toggle="collapse" data-bs-target="#collapseOne"
+              aria-expanded="true" aria-controls="collapseOne"&gt;
+        ¿Qué es Bootstrap?
+      &lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="collapseOne" class="accordion-collapse collapse show"
+         aria-labelledby="headingOne" data-bs-parent="#preguntas"&gt;
+      &lt;div class="accordion-body"&gt;
+        Un framework de CSS y JavaScript.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>.accordion-flush</code> quita bordes exteriores. Sin <code>data-bs-parent</code>, se pueden abrir varios paneles a la vez.</p>
+<h3>Badges</h3>
+<pre><code class="language-html">&lt;h1&gt;Mensajes &lt;span class="badge text-bg-secondary"&gt;4&lt;/span&gt;&lt;/h1&gt;
+&lt;button class="btn btn-primary"&gt;
+  Notificaciones &lt;span class="badge text-bg-danger"&gt;9&lt;/span&gt;
+&lt;/button&gt;
+&lt;span class="badge rounded-pill text-bg-success"&gt;Activo&lt;/span&gt;
+</code></pre>
+<p>Siempre se combina <code>.badge</code> con <code>.text-bg-*</code>. Con <code>.rounded-pill</code> queda tipo píldora. Para posicionarlo sobre otro elemento se usa <code>position-relative</code> en el padre y <code>position-absolute top-0 start-100 translate-middle</code> en el badge.</p>
+<h3>Tablas</h3>
+<pre><code class="language-html">&lt;div class="table-responsive"&gt;
+  &lt;table class="table table-striped table-hover align-middle"&gt;
+    &lt;caption&gt;Listado de alumnos&lt;/caption&gt;
+    &lt;thead class="table-light"&gt;
+      &lt;tr&gt;
+        &lt;th scope="col"&gt;#&lt;/th&gt;
+        &lt;th scope="col"&gt;Nombre&lt;/th&gt;
+        &lt;th scope="col"&gt;Nota&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;th scope="row"&gt;1&lt;/th&gt;
+        &lt;td&gt;Ana&lt;/td&gt;
+        &lt;td&gt;9&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class="table-active"&gt;
+        &lt;th scope="row"&gt;2&lt;/th&gt;
+        &lt;td&gt;Bruno&lt;/td&gt;
+        &lt;td&gt;8&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.table</code></td>
+<td>Estilos base (padding, bordes inferiores).</td>
+</tr>
+<tr>
+<td><code>.table-striped</code></td>
+<td>Filas alternadas.</td>
+</tr>
+<tr>
+<td><code>.table-striped-columns</code></td>
+<td>Columnas alternadas.</td>
+</tr>
+<tr>
+<td><code>.table-hover</code></td>
+<td>Resalta la fila al pasar el mouse.</td>
+</tr>
+<tr>
+<td><code>.table-bordered</code></td>
+<td>Todas las celdas con borde.</td>
+</tr>
+<tr>
+<td><code>.table-borderless</code></td>
+<td>Sin bordes.</td>
+</tr>
+<tr>
+<td><code>.table-sm</code></td>
+<td>Menos padding.</td>
+</tr>
+<tr>
+<td><code>.table-dark</code></td>
+<td>Tabla oscura.</td>
+</tr>
+<tr>
+<td><code>.table-{color}</code></td>
+<td>Color de fila o celda (primary, success, etc.).</td>
+</tr>
+<tr>
+<td><code>.table-active</code></td>
+<td>Fila resaltada.</td>
+</tr>
+<tr>
+<td><code>.table-group-divider</code></td>
+<td>Línea más marcada entre secciones.</td>
+</tr>
+<tr>
+<td><code>.table-responsive</code> / <code>-md</code></td>
+<td>Scroll horizontal en pantallas chicas.</td>
+</tr>
+<tr>
+<td><code>.align-middle</code></td>
+<td>Centra verticalmente el contenido de las celdas.</td>
+</tr>
+<tr>
+<td><code>.caption-top</code></td>
+<td>Caption arriba de la tabla.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>.table-responsive</code> va en un <strong>div envolvente</strong>, no en el <code>&lt;table&gt;</code>. Para tablas anchas en móvil es casi obligatorio; si no, rompe el layout.</p>
+</blockquote>
+<hr>
+<h2>16. Feedback: alerts, progress, spinners y toasts</h2>
+<h3>Alerts</h3>
+<pre><code class="language-html">&lt;div class="alert alert-success" role="alert"&gt;
+  Operación realizada correctamente.
+&lt;/div&gt;
+
+&lt;div class="alert alert-warning alert-dismissible fade show" role="alert"&gt;
+  &lt;strong&gt;Atención:&lt;/strong&gt; revisá los datos antes de continuar.
+  &lt;button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-danger" role="alert"&gt;
+  &lt;h4 class="alert-heading"&gt;Error&lt;/h4&gt;
+  &lt;p&gt;No se pudo conectar con el servidor.&lt;/p&gt;
+  &lt;hr&gt;
+  &lt;p class="mb-0"&gt;Intentá nuevamente en unos minutos.&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Variantes: <code>.alert-primary</code>, <code>.alert-secondary</code>, <code>.alert-success</code>, <code>.alert-danger</code>, <code>.alert-warning</code>, <code>.alert-info</code>, <code>.alert-light</code>, <code>.alert-dark</code>. El enlace interno usa <code>.alert-link</code>.</p>
+<h3>Progress</h3>
+<pre><code class="language-html">&lt;div class="progress" role="progressbar" aria-label="Progreso"
+     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"&gt;
+  &lt;div class="progress-bar" style="width: 60%;"&gt;60%&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="progress"&gt;
+  &lt;div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+       style="width: 45%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>El ancho se define <strong>con estilo inline o CSS</strong>, no con una clase. <code>.progress-stacked</code> permite varias barras sumadas.</p>
+<h3>Spinners</h3>
+<pre><code class="language-html">&lt;div class="spinner-border text-primary" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Cargando...&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="spinner-grow spinner-grow-sm text-success" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Cargando...&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>.spinner-border</code> gira; <code>.spinner-grow</code> crece y se desvanece. Tamaños: <code>.spinner-border-sm</code>, <code>.spinner-grow-sm</code>. Siempre incluir el texto para lectores de pantalla.</p>
+<h3>Toasts</h3>
+<pre><code class="language-html">&lt;div class="toast-container position-fixed bottom-0 end-0 p-3"&gt;
+  &lt;div class="toast show" role="alert" aria-live="assertive" aria-atomic="true"&gt;
+    &lt;div class="toast-header"&gt;
+      &lt;strong class="me-auto"&gt;Notificación&lt;/strong&gt;
+      &lt;small&gt;hace un momento&lt;/small&gt;
+      &lt;button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-body"&gt;
+      El archivo se guardó correctamente.
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Se inicializan con JS (<code>new bootstrap.Toast(el).show()</code>) o con <code>data-bs-toggle="toast"</code> y <code>data-bs-autohide</code>. <code>.toast-container</code> los posiciona en un rincón.</p>
+<h3>Placeholders</h3>
+<pre><code class="language-html">&lt;p class="placeholder-glow"&gt;
+  &lt;span class="placeholder col-6"&gt;&lt;/span&gt;
+  &lt;span class="placeholder col-4"&gt;&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;p class="placeholder-wave"&gt;
+  &lt;span class="placeholder col-8"&gt;&lt;/span&gt;
+&lt;/p&gt;
+</code></pre>
+<p>Simulan contenido mientras carga. <code>.placeholder</code> ocupa el ancho de las columnas indicadas (<code>col-*</code>).</p>
+<hr>
+<h2>17. Interactivos: modal, offcanvas, collapse y carousel</h2>
+<h3>Modal</h3>
+<pre><code class="language-html">&lt;!-- Disparador --&gt;
+&lt;button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEjemplo"&gt;
+  Abrir modal
+&lt;/button&gt;
+
+&lt;!-- Modal --&gt;
+&lt;div class="modal fade" id="modalEjemplo" tabindex="-1"
+     aria-labelledby="modalEjemploTitulo" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog modal-dialog-centered"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h1 class="modal-title fs-5" id="modalEjemploTitulo"&gt;Título&lt;/h1&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        Contenido del modal.
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cancelar&lt;/button&gt;
+        &lt;button type="button" class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Clase / atributo</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.modal-dialog-centered</code></td>
+<td>Centra verticalmente.</td>
+</tr>
+<tr>
+<td><code>.modal-lg</code> / <code>.modal-xl</code></td>
+<td>Más ancho; <code>.modal-sm</code> más angosto.</td>
+</tr>
+<tr>
+<td><code>.modal-dialog-scrollable</code></td>
+<td>Scroll dentro del body del modal.</td>
+</tr>
+<tr>
+<td><code>.modal-fullscreen</code> / <code>-md-down</code></td>
+<td>Pantalla completa (o hasta cierto breakpoint).</td>
+</tr>
+<tr>
+<td><code>data-bs-backdrop="static"</code></td>
+<td>No se cierra al hacer clic afuera.</td>
+</tr>
+<tr>
+<td><code>data-bs-keyboard="false"</code></td>
+<td>No se cierra con Escape.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-js">const modal = new bootstrap.Modal('#modalEjemplo');
+modal.show();
+modal.hide();
+
+const el = document.getElementById('modalEjemplo');
+el.addEventListener('shown.bs.modal', () =&gt; {
+  console.log('Modal visible');
+});
+</code></pre>
+<h3>Offcanvas</h3>
+<pre><code class="language-html">&lt;button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#panelLateral"
+        aria-controls="panelLateral"&gt;Abrir panel&lt;/button&gt;
+
+&lt;div class="offcanvas offcanvas-start" tabindex="-1" id="panelLateral"
+     aria-labelledby="panelLateralTitulo"&gt;
+  &lt;div class="offcanvas-header"&gt;
+    &lt;h2 class="offcanvas-title fs-5" id="panelLateralTitulo"&gt;Menú&lt;/h2&gt;
+    &lt;button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="offcanvas-body"&gt;
+    Contenido del panel.
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Posiciones: <code>.offcanvas-start</code>, <code>.offcanvas-end</code>, <code>.offcanvas-top</code>, <code>.offcanvas-bottom</code>. Variantes responsive: <code>.offcanvas-md</code> (se comporta como panel desde <code>md</code>).</p>
+<h3>Collapse</h3>
+<pre><code class="language-html">&lt;p&gt;
+  &lt;a class="btn btn-primary" data-bs-toggle="collapse" href="#detalle" role="button"
+     aria-expanded="false" aria-controls="detalle"&gt;
+    Mostrar detalle
+  &lt;/a&gt;
+&lt;/p&gt;
+&lt;div class="collapse" id="detalle"&gt;
+  &lt;div class="card card-body"&gt;
+    Contenido que se muestra y oculta.
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>También funciona con <code>data-bs-target</code> en un <code>&lt;button&gt;</code>. El estado visible es la clase <code>.show</code>. <code>.collapse-horizontal</code> anima el ancho en lugar del alto.</p>
+<h3>Carousel</h3>
+<pre><code class="language-html">&lt;div id="carrusel" class="carousel slide" data-bs-ride="carousel"&gt;
+  &lt;div class="carousel-indicators"&gt;
+    &lt;button type="button" data-bs-target="#carrusel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"&gt;&lt;/button&gt;
+    &lt;button type="button" data-bs-target="#carrusel" data-bs-slide-to="1" aria-label="Diapositiva 2"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div class="carousel-inner"&gt;
+    &lt;div class="carousel-item active"&gt;
+      &lt;img src="foto1.jpg" class="d-block w-100" alt="..."&gt;
+      &lt;div class="carousel-caption d-none d-md-block"&gt;
+        &lt;h5&gt;Primera imagen&lt;/h5&gt;
+        &lt;p&gt;Descripción de la imagen.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-item"&gt;
+      &lt;img src="foto2.jpg" class="d-block w-100" alt="..."&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;button class="carousel-control-prev" type="button" data-bs-target="#carrusel" data-bs-slide="prev"&gt;
+    &lt;span class="carousel-control-prev-icon" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span class="visually-hidden"&gt;Anterior&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class="carousel-control-next" type="button" data-bs-target="#carrusel" data-bs-slide="next"&gt;
+    &lt;span class="carousel-control-next-icon" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span class="visually-hidden"&gt;Siguiente&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>data-bs-ride="carousel"</code> inicia el autoplay; <code>data-bs-interval="3000"</code> cambia la velocidad (ms). El primer ítem debe tener <code>.active</code>.</p>
+<h3>Tooltip y popover</h3>
+<pre><code class="language-html">&lt;button class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-title="Texto del tooltip"&gt;
+  Pasá el mouse
+&lt;/button&gt;
+
+&lt;button class="btn btn-secondary" data-bs-toggle="popover" data-bs-placement="right"
+        data-bs-title="Título" data-bs-content="Contenido del popover"&gt;
+  Clic
+&lt;/button&gt;
+</code></pre>
+<pre><code class="language-js">// Los tooltips y popovers son "opt-in": hay que inicializarlos
+const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+tooltips.forEach(el =&gt; new bootstrap.Tooltip(el));
+
+const popovers = document.querySelectorAll('[data-bs-toggle="popover"]');
+popovers.forEach(el =&gt; new bootstrap.Popover(el));
+</code></pre>
+<p>Opciones: <code>data-bs-trigger="focus"</code> (popover al hacer foco), <code>data-bs-html="true"</code> (permite HTML en el contenido, con cuidado), <code>data-bs-delay</code>.</p>
+<h3>Scrollspy</h3>
+<pre><code class="language-html">&lt;body data-bs-spy="scroll" data-bs-target="#menuLateral" data-bs-offset="80" tabindex="0"&gt;
+  ...
+  &lt;nav id="menuLateral" class="nav flex-column"&gt;
+    &lt;a class="nav-link" href="#seccion1"&gt;Sección 1&lt;/a&gt;
+    &lt;a class="nav-link" href="#seccion2"&gt;Sección 2&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/body&gt;
+</code></pre>
+<p>Resalta el enlace de la sección visible. Requiere que los destinos existan con esos <code>id</code>.</p>
+<hr>
+<h2>18. Imágenes y media</h2>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.img-fluid</code></td>
+<td><code>max-width: 100%</code> y <code>height: auto</code>: la imagen se adapta al contenedor.</td>
+</tr>
+<tr>
+<td><code>.img-thumbnail</code></td>
+<td>Borde, padding, fondo y esquinas redondeadas.</td>
+</tr>
+<tr>
+<td><code>.rounded</code> / <code>.rounded-circle</code></td>
+<td>Esquinas redondeadas / círculo.</td>
+</tr>
+<tr>
+<td><code>.object-fit-*</code></td>
+<td>Ajuste del contenido dentro de un tamaño fijo.</td>
+</tr>
+<tr>
+<td><code>.ratio ratio-16x9</code></td>
+<td>Contenedor con proporción fija para iframes y videos.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;img src="foto.jpg" class="img-fluid rounded shadow-sm" alt="Descripción de la foto"&gt;
+
+&lt;!-- Miniatura --&gt;
+&lt;img src="foto.jpg" class="img-thumbnail" width="200" alt="..."&gt;
+
+&lt;!-- Figura con epígrafe --&gt;
+&lt;figure class="figure"&gt;
+  &lt;img src="grafico.png" class="figure-img img-fluid rounded" alt="Gráfico de ventas"&gt;
+  &lt;figcaption class="figure-caption"&gt;Ventas del último trimestre.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;!-- Video responsive --&gt;
+&lt;div class="ratio ratio-16x9"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/ID" title="Video" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>Toda imagen informativa necesita <code>alt</code>. Si es decorativa, <code>alt=""</code>. No usar imágenes para texto importante.</p>
+</blockquote>
+<hr>
+<h2>19. Iconos</h2>
+<p>Bootstrap Icons es una librería aparte (no viene incluida en el CSS de Bootstrap). Se incluye por CDN o descarga:</p>
+<pre><code class="language-html">&lt;link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"&gt;
+</code></pre>
+<pre><code class="language-html">&lt;i class="bi bi-alarm"&gt;&lt;/i&gt;
+&lt;i class="bi bi-search text-primary fs-4"&gt;&lt;/i&gt;
+&lt;button class="btn btn-primary"&gt;
+  &lt;i class="bi bi-plus-lg me-1" aria-hidden="true"&gt;&lt;/i&gt; Nuevo
+&lt;/button&gt;
+</code></pre>
+<ul>
+<li>Se usan como una fuente: el tamaño se controla con <code>font-size</code> (<code>.fs-*</code>) y el color con <code>.text-*</code>.</li>
+<li>Un icono decorativo lleva <code>aria-hidden="true"</code>; si es la única información del botón, este lleva <code>aria-label</code>.</li>
+<li>Nombres en <a href="https://icons.getbootstrap.com/">icons.getbootstrap.com</a>.</li>
+<li>Alternativas: Font Awesome, Lucide, Heroicons o SVG inline.</li>
+</ul>
+<hr>
+<h2>20. JavaScript</h2>
+<p>Los componentes interactivos se activan por <strong>atributos <code>data-bs-*</code></strong> o por la <strong>API de JavaScript</strong>. No hace falta escribir listeners propios para lo básico.</p>
+<h3>Atributos más usados</h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-bs-toggle="modal|collapse|dropdown|tab|offcanvas|tooltip|popover|toast|pill"</code></td>
+<td>Qué componente activar.</td>
+</tr>
+<tr>
+<td><code>data-bs-target="#id"</code></td>
+<td>Elemento destino (o <code>href="#id"</code> en enlaces).</td>
+</tr>
+<tr>
+<td><code>data-bs-dismiss="modal|alert|offcanvas|toast"</code></td>
+<td>Cierra el componente.</td>
+</tr>
+<tr>
+<td><code>data-bs-parent="#id"</code></td>
+<td>Agrupa acordeón o tabs.</td>
+</tr>
+<tr>
+<td><code>data-bs-ride="carousel"</code></td>
+<td>Activa autoplay del carrusel.</td>
+</tr>
+<tr>
+<td><code>data-bs-slide="prev|next"</code> / <code>data-bs-slide-to="n"</code></td>
+<td>Control manual del carrusel.</td>
+</tr>
+<tr>
+<td><code>data-bs-backdrop="static"</code> / <code>data-bs-keyboard="false"</code></td>
+<td>Configuración del modal/offcanvas.</td>
+</tr>
+<tr>
+<td><code>data-bs-interval="3000"</code></td>
+<td>Velocidad del carrusel o toast.</td>
+</tr>
+<tr>
+<td><code>data-bs-autohide="false"</code></td>
+<td>El toast no se cierra solo.</td>
+</tr>
+<tr>
+<td><code>data-bs-placement="top|bottom|start|end"</code></td>
+<td>Posición de tooltip/popover.</td>
+</tr>
+<tr>
+<td><code>data-bs-title</code> / <code>data-bs-content</code></td>
+<td>Texto del tooltip / popover.</td>
+</tr>
+</tbody>
+</table>
+<h3>API programática</h3>
+<pre><code class="language-js">// Crear e inicializar
+const miModal = new bootstrap.Modal(document.getElementById('modalEjemplo'), {
+  backdrop: 'static',
+  keyboard: false
+});
+miModal.show();
+miModal.hide();
+miModal.toggle();
+
+// Otros componentes
+const tooltip = new bootstrap.Tooltip('#btnAyuda');
+const popover = new bootstrap.Popover('#btnInfo');
+const toast = new bootstrap.Toast('#miToast', { delay: 5000 });
+toast.show();
+
+const collapse = new bootstrap.Collapse('#detalle');
+collapse.toggle();
+
+const tab = new bootstrap.Tab('#tab1-tab');
+tab.show();
+
+new bootstrap.Carousel('#carrusel', { interval: 2000 }).cycle();
+</code></pre>
+<h3>Eventos</h3>
+<p>Cada componente emite eventos antes y después de la transición. Se escuchan sobre el elemento:</p>
+<pre><code class="language-js">const modalEl = document.getElementById('modalEjemplo');
+
+modalEl.addEventListener('show.bs.modal', () =&gt; {
+  console.log('antes de mostrarse');
+});
+
+modalEl.addEventListener('shown.bs.modal', () =&gt; {
+  // el modal ya es visible: buen momento para enfocar un input
+  modalEl.querySelector('input')?.focus();
+});
+
+modalEl.addEventListener('hidden.bs.modal', () =&gt; {
+  console.log('ya se cerró');
+});
+</code></pre>
+<p>Patrón: <code>show</code> / <code>shown</code> / <code>hide</code> / <code>hidden</code> + <code>.bs.</code> + componente (por ejemplo <code>shown.bs.dropdown</code>, <code>slide.bs.carousel</code>).</p>
+<h3>Inicialización y DOM</h3>
+<pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  // El script va después del HTML, o dentro de DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () =&gt; {
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      .forEach(el =&gt; new bootstrap.Tooltip(el));
+  });
+&lt;/script&gt;
+</code></pre>
+<h3>Uso como módulo ES</h3>
+<pre><code class="language-js">import Modal from 'bootstrap/js/dist/modal';
+import Tooltip from 'bootstrap/js/dist/tooltip';
+
+const modal = new Modal(document.getElementById('miModal'));
+</code></pre>
+<blockquote>
+<p><strong>Errores frecuentes:</strong> cargar <code>bootstrap.min.js</code> sin Popper (los dropdowns fallan), ejecutar el JS antes de que exista el DOM, o esperar que los tooltips funcionen sin inicializarlos.</p>
+</blockquote>
+<hr>
+<h2>21. Helpers y utilidades</h2>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.clearfix</code></td>
+<td>Contiene elementos flotantes.</td>
+</tr>
+<tr>
+<td><code>.text-truncate</code></td>
+<td>Corta el texto con puntos suspensivos.</td>
+</tr>
+<tr>
+<td><code>.vr</code></td>
+<td>Línea vertical separadora (hereda altura).</td>
+</tr>
+<tr>
+<td><code>.stretched-link</code></td>
+<td>Hace que toda la tarjeta sea clicable a través de un enlace.</td>
+</tr>
+<tr>
+<td><code>.ratio</code> + <code>.ratio-*</code></td>
+<td>Contenedor con proporción fija.</td>
+</tr>
+<tr>
+<td><code>.visually-hidden</code></td>
+<td>Oculto visualmente, visible para lectores de pantalla.</td>
+</tr>
+<tr>
+<td><code>.visually-hidden-focusable</code></td>
+<td>Oculto hasta que recibe foco (skip links).</td>
+</tr>
+<tr>
+<td><code>.vstack</code> / <code>.hstack</code></td>
+<td>Apila hijos en columna / fila con gap.</td>
+</tr>
+<tr>
+<td><code>.sticky-top</code></td>
+<td>Se pega al top al hacer scroll.</td>
+</tr>
+<tr>
+<td><code>.overflow-*</code></td>
+<td>Controla el desborde.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- Tarjeta completamente clicable --&gt;
+&lt;div class="card position-relative"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Título&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Texto de la tarjeta.&lt;/p&gt;
+    &lt;a href="/detalle" class="stretched-link"&gt;Ver detalle&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Skip link accesible --&gt;
+&lt;a class="visually-hidden-focusable" href="#contenido"&gt;Saltar al contenido&lt;/a&gt;
+</code></pre>
+<h3>Utilidades responsive</h3>
+<p>Casi todas las familias aceptan breakpoints:</p>
+<pre><code class="language-html">&lt;div class="d-none d-md-block"&gt;...&lt;/div&gt;
+&lt;div class="text-center text-lg-end"&gt;...&lt;/div&gt;
+&lt;div class="p-2 p-lg-5"&gt;...&lt;/div&gt;
+&lt;div class="flex-column flex-xl-row"&gt;...&lt;/div&gt;
+&lt;div class="m-0 m-md-3"&gt;...&lt;/div&gt;
+</code></pre>
+<hr>
+<h2>22. Accesibilidad</h2>
+<p>Bootstrap trae bases accesibles, pero el resultado depende de cómo se use. Puntos mínimos:</p>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Etiquetas de formulario</td>
+<td>Siempre <code>&lt;label for="id"&gt;</code>; el placeholder no alcanza.</td>
+</tr>
+<tr>
+<td>Imágenes</td>
+<td><code>alt</code> descriptivo; <code>alt=""</code> si son decorativas.</td>
+</tr>
+<tr>
+<td>Botones con icono</td>
+<td><code>aria-label</code> y <code>aria-hidden="true"</code> en el icono.</td>
+</tr>
+<tr>
+<td>Navegación</td>
+<td><code>&lt;nav&gt;</code> + <code>aria-label</code>; <code>aria-current="page"</code> en el activo.</td>
+</tr>
+<tr>
+<td>Menús desplegables</td>
+<td><code>aria-expanded</code> y <code>aria-controls</code>.</td>
+</tr>
+<tr>
+<td>Contraste</td>
+<td>Mínimo 4.5:1 en texto normal; no comunicar solo con color.</td>
+</tr>
+<tr>
+<td>Foco</td>
+<td>No eliminar <code>:focus-visible</code>. Bootstrap ya dibuja un anillo.</td>
+</tr>
+<tr>
+<td>Contenido solo visual</td>
+<td><code>.visually-hidden</code> con texto para lectores.</td>
+</tr>
+<tr>
+<td>Estructura</td>
+<td>Un solo <code>h1</code> por página; jerarquía de encabezados sin saltos.</td>
+</tr>
+<tr>
+<td>Movimiento</td>
+<td>Respetar <code>prefers-reduced-motion</code> si se agregan animaciones.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;button type="button" class="btn-close" aria-label="Cerrar"&gt;&lt;/button&gt;
+
+&lt;nav aria-label="Navegación principal"&gt;...&lt;/nav&gt;
+
+&lt;a class="btn btn-primary" href="#"&gt;
+  &lt;span class="visually-hidden"&gt;Abrir&lt;/span&gt;
+  &lt;i class="bi bi-plus-lg" aria-hidden="true"&gt;&lt;/i&gt;
+&lt;/a&gt;
+</code></pre>
+<blockquote>
+<p>Para probar: navegar solo con <code>Tab</code>, revisar el foco, usar un lector de pantalla y verificar el contraste con herramientas como WebAIM Contrast Checker.</p>
+</blockquote>
+<hr>
+<h2>23. Modo oscuro (color modes)</h2>
+<p>Bootstrap 5.3 incorpora <code>data-bs-theme</code>. Al aplicarlo, cambian las variables de color de ese subárbol.</p>
+<pre><code class="language-html">&lt;!-- Toda la página --&gt;
+&lt;html lang="es" data-bs-theme="dark"&gt;
+  ...
+&lt;/html&gt;
+
+&lt;!-- Solo un componente --&gt;
+&lt;div data-bs-theme="dark" class="p-3 bg-body rounded"&gt;
+  Contenido en modo oscuro.
+&lt;/div&gt;
+
+&lt;!-- Forzar claro dentro de una zona oscura --&gt;
+&lt;div data-bs-theme="light"&gt;...&lt;/div&gt;
+</code></pre>
+<h3>Alternar con JavaScript</h3>
+<pre><code class="language-js">const html = document.documentElement;
+
+function aplicarTema(tema) {
+  html.setAttribute('data-bs-theme', tema);
+  localStorage.setItem('tema', tema);
+}
+
+aplicarTema(localStorage.getItem('tema') || 'light');
+
+document.getElementById('btnTema').addEventListener('click', () =&gt; {
+  const actual = html.getAttribute('data-bs-theme');
+  aplicarTema(actual === 'dark' ? 'light' : 'dark');
+});
+</code></pre>
+<h3>Colores adaptativos</h3>
+<table>
+<thead>
+<tr>
+<th>En lugar de…</th>
+<th>Usar…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.bg-white</code> / <code>.bg-light</code></td>
+<td><code>.bg-body</code>, <code>.bg-body-secondary</code>, <code>.bg-body-tertiary</code></td>
+</tr>
+<tr>
+<td><code>.text-black</code> / <code>.text-muted</code></td>
+<td><code>.text-body</code>, <code>.text-body-secondary</code>, <code>.text-body-emphasis</code></td>
+</tr>
+<tr>
+<td><code>.border</code> con color fijo</td>
+<td><code>.border</code> (usa <code>--bs-border-color</code>)</td>
+</tr>
+<tr>
+<td><code>.navbar-dark</code></td>
+<td><code>data-bs-theme="dark"</code> en la navbar</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Las utilidades <code>.bg-primary</code>, <code>.text-danger</code>, etc. mantienen su color en ambos modos. Para que se adapten, usar las variantes <code>-subtle</code> y <code>-emphasis</code> o definir variables propias.</p>
+</blockquote>
+<hr>
+<h2>24. Personalización avanzada con Sass</h2>
+<p>La personalización “de verdad” se hace recompilando Bootstrap con Sass. Permite cambiar la paleta completa (incluidos <code>.btn-*</code>, <code>.text-*</code>, <code>.alert-*</code>), la tipografía, los radios, los breakpoints y hasta generar utilidades nuevas.</p>
+<h3>Instalación</h3>
+<pre><code class="language-bash">npm install bootstrap sass
+</code></pre>
+<pre><code class="language-json">// package.json
+{
+  "scripts": {
+    "css": "sass scss/custom.scss css/custom.css --watch --style=compressed"
+  }
+}
+</code></pre>
+<h3>Variables antes del import</h3>
+<pre><code class="language-scss">// scss/custom.scss
+$primary: #6f42c1;
+$secondary: #64748b;
+$success: #15803d;
+$danger: #b91c1c;
+
+$font-family-sans-serif: "Inter", system-ui, sans-serif;
+$font-size-base: 1.05rem;
+$line-height-base: 1.65;
+$headings-font-family: "Poppins", sans-serif;
+$headings-font-weight: 600;
+$headings-color: #0f172a;
+
+$border-radius: .75rem;
+$border-radius-sm: .5rem;
+$border-radius-lg: 1rem;
+
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-negative-margins: true;
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 5
+);
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<blockquote>
+<p>El <code>@import</code> va <strong>siempre al final</strong> de las variables. Si se declara una variable después, Bootstrap ya se compiló con el valor anterior.</p>
+</blockquote>
+<h3>Agregar colores al tema</h3>
+<pre><code class="language-scss">// Sumar colores nuevos sin perder los existentes
+$theme-colors: map-merge(
+  (
+    "primary":   #0d6efd,
+    "secondary": #6c757d,
+    "success":   #198754,
+    "danger":    #dc3545,
+    "warning":   #ffc107,
+    "info":      #0dcaf0,
+    "light":     #f8f9fa,
+    "dark":      #212529
+  ),
+  (
+    "brand":  #7c3aed,
+    "accent": #f59e0b
+  )
+);
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<p>También se puede escribir solo el mapa completo con los 10 colores, sin <code>map-merge</code>. La ventaja de <code>map-merge</code> es que deja explícito qué se agrega y qué se conserva.</p>
+<p>Al recompilar se generan automáticamente <code>.text-brand</code>, <code>.bg-brand</code>, <code>.btn-brand</code>, <code>.alert-brand</code>, <code>.border-brand</code>, etc.</p>
+<h3>Utilities API</h3>
+<p>Permite crear utilidades propias sin escribir CSS a mano:</p>
+<pre><code class="language-scss">@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "cursor": (
+      property: cursor,
+      class: cursor,
+      values: auto pointer grab not-allowed
+    ),
+    "opacity": (
+      property: opacity,
+      values: (0: 0, 25: .25, 50: .5, 75: .75, 100: 1)
+    )
+  )
+);
+
+@import "bootstrap/scss/bootstrap";
+</code></pre>
+<p>Luego se usa <code>.cursor-pointer</code>, <code>.cursor-grab</code>, etc. Es la forma recomendada de extender Bootstrap sin pelear con la especificidad.</p>
+<h3>Qué conviene personalizar y qué no</h3>
+<table>
+<thead>
+<tr>
+<th>Conviene Sass</th>
+<th>Conviene CSS propio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paleta de colores de tema.</td>
+<td>Ajustes puntuales de un componente.</td>
+</tr>
+<tr>
+<td>Tipografía base y de títulos.</td>
+<td>Estilos de un bloque muy específico.</td>
+</tr>
+<tr>
+<td>Radios, sombras, espaciados globales.</td>
+<td>Animaciones propias.</td>
+</tr>
+<tr>
+<td>Breakpoints y anchos de contenedor.</td>
+<td>Integración con un diseño externo.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>25. Errores típicos y checklist</h2>
+<h3>Errores frecuentes</h3>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Por qué falla</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falta el meta viewport</td>
+<td>El responsive no se activa en móvil.</td>
+<td>Agregar <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>.</td>
+</tr>
+<tr>
+<td>Usar <code>.row</code> sin <code>.col</code></td>
+<td>El contenido queda con márgenes negativos.</td>
+<td>Siempre <code>.row</code> → <code>.col-*</code>.</td>
+</tr>
+<tr>
+<td>Poner contenido directo en <code>.row</code></td>
+<td>Rompe el gutter y el layout.</td>
+<td>Envolver en una columna.</td>
+</tr>
+<tr>
+<td>Columnas que suman más de 12</td>
+<td>La última baja de línea.</td>
+<td>Revisar la suma por breakpoint.</td>
+</tr>
+<tr>
+<td>Mezclar clases de Bootstrap 4</td>
+<td>Ya no existen en v5.</td>
+<td><code>.ml-*</code>→<code>.ms-*</code>, <code>.float-left</code>→<code>.float-start</code>, <code>.text-left</code>→<code>.text-start</code>, <code>.form-group</code>→<code>.mb-3</code>, <code>.btn-block</code>→<code>.w-100</code>, <code>.no-gutters</code>→<code>.g-0</code>.</td>
+</tr>
+<tr>
+<td>Cargar <code>bootstrap.min.js</code> sin Popper</td>
+<td>Dropdowns, tooltips y popovers no funcionan.</td>
+<td>Usar <code>bootstrap.bundle.min.js</code>.</td>
+</tr>
+<tr>
+<td>No inicializar tooltips/popovers</td>
+<td>Son opt-in.</td>
+<td>Inicializarlos con JS.</td>
+</tr>
+<tr>
+<td>JS ejecutado antes del DOM</td>
+<td>No encuentra los elementos.</td>
+<td>Script al final o <code>DOMContentLoaded</code>.</td>
+</tr>
+<tr>
+<td>CSS propio antes de Bootstrap</td>
+<td>Bootstrap pisa los estilos propios.</td>
+<td>Cargar Bootstrap primero.</td>
+</tr>
+<tr>
+<td>Abusar de <code>!important</code></td>
+<td>Dificulta el mantenimiento.</td>
+<td>Subir especificidad o usar una clase propia.</td>
+</tr>
+<tr>
+<td>Usar <code>.text-muted</code></td>
+<td>Deprecado en 5.3.</td>
+<td><code>.text-body-secondary</code>.</td>
+</tr>
+<tr>
+<td>Usar <code>.navbar-dark</code></td>
+<td>Deprecado en 5.3.</td>
+<td><code>data-bs-theme="dark"</code>.</td>
+</tr>
+<tr>
+<td>Modal dentro de un ancestro con <code>transform</code></td>
+<td>El <code>position: fixed</code> se rompe.</td>
+<td>Mover el modal al final del <code>body</code>.</td>
+</tr>
+<tr>
+<td>Ancho de progress por clase</td>
+<td>No existe <code>.w-60</code>.</td>
+<td>Usar <code>style="width: 60%"</code>.</td>
+</tr>
+<tr>
+<td>Imágenes sin <code>alt</code></td>
+<td>Problema de accesibilidad.</td>
+<td>Agregar texto alternativo.</td>
+</tr>
+<tr>
+<td>No cargar Bootstrap Icons</td>
+<td>Los <code>&lt;i class="bi ..."&gt;</code> no muestran nada.</td>
+<td>Incluir el CSS de iconos.</td>
+</tr>
+</tbody>
+</table>
+<h3>Checklist antes de entregar</h3>
+<ul>
+<li>Viewport presente y CSS/JS cargados una sola vez.</li>
+<li>Un <code>&lt;h1&gt;</code> por página y jerarquía de títulos correcta.</li>
+<li>Todas las imágenes con <code>alt</code>; formularios con <code>label</code>.</li>
+<li>Grilla revisada en móvil, tablet y escritorio.</li>
+<li>Navbar colapsable probada en pantalla chica.</li>
+<li>Tablas anchas dentro de <code>.table-responsive</code>.</li>
+<li>Contraste de color suficiente; foco visible.</li>
+<li>Sin clases de Bootstrap 4 ni estilos inline innecesarios.</li>
+<li>Componentes JS inicializados y probados (modal, dropdown, tooltip).</li>
+<li>Consola del navegador sin errores 404.</li>
+<li>Impresión revisada si el trabajo se entrega en PDF.</li>
+</ul>
+<hr>
+<h2>26. Plantilla completa</h2>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="es" data-bs-theme="light"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Plantilla Bootstrap 5.3&lt;/title&gt;
+
+  &lt;!-- Bootstrap CSS --&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+
+  &lt;!-- Iconos --&gt;
+  &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"&gt;
+
+  &lt;!-- CSS propio: siempre después de Bootstrap --&gt;
+  &lt;link href="css/estilo.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;!-- NAVBAR --&gt;
+  &lt;nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top border-bottom"&gt;
+    &lt;div class="container"&gt;
+      &lt;a class="navbar-brand fw-bold text-primary" href="#"&gt;Mi Sitio&lt;/a&gt;
+
+      &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#menu" aria-controls="menu"
+              aria-expanded="false" aria-label="Abrir menú"&gt;
+        &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+      &lt;/button&gt;
+
+      &lt;div class="collapse navbar-collapse" id="menu"&gt;
+        &lt;ul class="navbar-nav me-auto mb-2 mb-lg-0"&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link active" aria-current="page" href="#"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#servicios"&gt;Servicios&lt;/a&gt;&lt;/li&gt;
+          &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#contacto"&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button class="btn btn-outline-secondary btn-sm" id="btnTema" type="button"&gt;
+          &lt;i class="bi bi-moon-stars" aria-hidden="true"&gt;&lt;/i&gt; Tema
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+
+  &lt;!-- HERO --&gt;
+  &lt;header class="py-5 bg-body-tertiary"&gt;
+    &lt;div class="container py-4"&gt;
+      &lt;div class="row align-items-center g-4"&gt;
+        &lt;div class="col-lg-7"&gt;
+          &lt;p class="text-uppercase text-primary fw-semibold small mb-2"&gt;Bienvenido&lt;/p&gt;
+          &lt;h1 class="display-4 fw-bold mb-3"&gt;Diseñá más rápido con Bootstrap&lt;/h1&gt;
+          &lt;p class="lead text-body-secondary mb-4"&gt;
+            Una base responsive, accesible y lista para personalizar.
+          &lt;/p&gt;
+          &lt;div class="d-flex flex-column flex-sm-row gap-2"&gt;
+            &lt;a href="#servicios" class="btn btn-primary btn-lg"&gt;Empezar&lt;/a&gt;
+            &lt;a href="#contacto" class="btn btn-outline-secondary btn-lg"&gt;Contacto&lt;/a&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="col-lg-5 text-center"&gt;
+          &lt;img src="img/hero.png" class="img-fluid rounded-4 shadow" alt="Ilustración de la aplicación"&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;!-- SERVICIOS --&gt;
+  &lt;main id="contenido" class="py-5"&gt;
+    &lt;section id="servicios" class="container"&gt;
+      &lt;div class="text-center mb-5"&gt;
+        &lt;h2 class="fw-bold"&gt;Servicios&lt;/h2&gt;
+        &lt;p class="text-body-secondary"&gt;Tres tarjetas con la misma altura.&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class="row row-cols-1 row-cols-md-3 g-4"&gt;
+        &lt;div class="col"&gt;
+          &lt;article class="card h-100 border-0 shadow-sm"&gt;
+            &lt;div class="card-body p-4"&gt;
+              &lt;i class="bi bi-phone fs-2 text-primary" aria-hidden="true"&gt;&lt;/i&gt;
+              &lt;h3 class="h5 card-title mt-3"&gt;Responsive&lt;/h3&gt;
+              &lt;p class="card-text text-body-secondary"&gt;
+                Adaptá la interfaz a cualquier pantalla con el grid.
+              &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="card-footer bg-transparent border-0 p-4 pt-0"&gt;
+              &lt;button type="button" class="btn btn-sm btn-outline-primary"
+                      data-bs-toggle="modal" data-bs-target="#modalInfo"&gt;Ver más&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/article&gt;
+        &lt;/div&gt;
+
+        &lt;div class="col"&gt;
+          &lt;article class="card h-100 border-0 shadow-sm"&gt;
+            &lt;div class="card-body p-4"&gt;
+              &lt;i class="bi bi-palette fs-2 text-success" aria-hidden="true"&gt;&lt;/i&gt;
+              &lt;h3 class="h5 card-title mt-3"&gt;Personalizable&lt;/h3&gt;
+              &lt;p class="card-text text-body-secondary"&gt;
+                Cambiá colores, tipografía y radios con Sass.
+              &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="card-footer bg-transparent border-0 p-4 pt-0"&gt;
+              &lt;a href="#" class="btn btn-sm btn-outline-success"&gt;Ver más&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/article&gt;
+        &lt;/div&gt;
+
+        &lt;div class="col"&gt;
+          &lt;article class="card h-100 border-0 shadow-sm"&gt;
+            &lt;div class="card-body p-4"&gt;
+              &lt;i class="bi bi-universal-access fs-2 text-danger" aria-hidden="true"&gt;&lt;/i&gt;
+              &lt;h3 class="h5 card-title mt-3"&gt;Accesible&lt;/h3&gt;
+              &lt;p class="card-text text-body-secondary"&gt;
+                Componentes pensados para teclado y lectores de pantalla.
+              &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="card-footer bg-transparent border-0 p-4 pt-0"&gt;
+              &lt;a href="#" class="btn btn-sm btn-outline-danger"&gt;Ver más&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/article&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- FORMULARIO --&gt;
+    &lt;section id="contacto" class="container py-5"&gt;
+      &lt;div class="row justify-content-center"&gt;
+        &lt;div class="col-lg-7"&gt;
+          &lt;div class="card border-0 shadow-sm"&gt;
+            &lt;div class="card-body p-4 p-md-5"&gt;
+              &lt;h2 class="h4 mb-4"&gt;Contacto&lt;/h2&gt;
+              &lt;form class="row g-3 needs-validation" novalidate&gt;
+                &lt;div class="col-md-6"&gt;
+                  &lt;label for="nombre" class="form-label"&gt;Nombre&lt;/label&gt;
+                  &lt;input type="text" class="form-control" id="nombre" required&gt;
+                  &lt;div class="invalid-feedback"&gt;Ingresá tu nombre.&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="col-md-6"&gt;
+                  &lt;label for="email" class="form-label"&gt;Email&lt;/label&gt;
+                  &lt;input type="email" class="form-control" id="email" required&gt;
+                  &lt;div class="invalid-feedback"&gt;Ingresá un email válido.&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="col-12"&gt;
+                  &lt;label for="mensaje" class="form-label"&gt;Mensaje&lt;/label&gt;
+                  &lt;textarea class="form-control" id="mensaje" rows="3"&gt;&lt;/textarea&gt;
+                &lt;/div&gt;
+                &lt;div class="col-12 d-grid d-md-flex justify-content-md-end"&gt;
+                  &lt;button class="btn btn-primary px-4" type="submit"&gt;Enviar&lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;!-- FOOTER --&gt;
+  &lt;footer class="bg-dark text-white-50 py-4 mt-5"&gt;
+    &lt;div class="container d-flex flex-column flex-md-row justify-content-between gap-2"&gt;
+      &lt;span&gt;&amp;copy; 2026 Mi Sitio&lt;/span&gt;
+      &lt;span&gt;Hecho con Bootstrap 5.3&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;!-- MODAL --&gt;
+  &lt;div class="modal fade" id="modalInfo" tabindex="-1" aria-labelledby="modalInfoTitulo" aria-hidden="true"&gt;
+    &lt;div class="modal-dialog modal-dialog-centered"&gt;
+      &lt;div class="modal-content"&gt;
+        &lt;div class="modal-header"&gt;
+          &lt;h2 class="modal-title fs-5" id="modalInfoTitulo"&gt;Información&lt;/h2&gt;
+          &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"&gt;&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="modal-body"&gt;Contenido del modal.&lt;/div&gt;
+        &lt;div class="modal-footer"&gt;
+          &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cerrar&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Bootstrap JS con Popper --&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Tema claro/oscuro --&gt;
+  &lt;script&gt;
+    const html = document.documentElement;
+    const guardado = localStorage.getItem('tema');
+    if (guardado) html.setAttribute('data-bs-theme', guardado);
+
+    document.getElementById('btnTema').addEventListener('click', () =&gt; {
+      const nuevo = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-bs-theme', nuevo);
+      localStorage.setItem('tema', nuevo);
+    });
+
+    // Validación de Bootstrap
+    document.querySelectorAll('.needs-validation').forEach(form =&gt; {
+      form.addEventListener('submit', event =&gt; {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr>
+<h2>27. Equivalencias CSS → Bootstrap</h2>
+<table>
+<thead>
+<tr>
+<th>CSS nativo</th>
+<th>Bootstrap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max-width: 960px; margin: 0 auto;</code></td>
+<td><code>.container</code></td>
+</tr>
+<tr>
+<td><code>width: 100%;</code></td>
+<td><code>.w-100</code> / <code>.container-fluid</code></td>
+</tr>
+<tr>
+<td><code>display: flex;</code></td>
+<td><code>.d-flex</code></td>
+</tr>
+<tr>
+<td><code>display: none;</code></td>
+<td><code>.d-none</code></td>
+</tr>
+<tr>
+<td><code>justify-content: center;</code></td>
+<td><code>.justify-content-center</code></td>
+</tr>
+<tr>
+<td><code>align-items: center;</code></td>
+<td><code>.align-items-center</code></td>
+</tr>
+<tr>
+<td><code>gap: 1rem;</code></td>
+<td><code>.gap-3</code></td>
+</tr>
+<tr>
+<td><code>margin-top: 1rem;</code></td>
+<td><code>.mt-3</code></td>
+</tr>
+<tr>
+<td><code>padding: 1.5rem;</code></td>
+<td><code>.p-4</code></td>
+</tr>
+<tr>
+<td><code>margin-inline: auto;</code></td>
+<td><code>.mx-auto</code></td>
+</tr>
+<tr>
+<td><code>font-size: 2.5rem;</code></td>
+<td><code>.fs-1</code> / <code>.display-6</code></td>
+</tr>
+<tr>
+<td><code>font-weight: 700;</code></td>
+<td><code>.fw-bold</code></td>
+</tr>
+<tr>
+<td><code>font-style: italic;</code></td>
+<td><code>.fst-italic</code></td>
+</tr>
+<tr>
+<td><code>font-family: monospace;</code></td>
+<td><code>.font-monospace</code></td>
+</tr>
+<tr>
+<td><code>line-height: 1.5;</code></td>
+<td><code>.lh-base</code></td>
+</tr>
+<tr>
+<td><code>text-align: center;</code></td>
+<td><code>.text-center</code></td>
+</tr>
+<tr>
+<td><code>text-transform: uppercase;</code></td>
+<td><code>.text-uppercase</code></td>
+</tr>
+<tr>
+<td><code>text-decoration: underline;</code></td>
+<td><code>.text-decoration-underline</code></td>
+</tr>
+<tr>
+<td><code>color: #0d6efd;</code></td>
+<td><code>.text-primary</code></td>
+</tr>
+<tr>
+<td><code>background: #0d6efd;</code></td>
+<td><code>.bg-primary</code> / <code>.text-bg-primary</code></td>
+</tr>
+<tr>
+<td><code>border: 1px solid #dee2e6;</code></td>
+<td><code>.border</code></td>
+</tr>
+<tr>
+<td><code>border-radius: .375rem;</code></td>
+<td><code>.rounded</code></td>
+</tr>
+<tr>
+<td><code>border-radius: 50%;</code></td>
+<td><code>.rounded-circle</code></td>
+</tr>
+<tr>
+<td><code>box-shadow: ...;</code></td>
+<td><code>.shadow</code> / <code>.shadow-sm</code> / <code>.shadow-lg</code></td>
+</tr>
+<tr>
+<td><code>opacity: .5;</code></td>
+<td><code>.opacity-50</code></td>
+</tr>
+<tr>
+<td><code>position: relative;</code></td>
+<td><code>.position-relative</code></td>
+</tr>
+<tr>
+<td><code>position: absolute;</code></td>
+<td><code>.position-absolute</code></td>
+</tr>
+<tr>
+<td><code>position: fixed; top: 0;</code></td>
+<td><code>.fixed-top</code></td>
+</tr>
+<tr>
+<td><code>float: left;</code></td>
+<td><code>.float-start</code></td>
+</tr>
+<tr>
+<td><code>overflow: hidden;</code></td>
+<td><code>.overflow-hidden</code></td>
+</tr>
+<tr>
+<td><code>white-space: nowrap;</code></td>
+<td><code>.text-nowrap</code></td>
+</tr>
+<tr>
+<td><code>text-overflow: ellipsis;</code></td>
+<td><code>.text-truncate</code></td>
+</tr>
+<tr>
+<td><code>background: transparent;</code></td>
+<td><code>.bg-transparent</code></td>
+</tr>
+<tr>
+<td><code>pointer-events: none;</code></td>
+<td><code>.pe-none</code></td>
+</tr>
+<tr>
+<td><code>user-select: none;</code></td>
+<td><code>.user-select-none</code></td>
+</tr>
+<tr>
+<td><code>@media (min-width: 768px) { ... }</code></td>
+<td>Infijo <code>md</code>: <code>.d-md-flex</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Para memorizar:</strong> el grid resuelve el layout, las utilidades resuelven el detalle (espaciado, color, tipografía, display) y los componentes resuelven las piezas complejas (navbar, card, modal). Si algo se repite mucho y no existe como utilidad, se crea con Sass o con CSS propio.</p>
+</blockquote>
+</body>
+</html>
