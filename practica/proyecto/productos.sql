@@ -33,20 +33,21 @@ CREATE TABLE `productos` (
   `nombre` varchar(250) NOT NULL,
   `precio_costo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `cantidad_minima` int(11) NOT NULL
+  `cantidad_minima` int(11) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `codigo`, `nombre`, `precio_costo`, `cantidad`, `cantidad_minima`) VALUES
-(1, 12, 'Yerba Mate Amanda', 3900, 15, 10),
-(2, 11, 'Yerba M. La Tranquera suave', 3580, 11, 10),
-(3, 2, 'Te La Virgina', 1900, 5, 10),
-(4, 1, 'Aceite Cocinero 1.5L', 4200, 5, 10),
-(5, 22, 'Cafe Instantaneo Intomable', 2700, 12, 10),
-(6, 2, 'Cafe molido la morenita', 4000, 10, 10);
+INSERT INTO `productos` (`id`, `codigo`, `nombre`, `precio_costo`, `cantidad`, `cantidad_minima`, `imagen`) VALUES
+(1, 12, 'Yerba Mate Amanda', 3900, 15, 10, NULL),
+(2, 11, 'Yerba M. La Tranquera suave', 3580, 11, 10, NULL),
+(3, 2, 'Te La Virgina', 1900, 5, 10, NULL),
+(4, 1, 'Aceite Cocinero 1.5L', 4200, 5, 10, NULL),
+(5, 22, 'Cafe Instantaneo Intomable', 2700, 12, 10, NULL),
+(6, 23, 'Cafe molido la morenita', 4000, 10, 10, NULL);
 
 --
 -- Índices para tablas volcadas
