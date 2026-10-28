@@ -1,0 +1,53 @@
+/* ESTRUCTURA BASE */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 70px;
+    background-color: #f8f9fa;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+.custom-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.hover-white:hover {
+    color: #fff !important;
+}
+
+/* REQUERIMIENTOS TÉCNICOS EXAMEN */
+@font-face {
+    font-family: 'Shadowed Serif';
+    src: url('../recursos/shadowed_serif.ttf') format('truetype');
+}
+
+.texto-banner {
+    font-family: 'Shadowed Serif', serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+
+.btn-flotante-wsp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    transition: transform 0.2s ease-in-out;
+}
+
+.btn-flotante-wsp:hover {
+    transform: scale(1.1);
+}

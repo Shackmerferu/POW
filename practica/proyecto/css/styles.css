@@ -1,0 +1,352 @@
+:root {
+    --verde: #019131;
+    --acento: #6b6b6b;
+    --texto: #1f1f1f;
+    --texto-suave: #6f6f6f;
+    --linea: #e6e6e6;
+    --fondo: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Barra superior ---------- */
+.barra-superior {
+    background-color: var(--verde);
+    min-height: 72px;
+    padding: 6px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.logo-almacen {
+    height: 62px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+}
+
+/* ---------- Contenido ---------- */
+.contenido {
+    flex: 1;
+    width: 100%;
+}
+
+.gestion-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 40px 28px 56px;
+}
+
+/* ---------- Formulario ---------- */
+.formulario {
+    max-width: 320px;
+}
+
+.campo {
+    margin-bottom: 28px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: var(--texto-suave);
+}
+
+.texto-ayuda {
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: normal;
+    color: #8f8f8f;
+    font-weight: 400;
+}
+
+.form-control {
+    width: 100%;
+    padding: 6px 0 8px;
+    border: none;
+    border-bottom: 1px solid var(--linea);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--texto);
+    font-size: 16px;
+    box-shadow: none;
+    transition: border-color 160ms ease;
+}
+
+.form-control:hover {
+    border-bottom-color: #b9b9b9;
+}
+
+.form-control:focus {
+    border: none;
+    border-bottom: 1px solid var(--texto);
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+}
+
+/* Permitir usar flechas/spinners para sumar con mouse */
+.form-control[type="number"] {
+    -moz-appearance: number-input;
+    appearance: auto;
+    padding-right: 0.25rem;
+}
+
+.form-control[type="number"]::-webkit-inner-spin-button,
+.form-control[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button;
+    opacity: 0.6;
+    margin: 0;
+}
+
+/* ---------- Botones de acción ---------- */
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-accion {
+    background-color: transparent;
+    color: var(--texto);
+    border: 1px solid var(--verde);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 13px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+    box-shadow: none;
+}
+
+.btn-accion:hover {
+    background-color: var(--verde);
+    color: #ffffff;
+    border-color: var(--verde);
+}
+
+.btn-accion:active {
+    background-color: #1976d2;
+    border-color: #1976d2;
+    color: #ffffff;
+}
+
+.btn-accion:focus-visible {
+    outline: 2px solid rgba(33, 150, 243, 0.4);
+    outline-offset: 2px;
+}
+
+/* ---------- Mensajes ---------- */
+.mensaje {
+    min-height: 24px;
+    margin: 20px 0 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texto);
+    letter-spacing: 0.01em;
+}
+
+/* ---------- Tabla ---------- */
+.tabla-container {
+    width: 100%;
+    margin-top: 16px;
+    overflow-x: auto;
+}
+
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.tabla-productos th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--texto-suave);
+    border-bottom: 1px solid var(--linea);
+    white-space: nowrap;
+}
+
+.tabla-productos td {
+    padding: 16px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: middle;
+}
+
+.tabla-productos tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-productos tbody tr {
+    transition: background-color 140ms ease;
+}
+
+.tabla-productos tbody tr:hover {
+    background-color: #fbfbfb;
+}
+
+.miniatura {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    display: block;
+    background-color: #fafafa;
+}
+
+.sin-imagen {
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+/* Selector de archivo del modal */
+.form-control[type="file"] {
+    padding: 10px 0 12px;
+    border-bottom: 1px solid var(--linea);
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+.form-control[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 6px 14px;
+    border: 1px solid var(--verde);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--texto);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+    background-color: var(--verde);
+    color: #ffffff;
+    border-color: var(--verde);
+}
+
+/* ---------- Contador ---------- */
+.contador {
+    margin-top: 28px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-suave);
+    font-weight: 500;
+}
+
+/* ---------- Modal ---------- */
+.modal-content {
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+    box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--linea);
+    padding: 24px 28px 18px;
+    align-items: flex-start;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--texto);
+    letter-spacing: 0.01em;
+}
+
+.btn-close {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin: 4px 0 0 auto;
+    opacity: 0.4;
+    filter: none;
+}
+
+.btn-close:hover {
+    opacity: 0.7;
+}
+
+.modal-body {
+    padding: 20px 28px 0;
+}
+
+.modal-body .campo {
+    margin-bottom: 24px;
+}
+
+.modal-footer {
+    border-top: none;
+    justify-content: flex-start;
+    padding: 4px 28px 26px;
+    gap: 8px;
+}
+
+/* ---------- Utilidad ---------- */
+.oculto {
+    display: none !important;
+}
+
+@media (max-width: 576px) {
+    .barra-superior {
+        min-height: 56px;
+        padding: 6px 18px;
+    }
+
+    .logo-almacen {
+        height: 44px;
+    }
+
+    .gestion-container {
+        padding: 28px 18px 44px;
+    }
+
+    .formulario {
+        max-width: 100%;
+    }
+
+    .btn-accion {
+        font-size: 12px;
+        padding: 7px 16px;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
