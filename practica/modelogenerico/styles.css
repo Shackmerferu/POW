@@ -1,53 +1,68 @@
 /* ESTRUCTURA BASE */
+
+/* Organiza la página verticalmente y ocupa al menos toda la pantalla. */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-top: 70px;
-    background-color: #f8f9fa;
+    display: flex;              /* Activa Flexbox. */
+    flex-direction: column;     /* Coloca los elementos uno debajo del otro. */
+    min-height: 100vh;           /* Altura mínima igual a la ventana del navegador. */
+    padding-top: 70px;          /* Deja espacio para la barra de navegación fija. */
+    background-color: #f8f9fa;  /* Fondo gris muy claro. */
 }
 
+/* Permite que el contenido principal ocupe el espacio disponible. */
 main {
-    flex: 1 0 auto;
+    flex: 1 0 auto; /* Puede crecer, no se encoge y su tamaño base es automático. */
 }
 
+/* Evita que el pie de página se encoja. */
 footer {
     flex-shrink: 0;
 }
 
+/* Agrega una sombra suave al elemento. */
 .custom-shadow {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+/* Cambia el color del enlace al pasar el cursor por encima. */
 .hover-white:hover {
-    color: #fff !important;
+    color: #fff !important; /* Prioriza este color frente a reglas normales. */
 }
+
 
 /* REQUERIMIENTOS TÉCNICOS EXAMEN */
+
+/* Registra una fuente personalizada para utilizarla en la página. */
 @font-face {
-    font-family: 'Shadowed Serif';
-    src: url('../recursos/shadowed_serif.ttf') format('truetype');
+    font-family: 'Shadowed Serif'; /* Nombre asignado a la fuente. */
+    src: url('../recursos/shadowed_serif.ttf') format('truetype'); /* Ruta del archivo de fuente. */
 }
 
+/* Da formato y posiciona el texto que aparece sobre un banner. */
 .texto-banner {
-    font-family: 'Shadowed Serif', serif;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    font-family: 'Shadowed Serif', serif; /* Fuente personalizada y alternativa serif. */
+    position: absolute;                  /* Posicionamiento respecto del ancestro posicionado más cercano. */
+    top: 50%;                            /* Ubica el punto de referencia a mitad de altura. */
+    left: 50%;                           /* Ubica el punto de referencia a mitad del ancho. */
+    transform: translate(-50%, -50%);    /* Centra el texto según su propio tamaño. */
+    text-align: center;                  /* Centra el texto horizontalmente. */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Agrega sombra al texto. */
 }
 
 
+/* BOTÓN FLOTANTE DE WHATSAPP */
+
+/* Mantiene el botón fijo en la pantalla aunque se desplace la página. */
 .btn-flotante-wsp {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1050;
-    transition: transform 0.2s ease-in-out;
+    position: fixed;                      /* Posición fija respecto de la ventana. */
+    bottom: 20px;                         /* Separación del borde inferior. */
+    right: 20px;                          /* Separación del borde derecho. */
+    z-index: 1050;                        /* Controla el orden de superposición. */
+    transition: transform 0.2s ease-in-out; /* Suaviza las transformaciones. */
 }
 
+/* Agranda el botón al pasar el cursor por encima. */
 .btn-flotante-wsp:hover {
-    transform: scale(1.1);
+    transform: scale(1.1); /* Aumenta su tamaño al 110 %. */
 }
