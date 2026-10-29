@@ -1,0 +1,60 @@
+
+/* ------------------------------------------------------------ */
+/* index.css - estilos básicos y anotaciones en español           */
+/* Comentarios añadidos para explicar qué hace cada regla.      */
+/* ------------------------------------------------------------ */
+
+/* Contenedor principal de la página.
+   - padding: 0 elimina espacio interior por defecto.
+   - overflow: hidden se usa para contener elementos flotantes
+     o recortar contenido que sobresalga. Atención: esto también
+     evita el scroll y puede cortar elementos si crecen.
+   Alternativa: usar clearfix (::after) o overflow: auto si se
+   quiere permitir scroll en caso de desborde. */
+.main-container {
+    padding: 0;
+    overflow: hidden; 
+}
+
+
+/* Logotipo/imagen del encabezado.
+   - height fija la altura en 50px; la anchura se ajustará para
+     mantener la proporción si no se fuerza width.
+   - margin-left separa el logo del borde o del elemento anterior.
+   Para mejor comportamiento responsive, considerar usar
+   max-height en lugar de height o definir width: auto. */
+.logo {
+    height: 50px;
+    margin-left: 10px; 
+}
+
+/* Botón estilo "info" (sobrescribe/ajusta el de Bootstrap si existe).
+   - background-color: color de fondo del botón.
+   - border-color: color del borde.
+   Asegúrate de que el color del texto tenga suficiente contraste
+   (por ejemplo texto blanco #fff) para accesibilidad. */
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #138496;
+}
+
+
+/* Grupo de botones.
+   - display: inline-flex permite que el contenedor sea inline y
+     a la vez tenga comportamiento flex (alineado de hijos).
+   - gap: 6px añade espacio entre botones de forma simple y
+     consistente. Nota: gap en flex funciona en navegadores modernos
+     (no en IE11). */
+.btn-group {
+    display: inline-flex; 
+    gap: 6px; 
+}
+
+
+/* Quitar el borde izquierdo del primer botón dentro del grupo
+   para evitar doble borde entre botones y mejorar la estética.
+   Si usas border-radius en los botones, revisar las esquinas
+   para mantener el aspecto redondeado coherente. */
+.btn-group .btn:first-child {
+    border-left: none; 
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <title>Productos</title>
+</head>
+
+<body>
+    <header>
+        <img src="logo.png" alt="logo de la pagina">
+    </header>
+
+    <div class="main-form">
+        <div>
+            <label for="Codigo">Codigo (ID)</label>
+            <input type="number" id="codigo" name="codigo">
+        </div>
+        <div>
+            <label for="Cantidad">Cantidad</label>
+            <input type="number" id="cantidad" name="cantidad">
+        </div>
+        <div>
+            <label for="Precio">Precio (*solo su es akta de productos)</label>
+            <input type="number" id="precio" name="precio">
+        </div>
+    </div>
+
+    <div class="p-3">
+        <button type="button" id="alta" class="btn btn-info">Alta</button>
+        <button type="button" id="baja" class="btn btn-info">Baja</button>
+        <button type="button" id="stockBajo" class="btn btn-info">Stock Bajo</button>
+        <button type="button" id="mostrar" class="btn btn-info">Mostrar</button>
+        <button type="button" id="agregar" class="btn btn-info">Agregar</button>
+        <button type="button" id="borrar" class="btn btn-info">Borrar</button>
+    </div>
+    <div id="contenedorMensajes" class="alert alert-secondary mt-3" role="alert"></div>
+
+    <div class="row table-row p-4">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio $</th>
+                    <th>cant minima</th>
+                    <th>valor $$</th>
+                </tr>
+            </thead>
+            <tbody id="contenidoTabla">
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
+    
+    <div class="modal-dialog">
+        
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="codigoModal" class="form-label">Código</label>
+                    <input type="number" id="codigoModal" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="nombreModal" class="form-label">Descripción</label>
+                    <input type="text" id="nombreModal" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="cantidadModal" class="form-label">Cantidad</label>
+                    <input type="number" id="cantidadModal" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="precioCostoModal" class="form-label">Precio Costo</label>
+                    <input type="number" id="precioCostoModal" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="cantMinimaModal" class="form-label">Cant. Mínima</label>
+                    <input type="number" id="cantMinimaModal" class="form-control">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnGuardar" class="btn btn-primary">GUARDAR</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/funciones.js"></script>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script><!--Agregado para que fucione el modal de Bootstrap-->
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="estilos.css">
+    <title>practIntegral</title>
+</head>
+
+<body>
+    <header>
+        <img src="logo.png" alt="logo">
+
+    </header>
+    <div class="formulario">
+        <form>
+            <div>
+                <label>Codigo (ID)
+                    <div>
+                        <input type="number" id="inputID" placeholder="Numero de ID">
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label>Cantidad
+                    <div>
+                        <input type="number" id="inputCantidad" placeholder="0">
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label>Precio (Solamanete para alta de productos)
+                    <div>
+                        <input type="number" id="inputPrecio" placeholder="0">
+                    </div>
+                </label>
+            </div>
+        </form>
+    </div>
+
+    
+    <div class="botones">
+        <button class="btn btn-primary" id="btnAlta"> ALTA</button>
+        <button class="btn btn-primary" id="btnBaja"> BAJA</button>
+        <button class="btn btn-primary" id="btnStockBajo"> STOCK BAJO</button>
+        <button class="btn btn-primary" id="btnMostrar"> MOSTRAR</button>
+        <button class="btn btn-primary" id="btnAgregar"> AGREGAR</button>
+        <button class="btn btn-primary" id="btnBorrar"> BORRAR</button>
+    </div>
+
+
+    <div class="tabla">
+        <table class="  table table-striped">
+            <thead>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Cant</th>
+                <th>Precio $</th>
+                <th>cant minima</th>
+                <th>valor $$</th>
+            </thead>
+
+            <tbody id="body"></tbody>
+        </table>
+
+    </div>
+
+    <!-- Scrollable modal -->
+<div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="agregarModalLabel">Agregar Producto</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="modalForm">
+                        <div class="mb-3">
+                            <label for="modalCodigo" class="modal-label">Codigo (ID)</label>
+                            <input type="number" class="form-control" id="modalCodigo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalNombre" class="modal-label">Nombre</label>
+                            <input type="text" class="form-control" id="modalNombre">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalCantidad" class="modal-label">Cantidad</label>
+                            <input type="number" class="form-control" id="modalCantidad">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalPrecioCosto" class="modal-label">Precio Costo</label>
+                            <input type="number" class="form-control" id="modalPrecioCosto">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalCantidadMinima" class="modal-label">Cant Minima</label>
+                            <input type="number" class="form-control" id="modalCantidadMinima">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardar" style="background-color: #17a2b8; border-color: #138496;">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.js"></script>
+<script src="funciones.js"></script>
+
+</html>

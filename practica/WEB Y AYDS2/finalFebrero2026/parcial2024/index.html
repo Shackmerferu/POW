@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial 2024</title>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <header>
+        <img src="logo.png" alt="logo">
+        <h1>Pico TransUber Packing</h1>
+    </header>
+
+    <main>
+        <form class="formRegistro" id="formRegistro">
+            <div class="form-grupo ">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" required>
+            </div>
+            <div class="form-grupo ">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-grupo ">
+                <label for="celular">Celular</label>
+                <input type="tel" id="celular" name="celular" required>
+            </div>
+            <div class="form-grupo ">
+                <label for="latitud">Latitud</label>
+                <input type="number" id="lat" name="lat" readonly>
+            </div>
+            <div class="form-grupo ">
+                <label for="longitud">Longitud</label>
+                <input type="number" id="long" name="long" readonly>
+            </div>
+            <input type="hidden" id="disponible" name="disponible" value="S">
+            <button  type="button" id="btnEnviar" class="btn btn-primary">Enviar</button>
+
+        </form>
+
+    </main>
+
+    <footer class="piePagina">
+        <p>&copy; 2024 Pico TransUber Packing. Todos los derechos reservados.</p>
+    </footer>
+</body>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.js"></script>
+<script src="funciones.js"></script>
+
+</html>

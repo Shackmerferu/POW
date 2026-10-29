@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <header class="encabezado">
+        <img src="logo.png" alt="Logo almacen" class="logo">
+        <h1>Geo Ubicacion</h1>
+
+    </header>
+    <main class="container-fluid my-4 d-flex flex-column flex-grow-1">
+
+
+        <div class="row flex-grow-1">
+            <!-- Menu: botones apilados verticalmente -->
+            <aside class="col-12 col-md-3 mb-3">
+                <section class="panelBotones p-4 bg-light h-100">
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-info text-white fw-bold" id="paises">Paises</button>
+                        <button type="button" class="btn btn-info text-white fw-bold" id="provincias">Provincias</button>
+                        <button type="button" class="btn btn-info text-white fw-bold" id="ciudades">Ciudades</button>
+                        <div class="lupa-filtar">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white lupa-icon" id="basic-addon1">
+                                    <!-- Icono lupa (SVG inline) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.106a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                                    </svg>
+                                </span>
+                                <input type="text" id="filtroInput" class="form-control filtro-input" placeholder="Filtrar..." aria-label="Filtrar" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Display: aquí se muestra la acción de los botones -->
+            <section class="col-12 col-md-9 mb-5 d-flex">
+                <div id="areaDisplay" class="panelDisplay p-4 border rounded flex-grow-1">
+                    Pulsa un botón del menú para ver la acción aquí.
+                </div>
+            </section>
+        </div>
+
+
+    </main>
+
+    <footer class="piePagina">
+        <p>&copy; 2023 Geo Ubicacion. Todos los derechos reservados.</p>
+    </footer>
+
+    <div class="modal fade" tabindex="-1" id="mapaModal" aria-labelledby="mapaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapaModalLabel">Ubicacion del cliente</h5>
+                    <input type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body p-0">
+                    <iframe id="mapaIframe" width="100%" height="450" style="border:0;" allowfullscreen=""
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar modal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/index.js"></script>
+
+</html>
