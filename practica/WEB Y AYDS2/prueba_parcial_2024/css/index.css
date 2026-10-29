@@ -1,0 +1,122 @@
+/* index.css
+   Estilos globales de la página
+   - Define tipografías, fondo general, header, menú, formulario y footer.
+   - Incluye anotaciones TODO para propiedades inválidas o incompletas.
+*/
+
+/* === Base de la página === */
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    margin: flex; /* TODO: esta propiedad es inválida. Probablemente querías `display:flex;` en el contenedor padre o eliminarla. */
+    flex-direction: column; /* Sólo tiene efecto si el elemento es display:flex */
+    min-height: 100vh;
+    background-color: #f4f4f4; /* Fondo general */
+}
+
+/* === Encabezado (logo + título) === */
+.encabezado{
+    background-color: rgb(195, 206, 221);
+    color: rgb(0, 0, 0);
+    padding: 20px 10px;
+    display: flex; /* organiza logo y título en una fila */
+    align-items: center; /* centra verticalmente */
+}
+
+.encabezado h1{
+    margin: 0 0 0 20px; /* separa el título del logo */
+    font-size: 40px; 
+}
+
+.logo{
+    height: 100px; /* alto fijo para el logo */
+    background-color: white; /* útil si la imagen tiene transparencia */
+}
+
+/* === Menú de navegación === */
+.menu{
+    background-color: #e9ecef;
+    border-bottom: 1.5px; /* TODO: incompleto — falta `solid` y un color, p.ej. `border-bottom: 1.5px solid #ccc;` */
+}
+
+.menu ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* lista horizontal */
+}
+
+.menu li a{
+    display: block;
+    text-decoration: none;
+    padding: 15px 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.menu li a:hover, .menu li a.activo {
+    background-color: #ddd;
+    color: #004a99;
+}
+
+/* === Contenedor central (contenido principal) === */
+.parteCentral{
+    flex-grow: 1; /* ocupa espacio disponible si el padre es flex */
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra sutil */
+}
+
+/* === Pie de página === */
+.piePagina{
+    background-color: #99a7b8;
+    color: white;
+    text-align: center;
+    margin-top: auto; /* funciona si el contenedor padre usa flex column */
+    margin-bottom: 0;
+    font-size: medium;
+}
+
+/* === Formulario de registro: utilidades y campos === */
+.formRegistro .form-group{
+    margin-bottom: 15px; /* separación entre campos */
+}
+
+.formRegistro label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formRegistro input[type="text"],
+.formRegistro input[type="tel"]{
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.formRegistro input[readonly]{
+    background-color: #eee; /* indicar visualmente que no es editable */
+    cursor: not-allowed;
+}
+
+/* Botón enviar: color principal y efecto hover */
+.btnEnviar{
+    background-color: #007bff; /* Color del botón principal */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btnEnviar:hover{
+    background-color: #0056b3; /* Color al pasar el cursor */
+}

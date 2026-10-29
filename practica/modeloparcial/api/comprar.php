@@ -1,46 +1,64 @@
+```php
 <?php
 
-// Inicia o recupera la sesión del usuario.
-// Permite acceder a los datos guardados en $_SESSION.
+// =====================================================
+// 1. INICIALIZACIÓN Y CONFIGURACIÓN
+// =====================================================
+
 session_start();
 
-// Incluye el archivo que contiene la conexión a la base de datos.
 require_once __DIR__ . "/conexion.php";
 
-// Indica que la respuesta del servidor será texto plano en UTF-8.
 header("Content-Type: text/plain; charset=UTF-8");
 
-// Función auxiliar para devolver un error HTTP y finalizar el script.
-// $mensaje: texto que recibirá el cliente.
-// $codigo: código HTTP; por defecto, 400 (solicitud incorrecta).
+// Devuelve un mensaje de error y finaliza la petición.
 function errorCompra($mensaje, $codigo = 400)
 {
     http_response_code($codigo);
     exit($mensaje);
 }
 
-// Verifica que la petición se haya enviado mediante POST.
-// Si se usa otro método, devuelve 405 (método no permitido).
+// =====================================================
+// 2. VALIDACIÓN DE LA PETICIÓN Y DEL USUARIO
+// =====================================================
+
+// Solo se permiten peticiones POST.
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     errorCompra("Método no permitido.", 405);
 }
 
-// Comprueba que exista un usuario autenticado en la sesión.
-// Si no inició sesión, devuelve 401 (no autorizado).
-if (!isset($_SESSION["usuario"]["id"])) {
+// Debe existir un usuario autenticado.
+if (
+    !isset($_SESSION["usuario"]) ||
+    !isset($_SESSION["usuario"]["id"])
+) {
     errorCompra("Iniciá sesión para comprar.", 401);
 }
 
-// Obtiene el token de seguridad guardado en la sesión.
-$tokenSesion = $_SESSION["token"] ?? "";
+// IMPORTANTE:
+// Se supone que el rol está guardado en
+// $_SESSION["usuario"]["rol"].
+// Si tu login utiliza otra clave, adaptá esta validación.
+$rol = $_SESSION["usuario"]["rol"] ?? "";
 
-// Obtiene el token enviado por el cliente mediante POST.
+// Solo los clientes pueden comprar.
+if ($rol !== "cliente") {
+    errorCompra(
+        "No tenés permisos para realizar compras.",
+        403
+    );
+}
+
+// =====================================================
+// 3. VALIDACIÓN DEL TOKEN CSRF
+// =====================================================
+
+$tokenSesion = $_SESSION["token"] ?? "";
 $tokenRecibido = $_POST["token"] ?? "";
 
-// Verifica que ambos tokens existan y coincidan.
-// hash_equals() compara los valores de forma segura.
-// Esto ayuda a prevenir ataques CSRF.
 if (
+    !is_string($tokenSesion) ||
+    !is_string($tokenRecibido) ||
     $tokenSesion === "" ||
     $tokenRecibido === "" ||
     !hash_equals($tokenSesion, $tokenRecibido)
@@ -48,68 +66,93 @@ if (
     errorCompra("Token de seguridad inválido.", 403);
 }
 
-// Convierte el JSON del carrito en un array asociativo de PHP.
-// El segundo argumento true hace que los objetos JSON se conviertan
-// en arrays asociativos en lugar de objetos.
-$carrito = json_decode($_POST["carrito"] ?? "", true);
+// =====================================================
+// 4. VALIDACIÓN DEL CARRITO
+// =====================================================
 
-// Verifica que el carrito se haya convertido correctamente
-// en un array y que contenga al menos un elemento.
-if (!is_array($carrito) || count($carrito) === 0) {
-    errorCompra("El carrito está vacío.");
+$carritoJSON = $_POST["carrito"] ?? "";
+
+if (!is_string($carritoJSON) || $carritoJSON === "") {
+    errorCompra("No se recibió un carrito válido.");
 }
 
-// Array que almacenará las cantidades totales por producto.
-// Ejemplo: si el producto 5 aparece dos veces, suma ambas cantidades.
+// Convierte el JSON en un array asociativo.
+$carrito = json_decode($carritoJSON, true);
+
+// Comprueba que el JSON sea válido y contenga productos.
+if (
+    json_last_error() !== JSON_ERROR_NONE ||
+    !is_array($carrito) ||
+    count($carrito) === 0
+) {
+    errorCompra("El carrito está vacío o tiene un formato inválido.");
+}
+
+// Evita procesar carritos excesivamente grandes.
+if (count($carrito) > 100) {
+    errorCompra("El carrito contiene demasiados productos.");
+}
+
+// Acumula las cantidades por ID de producto.
 $cantidades = [];
 
 foreach ($carrito as $item) {
 
-    // Valida que el ID del producto sea un número entero.
+    if (!is_array($item)) {
+        errorCompra("Los datos de un producto son inválidos.");
+    }
+
+    // El cliente solo necesita enviar ID y cantidad.
+    // No aceptamos precios ni stock como datos confiables.
     $id = filter_var(
         $item["id"] ?? null,
-        FILTER_VALIDATE_INT
+        FILTER_VALIDATE_INT,
+        ["options" => ["min_range" => 1]]
     );
 
-    // Valida que la cantidad también sea un número entero.
     $cantidad = filter_var(
         $item["cantidad"] ?? null,
-        FILTER_VALIDATE_INT
+        FILTER_VALIDATE_INT,
+        ["options" => ["min_range" => 1]]
     );
 
-    // Rechaza IDs inválidos, cantidades inválidas
-    // y cantidades menores que uno.
-    if (!$id || !$cantidad || $cantidad < 1) {
+    if ($id === false || $cantidad === false) {
         errorCompra("Producto o cantidad inválida.");
     }
 
-    // Inicializa la cantidad acumulada si es la primera
-    // vez que aparece ese producto.
+    // Evita cantidades excesivas y desbordamientos.
+    if ($cantidad > 100000) {
+        errorCompra("La cantidad solicitada no es válida.");
+    }
+
     if (!isset($cantidades[$id])) {
         $cantidades[$id] = 0;
     }
 
-    // Suma la cantidad solicitada a la cantidad acumulada.
     $cantidades[$id] += $cantidad;
+
+    if ($cantidades[$id] > 100000) {
+        errorCompra("La cantidad solicitada no es válida.");
+    }
 }
 
-// Indica si hay una transacción abierta.
-// Sirve para saber si corresponde ejecutar un rollback
-// en caso de que ocurra un error.
+// =====================================================
+// 5. TRANSACCIÓN Y VALIDACIÓN DEL STOCK
+// =====================================================
+
 $transaccionIniciada = false;
+$consulta = null;
+$actualizar = null;
 
 try {
 
     // Inicia una transacción SQL.
-    // Los cambios podrán confirmarse todos juntos o deshacerse.
     $conexion->begin_transaction();
-
     $transaccionIniciada = true;
 
-    // Prepara una consulta para obtener el stock de un producto.
-    // Solo considera productos activos.
-    // FOR UPDATE bloquea las filas seleccionadas para evitar
-    // que otra transacción las modifique simultáneamente.
+    // Consulta el stock y bloquea las filas seleccionadas.
+    // Esto evita que otras transacciones descuenten
+    // simultáneamente el mismo stock sin coordinación.
     $consulta = $conexion->prepare(
         "SELECT stock
          FROM productos
@@ -117,42 +160,33 @@ try {
          FOR UPDATE"
     );
 
-    // Prepara la actualización del stock.
-    // Descuenta la cantidad únicamente si el producto está activo
-    // y todavía tiene stock suficiente.
+    // Prepara el descuento de stock.
+    // La condición stock >= cantidad actúa como
+    // una segunda comprobación de seguridad.
     $actualizar = $conexion->prepare(
         "UPDATE productos
          SET stock = stock - ?
-         WHERE id = ? AND activo = 1 AND stock >= ?"
+         WHERE id = ?
+           AND activo = 1
+           AND stock >= ?"
     );
 
     // PRIMER RECORRIDO:
-    // Comprueba que todos los productos existan, estén activos
-    // y tengan stock suficiente antes de descontar nada.
+    // Verifica todos los productos antes de descontar stock.
     foreach ($cantidades as $id => $cantidad) {
 
-        // Vincula el ID con el parámetro ? de la consulta.
-        // "i" indica que el parámetro es un entero.
         $consulta->bind_param("i", $id);
-
-        // Ejecuta la consulta.
         $consulta->execute();
 
-        // Obtiene el resultado de la consulta.
         $resultado = $consulta->get_result();
-
-        // Recupera la fila como un array asociativo.
         $producto = $resultado->fetch_assoc();
 
-        // Si no hay fila, el producto no existe
-        // o no está activo.
         if (!$producto) {
             throw new Exception(
                 "Uno de los productos ya no está disponible."
             );
         }
 
-        // Compara el stock disponible con la cantidad solicitada.
         if ((int) $producto["stock"] < $cantidad) {
             throw new Exception(
                 "Stock insuficiente para uno de los productos."
@@ -161,14 +195,9 @@ try {
     }
 
     // SEGUNDO RECORRIDO:
-    // Como ya se validaron todos los productos,
-    // comienza a descontar el stock de cada uno.
+    // Descuenta el stock después de validar todos los productos.
     foreach ($cantidades as $id => $cantidad) {
 
-        // Vincula los tres parámetros de la consulta UPDATE:
-        // 1. Cantidad que se descuenta.
-        // 2. ID del producto.
-        // 3. Cantidad mínima de stock que debe haber disponible.
         $actualizar->bind_param(
             "iii",
             $cantidad,
@@ -176,11 +205,9 @@ try {
             $cantidad
         );
 
-        // Ejecuta la actualización del stock.
         $actualizar->execute();
 
-        // Si no se modificó exactamente una fila,
-        // considera que la actualización falló.
+        // Cada UPDATE debe modificar exactamente una fila.
         if ($actualizar->affected_rows !== 1) {
             throw new Exception(
                 "No se pudo actualizar el stock."
@@ -188,33 +215,54 @@ try {
         }
     }
 
-    // Confirma la transacción.
-    // Los descuentos de stock quedan guardados en la base de datos.
+    // Confirma todos los descuentos juntos.
     $conexion->commit();
-
-    // Marca la transacción como finalizada.
     $transaccionIniciada = false;
 
-    // Informa al cliente que la operación terminó correctamente.
     echo "Compra realizada correctamente. Stock actualizado.";
 
 } catch (Throwable $e) {
 
-    // Si hubo un error mientras la transacción estaba abierta,
-    // deshace todos los cambios realizados en ella.
+    // Si alguna operación falla, deshace todos los descuentos.
     if ($transaccionIniciada) {
-        $conexion->rollback();
+        try {
+            $conexion->rollback();
+        } catch (Throwable $errorRollback) {
+            error_log(
+                "Error al revertir la compra: " .
+                $errorRollback->getMessage()
+            );
+        }
     }
 
-    // Devuelve el mensaje del error y finaliza el script.
+    // Guarda el error técnico en el registro del servidor.
+    error_log("Error en comprar.php: " . $e->getMessage());
+
+    // Los errores de validación se muestran al cliente.
+    // Los errores internos de SQL no se exponen.
+    if ($e instanceof mysqli_sql_exception) {
+        errorCompra(
+            "Ocurrió un error al procesar la compra.",
+            500
+        );
+    }
+
     errorCompra($e->getMessage());
+    
+} finally {
+
+    // Cierra las consultas preparadas si fueron creadas.
+    if ($consulta !== null) {
+        $consulta->close();
+    }
+
+    if ($actualizar !== null) {
+        $actualizar->close();
+    }
+
+    // Cierra la conexión.
+    $conexion->close();
 }
 
-// Cierra las consultas preparadas.
-$consulta->close();
-$actualizar->close();
-
-// Cierra la conexión a la base de datos.
-$conexion->close();
-
 ?>
+```

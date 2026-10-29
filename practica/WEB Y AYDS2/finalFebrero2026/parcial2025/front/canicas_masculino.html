@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canicas Masculino</title>
+    <link href="../bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <header class="bg-dark text-white py-3">
+            <img src="../la_tania/la_tania/front/Recursos FRONT(textos, imagenes front_end+fuentes)/tania .png" alt="Logo La Tania"
+                height="60">
+            <h1>La Tania</h1>
+            
+    </header>
+    <nav id="nav" class="nav">
+                <!-- Menú dinámico desde la API -->
+    </nav>
+
+    <div class="areaDisplay" id="tarjetas">
+        <!-- Contenido específico de Canicas Masculino -->
+    </div>
+
+    <div id="tablaPosicionesM">
+        
+        <!-- Tabla de posiciones de Canicas Masculino -->
+    </div>
+    
+    <div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="cerrar-modal" class="cerrar">&times;</span>
+
+    <div class="modal-header">
+      <img id="modal-img" alt="Foto jugador">
+      <div>
+        <h2 id="modal-nombre"></h2>
+        <h4 id="modal-apodo"></h4>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <p id="modal-info"></p>
+
+      <h5>🏆 Palmarés</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Año</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-palmares"></tbody>
+      </table>
+
+      <h5>Agregar nuevo logro</h5>
+      <textarea id="nuevo-palmares" placeholder="Ingrese nuevo logro..."></textarea>
+      <button class="btn-palmares">Agregar</button>
+      <small>(Funcionalidad no implementada)</small>
+    </div>
+  </div>
+</div>
+</body>
+<script src="js/index.js"></script>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial</title>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="encabezado">
+         <img src="la_tania/la_tania/front/Recursos FRONT(textos, imagenes front_end+fuentes)/tania .png" alt="Logo"
+            class="logo">
+        <h1>La Tania</h1>
+    </header>
+
+    <main class="container-fluid my-4 d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1">
+            
+            <aside class="col-12 col-md-3 mb-3">
+                <section id="menu-container" class="panelBotones p-4 bg-light h-100">
+                    <div class="d-grid gap-2">
+                        <p>Cargando menu...</p>
+                    </div>
+                </section>
+            </aside>
+
+            <section class="col-12 col-md-9 mb-5 d-flex">
+                <div id="areaDisplay" class="panelDisplay p-4 border rounded flex-grow-1">
+                    Pulsa un botón del menú para ver la acción aquí.
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="piePagina">
+        <p>&copy; 2024 La Tania. Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://wa.me/TUNUMERO" class="whatsapp-logo" target="_blank">
+        <img src="la_tania/la_tania/front/Recursos FRONT(textos, imagenes front_end+fuentes)/whatsap.png" alt="WhatsApp">
+    </a>
+
+    <div class="modal fade" tabindex="-1" id="Modal" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Detalles del jugador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

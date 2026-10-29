@@ -1,0 +1,33 @@
+header{
+    background-color:beige;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+header img{
+    width: 80px;
+    height: auto;
+}
+
+@font-face {
+    font-family: shadowed_serif;
+    src: url("Recursos\ FRONT\(textos\,\ imagenes\ front_end+fuentes\)/shadowed_serif.ttf");
+}
+header h1{
+    position:absolute;
+    left: 40%;
+    font-family: shadowed_serif;
+}
+
+.partidos{
+    grid-column: auto;
+    margin: 20px;
+}
+
+.cargarPartidos{
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}

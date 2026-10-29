@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <header class="encabezado">
+        <img src="logo.png" alt="Logo almacen" class="logo">
+        <h1>Pico TransUber Packing</h1>
+
+    </header>
+    <main class="container-fluid my-4 d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1">
+            <!-- Menu: botones apilados verticalmente -->
+            <aside class="col-12 col-md-3 mb-3">
+                <section class="panelBotones p-4 bg-light h-100">
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-info text-white fw-bold" id="asignarme">Asignarme</button>
+                        <button type="button" class="btn btn-info text-white fw-bold" id="verAsignados">Ver mis
+                            asignados</button>
+                        <button type="button" class="btn btn-info text-white fw-bold" id="todosClientes">Ver todos los
+                            clientes</button>
+                        <button type="button" class="btn btn-danger text-white fw-bold" id="salir">Salir</button>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Display: aquí se muestra la acción de los botones -->
+            <section class="col-12 col-md-9 mb-5 d-flex">
+                <div id="areaDisplay" class="panelDisplay p-4 border rounded flex-grow-1" >
+                    Pulsa un botón del menú para ver la acción aquí.
+                </div>
+            </section>
+        </div>
+
+
+    </main>
+
+    <footer class="piePagina">
+        <p>&copy; 2024 Pico TransUber Packing. Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://wa.me/TUNUMERO" class="whatsapp-logo" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <div class="modal fade" tabindex="-1" id="mapaModal" aria-labelledby="mapaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapaModalLabel">Ubicacion del cliente</h5>
+                    <input type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body p-0">
+                    <iframe 
+                        id="mapaIframe"
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar modal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/home.js"></script>
+
+</html>

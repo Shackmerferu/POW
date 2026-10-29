@@ -1,0 +1,49 @@
+
+.panelBotones{
+    /* Panel lateral que contiene los botones del menú
+       - Diferencia visual respecto al fondo general (#f4f4f4)
+       - Usa sombra sutil y radios en los bordes para un look moderno
+       Nota: en el HTML este contenedor también tiene clases de Bootstrap
+       (p.ej. `p-4 bg-light h-100`); las reglas aquí, cargadas después
+       de Bootstrap, sobrescribirán `bg-light` salvo mayor especificidad.
+    */
+    background-color: #e9f6ff; /* azul muy claro */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.panelDisplay{
+    /* Área principal de contenido donde se muestra la acción de los botones
+       - Fondo blanco para máxima legibilidad
+       - Sombra más marcada para destacarlo frente al resto de la página
+       - Mantener bordes redondeados acorde al panel lateral
+    */
+    background-color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.whatsapp-logo {
+    /* Icono de WhatsApp fijado en la esquina inferior derecha */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* siempre encima del contenido */
+}
+
+.whatsapp-logo img{
+    /* Tamaño del icono y transición para hover */
+    height: 50px;
+    width: 50px;
+    transition: 0.2s;
+}
+
+.whatsapp-logo img:hover{
+    /* Efecto sutil al pasar el cursor */
+    transform: scale(1.1);
+}
+
+#areaDisplay {
+    /* Control de scroll interno cuando el contenido supera la altura disponible */
+    overflow-y: auto;
+}

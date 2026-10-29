@@ -1,0 +1,152 @@
+/* Archivo: css/home.css 
+  Estilos para la práctica de Países, Provincias y Capitales.
+*/
+
+/* --- Variables de Color (Tema Geográfico) --- */
+:root {
+    --primary-color: #005a9c; /* Azul oscuro (océano/institucional) */
+    --secondary-color: #f4f7f6; /* Gris muy claro (fondo) */
+    --accent-color: #4CAF50; /* Verde (tierra/éxito) */
+    --text-dark: #333;
+    --text-light: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
+/* --- Estilos Globales --- */
+body {
+    background-color: var(--secondary-color);
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+}
+
+/* --- Encabezado --- */
+.encabezado {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.encabezado .logo {
+    height: 80px; /* Ajusta el tamaño de tu logo */
+    width: 80px;
+    margin-right: 10px;
+}
+
+.encabezado h1 {
+    font-size: 1.75rem; /* Un poco más grande */
+    font-weight: 600;
+    margin: 0;
+}
+
+/* --- Contenido Principal (Main) --- */
+main.container-fluid {
+    /* Le da espacio al contenido */
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* --- Panel de Botones (Menú) --- */
+.panelBotones {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    /* El h-100 de Bootstrap ya hace que ocupe todo el alto */
+}
+
+/* Estilo de los botones del menú */
+.panelBotones .btn {
+    text-align: left;
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    /* Transición suave */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Sobrescribimos los colores de Bootstrap 
+  para que usen nuestros colores del tema 
+*/
+.panelBotones .btn-info {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-light); /* El HTML ya tiene text-white, pero aseguramos */
+}
+
+.panelBotones .btn-info:hover {
+    background-color: #004a80; /* Un azul más oscuro al pasar el mouse */
+    border-color: #004a80;
+    transform: translateX(5px); /* Pequeño efecto al pasar el mouse */
+}
+
+/* Botón de Salir */
+.panelBotones .btn-danger {
+    background-color: #d9534f;
+    border-color: #d9534f;
+}
+
+.panelBotones .btn-danger:hover {
+    background-color: #c9302c;
+    border-color: #c9302c;
+    transform: translateX(5px);
+}
+
+
+/* --- Área de Display (Contenido) --- */
+#areaDisplay {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    border: none; /* Quitamos el borde por defecto */
+    min-height: 300px; /* Asegura una altura mínima */
+}
+
+/* --- Pie de Página --- */
+.piePagina {
+    background-color: #343a40; /* Gris oscuro */
+    color: #ccc;
+    text-align: center;
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+    /* margin-top: auto; ya está cubierto por d-flex en el body */
+}
+
+.piePagina p {
+    margin: 0;
+}
+
+
+
+/* --- Estilos para el Modal (si lo usas para mapas) --- */
+.modal-header {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+.modal-header .btn-close {
+    /* Hace la 'X' de cerrar más visible en fondos oscuros */
+    filter: brightness(0) invert(1);
+}
+
+
+/* --- Estilos para la lupa de búsqueda --- */
+.lupa-filtar {
+    margin-top: 0.5rem;
+}
+.lupa-filtar .input-group .lupa-icon {
+    border-right: 0; /* quita borde derecho del grupo de icono */
+}
+.lupa-filtar .input-group .filtro-input {
+    border-left: 0; /* quita borde izquierdo del input para unir visualmente */
+}
+.lupa-filtar svg {
+    color: var(--primary-color); /* el SVG usa fill=currentColor */
+    width: 1rem;
+    height: 1rem;
+}
+@media (max-width: 576px) {
+    .lupa-filtar .input-group {
+        width: 100%;
+    }
+}

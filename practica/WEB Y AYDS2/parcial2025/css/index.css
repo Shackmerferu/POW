@@ -1,0 +1,147 @@
+/* CORRECCIÓN: Para usar una fuente local (.ttf), primero debes 
+   declararla con @font-face, dándole un nombre y la ruta al archivo.
+*/
+
+@font-face{
+    font-family: 'Shadowed Serif';
+    src: url("../la_tania/la_tania/front/Recursos FRONT(textos, imagenes front_end+fuentes)/shadowed_serif.ttf") format("truetype");
+    
+}
+
+.banner{
+    background-image: url("../la_tania/la_tania/front/Recursos FRONT(textos, imagenes front_end+fuentes)/banner.png");
+    
+}
+
+.banner h1 h2 p{
+    text-align-last:right;
+}
+
+img{
+    height: 80px;
+    width: 80px;
+}
+
+
+.panelBotones{
+    background-color: #b2d6f0; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.panelDisplay{
+    background-color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.whatsapp-logo {
+   
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; 
+}
+
+.whatsapp-logo img{
+    height: 50px;
+    width: 50px;
+    transition: 0.2s;
+}
+
+.whatsapp-logo img:hover{
+    transform: scale(1.1);
+}
+
+#areaDisplay {
+    overflow-y: auto;
+}
+
+
+body{
+    font-family: 'Shadowed Serif', 'Arial', sans-serif;
+    margin: 0;
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh;
+    background-color: #e6cfcf;
+}
+
+.encabezado{
+    background-color: rgb(255, 253, 235);
+    color: rgb(0, 0, 0);
+    padding: 20px 10px;
+    display: flex;
+    align-items: center; 
+}
+
+.encabezado h1{
+    margin: 0 0 0 20px;
+    font-size: 40px; 
+}
+
+.logo{
+    height: 100px; 
+    
+}
+
+
+.menu{
+    background-color: #e9ecef;
+    border-bottom: 1.5px; 
+}
+
+.menu ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; 
+}
+
+.menu li a{
+    display: block;
+    text-decoration: none;
+    padding: 15px 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.menu li a:hover, .menu li a.activo {
+    background-color: #ddd;
+    color: #004a99;
+}
+
+
+.parteCentral{
+    flex-grow: 1; 
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+
+.piePagina{
+    background-color: #99a7b8;
+    color: white;
+    text-align: center;
+    margin-top: auto; 
+    margin-bottom: 0;
+    font-size: medium;
+}
+
+.btnEnviar{
+    background-color: #e7c680; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btnEnviar:hover{
+    background-color: #0056b3; 
+}

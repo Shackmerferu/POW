@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Recuperatorio</title>
+</head>
+
+<body>
+    <header>
+        <img src="Recursos FRONT(textos, imagenes front_end+fuentes)/tania .png" alt="Logo">
+        <h1>LA TANIA </h1>
+    </header>
+
+    <div >
+        <h2>Partidos</h2>
+        <div class="partidos d-flex  gap-3">
+            <p>Selccionar disciplina</p>
+            <select class="form-select" id="disciplina" id="disciplina">
+                <option value="" >Elegi una disciplina</option>
+            </select>
+             <p>Selccionar modalidad</p>
+            <select class="form-select" name="modalidad" id="modalidad">
+                <option value="" >Elegi una modalidad</option>
+                <option value="C1">C1</option>
+                <option value="C2">C2</option>
+                <option value="C3">C3</option>
+                <option value="C4">C4</option>
+                <option value="C5">C5</option>
+                
+            </select>
+
+
+        </div>
+        <h2>Cargar Partidos</h2>
+        <div class="cargarPartidos d-flex ">
+            
+            <div class="d-flex gap-2">
+                <select class="form-select" name="primerEquipo" id="1equipo">
+                    <option value="" >Selecciona equipo</option>
+                </select>
+                <input type="number" id="1goles" placeholder="Goles">
+            </div>
+
+            <div class="d-flex gap-2">
+                <select class="form-select" name="segundoEquipo" id="2equipo">
+                    <option value="" >Selecciona equipo</option>
+                </select>
+                <input type="number" id="2goles" placeholder="Goles">
+            </div>
+
+            <button class="btn btn-primary" id="btnGuardar">Guardar</button>
+        </div>
+    </div>
+
+    <div class="table table-responsive">
+        <h2>Resultados</h2>
+        <div id="mensaje"></div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Equipo</th>
+                    <th>Logo</th>
+                    <th>Goles</th>
+                    <th>VS</th>
+                    <th>Equipo</th>
+                    <th>Logo</th>
+                    <th>Goles</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaResultados">
+        </table>
+
+    </div>
+
+</body>
+<script src="../bootstrap-5.3.8-dist/js/bootstrap.js"></script>
+<script src="funciones.js"></script>
+
+</html>

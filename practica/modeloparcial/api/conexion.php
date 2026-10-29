@@ -3,7 +3,7 @@ $conexion = new mysqli(
     "localhost",
     "root",
     "",
-    "termo_store"
+    "termo_store" //cambiar
 );
 
 if ($conexion->connect_error) {
