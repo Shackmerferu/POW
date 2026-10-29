@@ -1,0 +1,72 @@
+CÓDIGOS DE ESTADO HTTP — RESUMEN PARA EL PARCIAL
+================================================
+
+1XX — INFORMATIVOS
+100 Continue: el cliente puede continuar enviando la solicitud.
+101 Switching Protocols: el servidor acepta cambiar de protocolo.
+
+2XX — ÉXITO
+200 OK: solicitud procesada correctamente.
+201 Created: se creó un recurso.
+202 Accepted: solicitud aceptada para procesarse, pero todavía no finalizada.
+204 No Content: operación exitosa sin contenido en la respuesta.
+
+3XX — REDIRECCIÓN
+301 Moved Permanently: el recurso se trasladó permanentemente.
+302 Found: redirección temporal.
+304 Not Modified: el recurso no cambió; puede usarse la versión en caché.
+
+4XX — ERROR DEL CLIENTE
+400 Bad Request: solicitud inválida o datos mal formados.
+401 Unauthorized: falta autenticación o las credenciales no son válidas.
+403 Forbidden: el servidor no permite realizar la operación.
+404 Not Found: el recurso o endpoint no existe.
+405 Method Not Allowed: método HTTP no permitido.
+409 Conflict: conflicto con el estado actual del recurso.
+410 Gone: el recurso ya no está disponible.
+413 Content Too Large: contenido enviado demasiado grande.
+415 Unsupported Media Type: formato de contenido no admitido.
+422 Unprocessable Content: los datos se entienden, pero no superan la validación.
+429 Too Many Requests: demasiadas solicitudes en poco tiempo.
+
+5XX — ERROR DEL SERVIDOR
+500 Internal Server Error: error inesperado del servidor.
+501 Not Implemented: funcionalidad no admitida.
+502 Bad Gateway: un servidor intermedio recibió una respuesta inválida.
+503 Service Unavailable: servicio temporalmente no disponible.
+504 Gateway Timeout: un servidor intermedio no recibió respuesta a tiempo.
+
+LOS MÁS IMPORTANTES PARA PHP
+============================
+200 -> operación exitosa.
+201 -> recurso creado correctamente.
+400 -> datos o parámetros inválidos.
+401 -> usuario no autenticado.
+403 -> usuario sin permisos.
+404 -> recurso o endpoint inexistente.
+405 -> método HTTP incorrecto.
+409 -> conflicto con el estado actual.
+422 -> datos recibidos, pero inválidos para la operación.
+500 -> error interno del servidor.
+503 -> servicio temporalmente no disponible.
+
+DIFERENCIA ENTRE 401 Y 403
+=========================
+401: no estás autenticado. El servidor no puede validar tu identidad.
+403: no tenés permiso para realizar esa operación.
+
+DIFERENCIA ENTRE 400 Y 422
+=========================
+400: la solicitud está mal formada o tiene parámetros inválidos.
+422: la solicitud se entiende, pero los datos no cumplen las reglas de validación.
+
+REGLA PARA RECORDAR
+===================
+2xx = éxito.
+3xx = redirección.
+4xx = problema en la solicitud del cliente.
+5xx = problema al procesar la solicitud en el servidor.
+
+NOTA:
+El código exacto depende del diseño de la API. Algunos proyectos utilizan
+400 para errores de validación donde otros utilizan 422.

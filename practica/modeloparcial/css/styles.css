@@ -1,717 +1,920 @@
+/* ============================================================
+   1. VARIABLES GLOBALES
+   ============================================================ */
 
 :root {
-    --color-primary: #203b32;
-    --color-primary-dark: #172c25;
-    --color-primary-light: #e9f0e9;
-    --color-accent: #eebf55;
-    --color-accent-hover: #dfad3e;
-    --color-background: #f8f7f2;
-    --color-surface: #ffffff;
-    --color-text: #24332c;
-    --color-muted: #758078;
-    --color-border: #e6e8e1;
-    --shadow-soft: 0 10px 35px rgba(32, 59, 50, 0.07);
-    --shadow-hover: 0 18px 42px rgba(32, 59, 50, 0.13);
-    --radius-card: 18px;
+  /* Paleta principal del sitio */
+  --color-primary: #203b32; /* Verde principal */
+  --color-primary-dark: #172c25; /* Verde oscuro */
+  --color-primary-light: #e9f0e9; /* Verde muy claro */
+
+  /* Color de acento para destacar elementos */
+  --color-accent: #eebf55; /* Dorado */
+  --color-accent-hover: #dfad3e; /* Dorado al pasar el mouse */
+
+  /* Colores generales */
+  --color-background: #f8f7f2; /* Fondo de la página */
+  --color-surface: #ffffff; /* Fondo de tarjetas y paneles */
+  --color-text: #24332c; /* Texto principal */
+  --color-muted: #758078; /* Texto secundario */
+  --color-border: #e6e8e1; /* Bordes suaves */
+
+  /* Sombras reutilizables */
+  --shadow-soft: 0 10px 35px rgba(32, 59, 50, 0.07);
+  --shadow-hover: 0 18px 42px rgba(32, 59, 50, 0.13);
+
+  /* Radio de las esquinas de las tarjetas */
+  --radius-card: 18px;
 }
 
+/* ============================================================
+   2. CONFIGURACIÓN GENERAL DEL DOCUMENTO
+   ============================================================ */
+
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 90px;
+  /* Desplazamiento suave al navegar hacia una sección */
+  scroll-behavior: smooth;
+
+  /* Deja un espacio superior al saltar a una sección con un enlace.
+       Evita que la barra de navegación tape el título. */
+  scroll-padding-top: 90px;
 }
 
 body {
-    margin: 0;
-    padding-top: 70px;
-    background: var(--color-background);
-    color: var(--color-text);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-    line-height: 1.6;
+  margin: 0; /* Elimina el margen predeterminado del navegador */
+  padding-top: 70px; /* Reserva espacio para la barra superior */
+
+  /* Aplica los colores definidos en :root */
+  background: var(--color-background);
+  color: var(--color-text);
+
+  /* Usa fuentes del sistema operativo */
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  /* Altura de línea: mejora la legibilidad del texto */
+  line-height: 1.6;
 }
 
+/* Elimina el subrayado predeterminado de los enlaces */
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
+/* Hace que los controles de formulario hereden la tipografía general */
 button,
 input,
 select,
 textarea {
-    font: inherit;
+  font: inherit;
 }
+
+/* ============================================================
+   3. ESTILO GENERAL DE BOTONES
+   ============================================================ */
 
 button,
 .btn {
-    border-radius: 10px;
-    font-weight: 600;
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+  border-radius: 10px; /* Redondea las esquinas */
+  font-weight: 600; /* Hace el texto seminegrita */
+
+  /* Anima los cambios visuales en 0,2 segundos */
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+/* Efecto al pasar el cursor sobre un botón Bootstrap */
 .btn:hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px); /* Eleva el botón ligeramente */
 }
 
+/* Personaliza el botón de advertencia de Bootstrap */
 .btn-warning {
-    --bs-btn-bg: var(--color-accent);
-    --bs-btn-border-color: var(--color-accent);
-    --bs-btn-hover-bg: var(--color-accent-hover);
-    --bs-btn-hover-border-color: var(--color-accent-hover);
-    --bs-btn-color: var(--color-primary-dark);
-    --bs-btn-hover-color: var(--color-primary-dark);
+  --bs-btn-bg: var(--color-accent);
+  --bs-btn-border-color: var(--color-accent);
+  --bs-btn-hover-bg: var(--color-accent-hover);
+  --bs-btn-hover-border-color: var(--color-accent-hover);
+  --bs-btn-color: var(--color-primary-dark);
+  --bs-btn-hover-color: var(--color-primary-dark);
 }
 
+/* Personaliza el botón de éxito de Bootstrap */
 .btn-success {
-    --bs-btn-bg: var(--color-primary);
-    --bs-btn-border-color: var(--color-primary);
-    --bs-btn-hover-bg: var(--color-primary-dark);
-    --bs-btn-hover-border-color: var(--color-primary-dark);
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-dark);
+  --bs-btn-hover-border-color: var(--color-primary-dark);
 }
+
+/* ============================================================
+   4. BARRA DE NAVEGACIÓN
+   ============================================================ */
 
 .store-navbar {
-    min-height: 70px;
-    background: var(--color-primary-dark);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-height: 70px; /* Altura mínima de la barra */
+  background: var(--color-primary-dark);
+
+  /* Sombra para separarla visualmente del contenido */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Nombre o marca de la tienda */
 .store-navbar .navbar-brand {
-    color: #fff;
-    font-size: 1.25rem;
-    font-weight: 500;
-    letter-spacing: -0.5px;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.5px; /* Acerca ligeramente las letras */
 }
 
+/* Cuadro que contiene el icono de la marca */
 .brand-icon {
-    display: inline-grid;
-    width: 38px;
-    height: 38px;
-    place-items: center;
-    border-radius: 12px;
-    background: var(--color-accent);
-    color: var(--color-primary-dark);
-    font-size: 1.2rem;
-    font-weight: 800;
+  display: inline-grid; /* Permite centrar el contenido con Grid */
+  width: 38px;
+  height: 38px;
+  place-items: center; /* Centra horizontal y verticalmente */
+  border-radius: 12px;
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
+/* Enlaces de navegación */
 .store-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.93rem;
+  color: rgba(255, 255, 255, 0.78); /* Blanco semitransparente */
+  font-size: 0.93rem;
 }
 
+/* Cambia el color del enlace al pasar el cursor */
 .store-navbar .nav-link:hover {
-    color: var(--color-accent);
+  color: var(--color-accent);
 }
 
+/* Texto que identifica al usuario conectado */
 .user-label {
-    color: #fff;
-    font-size: 0.9rem;
-    opacity: 0.9;
+  color: #fff;
+  font-size: 0.9rem;
+  opacity: 0.9; /* Reduce ligeramente su intensidad */
 }
 
+/* Espaciado de los botones de navegación */
 .nav-action {
-    padding: 9px 15px;
-    font-size: 0.9rem;
+  padding: 9px 15px;
+  font-size: 0.9rem;
 }
 
-/* Portada */
+/* ============================================================
+   5. PORTADA PRINCIPAL (HERO)
+   ============================================================ */
 
 .hero {
-    position: relative;
-    display: flex;
-    min-height: 490px;
-    align-items: center;
-    overflow: hidden;
-    background:
-        radial-gradient(ellipse at 85% 25%, rgba(238, 191, 85, 0.18), transparent 30%),
-        linear-gradient(115deg, #172c25 0%, #29483a 60%, #42634d 100%);
-    color: #fff;
+  position: relative; /* Permite posicionar elementos internos */
+  display: flex; /* Organiza el contenido con Flexbox */
+  min-height: 490px; /* Altura mínima de la portada */
+  align-items: center; /* Centra verticalmente el contenido */
+  overflow: hidden; /* Recorta los elementos que sobresalen */
+
+  /* Combina un resplandor dorado con un degradado verde */
+  background:
+    radial-gradient(
+      ellipse at 85% 25%,
+      rgba(238, 191, 85, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(115deg, #172c25 0%, #29483a 60%, #42634d 100%);
+
+  color: #fff;
 }
 
+/* Círculo decorativo ubicado hacia la parte superior derecha */
 .hero::after {
-    position: absolute;
-    top: -120px;
-    right: -100px;
-    width: 430px;
-    height: 430px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 50%;
-    content: "";
+  position: absolute; /* Se posiciona respecto de .hero */
+  top: -120px; /* Lo desplaza hacia arriba */
+  right: -100px; /* Lo desplaza hacia la derecha */
+  width: 430px;
+  height: 430px;
+
+  /* Dibuja únicamente el contorno del círculo */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+
+  /* Necesario para que el pseudoelemento exista */
+  content: "";
 }
 
+/* Segundo círculo decorativo, ubicado abajo a la derecha */
 .hero-overlay {
-    position: absolute;
-    right: 8%;
-    bottom: -200px;
-    width: 500px;
-    height: 500px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
+  position: absolute;
+  right: 8%;
+  bottom: -200px; /* Deja gran parte del círculo fuera de la portada */
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
 }
 
+/* Contenedor del texto y los botones de la portada */
 .hero-content {
-    position: relative;
-    z-index: 1;
-    padding-top: 65px;
-    padding-bottom: 65px;
+  position: relative;
+  z-index: 1; /* Mantiene el contenido delante de los círculos */
+  padding-top: 65px;
+  padding-bottom: 65px;
 }
 
+/* Etiqueta pequeña que aparece sobre el título */
 .eyebrow {
-    display: inline-block;
-    margin-bottom: 12px;
-    color: #a0b99f;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 2px;
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #a0b99f;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 2px; /* Separa las letras */
 }
 
+/* Título principal de la portada */
 .hero h1 {
-    max-width: 760px;
-    margin: 0 0 20px;
-    font-size: clamp(2.5rem, 5vw, 4.3rem);
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1.08;
+  max-width: 760px; /* Limita el ancho del título */
+  margin: 0 0 20px;
+
+  /* El tamaño se adapta al ancho de pantalla:
+       mínimo 2,5rem, preferido 5vw y máximo 4,3rem */
+  font-size: clamp(2.5rem, 5vw, 4.3rem);
+
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.08; /* Reduce el espacio entre líneas */
 }
 
+/* Parte destacada del título */
 .hero h1 span {
-    color: var(--color-accent);
+  color: var(--color-accent);
 }
 
+/* Descripción de la portada */
 .hero p {
-    max-width: 510px;
-    margin-bottom: 28px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.08rem;
+  max-width: 510px;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.08rem;
 }
 
+/* Botón principal de la portada */
 .hero-button {
-    padding: 13px 22px;
-    font-size: 0.98rem;
+  padding: 13px 22px;
+  font-size: 0.98rem;
 }
 
+/* Separa el icono del texto del botón */
 .hero-button span {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
+/* Lista de beneficios debajo del botón */
 .hero-benefits {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 24px;
-    margin-top: 30px;
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.83rem;
+  display: flex;
+  flex-wrap: wrap; /* Permite pasar elementos a otra línea */
+  gap: 12px 24px; /* Espacio vertical y horizontal */
+  margin-top: 30px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.83rem;
 }
 
-/* Contenido principal */
+/* ============================================================
+   6. CONTENIDO PRINCIPAL Y SECCIONES
+   ============================================================ */
 
 .store-main {
-    padding-top: 65px;
-    padding-bottom: 70px;
+  padding-top: 65px;
+  padding-bottom: 70px;
 }
 
+/* Cada sección del contenido principal */
 .store-section {
-    margin-bottom: 75px;
-    scroll-margin-top: 100px;
+  margin-bottom: 75px; /* Separa las secciones */
+  scroll-margin-top: 100px; /* Evita que el encabezado quede tapado */
 }
 
+/* Encabezado de una sección: título a la izquierda,
+   filtro u otro control a la derecha */
 .section-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
 }
 
+/* Títulos de las secciones */
 .section-heading h2 {
-    margin: 0 0 8px;
-    color: var(--color-primary-dark);
-    font-size: clamp(1.8rem, 3vw, 2.35rem);
-    font-weight: 800;
-    letter-spacing: -1px;
+  margin: 0 0 8px;
+  color: var(--color-primary-dark);
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
+/* Descripción debajo del título */
 .section-heading p {
-    margin: 0;
-    color: var(--color-muted);
+  margin: 0;
+  color: var(--color-muted);
 }
 
+/* Ajusta el color de la etiqueta pequeña del encabezado */
 .section-heading .eyebrow {
-    margin-bottom: 7px;
-    color: #68856d;
+  margin-bottom: 7px;
+  color: #68856d;
 }
 
+/* Selector de categorías */
 .category-filter {
-    width: min(100%, 245px);
-    flex-shrink: 0;
+  width: min(100%, 245px); /* Máximo 245px, sin exceder el contenedor */
+  flex-shrink: 0; /* Evita que Flexbox lo encoja */
 }
 
+/* Etiqueta del selector */
 .category-filter .form-label {
-    margin-bottom: 6px;
-    color: var(--color-muted);
-    font-size: 0.84rem;
-    font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  font-weight: 600;
 }
 
-/* Campos */
+/* ============================================================
+   7. CAMPOS DE FORMULARIO
+   ============================================================ */
 
 .form-control,
 .form-select {
-    min-height: 45px;
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    background-color: #fff;
-    color: var(--color-text);
+  min-height: 45px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: #fff;
+  color: var(--color-text);
 }
 
+/* Altura mínima especial para las áreas de texto */
 textarea.form-control {
-    min-height: 100px;
+  min-height: 100px;
 }
 
+/* Apariencia cuando el usuario selecciona un campo */
 .form-control:focus,
 .form-select:focus {
-    border-color: #7b9b82;
-    box-shadow: 0 0 0 0.22rem rgba(74, 112, 82, 0.13);
+  border-color: #7b9b82;
+
+  /* Anillo exterior que destaca el campo seleccionado */
+  box-shadow: 0 0 0 0.22rem rgba(74, 112, 82, 0.13);
 }
 
+/* Etiquetas de los campos */
 .form-label {
-    color: #46534a;
-    font-size: 0.9rem;
-    font-weight: 650;
+  color: #46534a;
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 
-/* Catálogo: estilos compatibles con tarjetas Bootstrap */
+/* ============================================================
+   8. CATÁLOGO Y TARJETAS DE PRODUCTOS
+   ============================================================ */
 
+/* Hace que las columnas del catálogo utilicen Flexbox.
+   El selector [class*="col-"] detecta clases como col-md-4. */
 .product-grid > [class*="col-"] {
-    display: flex;
+  display: flex;
 }
 
+/* Estilo compartido por tarjetas del catálogo y administración */
 .product-grid .producto-card,
 .admin-product-grid .producto-card {
-    width: 100%;
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    background: var(--color-surface);
-    box-shadow: var(--shadow-soft);
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+  width: 100%; /* La tarjeta ocupa todo el ancho disponible */
+  overflow: hidden; /* Recorta contenido que sobresale */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+
+  /* Anima el movimiento, la sombra y el borde */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
+/* Efecto al pasar el cursor sobre una tarjeta */
 .product-grid .producto-card:hover,
 .admin-product-grid .producto-card:hover {
-    transform: translateY(-5px);
-    border-color: #d1dbd0;
-    box-shadow: var(--shadow-hover);
+  transform: translateY(-5px); /* Eleva la tarjeta */
+  border-color: #d1dbd0;
+  box-shadow: var(--shadow-hover);
 }
 
+/* Imágenes dentro de las tarjetas */
 .producto-card img {
-    display: block;
-    width: 100%;
-    max-height: 280px;
-    object-fit: cover;
-    background: #f0f0e9;
+  display: block; /* Evita el espacio inferior típico de imágenes inline */
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover; /* Recorta la imagen para cubrir el espacio */
+  background: #f0f0e9; /* Fondo visible mientras carga la imagen */
 }
 
+/* Ajustes para imágenes que usan la clase de Bootstrap */
 .producto-card .card-img-top {
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+  aspect-ratio: 4 / 3; /* Proporción de ancho y alto */
+  object-fit: cover;
 }
 
+/* Área interna de la tarjeta */
 .producto-card .card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 9px;
-    padding: 20px;
+  display: flex;
+  flex-direction: column; /* Coloca los elementos uno debajo del otro */
+  align-items: flex-start;
+  gap: 9px;
+  padding: 20px;
 }
 
+/* Nombre del producto */
 .producto-card h3,
 .producto-card .card-title {
-    margin-bottom: 0;
-    color: var(--color-primary-dark);
-    font-size: 1.08rem;
-    font-weight: 750;
+  margin-bottom: 0;
+  color: var(--color-primary-dark);
+  font-size: 1.08rem;
+  font-weight: 750;
 }
 
+/* Descripción y otros textos */
 .producto-card p,
 .producto-card .card-text {
-    color: var(--color-muted);
-    font-size: 0.91rem;
+  color: var(--color-muted);
+  font-size: 0.91rem;
 }
 
+/* Precio del producto */
 .producto-card .precio,
 .producto-card .product-price {
-    color: var(--color-primary);
-    font-size: 1.35rem;
-    font-weight: 800;
+  color: var(--color-primary);
+  font-size: 1.35rem;
+  font-weight: 800;
 }
 
+/* Empuja el botón hacia el final de la tarjeta cuando hay espacio */
 .producto-card .btn {
-    margin-top: auto;
+  margin-top: auto;
 }
 
+/* Color del texto de los botones indicados */
 .producto-card .btn-warning,
 .producto-card .btn-primary {
-    color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
+/* Espacio superior para los botones de administración */
 .producto-card [data-admin-accion] {
-    margin-top: 6px;
+  margin-top: 6px;
 }
 
+/* Caja para mostrar un mensaje mientras se cargan los productos */
 .loading-state {
-    padding: 50px 20px;
-    border: 1px dashed #cbd4c8;
-    border-radius: var(--radius-card);
-    color: var(--color-muted);
-    text-align: center;
+  padding: 50px 20px;
+  border: 1px dashed #cbd4c8; /* Borde discontinuo */
+  border-radius: var(--radius-card);
+  color: var(--color-muted);
+  text-align: center;
 }
 
-/* Mensajes */
+/* ============================================================
+   9. MENSAJES DE ALERTA
+   ============================================================ */
 
 .alerts-container {
-    margin-bottom: 22px;
+  margin-bottom: 22px;
 }
 
+/* Estilo de las alertas dentro del elemento #alertas */
 #alertas .alert {
-    margin-bottom: 12px;
-    border: 0;
-    border-radius: 12px;
-    box-shadow: var(--shadow-soft);
+  margin-bottom: 12px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
 }
 
-/* Carrito */
+/* ============================================================
+   10. CARRITO
+   ============================================================ */
 
+/* Contenedor general de la sección del carrito */
 .cart-section {
-    padding: 32px;
-    border: 1px solid var(--color-border);
-    border-radius: 22px;
-    background: #fff;
+  padding: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: #fff;
 }
 
+/* Iconos decorativos del carrito y de administración */
 .cart-symbol,
 .admin-symbol {
-    display: grid;
-    width: 52px;
-    height: 52px;
-    flex-shrink: 0;
-    place-items: center;
-    border-radius: 16px;
-    background: var(--color-primary-light);
-    color: var(--color-primary);
-    font-size: 1.45rem;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0; /* Evita que el icono se achique */
+  place-items: center; /* Centra el contenido */
+  border-radius: 16px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 1.45rem;
 }
 
+/* Marco que contiene los elementos del carrito */
 .cart-panel {
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
 }
 
+/* Espacio interno para las filas del carrito */
 #carritoItems {
-    padding: 20px;
+  padding: 20px;
 }
 
+/* Mensaje que aparece cuando el contenedor está vacío */
 #carritoItems:empty::before {
-    display: block;
-    padding: 12px 0;
-    color: var(--color-muted);
-    content: "Todavía no agregaste productos.";
-    text-align: center;
+  display: block;
+  padding: 12px 0;
+  color: var(--color-muted);
+  content: "Todavía no agregaste productos.";
+  text-align: center;
 }
 
+/* Separa verticalmente los elementos directos del carrito */
 #carritoItems > * {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
+/* El último elemento no necesita margen inferior */
 #carritoItems > *:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
+/* Estilo alternativo para un elemento que tenga la clase empty-cart */
 #carritoItems .empty-cart {
-    margin: 0;
-    padding: 12px 0;
-    color: var(--color-muted);
-    text-align: center;
+  margin: 0;
+  padding: 12px 0;
+  color: var(--color-muted);
+  text-align: center;
 }
 
+/* Fila del resumen: importe a un lado y botones al otro */
 .cart-summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    border-top: 1px solid var(--color-border);
-    background: #fafbf8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border-top: 1px solid var(--color-border);
+  background: #fafbf8;
 }
 
+/* Etiqueta secundaria del resumen */
 .summary-label {
-    color: var(--color-muted);
-    font-size: 0.84rem;
+  color: var(--color-muted);
+  font-size: 0.84rem;
 }
 
+/* Importe total del carrito */
 #totalCarrito {
-    margin: 3px 0 0;
-    color: var(--color-primary);
-    font-size: 1.5rem;
-    font-weight: 800;
+  margin: 3px 0 0;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
-/* Administración */
+/* ============================================================
+   11. PANEL DE ADMINISTRACIÓN
+   ============================================================ */
 
+/* Fondo general del panel administrativo */
 .admin-section {
-    padding: 32px;
-    border: 1px solid #dce5da;
-    border-radius: 22px;
-    background: #f0f4ed;
+  padding: 32px;
+  border: 1px solid #dce5da;
+  border-radius: 22px;
+  background: #f0f4ed;
 }
 
+/* Panel que contiene el formulario para crear o editar productos */
 .admin-form-panel {
-    padding: 26px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    background: #fff;
-    box-shadow: var(--shadow-soft);
+  padding: 26px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: #fff;
+  box-shadow: var(--shadow-soft);
 }
 
+/* Títulos del formulario y del listado administrativo */
 .admin-form-panel h3,
 .admin-products-section h3 {
-    margin-bottom: 5px;
-    color: var(--color-primary-dark);
-    font-size: 1.2rem;
-    font-weight: 750;
+  margin-bottom: 5px;
+  color: var(--color-primary-dark);
+  font-size: 1.2rem;
+  font-weight: 750;
 }
 
+/* Descripción del panel */
 .panel-description {
-    margin-bottom: 22px;
-    color: var(--color-muted);
-    font-size: 0.9rem;
+  margin-bottom: 22px;
+  color: var(--color-muted);
+  font-size: 0.9rem;
 }
 
+/* Separa el listado de productos del formulario */
 .admin-products-section {
-    margin-top: 36px;
+  margin-top: 36px;
 }
 
+/* Hace que las columnas del listado administrativo usen Flexbox */
 .admin-product-grid > [class*="col-"] {
-    display: flex;
+  display: flex;
 }
 
-/* Ventana de inicio de sesión */
+/* ============================================================
+   12. VENTANA MODAL DE INICIO DE SESIÓN
+   ============================================================ */
 
+/* Contenedor de la ventana emergente */
 .login-modal {
-    overflow: hidden;
-    border: 0;
-    border-radius: 18px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
 }
 
+/* Cabecera del modal */
 .login-modal .modal-header {
-    align-items: flex-start;
-    padding: 25px 25px 15px;
-    border-bottom: 0;
+  align-items: flex-start;
+  padding: 25px 25px 15px;
+  border-bottom: 0;
 }
 
+/* Etiqueta pequeña de la cabecera */
 .login-modal .modal-header .eyebrow {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
+/* Título del modal */
 .login-modal .modal-title {
-    color: var(--color-primary-dark);
-    font-weight: 800;
+  color: var(--color-primary-dark);
+  font-weight: 800;
 }
 
+/* Contenido principal del modal */
 .login-modal .modal-body {
-    padding: 15px 25px 25px;
+  padding: 15px 25px 25px;
 }
 
+/* Pie del modal, donde suelen ir los botones */
 .login-modal .modal-footer {
-    padding: 16px 25px 24px;
-    border-top: 0;
+  padding: 16px 25px 24px;
+  border-top: 0;
 }
 
-/* Pie */
+/* ============================================================
+   13. PIE DE PÁGINA
+   ============================================================ */
 
 .store-footer {
-    padding: 38px 0;
-    background: var(--color-primary-dark);
-    color: #fff;
-    text-align: center;
+  padding: 38px 0;
+  background: var(--color-primary-dark);
+  color: #fff;
+  text-align: center;
 }
 
+/* Nombre de la tienda en el pie */
 .footer-brand {
-    color: #fff;
-    font-size: 1.3rem;
-    font-weight: 800;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 800;
 }
 
+/* Cambia el color del nombre al pasar el cursor */
 .footer-brand:hover {
-    color: var(--color-accent);
+  color: var(--color-accent);
 }
 
+/* Descripción del pie de página */
 .footer-content p {
-    margin: 5px 0 14px;
-    color: rgba(255, 255, 255, 0.72);
+  margin: 5px 0 14px;
+  color: rgba(255, 255, 255, 0.72);
 }
 
+/* Texto secundario del pie */
 .footer-content span {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.8rem;
 }
 
-/* Accesibilidad */
+/* ============================================================
+   14. ACCESIBILIDAD
+   ============================================================ */
 
+/* Resalta los elementos cuando reciben el foco por teclado.
+   Por ejemplo, al navegar usando la tecla Tab. */
 :focus-visible {
-    outline: 3px solid #d9a832;
-    outline-offset: 3px;
+  outline: 3px solid #d9a832;
+  outline-offset: 3px; /* Separa el contorno del elemento */
 }
 
+/* Respeta la preferencia del sistema para reducir animaciones */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    /* Desactiva el desplazamiento suave */
+    scroll-behavior: auto !important;
+
+    /* Reduce la duración de transiciones y animaciones */
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
-/* Tablets y celulares */
+/* ============================================================
+   15. DISEÑO RESPONSIVE: TABLETS Y CELULARES
+   ============================================================ */
 
+/* Estas reglas se aplican cuando la pantalla mide como máximo
+   767,98 píxeles de ancho. */
 @media (max-width: 767.98px) {
-    body {
-        padding-top: 66px;
-    }
+  body {
+    padding-top: 66px; /* Ajusta el espacio superior */
+  }
 
-    .store-navbar {
-        min-height: 66px;
-    }
+  .store-navbar {
+    min-height: 66px;
+  }
 
-    .hero {
-        min-height: 420px;
-    }
+  .hero {
+    min-height: 420px; /* Reduce la altura de la portada */
+  }
 
-    .hero-content {
-        padding-top: 55px;
-        padding-bottom: 50px;
-    }
+  .hero-content {
+    padding-top: 55px;
+    padding-bottom: 50px;
+  }
 
-    .hero h1 {
-        letter-spacing: -1.2px;
-    }
+  .hero h1 {
+    letter-spacing: -1.2px; /* Reduce el ajuste entre letras */
+  }
 
-    .hero-benefits {
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .store-main {
-        padding-top: 45px;
-        padding-bottom: 45px;
-    }
-
-    .store-section {
-        margin-bottom: 55px;
-    }
-
-    .section-heading {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 18px;
-    }
-
-    .category-filter {
-        width: 100%;
-    }
-
-    .cart-section,
-    .admin-section {
-        padding: 22px 16px;
-        border-radius: 17px;
-    }
-
-    .admin-form-panel {
-        padding: 20px 16px;
-    }
-
-    .cart-summary {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .cart-summary .btn {
-        width: 100%;
-    }
-
-    .cart-symbol,
-    .admin-symbol {
-        display: none;
-    }
-
-    .store-footer {
-        padding: 30px 15px;
-    }
-}
-
-@media (max-width: 420px) {
-    .hero h1 {
-        font-size: 2.25rem;
-    }
-
-    .hero p {
-        font-size: 0.98rem;
-    }
-
-    .brand-icon {
-        width: 34px;
-        height: 34px;
-    }
-
-    .store-navbar .navbar-brand {
-        font-size: 1.1rem;
-    }
-}
-
-.producto-card .card-body {
-    display: flex;
+  /* Coloca los beneficios uno debajo del otro */
+  .hero-benefits {
     flex-direction: column;
+    gap: 6px;
+  }
+
+  .store-main {
+    padding-top: 45px;
+    padding-bottom: 45px;
+  }
+
+  .store-section {
+    margin-bottom: 55px;
+  }
+
+  /* Apila el título y el filtro verticalmente */
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* El filtro utiliza todo el ancho disponible */
+  .category-filter {
+    width: 100%;
+  }
+
+  /* Reduce el espacio interior de los paneles */
+  .cart-section,
+  .admin-section {
+    padding: 22px 16px;
+    border-radius: 17px;
+  }
+
+  .admin-form-panel {
+    padding: 20px 16px;
+  }
+
+  /* Apila el resumen del carrito verticalmente */
+  .cart-summary {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  /* Hace que los botones del resumen ocupen todo el ancho */
+  .cart-summary .btn {
+    width: 100%;
+  }
+
+  /* Oculta los iconos decorativos para ahorrar espacio */
+  .cart-symbol,
+  .admin-symbol {
+    display: none;
+  }
+
+  .store-footer {
+    padding: 30px 15px;
+  }
 }
 
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 420px) {
+  .hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero p {
+    font-size: 0.98rem;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .store-navbar .navbar-brand {
+    font-size: 1.1rem;
+  }
+}
+
+/* ============================================================
+   16. AJUSTES ADICIONALES DE LAS TARJETAS
+   ============================================================ */
+
+/* Reafirma que el cuerpo de la tarjeta sea una columna Flexbox.
+   Esta regla complementa la definición anterior. */
+.producto-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Coloca el botón de eliminar al final y alineado a la derecha */
 .producto-card .btn-eliminar-producto {
-    align-self: flex-end;
-    margin-top: 10px;
+  align-self: flex-end;
+  margin-top: 10px;
 }
 
+/* ============================================================
+   17. DISTRIBUCIÓN DE LOS PRODUCTOS DEL CARRITO
+   ============================================================ */
 
-/* Dar espacio entre los productos del carrito */
-/* Producto y botón Quitar en la misma fila */
+/* Organiza cada fila del carrito con Flexbox */
 #carritoItems > div {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
+  display: flex;
+  align-items: center; /* Centra verticalmente los elementos */
+  flex-wrap: wrap; /* Permite saltar a otra línea */
+  gap: 8px; /* Separa los elementos */
 }
 
-/* Empujar Quitar hacia el extremo derecho */
+/* Mueve el botón Quitar hacia el extremo derecho */
 #carritoItems button {
-    display: inline-block;
-    margin: 0 0 0 auto;
-    flex-shrink: 0;
+  display: inline-block;
+
+  /* El margen izquierdo automático ocupa el espacio sobrante */
+  margin: 0 0 0 auto;
+
+  /* Evita que el botón se encoja */
+  flex-shrink: 0;
 }
+
+/* ============================================================
+   18. BOTONES DE COMPRA DEL CARRITO
+   ============================================================ */
+
 .cart-checkout {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  /* IMPORTANTE: gap: px no es un valor válido de CSS.
+       Debe reemplazarse por una medida, por ejemplo gap: 8px. */
+  gap: 8px;
 }
+
+/* Estilo y posición de los botones de compra */
 .cart-checkout button {
-    display: inline-block;
-    margin: 20px 20px 20px auto;
-    flex-shrink: 0;
+  display: inline-block;
+
+  /* Márgenes: arriba 20px, derecha 20px,
+       abajo 20px e izquierda automática.
+       El margen izquierdo automático empuja el botón
+       hacia la derecha si hay espacio disponible. */
+  margin: 20px 20px 20px auto;
+
+  /* Evita que el botón se encoja */
+  flex-shrink: 0;
 }
