@@ -37,6 +37,8 @@ async function cargarSesion() {
   const texto = await respuesta.text();
   const catalogo = document.getElementById("catalogo");
   const carrito = document.getElementById("carrito");
+  const navCatalogo = document.getElementById("navCatalogo");
+  const navCarrito = document.getElementById("navCarrito");
   const info = document.getElementById("usuarioInfo");
   const btnLogin = document.getElementById("btnLogin");
   const btnLogout = document.getElementById("btnLogout");
@@ -65,10 +67,16 @@ async function cargarSesion() {
     panel.classList.remove("d-none");
     catalogo.classList.add("d-none");
     carrito.classList.add("d-none");
+
+    navCatalogo.classList.add("d-none");
+    navCarrito.classList.add("d-none");
   } else {
     panel.classList.add("d-none");
     catalogo.classList.remove("d-none");
     carrito.classList.remove("d-none");
+
+    navCatalogo.classList.remove("d-none");
+    navCarrito.classList.remove("d-none");
   }
 }
 
