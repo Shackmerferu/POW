@@ -29,7 +29,17 @@ async function cargarProductos() {
     document.getElementById("adminProductos").innerHTML = html;
   } else {
     productosDiv.innerHTML = html;
+    actualizarBotonesCarrito();
   }
+}
+function actualizarBotonesCarrito() {
+  const botones = productosDiv.querySelectorAll(".agregar-carrito");
+
+  botones.forEach((boton) => {
+    if (rolUsuario !== "cliente") {
+      boton.remove();
+    }
+  });
 }
 
 async function cargarSesion() {
@@ -47,6 +57,8 @@ async function cargarSesion() {
   if (texto === "INVITADO") {
     rolUsuario = "INVITADO";
     token = "";
+    document.getElementById("btnComprar").classList.add("d-none");
+    document.getElementById("btnVaciarCarrito").classList.add("d-none");
     info.textContent = "Invitado";
     btnLogin.classList.remove("d-none");
     btnLogout.classList.add("d-none");
@@ -71,6 +83,14 @@ async function cargarSesion() {
     navCatalogo.classList.add("d-none");
     navCarrito.classList.add("d-none");
   } else {
+    const esCliente = rolUsuario === "cliente";
+
+    document
+      .getElementById("btnComprar")
+      .classList.toggle("d-none", !esCliente);
+    document
+      .getElementById("btnVaciarCarrito")
+      .classList.toggle("d-none", !esCliente);
     panel.classList.add("d-none");
     catalogo.classList.remove("d-none");
     carrito.classList.remove("d-none");
@@ -133,6 +153,8 @@ async function cerrarSesion() {
 
   token = "";
   rolUsuario = "INVITADO";
+  carrito = [];
+  renderizarCarrito();
   mostrarMensaje("Sesión cerrada.");
   await cargarSesion();
   await cargarProductos();
@@ -176,6 +198,13 @@ function renderizarCarrito() {
 }
 
 function agregarAlCarrito(id, nombre, precio, stock) {
+  if (rolUsuario !== "cliente") {
+    mostrarMensaje(
+      "Iniciá sesión como cliente para agregar productos al carrito.",
+      "warning",
+    );
+    return;
+  }
   const existente = carrito.find((p) => p.id === id);
 
   if (existente) {
