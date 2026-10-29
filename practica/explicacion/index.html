@@ -66,11 +66,11 @@
             <input type="password" id="clave" class="form-control mb-3" placeholder="Contraseña">
             <!-- type="password": Esta es LA clave de seguridad de HTML. En vez de mostrar las letras, las transforma en puntitos negros (****) para que el que está atrás tuyo no lea la clave. -->
 
-            <button id="btn-ingresar" class="btn btn-primary w-100">Iniciar Sesión</button>
+            <button id="btn-ingresar" class="btn btn-primary w-100 mb-2">Iniciar Sesión</button>
             <!-- <button>: Dibuja un botón. -->
             <!-- btn btn-primary: Le da diseño oficial de botón (btn) y lo pinta de Azul (primary). -->
             <!-- w-100: Width 100%. Obliga al botón a estirarse para rellenar todo el ancho de la tarjeta. -->
-
+            <button id="btn-ir-registro" class="btn btn-secondary w-100">No tengo cuenta, crear una</button>
         </div>
     </div>
 
@@ -112,7 +112,22 @@
     </div>
 
 
-    <!-- ==========================================
+   
+    <!-- PANTALLA DE REGISTRO (Arranca oculta con d-none) -->
+<div id="pantalla-registro" class="container mt-5 d-none">
+    <div class="card p-4 mx-auto shadow" style="max-width: 400px;">
+        <h3 class="text-center mb-4">Crear Cuenta Nueva</h3>
+        
+        <input type="text" id="reg-usuario" class="form-control mb-3" placeholder="Elegí un Usuario">
+        <input type="password" id="reg-clave" class="form-control mb-3" placeholder="Elegí una Contraseña">
+        
+        <button id="btn-registrar" class="btn btn-success w-100 mb-2">Registrarme</button>
+        
+        <!-- Botón sutil para volver al login si se arrepiente -->
+        <button id="btn-volver-login" class="btn btn-link w-100">Ya tengo cuenta, iniciar sesión</button>
+    </div>
+</div>
+  <!-- ==========================================
          EL CEREBRO
     =========================================== -->
 
@@ -120,8 +135,5 @@
     <!-- <script>: Enchufe para la programación. -->
     <!-- src="...": (Source). Ruta que busca a tu cadete de JavaScript. -->
     
-   
-    
-
 </body>
 </html>
