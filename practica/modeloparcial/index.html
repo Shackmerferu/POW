@@ -1,93 +1,151 @@
 <!DOCTYPE html>
+
+<!-- Indica que el documento utiliza HTML5. -->
 <html lang="es">
 
 <head>
+    <!-- Permite mostrar correctamente tildes, ñ y otros caracteres. -->
     <meta charset="UTF-8">
+
+    <!-- Adapta el ancho de la página al dispositivo (PC, celular, etc.). -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Descripción que pueden utilizar los buscadores. -->
     <meta name="description" content="Termo Store: termos y mates para acompañarte todos los días.">
+
+    <!-- Identifica al autor del sitio. -->
     <meta name="author" content="Termo Store">
+
+    <!-- Define el color de la interfaz del navegador en dispositivos compatibles. -->
     <meta name="theme-color" content="#203b32">
 
+    <!-- Texto que aparece en la pestaña del navegador. -->
     <title>Termo Store | Tu momento de mate</title>
 
+    <!-- Carga Bootstrap 5.3.3 desde un CDN para utilizar sus estilos y componentes. -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Carga los estilos personalizados del proyecto. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
+
+    <!-- BARRA DE NAVEGACIÓN PRINCIPAL. -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top store-navbar">
+
+        <!-- Centra y limita el ancho del contenido. -->
         <div class="container">
+
+            <!-- Enlace de marca que vuelve al inicio. -->
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+
+                <!-- Icono decorativo de la marca. -->
                 <span class="brand-icon">T</span>
+
+                <!-- Nombre de la tienda; strong resalta "Store". -->
                 <span>Termo <strong>Store</strong></span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido"
-                aria-controls="navbarContenido" aria-expanded="false" aria-label="Abrir menú">
+            <!-- Botón que abre o cierra el menú en pantallas pequeñas. -->
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarContenido"
+                aria-controls="navbarContenido" aria-expanded="false"
+                aria-label="Abrir menú">
+
+                <!-- Icono de menú de Bootstrap. -->
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Contenido del menú que Bootstrap puede contraer. -->
             <div class="collapse navbar-collapse" id="navbarContenido">
+
+                <!-- ms-auto empuja los enlaces hacia la derecha. -->
                 <div class="navbar-nav ms-auto align-items-lg-center gap-lg-3 py-3 py-lg-0">
+
+                    <!-- Enlace que desplaza hasta la sección del catálogo. -->
                     <a class="nav-link" href="#catalogo" id="navCatalogo">Catálogo</a>
 
+                    <!-- Enlace que desplaza hasta el carrito. -->
                     <a class="nav-link" href="#carrito" id="navCarrito">Mi carrito</a>
 
+                    <!-- JavaScript puede modificar este texto para mostrar al usuario. -->
                     <span id="usuarioInfo" class="user-label">Invitado</span>
 
-                    <button id="btnLogin" class="btn btn-outline-light nav-action" data-bs-toggle="modal"
-                        data-bs-target="#modalLogin">
+                    <!-- Abre el modal de inicio de sesión mediante Bootstrap. -->
+                    <button id="btnLogin" class="btn btn-outline-light nav-action"
+                        data-bs-toggle="modal" data-bs-target="#modalLogin">
                         Iniciar sesión
                     </button>
 
+                    <!-- Botón de cierre de sesión; d-none lo oculta inicialmente. -->
                     <button id="btnLogout" class="btn btn-warning nav-action d-none">
                         Cerrar sesión
                     </button>
+
                 </div>
             </div>
         </div>
     </nav>
 
+
+    <!-- PORTADA PRINCIPAL DEL SITIO. -->
     <header class="hero">
+
+        <!-- Capa visual que puede oscurecer o superponer la imagen de fondo. -->
         <div class="hero-overlay"></div>
 
         <div class="container hero-content">
+
+            <!-- Texto breve que identifica el estilo de la tienda. -->
             <span class="eyebrow">TU RITUAL, TU ESTILO</span>
 
-            <h1>El mate de todos los días.<br><span>Como más te gusta.</span></h1>
+            <!-- Título principal; br produce un salto de línea. -->
+            <h1>El mate de todos los días.<br>
+                <span>Como más te gusta.</span>
+            </h1>
 
+            <!-- Descripción introductoria de la tienda. -->
             <p>
                 Descubrí termos y mates pensados para acompañarte
                 en cada momento.
             </p>
 
+            <!-- Enlace que lleva al catálogo. -->
             <a href="#catalogo" class="btn btn-warning btn-lg hero-button">
                 Explorar catálogo <span aria-hidden="true">→</span>
             </a>
 
+            <!-- Beneficios destacados de la tienda. -->
             <div class="hero-benefits">
                 <span>● Calidad para todos los días</span>
                 <span>● Encontrá tu estilo</span>
             </div>
+
         </div>
     </header>
 
 
-
+    <!-- CONTENIDO PRINCIPAL DE LA PÁGINA. -->
     <main class="container py-4">
 
-        <!-- Mensajes del sistema -->
+        <!-- JavaScript puede insertar mensajes de éxito o error aquí. -->
         <div id="alertas" class="mb-3"></div>
 
-        <!-- CATÁLOGO PARA CLIENTES E INVITADOS -->
+
+        <!-- CATÁLOGO VISIBLE PARA CLIENTES E INVITADOS. -->
         <section id="catalogo">
+
             <h2 class="mb-4">Catálogo de productos</h2>
 
             <div class="mb-4">
+
+                <!-- label asocia el texto con el selector mediante for e id. -->
                 <label for="filtroCategoria" class="form-label">
                     Filtrar por categoría
                 </label>
 
+                <!-- El usuario selecciona qué productos quiere ver. -->
                 <select id="filtroCategoria" class="form-select">
                     <option value="todos">Todos los productos</option>
                     <option value="termo">Termos</option>
@@ -95,149 +153,203 @@
                 </select>
             </div>
 
+            <!-- Contenedor donde JavaScript inserta las tarjetas HTML
+                 generadas por api/productos.php. -->
             <div id="productos" class="row g-4">
-                <!-- Productos cargados desde api/productos.php -->
+                <!-- Los productos se cargan dinámicamente. -->
             </div>
+
         </section>
 
-        <!-- CARRITO PARA CLIENTES E INVITADOS -->
+
+        <!-- CARRITO VISIBLE PARA CLIENTES E INVITADOS. -->
         <section id="carrito" class="mt-5">
+
             <h2 class="mb-4">Tu carrito</h2>
 
             <div class="cart-panel">
 
+                <!-- JavaScript coloca aquí los productos agregados al carrito. -->
                 <div id="carritoItems">
                     <p class="empty-cart">
                         Todavía no agregaste productos.
                     </p>
                 </div>
 
+                <!-- Resumen económico del carrito. -->
                 <div class="cart-summary">
+
                     <div>
                         <span class="summary-label">
                             Total de tu compra
                         </span>
+
+                        <!-- JavaScript actualiza este importe. -->
                         <h3 id="totalCarrito">Total: $0.00</h3>
                     </div>
 
-                    <button id="btnVaciarCarrito" type="button" class="btn btn-outline-danger">
+                    <!-- Botón para eliminar todos los productos del carrito. -->
+                    <button id="btnVaciarCarrito" type="button"
+                        class="btn btn-outline-danger">
                         Vaciar carrito
                     </button>
+
                 </div>
 
+                <!-- Área de acciones relacionadas con la compra. -->
                 <div class="cart-checkout">
-                    <button id="btnComprar" type="button" class="btn btn-sm btn-success">
+
+                    <!-- JavaScript debe gestionar el proceso de compra. -->
+                    <button id="btnComprar" type="button"
+                        class="btn btn-sm btn-success">
                         Comprar
                     </button>
-                </div>
 
+                </div>
             </div>
         </section>
 
-        <!-- PANEL EXCLUSIVO DEL ADMINISTRADOR -->
+
+        <!-- PANEL DE ADMINISTRACIÓN.
+             d-none lo mantiene oculto inicialmente.
+             JavaScript puede mostrarlo según el rol del usuario. -->
         <section id="adminPanel" class="mt-4 d-none">
 
             <h2 class="mb-4">Panel de administración</h2>
 
-            <!-- FORMULARIO PARA AGREGAR O EDITAR -->
+
+            <!-- FORMULARIO PARA CREAR O MODIFICAR PRODUCTOS. -->
             <div class="card mb-4">
+
                 <div class="card-header">
                     <h3 class="h5 mb-0">Agregar o editar producto</h3>
                 </div>
 
                 <div class="card-body">
+
+                    <!-- JavaScript puede interceptar el envío mediante submit. -->
                     <form id="formProducto">
 
+                        <!-- Guarda el ID del producto que se está editando.
+                             Si está vacío o vale 0, puede tratarse de un alta. -->
                         <input type="hidden" id="productoId" name="id">
 
+                        <!-- Guarda el token CSRF que se enviará al servidor. -->
                         <input type="hidden" id="tokenForm" name="token">
 
                         <div class="row g-3">
 
                             <div class="col-md-6">
+
                                 <label for="nombreProducto" class="form-label">
                                     Nombre
                                 </label>
 
-                                <input type="text" id="nombreProducto" name="nombre" class="form-control" required>
+                                <!-- required obliga a completar el campo en el navegador. -->
+                                <input type="text" id="nombreProducto" name="nombre"
+                                    class="form-control" required>
                             </div>
 
                             <div class="col-md-6">
+
                                 <label for="categoriaProducto" class="form-label">
                                     Categoría
                                 </label>
 
-                                <select id="categoriaProducto" name="categoria" class="form-select" required>
+                                <!-- El valor seleccionado se envía como categoria. -->
+                                <select id="categoriaProducto" name="categoria"
+                                    class="form-select" required>
+
                                     <option value="">Seleccionar categoría</option>
                                     <option value="termo">Termo</option>
                                     <option value="mate">Mate</option>
+
                                 </select>
                             </div>
 
                             <div class="col-12">
+
                                 <label for="descripcionProducto" class="form-label">
                                     Descripción
                                 </label>
 
-                                <textarea id="descripcionProducto" name="descripcion" class="form-control" rows="3"
-                                    required></textarea>
+                                <!-- Campo de texto de varias líneas. -->
+                                <textarea id="descripcionProducto" name="descripcion"
+                                    class="form-control" rows="3" required></textarea>
                             </div>
 
                             <div class="col-md-6">
+
                                 <label for="imagenProducto" class="form-label">
                                     Ruta de la imagen
                                 </label>
 
-                                <input type="text" id="imagenProducto" name="imagen" class="form-control" required>
+                                <!-- Permite indicar dónde está la imagen del producto. -->
+                                <input type="text" id="imagenProducto" name="imagen"
+                                    class="form-control" required>
                             </div>
 
                             <div class="col-md-3">
+
                                 <label for="precioProducto" class="form-label">
                                     Precio
                                 </label>
 
-                                <input type="number" id="precioProducto" name="precio" class="form-control" min="0.01"
-                                    step="0.01" required>
+                                <!-- min impide valores menores que 0.01 en el navegador.
+                                     step permite incrementos de 0.01. -->
+                                <input type="number" id="precioProducto" name="precio"
+                                    class="form-control" min="0.01" step="0.01" required>
                             </div>
 
                             <div class="col-md-3">
+
                                 <label for="stockProducto" class="form-label">
                                     Stock
                                 </label>
 
-                                <input type="number" id="stockProducto" name="stock" class="form-control" min="0"
-                                    step="1" required>
+                                <!-- El stock debe ser un número entero no negativo. -->
+                                <input type="number" id="stockProducto" name="stock"
+                                    class="form-control" min="0" step="1" required>
                             </div>
 
                         </div>
 
+                        <!-- Botones de acciones del formulario. -->
                         <div class="d-flex flex-wrap gap-2 mt-4">
+
+                            <!-- Envía el formulario para guardar el producto. -->
                             <button type="submit" class="btn btn-primary">
                                 Guardar producto
                             </button>
 
-                            <button type="button" id="btnCancelarEdicion" class="btn btn-outline-secondary">
+                            <!-- JavaScript puede limpiar los campos y cancelar la edición. -->
+                            <button type="button" id="btnCancelarEdicion"
+                                class="btn btn-outline-secondary">
                                 Cancelar edición
                             </button>
+
                         </div>
 
                     </form>
                 </div>
             </div>
 
-            <!-- LISTADO ADMINISTRABLE DE PRODUCTOS -->
+
+            <!-- LISTADO PARA ADMINISTRAR PRODUCTOS EXISTENTES. -->
             <div class="card">
+
                 <div class="card-header">
                     <h3 class="h5 mb-0">Administrar productos</h3>
                 </div>
 
                 <div class="card-body">
+
+                    <!-- El contenido puede generarse dinámicamente con PHP.
+                         Las tarjetas deben incluir las acciones de edición y eliminación. -->
                     <div id="adminProductos" class="row g-4">
-                        <!--
-                        api/productos.php debe generar las tarjetas
-                        con los botones Editar y Eliminar.
-                    -->
+                        <!-- Productos administrables cargados dinámicamente. -->
                     </div>
+
                 </div>
             </div>
 
@@ -246,60 +358,107 @@
     </main>
 
 
-
+    <!-- PIE DE PÁGINA. -->
     <footer class="store-footer">
+
         <div class="container footer-content">
+
+            <!-- Enlace que vuelve al inicio. -->
             <a class="footer-brand" href="#">Termo Store</a>
+
             <p>Tu próximo mate empieza acá.</p>
+
+            <!-- Aviso de derechos de autor. -->
             <span>© 2026 Termo Store. Todos los derechos reservados.</span>
+
         </div>
     </footer>
 
-    <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="tituloModalLogin" aria-hidden="true">
+
+    <!-- MODAL DE INICIO DE SESIÓN.
+         Bootstrap lo muestra al pulsar el botón asociado a #modalLogin. -->
+    <div class="modal fade" id="modalLogin" tabindex="-1"
+        aria-labelledby="tituloModalLogin" aria-hidden="true">
+
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content login-modal">
+
+                <!-- Formulario de autenticación. -->
                 <form id="formLogin">
+
                     <div class="modal-header">
+
                         <div>
                             <span class="eyebrow">BIENVENIDO/A</span>
+
                             <h2 class="modal-title fs-4" id="tituloModalLogin">
                                 Iniciar sesión
                             </h2>
                         </div>
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <!-- Botón para cerrar el modal. -->
+                        <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
                     </div>
 
                     <div class="modal-body">
+
                         <p class="panel-description">
                             Ingresá a tu cuenta para continuar.
                         </p>
 
-                        <label for="emailLogin" class="form-label">Correo electrónico</label>
-                        <input name="email" id="emailLogin" type="email" class="form-control mb-3"
-                            placeholder="nombre@ejemplo.com" autocomplete="username" required>
+                        <!-- Campo de correo electrónico.
+                             autocomplete ayuda al navegador a completar el usuario. -->
+                        <label for="emailLogin" class="form-label">
+                            Correo electrónico
+                        </label>
 
-                        <label for="passwordLogin" class="form-label">Contraseña</label>
-                        <input name="password" id="passwordLogin" type="password" class="form-control"
-                            placeholder="Tu contraseña" autocomplete="current-password" required>
+                        <input name="email" id="emailLogin" type="email"
+                            class="form-control mb-3"
+                            placeholder="nombre@ejemplo.com"
+                            autocomplete="username" required>
+
+                        <!-- Campo de contraseña.
+                             type=password oculta visualmente los caracteres. -->
+                        <label for="passwordLogin" class="form-label">
+                            Contraseña
+                        </label>
+
+                        <input name="password" id="passwordLogin" type="password"
+                            class="form-control" placeholder="Tu contraseña"
+                            autocomplete="current-password" required>
+
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                        <!-- Cierra el modal sin enviar el formulario. -->
+                        <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">
                             Cancelar
                         </button>
+
+                        <!-- Envía el formulario para que JavaScript gestione el login. -->
                         <button type="submit" class="btn btn-success">
                             Entrar
                         </button>
+
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/admin-productos.js"></script>
-</body>
 
+    <!-- Carga JavaScript de Bootstrap, necesario para el modal y el menú adaptable. -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Contiene la lógica general: sesión, catálogo, carrito y eventos de la interfaz. -->
+    <script src="js/app.js"></script>
+
+    <!-- Contiene la lógica específica de administración de productos. -->
+    <script src="js/admin-productos.js"></script>
+
+</body>
 </html>
