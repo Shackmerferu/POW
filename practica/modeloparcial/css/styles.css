@@ -687,3 +687,31 @@ textarea.form-control {
     align-self: flex-end;
     margin-top: 10px;
 }
+
+
+/* Dar espacio entre los productos del carrito */
+/* Producto y botón Quitar en la misma fila */
+#carritoItems > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Empujar Quitar hacia el extremo derecho */
+#carritoItems button {
+    display: inline-block;
+    margin: 0 0 0 auto;
+    flex-shrink: 0;
+}
+.cart-checkout {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: px;
+}
+.cart-checkout button {
+    display: inline-block;
+    margin: 20px 20px 20px auto;
+    flex-shrink: 0;
+}
