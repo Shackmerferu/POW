@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plantilla Genérica Web - HTML5 & Bootstrap</title>
+
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../fontawesome-free-7.3.1-web/fontawesome-free-7.3.1-web/css/all.min.css">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<!-- Organiza la página en una columna que ocupa toda la altura disponible. -->
+<body class="d-flex flex-column h-100">
+
+    <!-- HEADER: encabezado principal de la página. -->
+    <header>
+        <!-- NAVBAR: barra de navegación fija en la parte superior. -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top custom-shadow">
+            <div class="container">
+
+                <!-- Marca o nombre del sitio, con un icono. -->
+                <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                    <i class="fa-solid fa-layer-group text-primary"></i>
+                    <span>MiSitioWeb</span>
+                </a>
+
+                <!-- Botón que despliega el menú en pantallas pequeñas. -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Contenido del menú que se puede contraer en móviles. -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+
+                    <!-- Enlaces principales de navegación. -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <i class="fa-solid fa-house me-1"></i> Inicio
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa-solid fa-circle-info me-1"></i> Acerca de
+                            </a>
+                        </li>
+
+                        <!-- Menú desplegable con opciones de servicios. -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-list-check me-1"></i> Servicios
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-code me-2"></i>Desarrollo Web
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-palette me-2"></i>Diseño UI/UX
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-gears me-2"></i>Consultoría
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- Contenedor vacío que JavaScript puede completar dinámicamente. -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3" id="contenedor-menu">
+                    </ul>
+
+                    <!-- Abre el modal de contacto mediante los atributos de Bootstrap. -->
+                    <button class="btn btn-outline-light rounded-pill px-3" type="button"
+                        data-bs-toggle="modal" data-bs-target="#modalContacto">
+                        <i class="fa-solid fa-paper-plane me-1"></i> Contacto
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN: contiene el contenido principal de la página. -->
+    <main class="py-4">
+        <div class="container">
+            <!-- Centra el contenido y limita su ancho en pantallas grandes. -->
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <!-- CARD: tarjeta que agrupa el contenido principal. -->
+                    <article class="card border-0 custom-shadow rounded-3 mb-4">
+                        <div class="card-body p-4 p-md-5">
+
+                            <!-- Presentación o introducción de la página. -->
+                            <section class="mb-4 text-center">
+                                <h1 class="fw-bold text-primary">Plantilla Web Semántica</h1>
+                                <p class="text-muted">
+                                    Una maqueta moderna, accesible y totalmente responsiva
+                                    construida con HTML5 y Bootstrap 5.
+                                </p>
+                                <hr class="w-25 mx-auto text-primary border-2">
+                            </section>
+
+                            <!-- FORMULARIO DE DEMOSTRACIÓN: reúne controles de ejemplo. -->
+                            <section class="mb-5">
+                                <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">
+                                    Controles Interactivos
+                                </h3>
+
+                                <form id="demoForm">
+                                    <div class="row g-3">
+
+                                        <!-- SELECT: permite elegir una categoría. -->
+                                        <div class="col-md-6">
+                                            <label for="categorySelect" class="form-label fw-medium">
+                                                Seleccionar Categoría:
+                                            </label>
+                                            <select class="form-select" id="categorySelect" required>
+                                                <option value="" selected disabled>Elija una opción...</option>
+                                                <option value="1">Opción 1: Desarrollo Frontend</option>
+                                                <option value="2">Opción 2: Desarrollo Backend</option>
+                                                <option value="3">Opción 3: Base de Datos</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- SELECT: permite elegir el nivel de prioridad. -->
+                                        <div class="col-md-6">
+                                            <label for="prioritySelect" class="form-label fw-medium">
+                                                Prioridad:
+                                            </label>
+                                            <select class="form-select" id="prioritySelect">
+                                                <option value="low">Baja</option>
+                                                <option value="medium" selected>Media</option>
+                                                <option value="high">Alta</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- CHECKBOX: permite seleccionar varias preferencias. -->
+                                        <div class="col-12 mt-4">
+                                            <label class="form-label fw-medium d-block">
+                                                Preferencias de Notificación:
+                                            </label>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="checkEmail" value="email" checked>
+                                                <label class="form-check-label" for="checkEmail">
+                                                    Correo Electrónico
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="checkSms" value="sms">
+                                                <label class="form-check-label" for="checkSms">
+                                                    Mensaje SMS
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="checkPush" value="push" checked>
+                                                <label class="form-check-label" for="checkPush">
+                                                    Notificaciones Push
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- CHECKBOX obligatorio para aceptar las condiciones. -->
+                                        <div class="col-12 mt-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="checkTerms" required>
+                                                <label class="form-check-label" for="checkTerms">
+                                                    Acepto los términos y condiciones de servicio.
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </section>
+
+                            <!-- INVENTARIO: campos utilizados por las operaciones de productos. -->
+                            <section class="mb-4">
+                                <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">
+                                    Gestión de Inventario
+                                </h3>
+
+                                <!-- Formulario visual con los datos necesarios para operar. -->
+                                <div class="row g-3 mb-4 p-3 border rounded bg-light">
+
+                                    <!-- Código identificador del producto. -->
+                                    <div class="col-md-4">
+                                        <label for="inputCodigo"
+                                            class="form-label fw-bold small text-muted">
+                                            Código (ID)
+                                        </label>
+                                        <input type="number" class="form-control" id="inputCodigo"
+                                            min="1" placeholder="Ej: 11">
+                                    </div>
+
+                                    <!-- Cantidad que se desea ingresar o retirar. -->
+                                    <div class="col-md-4">
+                                        <label for="inputCantidad"
+                                            class="form-label fw-bold small text-muted">
+                                            Cantidad
+                                        </label>
+                                        <input type="number" class="form-control" id="inputCantidad"
+                                            min="1" placeholder="Cantidad a mover">
+                                    </div>
+
+                                    <!-- Precio de costo utilizado para las altas. -->
+                                    <div class="col-md-4">
+                                        <label for="inputPrecio"
+                                            class="form-label fw-bold small text-muted">
+                                            Precio <small>(*solo si es alta)</small>
+                                        </label>
+                                        <input type="number" class="form-control" id="inputPrecio"
+                                            step="0.01" min="0" placeholder="Precio de costo">
+                                    </div>
+                                </div>
+
+                                <!-- Botones de demostración: sus acciones dependen de main.js. -->
+                                <h3 class="h4 mb-3 border-start border-4 border-primary ps-2">
+                                    Botones de Acción
+                                </h3>
+
+                                <div class="d-flex flex-wrap gap-2">
+                                    <!-- Envía el formulario demoForm. -->
+                                    <button type="submit" form="demoForm" class="btn btn-primary">
+                                        <i class="fa-solid fa-check me-1"></i> Principal (Guardar)
+                                    </button>
+
+                                    <!-- Limpia o restablece los campos según el JavaScript. -->
+                                    <button type="button" id="btnReset" class="btn btn-secondary">
+                                        <i class="fa-solid fa-rotate-left me-1"></i> Secundario (Limpiar)
+                                    </button>
+
+                                    <!-- Muestra una alerta de éxito. -->
+                                    <button type="button" id="btnSuccess" class="btn btn-success">
+                                        <i class="fa-solid fa-circle-check me-1"></i> Éxito
+                                    </button>
+
+                                    <!-- Muestra una alerta de advertencia. -->
+                                    <button type="button" id="btnWarning" class="btn btn-warning text-dark">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Advertencia
+                                    </button>
+
+                                    <!-- Muestra una alerta de error o una acción peligrosa. -->
+                                    <button type="button" id="btnDanger" class="btn btn-danger">
+                                        <i class="fa-solid fa-trash me-1"></i> Eliminar
+                                    </button>
+
+                                    <!-- Muestra información al usuario. -->
+                                    <button type="button" id="btnInfo" class="btn btn-info text-dark">
+                                        <i class="fa-solid fa-circle-info me-1"></i> Info
+                                    </button>
+                                </div>
+
+                                <!-- Operaciones específicas del inventario. -->
+                                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                                    <!-- Aumenta las existencias de un producto. -->
+                                    <button type="button" id="btnAlta"
+                                        class="btn btn-outline-success fw-bold px-4">
+                                        <i class="fa-solid fa-arrow-trend-up me-1"></i> ALTA
+                                    </button>
+
+                                    <!-- Reduce las existencias de un producto. -->
+                                    <button type="button" id="btnBaja"
+                                        class="btn btn-outline-danger fw-bold px-4">
+                                        <i class="fa-solid fa-arrow-trend-down me-1"></i> BAJA
+                                    </button>
+
+                                    <!-- Filtra los productos con pocas existencias. -->
+                                    <button type="button" id="btnStockBajo"
+                                        class="btn btn-outline-warning text-dark fw-bold px-4">
+                                        <i class="fa-solid fa-boxes-stacked me-1"></i> STOCK BAJO
+                                    </button>
+
+                                    <!-- Consulta y muestra los productos existentes. -->
+                                    <button type="button" id="btnMostrar"
+                                        class="btn btn-outline-info text-dark fw-bold px-4">
+                                        <i class="fa-solid fa-list me-1"></i> MOSTRAR
+                                    </button>
+
+                                    <!-- Abre el formulario para registrar un producto nuevo. -->
+                                    <button type="button" id="btnAgregar"
+                                        class="btn btn-outline-primary fw-bold px-4">
+                                        <i class="fa-solid fa-plus me-1"></i> AGREGAR
+                                    </button>
+
+                                    <!-- Elimina un producto según la lógica de main.js. -->
+                                    <button type="button" id="btnBorrar"
+                                        class="btn btn-outline-secondary fw-bold px-4">
+                                        <i class="fa-solid fa-trash-can me-1"></i> BORRAR
+                                    </button>
+                                </div>
+                            </section>
+
+                            <!-- Contenedor vacío donde JavaScript inserta mensajes y alertas. -->
+                            <div id="alertContainer" class="mt-4"></div>
+
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER: pie de página con información y enlaces. -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between
+                align-items-center gap-4">
+
+                <!-- Aviso de derechos de autor. -->
+                <div class="text-center text-md-start">
+                    <p class="mb-0 text-white">
+                        &copy; 2026 MiSitioWeb. Todos los derechos reservados.
+                    </p>
+                </div>
+
+                <!-- Enlaces informativos del pie de página. -->
+                <div>
+                    <ul class="nav justify-content-center list-unstyled d-flex gap-3 mb-0">
+                        <li>
+                            <a href="#" class="text-white text-decoration-none hover-white">
+                                Política de Privacidad
+                            </a>
+                        </li>
+                        <li><span class="text-white">•</span></li>
+                        <li>
+                            <a href="#" class="text-white text-decoration-none hover-white">
+                                Términos de Uso
+                            </a>
+                        </li>
+                        <li><span class="text-white">•</span></li>
+                        <li>
+                            <a href="#" class="text-white text-decoration-none hover-white">
+                                Soporte
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Enlace externo a WhatsApp, abierto en otra pestaña. -->
+                <div>
+                    <a href="https://wa.me/"
+                        class="btn btn-success rounded-circle d-flex align-items-center
+                        justify-content-center custom-shadow"
+                        style="width: 60px; height: 60px; z-index: 1050;"
+                        target="_blank" rel="noopener noreferrer">
+
+                        <!-- Icono SVG vectorial de WhatsApp. -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                            fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.49.652.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+                        </svg>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE DETALLE: ventana emergente para mostrar información adicional. -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Encabezado del modal; el título puede completarse con JavaScript. -->
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modal-titulo-nombre"></h5>
+                    <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+
+                        <!-- Columna de fotografía y apodo. -->
+                        <div class="col-md-4 text-center mb-3">
+                            <img id="modal-img-foto" src=""
+                                class="img-fluid rounded mb-2 custom-shadow" alt="Foto">
+                            <p class="fw-bold mb-0 mt-3">Apodo:</p>
+                            <p id="modal-texto-apodo" class="text-muted text-uppercase"></p>
+                        </div>
+
+                        <!-- Columna con biografía y trayectoria. -->
+                        <div class="col-md-8">
+                            <h6 class="fw-bold text-warning border-bottom pb-1">Biografía</h6>
+                            <p id="modal-texto-bio" class="small mb-4"></p>
+
+                            <h6 class="fw-bold text-warning border-bottom pb-1">Trayectoria</h6>
+
+                            <!-- Filas de la trayectoria que JavaScript puede generar. -->
+                            <table class="table table-sm table-hover small mb-3">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Año</th>
+                                        <th>Detalle</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modal-tabla-trayectoria">
+                                </tbody>
+                            </table>
+
+                            <!-- Campo para ingresar un nuevo logro o elemento de trayectoria. -->
+                            <div class="mt-3 bg-light p-3 rounded border">
+                                <label for="input-nuevo-logro"
+                                    class="form-label small fw-bold text-muted">
+                                    Agregar nuevo ítem trayectoria:
+                                </label>
+                                <textarea id="input-nuevo-logro"
+                                    class="form-control form-control-sm mb-2"
+                                    rows="2" placeholder="Describa el logro..."></textarea>
+
+                                <!-- Botón que debe estar asociado a una acción JavaScript. -->
+                                <button id="btn-guardar-logro"
+                                    class="btn btn-outline-success btn-sm w-100 fw-bold">
+                                    Registrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie del modal con el botón para cerrarlo. -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cerrar Panel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONTACTO: formulario para enviar un mensaje. -->
+    <div class="modal fade" id="modalContacto" tabindex="-1"
+        aria-labelledby="tituloModalContacto" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Título y botón para cerrar la ventana. -->
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="tituloModalContacto">
+                        <i class="fa-solid fa-envelope me-2"></i>Contacto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- JavaScript muestra aquí el resultado del envío. -->
+                    <div id="alertaContacto" class="alert d-none" role="alert"></div>
+
+                    <!-- Formulario cuyos datos serán enviados a la API de contacto. -->
+                    <form id="formContacto">
+
+                        <!-- Campo obligatorio para el nombre. -->
+                        <div class="mb-3">
+                            <label for="nombreContacto" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreContacto"
+                                name="nombre" maxlength="100" required>
+                        </div>
+
+                        <!-- Campo obligatorio para un correo con formato válido. -->
+                        <div class="mb-3">
+                            <label for="emailContacto" class="form-label">
+                                Correo electrónico
+                            </label>
+                            <input type="email" class="form-control" id="emailContacto"
+                                name="email" maxlength="150" required>
+                        </div>
+
+                        <!-- Campo obligatorio para el contenido del mensaje. -->
+                        <div class="mb-3">
+                            <label for="mensajeContacto" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensajeContacto"
+                                name="mensaje" rows="4" maxlength="5000" required></textarea>
+                        </div>
+
+                        <!-- Acciones del formulario. -->
+                        <div class="text-end">
+                            <!-- Cierra el modal sin enviar el formulario. -->
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+
+                            <!-- Envía el formulario y activa el evento submit de JavaScript. -->
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-paper-plane me-1"></i>
+                                Enviar mensaje
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carga Bootstrap con JavaScript y Popper para los menús, modales y otros componentes. -->
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Carga la lógica principal de la aplicación. -->
+    <script src="main.js"></script>
+
+    <!-- Funciones adicionales: validación de campos e integración con ExamenJS. -->
+    <script>
+        // Espera a que el HTML esté cargado antes de buscar elementos.
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Obtiene las funciones reutilizables definidas en main.js.
+            const util = window.ExamenJS;
+
+            // Si la biblioteca no existe, muestra un error y detiene este bloque.
+            if (!util) {
+                console.error('No se encontró ExamenJS. Verificá que main.js se cargue correctamente.');
+                return;
+            }
+
+            // Define qué campos se validarán, cómo y qué mensaje mostrar.
+            const validaciones = [
+                {
+                    id: 'inputCodigo',
+                    validar: valor => util.esEnteroPositivo(valor),
+                    mensaje: 'Ingresá un código entero mayor que cero.'
+                },
+                {
+                    id: 'inputCantidad',
+                    validar: valor => util.esEnteroPositivo(valor),
+                    mensaje: 'Ingresá una cantidad entera mayor que cero.'
+                },
+                {
+                    id: 'inputPrecio',
+                    validar: valor => util.esPositivo(valor),
+                    mensaje: 'Ingresá un precio mayor que cero.'
+                }
+            ];
+
+            // Recorre las validaciones y las conecta con cada campo.
+            validaciones.forEach(({ id, validar, mensaje }) => {
+                const campo = util.elemento(id);
+
+                // Si el campo no existe en el HTML, pasa al siguiente.
+                if (!campo) return;
+
+                // Comprueba el valor y actualiza el estado visual del campo.
+                const revisar = () => {
+                    const valor = util.valor(id);
+
+                    // Permite dejar vacío el campo mientras todavía no se utiliza.
+                    const valido = valor === '' || validar(valor);
+
+                    // Agrega o quita las clases de Bootstrap según la validez.
+                    campo.classList.toggle('is-invalid', !valido);
+                    campo.classList.toggle('is-valid', valor !== '' && valido);
+
+                    // Define un mensaje personalizado para la validación HTML.
+                    campo.setCustomValidity(valido ? '' : mensaje);
+                    campo.title = valido ? '' : mensaje;
+                };
+
+                // Valida cada vez que cambia el contenido o se abandona el campo.
+                campo.addEventListener('input', revisar);
+                campo.addEventListener('blur', revisar);
+            });
+
+            // Ejecuta tareas adicionales al pulsar el botón de limpiar.
+            util.conectarBoton('btnReset', () => {
+                validaciones.forEach(({ id }) => {
+                    const campo = util.elemento(id);
+
+                    // Limpia los estilos y los mensajes de validación del campo.
+                    if (campo) {
+                        campo.classList.remove('is-valid', 'is-invalid');
+                        campo.setCustomValidity('');
+                        campo.title = '';
+                    }
+                });
+            });
+
+            // Comprueba que se haya seleccionado una categoría al enviar el formulario.
+            const formulario = util.elemento('demoForm');
+
+            if (formulario) {
+                formulario.addEventListener('submit', evento => {
+                    const categoria = util.valor('categorySelect');
+
+                    // Cancela el envío si la categoría está vacía.
+                    if (!util.noVacio(categoria)) {
+                        evento.preventDefault();
+                        util.mostrarMensaje(
+                            'Seleccioná una categoría antes de continuar.',
+                            'warning'
+                        );
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
