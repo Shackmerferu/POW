@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -22,14 +21,14 @@ if (!in_array($categoria, ["todos", "termo", "mate"], true)) {
 
 if ($categoria === "todos") {
     $stmt = $conexion->prepare(
-        "SELECT id, nombre, descripcion, imagen, precio, stock
+        "SELECT id, nombre, categoria, descripcion, imagen, precio, stock
          FROM productos
          WHERE activo = 1
          ORDER BY id DESC"
     );
 } else {
     $stmt = $conexion->prepare(
-        "SELECT id, nombre, descripcion, imagen, precio, stock
+        "SELECT id, nombre, categoria, descripcion, imagen, precio, stock
          FROM productos
          WHERE activo = 1 AND categoria = ?
          ORDER BY id DESC"
@@ -105,7 +104,7 @@ while ($p = $productos->fetch_assoc()) {
 
     echo '<p class="product-stock">Stock disponible: ' . $stock . '</p>';
 
-    if ($stock > 0) {
+    if ($stock > 0 && !$esAdmin) {
         echo '
             <button
                 type="button"
@@ -118,28 +117,45 @@ while ($p = $productos->fetch_assoc()) {
                 Agregar al carrito
             </button>
         ';
-    } else {
+    } elseif (!$esAdmin) {
         echo '
-            <button
-                type="button"
-                class="btn btn-secondary w-100"
-                disabled
-            >
-                Sin stock
-            </button>
-        ';
+        <button
+            type="button"
+            class="btn btn-secondary w-100"
+            disabled>
+            Sin stock
+        </button>
+    ';
     }
 
     if ($esAdmin) {
         echo '
+        <div class="d-flex gap-2 mt-2">
+
             <button
                 type="button"
-                class="btn-eliminar-producto btn btn-outline-danger w-100 mt-2"
+                class="btn btn-primary flex-fill"
+                data-admin-accion="editar"
                 data-id="' . $id . '"
-            >
-                Eliminar producto
+                data-nombre="' . $nombre . '"
+                data-categoria="' . htmlspecialchars($p["categoria"] ?? "", ENT_QUOTES, "UTF-8") . '"
+                data-descripcion="' . $descripcion . '"
+                data-imagen="' . $imagen . '"
+                data-precio="' . $precioReal . '"
+                data-stock="' . $stock . '">
+                Editar
             </button>
-        ';
+
+            <button
+                type="button"
+                class="btn btn-danger flex-fill text-nowrap"
+                data-admin-accion="eliminar"
+                data-id="' . $id . '">
+                Eliminar
+            </button>
+
+        </div>
+    ';
     }
 
     echo '</div>';

@@ -71,63 +71,61 @@
         </div>
     </header>
 
-    <main class="container store-main">
-        <div id="alertas" aria-live="polite" class="alerts-container"></div>
 
-        <section id="catalogo" class="store-section">
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">NUESTRA SELECCIÓN</span>
-                    <h2>Encontrá tus favoritos</h2>
-                    <p>Elegí los productos que van con vos.</p>
-                </div>
 
-                <div class="category-filter">
-                    <label for="filtroCategoria" class="form-label">Categoría</label>
-                    <select id="filtroCategoria" class="form-select">
-                        <option value="todos">Todos los productos</option>
-                        <option value="termo">Termos</option>
-                        <option value="mate">Mates</option>
-                    </select>
-                </div>
+    <main class="container py-4">
+
+        <!-- Mensajes del sistema -->
+        <div id="alertas" class="mb-3"></div>
+
+        <!-- CATÁLOGO PARA CLIENTES E INVITADOS -->
+        <section id="catalogo">
+            <h2 class="mb-4">Catálogo de productos</h2>
+
+            <div class="mb-4">
+                <label for="filtroCategoria" class="form-label">
+                    Filtrar por categoría
+                </label>
+
+                <select id="filtroCategoria" class="form-select">
+                    <option value="todos">Todos los productos</option>
+                    <option value="termo">Termos</option>
+                    <option value="mate">Mates</option>
+                </select>
             </div>
 
-            <div id="productos" class="row g-4 product-grid">
-                <div class="col-12">
-                    <div class="loading-state">Cargando productos...</div>
-                </div>
+            <div id="productos" class="row g-4">
+                <!-- Productos cargados desde api/productos.php -->
             </div>
         </section>
 
-        <section id="carrito" class="store-section cart-section">
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">TU SELECCIÓN</span>
-                    <h2>Tu carrito</h2>
-                    <p>Revisá los productos que elegiste.</p>
-                </div>
-                <div class="cart-symbol" aria-hidden="true">🛒</div>
-            </div>
+        <!-- CARRITO PARA CLIENTES E INVITADOS -->
+        <section id="carrito" class="mt-5">
+            <h2 class="mb-4">Tu carrito</h2>
 
             <div class="cart-panel">
-                <div id="carritoItems">
-                    <p class="empty-cart">Todavía no agregaste productos.</p>
-                </div>
 
+                <div id="carritoItems">
+                    <p class="empty-cart">
+                        Todavía no agregaste productos.
+                    </p>
+                </div>
 
                 <div class="cart-summary">
                     <div>
-                        <span class="summary-label">Total de tu compra</span>
-                        <h3 id="totalCarrito">Total: $0</h3>
+                        <span class="summary-label">
+                            Total de tu compra
+                        </span>
+                        <h3 id="totalCarrito">Total: $0.00</h3>
                     </div>
 
-                    <button id="btnVaciarCarrito" class="btn btn-outline-danger">
+                    <button id="btnVaciarCarrito" type="button" class="btn btn-outline-danger">
                         Vaciar carrito
                     </button>
                 </div>
 
                 <div class="cart-checkout">
-                    <button id="btnComprar" class="btn btn-sm btn-success">
+                    <button id="btnComprar" type="button" class="btn btn-sm btn-success">
                         Comprar
                     </button>
                 </div>
@@ -135,87 +133,118 @@
             </div>
         </section>
 
-        <section id="adminPanel" class="store-section admin-section d-none">
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">GESTIÓN DE LA TIENDA</span>
-                    <h2>Administración</h2>
-                    <p>Creá, actualizá y administrá tus productos.</p>
+        <!-- PANEL EXCLUSIVO DEL ADMINISTRADOR -->
+        <section id="adminPanel" class="mt-4 d-none">
+
+            <h2 class="mb-4">Panel de administración</h2>
+
+            <!-- FORMULARIO PARA AGREGAR O EDITAR -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Agregar o editar producto</h3>
                 </div>
-                <div class="admin-symbol" aria-hidden="true">⚙</div>
+
+                <div class="card-body">
+                    <form id="formProducto">
+
+                        <input type="hidden" id="productoId" name="id">
+
+                        <input type="hidden" id="tokenForm" name="token">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label for="nombreProducto" class="form-label">
+                                    Nombre
+                                </label>
+
+                                <input type="text" id="nombreProducto" name="nombre" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="categoriaProducto" class="form-label">
+                                    Categoría
+                                </label>
+
+                                <select id="categoriaProducto" name="categoria" class="form-select" required>
+                                    <option value="">Seleccionar categoría</option>
+                                    <option value="termo">Termo</option>
+                                    <option value="mate">Mate</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="descripcionProducto" class="form-label">
+                                    Descripción
+                                </label>
+
+                                <textarea id="descripcionProducto" name="descripcion" class="form-control" rows="3"
+                                    required></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="imagenProducto" class="form-label">
+                                    Ruta de la imagen
+                                </label>
+
+                                <input type="text" id="imagenProducto" name="imagen" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="precioProducto" class="form-label">
+                                    Precio
+                                </label>
+
+                                <input type="number" id="precioProducto" name="precio" class="form-control" min="0.01"
+                                    step="0.01" required>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="stockProducto" class="form-label">
+                                    Stock
+                                </label>
+
+                                <input type="number" id="stockProducto" name="stock" class="form-control" min="0"
+                                    step="1" required>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                Guardar producto
+                            </button>
+
+                            <button type="button" id="btnCancelarEdicion" class="btn btn-outline-secondary">
+                                Cancelar edición
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
 
-            <div class="admin-form-panel">
-                <h3>Datos del producto</h3>
-                <p class="panel-description">
-                    Completá los campos para guardar un producto en el catálogo.
-                </p>
+            <!-- LISTADO ADMINISTRABLE DE PRODUCTOS -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Administrar productos</h3>
+                </div>
 
-                <form id="formProducto" class="row g-3">
-                    <input type="hidden" name="id" id="productoId">
-
-                    <div class="col-md-6">
-                        <label for="nombreProducto" class="form-label">Nombre</label>
-                        <input name="nombre" id="nombreProducto" class="form-control" placeholder="Ej.: Termo de acero"
-                            required>
+                <div class="card-body">
+                    <div id="adminProductos" class="row g-4">
+                        <!--
+                        api/productos.php debe generar las tarjetas
+                        con los botones Editar y Eliminar.
+                    -->
                     </div>
-
-                    <div class="col-md-6">
-                        <label for="categoriaProducto" class="form-label">Categoría</label>
-                        <select name="categoria" id="categoriaProducto" class="form-select">
-                            <option value="termo">Termo</option>
-                            <option value="mate">Mate</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="precioProducto" class="form-label">Precio</label>
-                        <input name="precio" id="precioProducto" type="number" min="0.01" step="0.01"
-                            class="form-control" placeholder="0.00" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="stockProducto" class="form-label">Stock disponible</label>
-                        <input name="stock" id="stockProducto" type="number" min="0" step="1" class="form-control"
-                            placeholder="0" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="imagenProducto" class="form-label">URL de imagen</label>
-                        <input name="imagen" id="imagenProducto" type="url" class="form-control"
-                            placeholder="https://...">
-                    </div>
-
-                    <div class="col-12">
-                        <label for="descripcionProducto" class="form-label">Descripción</label>
-                        <textarea name="descripcion" id="descripcionProducto" class="form-control" rows="3"
-                            placeholder="Describí las características del producto..."></textarea>
-                    </div>
-
-                    <input type="hidden" name="token" id="tokenForm">
-
-                    <div class="col-12 d-flex flex-wrap gap-2 mt-4">
-                        <button type="submit" class="btn btn-success">
-                            Guardar producto
-                        </button>
-
-                        <button type="button" id="btnCancelarEdicion" class="btn btn-outline-secondary">
-                            Limpiar formulario
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
 
-            <div class="admin-products-section">
-                <h3>Productos administrables</h3>
-                <p class="panel-description">
-                    Gestioná los productos existentes en tu catálogo.
-                </p>
-
-                <div id="adminProductos" class="row g-3 admin-product-grid"></div>
-            </div>
         </section>
+
     </main>
+
+
 
     <footer class="store-footer">
         <div class="container footer-content">

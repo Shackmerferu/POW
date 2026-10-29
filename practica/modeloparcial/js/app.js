@@ -18,18 +18,25 @@ async function cargarProductos() {
     "api/productos.php?categoria=" + encodeURIComponent(categoria),
   );
 
-  productosDiv.innerHTML = await respuesta.text();
+  const html = await respuesta.text();
+
+  if (!respuesta.ok) {
+    mostrarMensaje(html, "danger");
+    return;
+  }
 
   if (rolUsuario === "admin") {
-    document.getElementById("adminProductos").innerHTML =
-      productosDiv.innerHTML;
+    document.getElementById("adminProductos").innerHTML = html;
+  } else {
+    productosDiv.innerHTML = html;
   }
 }
 
 async function cargarSesion() {
   const respuesta = await fetch("api/sesion.php");
   const texto = await respuesta.text();
-
+  const catalogo = document.getElementById("catalogo");
+  const carrito = document.getElementById("carrito");
   const info = document.getElementById("usuarioInfo");
   const btnLogin = document.getElementById("btnLogin");
   const btnLogout = document.getElementById("btnLogout");
@@ -42,6 +49,8 @@ async function cargarSesion() {
     btnLogin.classList.remove("d-none");
     btnLogout.classList.add("d-none");
     panel.classList.add("d-none");
+    catalogo.classList.remove("d-none");
+    carrito.classList.remove("d-none");
     return;
   }
 
@@ -54,8 +63,12 @@ async function cargarSesion() {
 
   if (rolUsuario === "admin") {
     panel.classList.remove("d-none");
+    catalogo.classList.add("d-none");
+    carrito.classList.add("d-none");
   } else {
     panel.classList.add("d-none");
+    catalogo.classList.remove("d-none");
+    carrito.classList.remove("d-none");
   }
 }
 
@@ -237,16 +250,63 @@ document.getElementById("formLogin").addEventListener("submit", iniciarSesion);
 
 document.getElementById("btnLogout").addEventListener("click", cerrarSesion);
 
-document.getElementById("btnVaciarCarrito")
-    .addEventListener("click", () => {
-        const ids = carrito.map(producto => producto.id);
+document.getElementById("btnComprar").addEventListener("click", async () => {
+  if (carrito.length === 0) {
+    mostrarMensaje("Tu carrito está vacío.", "warning");
+    return;
+  }
 
-        carrito = [];
+  if (rolUsuario === "INVITADO" || !token) {
+    mostrarMensaje("Iniciá sesión para realizar la compra.", "warning");
+    return;
+  }
 
-        ids.forEach(id => actualizarStockVisual(id));
+  const boton = document.getElementById("btnComprar");
 
-        renderizarCarrito();
+  boton.disabled = true;
+  boton.textContent = "Procesando...";
+
+  try {
+    const datos = new FormData();
+
+    datos.append("token", token);
+    datos.append(
+      "carrito",
+      JSON.stringify(
+        carrito.map((producto) => ({
+          id: producto.id,
+          cantidad: producto.cantidad,
+        })),
+      ),
+    );
+
+    const respuesta = await fetch("api/comprar.php", {
+      method: "POST",
+      body: datos,
     });
+
+    const mensaje = await respuesta.text();
+
+    if (!respuesta.ok) {
+      mostrarMensaje(mensaje, "danger");
+      return;
+    }
+
+    // Vaciar el carrito y actualizar el total.
+    carrito = [];
+    renderizarCarrito();
+
+    // Recargar los productos con el stock actualizado.
+    await cargarProductos();
+
+    mostrarMensaje(mensaje, "success");
+  } catch (error) {
+    mostrarMensaje("No se pudo conectar con el servidor.", "danger");
+  } finally {
+    boton.disabled = false;
+    boton.textContent = "Comprar";
+  }
+});
 
 document
   .getElementById("formProducto")
@@ -295,11 +355,27 @@ document
     const id = Number(boton.dataset.id);
 
     if (boton.dataset.adminAccion === "editar") {
-      document.getElementById("productoId").value = id;
-      document.getElementById("nombreProducto").value =
-        tarjeta.querySelector("h3").textContent;
+      document.getElementById("productoId").value = boton.dataset.id;
+      document.getElementById("nombreProducto").value = boton.dataset.nombre;
+      document.getElementById("categoriaProducto").value =
+        boton.dataset.categoria;
+      document.getElementById("descripcionProducto").value =
+        boton.dataset.descripcion;
+      document.getElementById("imagenProducto").value = boton.dataset.imagen;
+      document.getElementById("precioProducto").value = boton.dataset.precio;
+      document.getElementById("stockProducto").value = boton.dataset.stock;
+      document.getElementById("tokenForm").value = token;
 
-      mostrarMensaje("Completá los demás campos antes de guardar.", "info");
+      document.getElementById("formProducto").scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      mostrarMensaje(
+        "Producto cargado. Modificá los campos y presioná Guardar producto.",
+        "info",
+      );
+
       return;
     }
 
