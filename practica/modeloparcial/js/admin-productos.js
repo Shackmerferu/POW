@@ -1,153 +1,304 @@
-// ============================================================
-// 1. ESCUCHAR LOS CLICS EN EL DOCUMENTO
-// ============================================================
+// js/admin-productos.js
 
-// Registra un evento de clic en todo el documento HTML.
-// Se utiliza async porque dentro de la función se espera
-// una respuesta del servidor mediante await.
-document.addEventListener("click", async function (evento) {
-  // Busca el botón con la clase "btn-eliminar-producto"
-  // que recibió el clic o que contiene al elemento clickeado.
-  //
-  // closest() permite detectar el botón incluso si se hace
-  // clic sobre un icono o un texto que esté dentro del botón.
-  const boton = evento.target.closest(".btn-eliminar-producto");
+// Esperamos a que el HTML esté disponible.
+document.addEventListener("DOMContentLoaded", function () {
 
-  // Si el clic no corresponde a un botón de eliminar,
-  // no hay nada que hacer.
-  if (!boton) {
-    return; // Finaliza la función.
-  }
+    // Referencias a los elementos del formulario.
+    const formulario = document.getElementById("formProducto");
+    const contenedor = document.getElementById("adminProductos");
+    const campoId = document.getElementById("productoId");
+    const campoToken = document.getElementById("tokenForm");
 
-  // ========================================================
-  // 2. OBTENER EL ID DEL PRODUCTO
-  // ========================================================
+    // Escapamos los valores antes de insertarlos en HTML.
+    // Así evitamos que nombres o descripciones se interpreten como etiquetas.
+    function escaparHTML(valor) {
+        return String(valor ?? "").replace(/[&<>"']/g, function (caracter) {
+            const equivalencias = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            };
 
-  // Obtiene el identificador desde el atributo HTML data-id.
-  // Ejemplo de botón:
-  // <button class="btn-eliminar-producto" data-id="15">
-  //
-  // boton.dataset.id devolvería el texto "15".
-  const id = boton.dataset.id;
-
-  // Comprueba que el botón tenga un identificador.
-  // Sin el ID, el servidor no sabría qué producto eliminar.
-  if (!id) {
-    alert("No se encontró el identificador del producto.");
-    return; // Detiene la operación.
-  }
-
-  // ========================================================
-  // 3. PEDIR CONFIRMACIÓN AL USUARIO
-  // ========================================================
-
-  // Muestra una ventana de confirmación del navegador.
-  // confirm() devuelve:
-  // true  -> el usuario acepta.
-  // false -> el usuario cancela.
-  const confirmar = confirm(
-    "¿Seguro que querés eliminar este producto del catálogo?",
-  );
-
-  // Si el usuario cancela, no se realiza ninguna petición.
-  if (!confirmar) {
-    return;
-  }
-
-  // ========================================================
-  // 4. INDICAR QUE LA OPERACIÓN ESTÁ EN CURSO
-  // ========================================================
-
-  // Deshabilita el botón para evitar que se presione varias
-  // veces mientras se procesa la eliminación.
-  boton.disabled = true;
-
-  // Cambia el texto para informar que se está eliminando.
-  boton.textContent = "Eliminando...";
-
-  // ========================================================
-  // 5. ENVIAR LA SOLICITUD AL SERVIDOR
-  // ========================================================
-
-  // try permite ejecutar código que podría generar errores.
-  // Si ocurre un error capturado, se ejecutará el catch.
-  try {
-    // Crea un objeto para agrupar los datos que se enviarán.
-    const datos = new FormData();
-
-    // Agrega el ID del producto al formulario.
-    // En PHP se podrá recuperar mediante $_POST["id"].
-    datos.append("id", id);
-
-    // Envía una petición HTTP al archivo PHP.
-    const respuesta = await fetch("./api/eliminar_producto.php", {
-      // POST se utiliza para enviar datos al servidor.
-      method: "POST",
-
-      // Envía el FormData con el ID del producto.
-      body: datos,
-
-      // Incluye las credenciales de la misma página,
-      // como las cookies de sesión.
-      // Esto permite que PHP pueda reconocer la sesión
-      // del usuario si está configurada mediante cookies.
-      credentials: "same-origin",
-    });
-
-    // Lee el contenido de la respuesta como texto.
-    // Por ejemplo, PHP podría devolver:
-    // "Producto eliminado correctamente."
-    const mensaje = await respuesta.text();
-
-    // ====================================================
-    // 6. COMPROBAR SI EL SERVIDOR DEVOLVIÓ UN ERROR HTTP
-    // ====================================================
-
-    // respuesta.ok es true para estados HTTP entre 200 y 299.
-    // Es false para estados como 400, 403 o 500.
-    if (!respuesta.ok) {
-      // Muestra el mensaje del servidor.
-      // Si no hay mensaje, muestra uno predeterminado.
-      alert(mensaje || "No se pudo eliminar el producto.");
-
-      // Vuelve a habilitar el botón porque la operación falló.
-      boton.disabled = false;
-
-      // Restaura el texto del botón.
-      boton.textContent = "Eliminar producto";
-
-      // Termina la función para no ejecutar el código de éxito.
-      return;
+            return equivalencias[caracter];
+        });
     }
 
-    // ====================================================
-    // 7. INFORMAR QUE LA OPERACIÓN FUE EXITOSA
-    // ====================================================
+    // Muestra mensajes usando el contenedor común de la página.
+    function mensaje(texto, tipo = "success") {
+        const alertas = document.getElementById("alertas");
 
-    // Muestra el mensaje devuelto por el servidor PHP.
-    alert(mensaje);
+        alertas.innerHTML = `
+            <div class="alert alert-${tipo}" role="alert">
+                ${escaparHTML(texto)}
+            </div>
+        `;
 
-    // Recarga la página completa.
-    // Al volver a cargar el catálogo desde el servidor,
-    // el producto eliminado debería dejar de aparecer.
-    window.location.reload();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-    // ========================================================
-    // 8. MANEJAR ERRORES DE COMUNICACIÓN O EJECUCIÓN
-    // ========================================================
-  } catch (error) {
-    // Registra el error en la consola del navegador.
-    // Sirve para que el desarrollador pueda investigar el problema.
-    console.error("Error al eliminar el producto:", error);
+    // Obtiene el token actualizado desde el formulario.
+    function obtenerToken() {
+        return campoToken.value;
+    }
 
-    // Informa al usuario que no se pudo establecer
-    // la comunicación correctamente con el servidor.
-    alert("No se pudo conectar con el servidor.");
+    // Solicita la lista de productos al PHP.
+    async function cargarProductosAdmin() {
+        try {
+            const respuesta = await fetch(
+                "api/productos.php?action=listar",
+                { credentials: "same-origin" }
+            );
 
-    // Vuelve a habilitar el botón para permitir otro intento.
-    boton.disabled = false;
+            const resultado = await respuesta.json();
 
-    // Restaura el texto original del botón.
-    boton.textContent = "Eliminar producto";
-  }
+            if (!respuesta.ok || resultado.status !== 200) {
+                throw new Error(resultado.message || "Error al cargar productos.");
+            }
+
+            // El servidor devuelve datos; JavaScript decide cómo mostrarlos.
+            renderizarProductos(resultado.data || []);
+
+        } catch (error) {
+            contenedor.innerHTML = `
+                <div class="col-12">
+                    <p class="text-danger">
+                        No se pudieron cargar los productos.
+                    </p>
+                </div>
+            `;
+
+            console.error(error);
+        }
+    }
+
+    // Construye las tarjetas administrativas con los datos recibidos.
+    function renderizarProductos(productos) {
+        if (productos.length === 0) {
+            contenedor.innerHTML = `
+                <div class="col-12">
+                    <p>No hay productos para administrar.</p>
+                </div>
+            `;
+            return;
+        }
+
+        contenedor.innerHTML = productos.map(function (producto) {
+            return `
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <article class="producto-card card h-100">
+                        ${
+                            producto.imagen
+                                ? `<img
+                                    src="${escaparHTML(producto.imagen)}"
+                                    class="card-img-top"
+                                    alt="${escaparHTML(producto.nombre)}"
+                                    loading="lazy">`
+                                : `<div class="product-image-placeholder">
+                                    <span>Termo Store</span>
+                                   </div>`
+                        }
+
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                ${escaparHTML(producto.nombre)}
+                            </h3>
+
+                            <p class="card-text">
+                                ${escaparHTML(producto.descripcion)}
+                            </p>
+
+                            <p class="precio">
+                                $${Number(producto.precio).toLocaleString("es-AR", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                })}
+                            </p>
+
+                            <p>Stock: ${Number(producto.stock)}</p>
+
+                            <p>
+                                Estado:
+                                ${Number(producto.activo) === 1 ? "Activo" : "Inactivo"}
+                            </p>
+
+                            <div class="d-flex gap-2">
+                                <button
+                                    type="button"
+                                    class="btn btn-primary flex-fill"
+                                    data-admin-accion="editar"
+                                    data-id="${Number(producto.id)}">
+                                    Editar
+                                </button>
+
+                                ${
+                                    Number(producto.activo) === 1
+                                        ? `<button
+                                            type="button"
+                                            class="btn btn-danger flex-fill"
+                                            data-admin-accion="eliminar"
+                                            data-id="${Number(producto.id)}">
+                                            Eliminar
+                                           </button>`
+                                        : ""
+                                }
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `;
+        }).join("");
+    }
+
+    // Busca un producto concreto para cargar sus datos en el formulario.
+    async function editarProducto(id) {
+        try {
+            const respuesta = await fetch(
+                "api/productos.php?action=listar",
+                { credentials: "same-origin" }
+            );
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || resultado.status !== 200) {
+                throw new Error(resultado.message || "No se pudo consultar el producto.");
+            }
+
+            const producto = (resultado.data || []).find(function (p) {
+                return Number(p.id) === Number(id);
+            });
+
+            if (!producto) {
+                mensaje("No se encontró el producto.", "danger");
+                return;
+            }
+
+            // Copiamos los valores del producto a los campos del formulario.
+            campoId.value = producto.id;
+            document.getElementById("nombreProducto").value = producto.nombre;
+            document.getElementById("categoriaProducto").value = producto.categoria;
+            document.getElementById("descripcionProducto").value = producto.descripcion;
+            document.getElementById("imagenProducto").value = producto.imagen;
+            document.getElementById("precioProducto").value = producto.precio;
+            document.getElementById("stockProducto").value = producto.stock;
+
+            document.getElementById("formProducto").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        } catch (error) {
+            mensaje(error.message, "danger");
+        }
+    }
+
+    // Limpia los campos y deja el formulario listo para un alta nueva.
+    function cancelarEdicion() {
+        formulario.reset();
+        campoId.value = "";
+    }
+
+    // Envía el formulario a PHP para insertar o modificar.
+    formulario.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+
+        const datos = new FormData(formulario);
+
+        // El ID vacío indica un alta; con ID se modifica.
+        const accion = campoId.value ? "modificar" : "insertar";
+        datos.append("action", accion);
+
+        // Incluimos el token para que PHP valide la solicitud.
+        datos.set("token", obtenerToken());
+
+        try {
+            const respuesta = await fetch("api/productos.php", {
+                method: "POST",
+                body: datos,
+                credentials: "same-origin"
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || resultado.status < 200 || resultado.status >= 300) {
+                throw new Error(resultado.message || "No se pudo guardar el producto.");
+            }
+
+            mensaje(resultado.message);
+            cancelarEdicion();
+
+            // Actualizamos tanto el catálogo como el listado administrativo.
+            if (typeof window.cargarProductos === "function") {
+                await window.cargarProductos();
+            }
+
+            await cargarProductosAdmin();
+
+        } catch (error) {
+            mensaje(error.message, "danger");
+        }
+    });
+
+    // Detecta los clics en los botones de editar y eliminar.
+    // Se utiliza un único listener para todas las tarjetas.
+    contenedor.addEventListener("click", async function (evento) {
+        const boton = evento.target.closest("[data-admin-accion]");
+
+        if (!boton) {
+            return;
+        }
+
+        const accion = boton.dataset.adminAccion;
+        const id = Number(boton.dataset.id);
+
+        if (accion === "editar") {
+            await editarProducto(id);
+            return;
+        }
+
+        if (accion === "eliminar") {
+            if (!confirm("¿Querés eliminar este producto del catálogo?")) {
+                return;
+            }
+
+            const datos = new FormData();
+            datos.append("action", "borrar");
+            datos.append("id", String(id));
+            datos.append("token", obtenerToken());
+
+            try {
+                const respuesta = await fetch("api/productos.php", {
+                    method: "POST",
+                    body: datos,
+                    credentials: "same-origin"
+                });
+
+                const resultado = await respuesta.json();
+
+                if (!respuesta.ok || resultado.status !== 200) {
+                    throw new Error(resultado.message || "No se pudo eliminar el producto.");
+                }
+
+                mensaje(resultado.message);
+
+                if (typeof window.cargarProductos === "function") {
+                    await window.cargarProductos();
+                }
+
+                await cargarProductosAdmin();
+
+            } catch (error) {
+                mensaje(error.message, "danger");
+            }
+        }
+    });
+
+    // Permite cancelar una edición sin guardar los cambios.
+    document.getElementById("btnCancelarEdicion")
+        .addEventListener("click", cancelarEdicion);
+
+    // Exponemos la función para que app.js pueda actualizar el listado.
+    window.cargarProductosAdmin = cargarProductosAdmin;
+
 });
