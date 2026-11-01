@@ -140,3 +140,54 @@ document.getElementById('btn-salir').addEventListener('click', () => {
     pantallaLogin.classList.remove('d-none');
     // Volvemos a ocultar el sistema y a mostrar la pantallita de login.
 });
+
+// Lógica para registrar un usuario nuevo
+document.getElementById('btn-registrar').addEventListener('click', () => {
+    
+    let nuevoUser = document.getElementById('reg-usuario').value;
+    let nuevaPass = document.getElementById('reg-clave').value;
+
+    if (!nuevoUser || !nuevaPass) {
+        alert("Completá todos los datos para registrarte.");
+        return;
+    }
+
+    // 1. Armamos el paquete cerrado con los datos nuevos
+    let paqueteRegistro = new FormData();
+    paqueteRegistro.append('usuario', nuevoUser);
+    paqueteRegistro.append('clave', nuevaPass);
+
+    // 2. Mandamos al cadete a la ventanilla de registro
+    fetch('api/registro.php', {
+        method: 'POST', // Obligatorio para mandar el paquete cerrado
+        body: paqueteRegistro
+    })
+    .then(res => res.json())
+    .then(datos => {
+        if (datos.status === 200) {
+            alert("¡Cuenta creada con éxito! Ahora podés iniciar sesión.");
+            
+            // Ocultamos el registro y volvemos a mostrar el login
+            document.getElementById('pantalla-registro').classList.add('d-none');
+            document.getElementById('pantalla-login').classList.remove('d-none');
+            
+            // Limpiamos las cajitas por prolijidad
+            document.getElementById('reg-usuario').value = "";
+            document.getElementById('reg-clave').value = "";
+        } else {
+            alert("Hubo un error: " + datos.mensaje);
+        }
+    });
+});
+
+// Lógica del botoncito para volver al login
+document.getElementById('btn-volver-login').addEventListener('click', () => {
+    document.getElementById('pantalla-registro').classList.add('d-none');
+    document.getElementById('pantalla-login').classList.remove('d-none');
+});
+
+// Lógica para ir a la pantalla de registro
+document.getElementById('btn-ir-registro').addEventListener('click', () => {
+    document.getElementById('pantalla-login').classList.add('d-none');
+    document.getElementById('pantalla-registro').classList.remove('d-none');
+});
