@@ -1,0 +1,157 @@
+========================================================================
+TERMO STORE - FRONT DEL PARCIAL 2026
+Programación Orientada a la Web - Funes, Luis Antonio
+========================================================================
+
+DOCUMENTO DE CONSIDERACIONES
+-----------------------------------------------------------------------
+Este archivo resume las decisiones y consideraciones de la entrega.
+La documentación completa está en DOCUMENTACION.md, la auditoría en
+ERRORES_DETECTADOS.md y el material de estudio en CHEATSHEET.md.
+
+
+1. CÓMO EJECUTAR
+-----------------------------------------------------------------------
+- Iniciar Apache y MySQL en XAMPP.
+- Importar ../termos.sql en la base "termos" si no existe.
+- Abrir:
+  http://localhost/facultad/POW/POW/practica/Funes_Antonio/termos/front/index.html
+
+- Usuario: gaston
+- Clave:   12345
+
+Si el proyecto se copia a C:\xampp\htdocs\termos, la URL es:
+  http://localhost/termos/front/index.html
+
+La ruta de la API se detecta automáticamente como la carpeta hermana
+../api/ desde front/js/config.js. También se puede forzar con:
+  window.API_BASE_OVERRIDE antes de cargar config.js.
+
+
+2. API NO MODIFICADA
+-----------------------------------------------------------------------
+No se modificó ningún archivo de termos/api/*.php.
+Todas las adaptaciones se resolvieron desde el front.
+
+Problemas de la API que el front tuvo que contemplar:
+- login.php espera "usuario" y "password" (no user/pass).
+- login.php devuelve el typo "id_usurio".
+- verifica_token.php devuelve el typo "tpken_presente".
+- Las respuestas de error usan "menssage" (typo) y HTTP 200.
+- listar_productos.php no ordena; el front ordena por título.
+- Una tabla de productos vacía devuelve status 500 con "algo malo paso";
+  el front lo interpreta como listado vacío.
+- registrar_productos.php calcula $descrpicion (typo) pero inserta
+  $descripcion sin escapar; el front escapa la descripción.
+- Los endpoints de personas no escapan ningún campo; el front escapa
+  nombre, apellido, dirección, email y teléfono.
+- personas_guardar_editar.php devuelve status 505 cuando el UPDATE no
+  modifica filas; el front lo acepta como éxito.
+- ciudades.php no ordena; el front ordena ascendente por nombre.
+- No hay endpoint de logout; el front limpia sessionStorage y redirige.
+- No hay búsqueda por DNI; el front usa búsqueda binaria con
+  personas_cantidad.php y personas_listar.php?id=N.
+
+
+3. FUNCIONALIDADES ENTREGADAS
+-----------------------------------------------------------------------
+- index.html: login con usuario y contraseña, validación, mostrar/ocultar
+  contraseña, redirección automática si ya hay sesión válida.
+- panel.html: protegido; no se muestra hasta verificar el token contra
+  verifica_token.php. Sin token redirige a index.html.
+- Logout con confirmación (punto extra) y limpieza de sesión.
+- Listado de termos en tarjetas, ordenado por título en el front.
+- Imagen con src, alt (texto_alternativo), title (titulo_imagen) y
+  aria-description (descripcion_larga).
+- Modal con título, imagen ampliada y descripción larga al hacer clic
+  en la imagen o en "Ver detalle".
+- Carga de termos por POST multipart con token.
+- El primer campo del alta es la imagen.
+- ExifReader autocompleta título, título de imagen, descripción,
+  descripción larga y texto alternativo desde IPTC/XMP.
+- Vista previa de la imagen y validación de tipo/tamaño.
+- Búsqueda binaria de personas por DNI (rango 3.000.000 a 50.000.000).
+- Alta de persona si el DNI no existe, con DNI precargado.
+- Edición si el DNI existe, con DNI deshabilitado.
+- Select de ciudades ordenado ascendente, con el id como value.
+- Provincia La Pampa fija, deshabilitada y con valor 5.
+- Todos los campos requeridos.
+- Mensajes exactos:
+  "La persona XXX YYY fue dada de alta con éxito."
+  "Los datos de XXX YYY fueron actualizados."
+- Mensajes de éxito y error accesibles (aria-live, role alert/status).
+- Diseño responsive con Bootstrap local y CSS propio.
+- Sin dependencias de CDN.
+
+
+4. SESIÓN Y SEGURIDAD DEL FRONT
+-----------------------------------------------------------------------
+- Token y usuario se guardan en sessionStorage:
+  termos_token y termos_usuario.
+- El token se valida en cada entrada al panel.
+- Si el token es inválido, se limpia la sesión y se redirige al login.
+- Los datos que se insertan con innerHTML se escapan con escapeHtml()
+  para evitar XSS.
+- El login se envía por POST, no por GET, para no exponer la clave en
+  la URL.
+- El escape SQL manual (escaparParaSql) es solo un parche de
+  compatibilidad porque la API no usa consultas preparadas. No debe
+  considerarse una solución de seguridad definitiva.
+
+
+5. PRUEBAS REALIZADAS
+-----------------------------------------------------------------------
+Se probó el front con Chrome headless sobre la aplicación y la base
+real:
+- Login incorrecto y correcto.
+- Redirección y protección del panel.
+- Token en sessionStorage.
+- Listado de 2 termos ordenados.
+- Atributos alt, title y aria-description.
+- Modal de detalle.
+- Búsqueda binaria del DNI 28901236 (id 37).
+- Edición con DNI deshabilitado.
+- Aceptación del status 505.
+- DNI inexistente 49999999: alta con DNI precargado.
+- Autocompletado de los 5 campos con metadatos.
+- Vista previa de imagen.
+- Logout con confirmación.
+- Acceso directo a panel.html sin token: redirige a index.html.
+- Consola sin errores ni advertencias.
+- Alta de persona con O'Brien y termo con L'termo: guardado correcto.
+- Estado final de la base: 99 personas y 2 productos.
+- Sintaxis de todos los JS verificada con node --check.
+
+
+6. ESTRUCTURA DE LA ENTREGA
+-----------------------------------------------------------------------
+front/
+  index.html
+  panel.html
+  README.md
+  DOCUMENTACION.md
+  ERRORES_DETECTADOS.md
+  CHEATSHEET.md
+  CONSIDERACIONES.txt
+  css/styles.css
+  js/config.js
+  js/app.js
+  js/login.js
+  js/metadatos.js
+  js/panel.js
+  lib/bootstrap/...
+  lib/ExifReader-main/...
+  lib/metadatos.html
+  _legacy/  (código original auditado, no se usa en producción)
+
+
+7. ACLARACIÓN SOBRE _legacy
+-----------------------------------------------------------------------
+Los archivos _legacy/index.original.html, _legacy/panel.original.html
+y _legacy/app.original.js se conservaron sin cambios para que la
+auditoría de ERRORES_DETECTADOS.md sea verificable. No forman parte
+del flujo de la aplicación.
+
+========================================================================
+Fin del documento.
+========================================================================

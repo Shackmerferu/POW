@@ -1,0 +1,183 @@
+/* Estilos estructurales para la Documentación Offline de Tailwind CSS v4 */
+:root {
+  --tw-docs-accent: #0ea5e9;
+  --tw-docs-accent-rgb: 14, 165, 233;
+  --tw-sidebar-width: 290px;
+  --tw-code-bg: #f8fafc;
+  --tw-preview-bg: #ffffff;
+  --tw-sidebar-bg: #f8fafc;
+  --tw-border-color: #e2e8f0;
+  --tw-text-muted: #64748b;
+}
+
+html.dark {
+  --tw-code-bg: #0f172a;
+  --tw-preview-bg: #1e293b;
+  --tw-sidebar-bg: #0f172a;
+  --tw-border-color: #334155;
+  --tw-text-muted: #94a3b8;
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Layout de documentación con Sidebar fijo en escritorio */
+.tw-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .tw-layout {
+    grid-template-columns: var(--tw-sidebar-width) minmax(0, 1fr);
+    gap: 2rem;
+  }
+}
+
+.tw-sidebar {
+  background-color: var(--tw-sidebar-bg);
+  border-right: 1px solid var(--tw-border-color);
+}
+
+@media (min-width: 1024px) {
+  .tw-sidebar {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+  }
+}
+
+.tw-links-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--tw-text-muted);
+  margin-top: 1.1rem;
+  margin-bottom: 0.35rem;
+  padding-left: 0.5rem;
+}
+
+.tw-links-nav .nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tw-links-nav .nav-link:hover {
+  background-color: rgba(var(--tw-docs-accent-rgb), 0.12);
+  color: #0284c7;
+}
+
+html.dark .tw-links-nav .nav-link:hover {
+  color: #38bdf8;
+}
+
+.tw-links-nav .nav-link.active {
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #0284c7;
+}
+
+/* Bloques de demostración (Vista previa + Código HTML) */
+.bd-example-snippet {
+  border: 1px solid var(--tw-border-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 1.75rem;
+  background-color: var(--tw-preview-bg);
+}
+
+.bd-example-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1rem;
+  background-color: rgba(148, 163, 184, 0.1);
+  border-bottom: 1px solid var(--tw-border-color);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--tw-text-muted);
+}
+
+.bd-example {
+  padding: 1.5rem;
+  position: relative;
+}
+
+.bd-code-wrapper {
+  position: relative;
+  border-top: 1px solid var(--tw-border-color);
+  background-color: var(--tw-code-bg);
+}
+
+.bd-code-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid var(--tw-border-color);
+  font-size: 0.75rem;
+  color: var(--tw-text-muted);
+}
+
+.bd-code-wrapper pre {
+  margin: 0;
+  padding: 1rem;
+  max-height: 340px;
+  overflow: auto;
+  font-size: 0.83rem;
+  line-height: 1.55;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Secciones de documentación */
+.doc-section {
+  scroll-margin-top: 76px;
+  padding-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--tw-border-color);
+}
+
+.doc-section-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.doc-badge-class {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  background-color: rgba(var(--tw-docs-accent-rgb), 0.12);
+  color: #0284c7;
+  padding: 0.2em 0.6em;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(var(--tw-docs-accent-rgb), 0.28);
+}
+
+html.dark .doc-badge-class {
+  color: #38bdf8;
+  background-color: rgba(var(--tw-docs-accent-rgb), 0.18);
+}
+
+#btnBackToTop {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  display: none;
+}
+

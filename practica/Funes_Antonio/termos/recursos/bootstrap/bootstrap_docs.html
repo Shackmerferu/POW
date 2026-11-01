@@ -1,0 +1,1808 @@
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentación Offline Bootstrap 5.3.8 — Guía Completa de Componentes</title>
+  <!-- Bootstrap 5.3.8 CSS Local (sin tocar la carpeta bootstrap-5.3.8-dist) -->
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+  <!-- Estilos de la documentación offline -->
+  <link rel="stylesheet" href="docs-assets/docs.css">
+</head>
+<body>
+
+  <!-- Barra de navegación superior -->
+  <header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top">
+    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Navegación principal">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="26" fill="currentColor" class="bi bi-bootstrap-fill" viewBox="0 0 16 16">
+          <path d="M6.375 7.125V4.658h1.78c.973 0 1.542.457 1.542 1.237 0 .802-.604 1.23-1.764 1.23zm0 3.762h1.898c1.184 0 1.81-.48 1.81-1.377 0-.885-.65-1.348-1.886-1.348H6.375z"/>
+          <path d="M4.002 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4zm1.06 12V3.545h3.399c1.587 0 2.543.809 2.543 2.11 0 .884-.65 1.675-1.483 1.816v.1c1.143.117 1.904.931 1.904 2.033 0 1.488-1.084 2.396-2.888 2.396z"/>
+        </svg>
+        <span>Bootstrap <span class="badge bg-light text-dark ms-1">v5.3.8 Offline</span></span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebarOffcanvas" aria-controls="bdSidebarOffcanvas" aria-label="Abrir índice de navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="d-flex align-items-center gap-2 ms-auto mt-2 mt-lg-0">
+        <!-- Buscador rápido -->
+        <div class="input-group input-group-sm" style="max-width: 260px;">
+          <span class="input-group-text bg-white bg-opacity-10 text-white border-light border-opacity-25">🔍</span>
+          <input type="search" id="sidebarSearch" class="form-control bg-white bg-opacity-10 text-white border-light border-opacity-25" placeholder="Buscar componente o clase..." aria-label="Buscar en la documentación">
+        </div>
+
+        <!-- Botón de cambio de tema Claro / Oscuro -->
+        <button type="button" id="themeSwitcher" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1 text-nowrap">
+          <span>🌓</span>
+          <span id="themeSwitcherLabel">Modo Claro</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenedor principal con Sidebar + Contenido -->
+  <div class="container-xxl bd-layout">
+    <!-- Sidebar de navegación (Offcanvas en móvil, fijo en escritorio) -->
+    <aside class="bd-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebarOffcanvas" aria-labelledby="bdSidebarOffcanvasLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold" id="bdSidebarOffcanvasLabel">Índice Bootstrap 5.3</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#bdSidebarOffcanvas" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="offcanvas-body d-block">
+        <nav class="bd-links-nav" aria-label="Navegación de documentación">
+          <div class="bd-links-heading">Comenzando</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link active" href="#intro-instalacion">Introducción y Uso Local</a></li>
+            <li><a class="nav-link" href="#intro-archivos">Archivos de Distribución</a></li>
+            <li><a class="nav-link" href="#intro-color-modes">Modos de Color (Dark Mode)</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Diseño (Layout)</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#layout-containers">Breakpoints y Contenedores</a></li>
+            <li><a class="nav-link" href="#layout-grid">Sistema Grid y Columnas</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Contenido (Content)</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#content-typography">Tipografía y Listas</a></li>
+            <li><a class="nav-link" href="#content-images-figures">Imágenes y Figuras</a></li>
+            <li><a class="nav-link" href="#content-tables">Tablas</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Formularios (Forms)</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#forms-controls">Form Control, Select y Range</a></li>
+            <li><a class="nav-link" href="#forms-checks">Checks, Radios y Switches</a></li>
+            <li><a class="nav-link" href="#forms-input-group">Input Group y Floating Labels</a></li>
+            <li><a class="nav-link" href="#forms-validation">Validación de Formularios</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Componentes (24)</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#comp-accordion">1. Accordion</a></li>
+            <li><a class="nav-link" href="#comp-alerts">2. Alerts</a></li>
+            <li><a class="nav-link" href="#comp-badge">3. Badge</a></li>
+            <li><a class="nav-link" href="#comp-breadcrumb">4. Breadcrumb</a></li>
+            <li><a class="nav-link" href="#comp-buttons">5. Buttons</a></li>
+            <li><a class="nav-link" href="#comp-button-group">6. Button group</a></li>
+            <li><a class="nav-link" href="#comp-card">7. Card</a></li>
+            <li><a class="nav-link" href="#comp-carousel">8. Carousel</a></li>
+            <li><a class="nav-link" href="#comp-close-button">9. Close button</a></li>
+            <li><a class="nav-link" href="#comp-collapse">10. Collapse</a></li>
+            <li><a class="nav-link" href="#comp-dropdowns">11. Dropdowns</a></li>
+            <li><a class="nav-link" href="#comp-list-group">12. List group</a></li>
+            <li><a class="nav-link" href="#comp-modal">13. Modal</a></li>
+            <li><a class="nav-link" href="#comp-navbar">14. Navbar</a></li>
+            <li><a class="nav-link" href="#comp-navs-tabs">15. Navs &amp; tabs</a></li>
+            <li><a class="nav-link" href="#comp-offcanvas">16. Offcanvas</a></li>
+            <li><a class="nav-link" href="#comp-pagination">17. Pagination</a></li>
+            <li><a class="nav-link" href="#comp-placeholders">18. Placeholders</a></li>
+            <li><a class="nav-link" href="#comp-popovers">19. Popovers</a></li>
+            <li><a class="nav-link" href="#comp-progress">20. Progress</a></li>
+            <li><a class="nav-link" href="#comp-scrollspy">21. Scrollspy</a></li>
+            <li><a class="nav-link" href="#comp-spinners">22. Spinners</a></li>
+            <li><a class="nav-link" href="#comp-toasts">23. Toasts</a></li>
+            <li><a class="nav-link" href="#comp-tooltips">24. Tooltips</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Helpers y Utilidades</div>
+          <ul class="list-unstyled mb-4">
+            <li><a class="nav-link" href="#helpers-overview">Helpers (Stacks, Ratio, Links)</a></li>
+            <li><a class="nav-link" href="#utilities-overview">Utilidades (Espaciado, Flex, Color)</a></li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="py-4 px-lg-3">
+      <!-- Encabezado y filtros por categoría -->
+      <div class="p-4 mb-4 rounded-3 bg-body-tertiary border">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+          <span class="badge text-bg-primary">Bootstrap 5.3.8 Dist Local</span>
+          <span class="text-body-secondary small">Fuente oficial: <code>getbootstrap.com/docs/5.3/</code></span>
+        </div>
+        <h1 class="display-6 fw-bold mb-2">Documentación Offline de Bootstrap 5.3</h1>
+        <p class="lead mb-3">
+          Guía interactiva completa y 100% offline conectada a la carpeta local <code>bootstrap-5.3.8-dist/</code>. Incluye ejemplos funcionales en vivo y código HTML listo para copiar de todos los componentes, formularios, grillas y utilidades.
+        </p>
+        <!-- Filtros rápidos por categoría -->
+        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
+          <button type="button" class="btn btn-sm btn-outline-primary active" data-filter-category="all">Todo</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="getting-started">Comenzando</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="layout">Layout y Grid</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="content">Contenido</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="forms">Formularios</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="components">Componentes (24)</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="utilities">Helpers y Utilidades</button>
+        </div>
+      </div>
+
+      <!-- Alerta cuando no hay resultados de búsqueda -->
+      <div id="noSearchResults" class="alert alert-warning d-none" role="alert">
+        No se encontraron secciones o componentes que coincidan con tu búsqueda. Prueba con otro término o selecciona la categoría <strong>Todo</strong>.
+      </div>
+
+      <!-- =====================================================================
+           SECCIÓN 1: COMENZANDO (GETTING STARTED)
+           ===================================================================== -->
+      <section id="intro-instalacion" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Introducción y Plantilla Inicial (Starter Template)</h2>
+          <span class="doc-badge-class">Getting Started</span>
+        </div>
+        <p class="text-body-secondary">
+          Bootstrap es un potente toolkit frontend repleto de funciones para construir sitios responsivos ("mobile-first"). Para utilizarlo de manera <strong>offline</strong> mediante la carpeta local <code>bootstrap-5.3.8-dist</code>, solo debes enlazar <code>bootstrap.min.css</code> en el <code>&lt;head&gt;</code> y <code>bootstrap.bundle.min.js</code> (que ya incluye Popper para Dropdowns, Popovers y Tooltips) antes de cerrar el <code>&lt;/body&gt;</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Plantilla base HTML5 con archivos locales de <code>bootstrap-5.3.8-dist</code></span>
+          </div>
+          <script type="text/plain" class="bd-custom-code">
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo Bootstrap 5.3.8 Offline</title>
+    <!-- CSS compilado local -->
+    <link href="bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container py-4">
+      <h1>¡Hola, mundo con Bootstrap 5.3.8!</h1>
+      <button class="btn btn-primary">Botón de prueba</button>
+    </div>
+
+    <!-- JS Bundle local (incluye Popper para Dropdowns, Tooltips y Popovers) -->
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+          </script>
+        </div>
+      </section>
+
+      <section id="intro-archivos" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Contenido de <code>bootstrap-5.3.8-dist</code></h2>
+          <span class="doc-badge-class">Contents</span>
+        </div>
+        <p class="text-body-secondary">
+          La distribución precompilada incluye diferentes variantes de CSS y JavaScript según las necesidades del proyecto:
+        </p>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Archivo en <code>bootstrap-5.3.8-dist/</code></th>
+                <th>Descripción</th>
+                <th>¿Incluye Popper?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>css/bootstrap.min.css</code></td>
+                <td>Todo el framework CSS completo y minificado (Reboot, Grid, Componentes, Utilidades). <strong>Recomendado.</strong></td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>css/bootstrap.rtl.min.css</code></td>
+                <td>Versión RTL (Right-to-Left) para idiomas que se escriben de derecha a izquierda.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>css/bootstrap-grid.min.css</code></td>
+                <td>Únicamente el sistema Grid (<code>.container</code>, <code>.row</code>, <code>.col-*</code>) y utilidades Flex.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>css/bootstrap-utilities.min.css</code></td>
+                <td>Únicamente las clases de utilidad (espaciado, colores, bordes, display, etc.).</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>css/bootstrap-reboot.min.css</code></td>
+                <td>Únicamente la normalización CSS base (Reboot).</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>js/bootstrap.bundle.min.js</code></td>
+                <td>Todos los plugins JavaScript de Bootstrap + <strong>Popper</strong> integrado. <strong>Recomendado.</strong></td>
+                <td><span class="badge text-bg-success">Sí (Incluido)</span></td>
+              </tr>
+              <tr>
+                <td><code>js/bootstrap.min.js</code></td>
+                <td>Plugins JavaScript sin Popper (requiere cargar Popper por separado si usas Dropdowns/Tooltips/Popovers).</td>
+                <td><span class="badge text-bg-secondary">No</span></td>
+              </tr>
+              <tr>
+                <td><code>js/bootstrap.esm.min.js</code></td>
+                <td>Versión módulo ES (<code>import * as bootstrap from '...'</code>).</td>
+                <td><span class="badge text-bg-secondary">No</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="intro-color-modes" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Modos de Color (Claro / Oscuro)</h2>
+          <span class="doc-badge-class">data-bs-theme="dark"</span>
+        </div>
+        <p class="text-body-secondary">
+          Bootstrap 5.3 incorpora soporte nativo para modo oscuro. Puedes aplicarlo globalmente en la etiqueta <code>&lt;html data-bs-theme="dark"&gt;</code> o localmente en cualquier contenedor o componente específico.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Prueba de alcance global y por contenedor con <code>data-bs-theme</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button type="button" class="btn btn-outline-primary btn-sm" data-set-bs-theme="light">☀️ Activar Modo Claro en toda la página</button>
+              <button type="button" class="btn btn-outline-primary btn-sm" data-set-bs-theme="dark">🌙 Activar Modo Oscuro en toda la página</button>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="card p-3" data-bs-theme="light">
+                  <h6 class="card-title">Tarjeta forzada en Modo Claro (<code>data-bs-theme="light"</code>)</h6>
+                  <p class="card-text small text-body-secondary mb-2">Este bloque siempre mantiene fondo claro sin importar el tema global.</p>
+                  <button class="btn btn-sm btn-primary">Acción</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card p-3" data-bs-theme="dark">
+                  <h6 class="card-title">Tarjeta forzada en Modo Oscuro (<code>data-bs-theme="dark"</code>)</h6>
+                  <p class="card-text small text-body-secondary mb-2">Este bloque siempre mantiene fondo oscuro usando variables CSS nativas.</p>
+                  <button class="btn btn-sm btn-primary">Acción</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 2: DISEÑO (LAYOUT)
+           ===================================================================== -->
+      <section id="layout-containers" class="doc-section" data-category="layout">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Breakpoints y Contenedores</h2>
+          <span class="doc-badge-class">.container / .container-fluid</span>
+        </div>
+        <p class="text-body-secondary">
+          Los contenedores son el bloque fundamental de diseño en Bootstrap: centran y rellenan horizontalmente el contenido según los 6 puntos de corte (breakpoints) responsivos:
+        </p>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm table-bordered text-center align-middle">
+            <thead class="table-light">
+              <tr>
+                <th> Clase Contenedor </th>
+                <th>Extra small<br><small>&lt;576px</small></th>
+                <th>Small (<code>sm</code>)<br><small>≥576px</small></th>
+                <th>Medium (<code>md</code>)<br><small>≥768px</small></th>
+                <th>Large (<code>lg</code>)<br><small>≥992px</small></th>
+                <th>X-Large (<code>xl</code>)<br><small>≥1200px</small></th>
+                <th>XX-Large (<code>xxl</code>)<br><small>≥1400px</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-start"><code>.container</code></td>
+                <td>100%</td><td>540px</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td>
+              </tr>
+              <tr>
+                <td class="text-start"><code>.container-md</code></td>
+                <td>100%</td><td>100%</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td>
+              </tr>
+              <tr>
+                <td class="text-start"><code>.container-lg</code></td>
+                <td>100%</td><td>100%</td><td>100%</td><td>960px</td><td>1140px</td><td>1320px</td>
+              </tr>
+              <tr>
+                <td class="text-start"><code>.container-fluid</code></td>
+                <td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Ejemplo de Contenedores</span></div>
+          <div class="bd-example">
+            <div class="container bg-primary bg-opacity-10 border border-primary p-2 mb-2 rounded">
+              <code>.container</code> — Ancho máximo adaptativo en cada breakpoint
+            </div>
+            <div class="container-fluid bg-success bg-opacity-10 border border-success p-2 rounded">
+              <code>.container-fluid</code> — Siempre ocupa el 100% del ancho disponible
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="layout-grid" class="doc-section" data-category="layout">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Sistema Grid (12 Columnas y Gutters)</h2>
+          <span class="doc-badge-class">.row / .col-* / .g-*</span>
+        </div>
+        <p class="text-body-secondary">
+          El sistema Grid usa Flexbox para construir diseños de hasta <strong>12 columnas por fila</strong>. Usa <code>.col</code> para columnas de igual ancho automático o <code>.col-{breakpoint}-{1..12}</code> para definir cuántos espacios ocupa cada columna en distintas pantallas. Con <code>.g-*</code>, <code>.gx-*</code> y <code>.gy-*</code> controlas la separación (gutters).
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Columnas automáticas, tamaños específicos y diseño responsivo</span></div>
+          <div class="bd-example bd-example-row text-center">
+            <!-- 3 columnas iguales -->
+            <div class="row mb-3">
+              <div class="col">.col (1 de 3)</div>
+              <div class="col">.col (2 de 3)</div>
+              <div class="col">.col (3 de 3)</div>
+            </div>
+            <!-- Ancho específico en escritorio y 100% en móvil -->
+            <div class="row mb-3">
+              <div class="col-12 col-md-8">.col-12 .col-md-8</div>
+              <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+            </div>
+            <!-- Gutters (espaciado entre columnas) -->
+            <div class="row g-3">
+              <div class="col-6"><div class="p-2 border bg-body-tertiary">Gutter .g-3 (Col 1)</div></div>
+              <div class="col-6"><div class="p-2 border bg-body-tertiary">Gutter .g-3 (Col 2)</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 3: CONTENIDO (CONTENT)
+           ===================================================================== -->
+      <section id="content-typography" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Tipografía, Encabezados y Citas</h2>
+          <span class="doc-badge-class">.h1–.h6 / .display-1–6 / .lead</span>
+        </div>
+        <p class="text-body-secondary">
+          Bootstrap incluye estilos para encabezados semánticos, clases <code>.display-*</code> para títulos destacados, <code>.lead</code> para párrafos introductorios, elementos en línea y listas (<code>.list-unstyled</code>, <code>.list-inline</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Demostración tipográfica</span></div>
+          <div class="bd-example">
+            <h1 class="display-6">Display 6 (<code>.display-6</code>)</h1>
+            <p class="lead">Este es un párrafo destacado usando la clase <code>.lead</code> para resaltar sobre el resto del texto.</p>
+            <p>Puedes usar la etiqueta <code>&lt;mark&gt;</code> para <mark>resaltar texto</mark>, <code>&lt;del&gt;</code> para <del>texto eliminado</del>, <code>&lt;strong&gt;</code> para <strong>negrita</strong> y <code>&lt;kbd&gt;</code> para atajos como <kbd>Ctrl + C</kbd>.</p>
+            <figure class="mb-0">
+              <blockquote class="blockquote">
+                <p>Una cita bien conocida contenida en un elemento blockquote.</p>
+              </blockquote>
+              <figcaption class="blockquote-footer mb-0">
+                Alguien famoso en <cite title="Título de la fuente">Documentación de Bootstrap</cite>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-images-figures" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Imágenes Responsivas y Figuras</h2>
+          <span class="doc-badge-class">.img-fluid / .img-thumbnail / .figure</span>
+        </div>
+        <p class="text-body-secondary">
+          Las imágenes en Bootstrap se vuelven responsivas con <code>.img-fluid</code> (aplica <code>max-width: 100%; height: auto;</code>). Usa <code>.img-thumbnail</code> para darle un marco redondeado de 1px y <code>.figure</code> para imágenes con pie de foto.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Imágenes fluidas, miniaturas y figuras</span></div>
+          <div class="bd-example d-flex flex-wrap align-items-start gap-4">
+            <div>
+              <p class="small text-body-secondary mb-1"><code>.img-thumbnail</code></p>
+              <svg class="bd-placeholder-img img-thumbnail" width="160" height="120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Thumbnail 160x120" focusable="false">
+                <rect width="100%" height="100%" fill="#6c757d"></rect>
+                <text x="50%" y="50%" fill="#dee2e6" dy=".3em" text-anchor="middle">160x120</text>
+              </svg>
+            </div>
+            <figure class="figure mb-0">
+              <svg class="bd-placeholder-img figure-img img-fluid rounded" width="240" height="120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figura 240x120" focusable="false">
+                <rect width="100%" height="100%" fill="#0d6efd"></rect>
+                <text x="50%" y="50%" fill="#ffffff" dy=".3em" text-anchor="middle">.figure-img .img-fluid</text>
+              </svg>
+              <figcaption class="figure-caption">Un pie de foto para la imagen superior (<code>.figure-caption</code>).</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-tables" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Tablas</h2>
+          <span class="doc-badge-class">.table / .table-striped / .table-hover / .table-responsive</span>
+        </div>
+        <p class="text-body-secondary">
+          Agrega la clase base <code>.table</code> a cualquier <code>&lt;table&gt;</code> y combínala con modificadores como <code>.table-striped</code>, <code>.table-hover</code>, <code>.table-bordered</code>, variantes de color (<code>.table-primary</code>, <code>.table-success</code>, etc.) y envuélvela en <code>.table-responsive</code> para desplazamiento horizontal en pantallas pequeñas.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Tabla con filas alternadas, hover y estados contextuales</span></div>
+          <div class="bd-example">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col">Materia</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Ana García</td>
+                    <td>Programación Orientada a la Web</td>
+                    <td><span class="badge text-bg-success">Promocionado</span></td>
+                  </tr>
+                  <tr class="table-info">
+                    <th scope="row">2</th>
+                    <td>Lucas Fernández</td>
+                    <td>Diseño de Interfaces (Fila <code>.table-info</code>)</td>
+                    <td><span class="badge text-bg-primary">Regular</span></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Sofía Martínez</td>
+                    <td>Bases de Datos</td>
+                    <td><span class="badge text-bg-warning">En curso</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 4: FORMULARIOS (FORMS)
+           ===================================================================== -->
+      <section id="forms-controls" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Controles de Formulario, Select y Range</h2>
+          <span class="doc-badge-class">.form-control / .form-select / .form-range</span>
+        </div>
+        <p class="text-body-secondary">
+          Estiliza campos de texto, áreas de texto, selectores desplegables, selectores de archivos, colores y controles deslizantes. Soporta tamaños <code>.form-control-lg</code> y <code>.form-control-sm</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Controles principales de formulario</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="demoEmailInput" class="form-label">Correo electrónico (<code>.form-control</code>)</label>
+                <input type="email" class="form-control" id="demoEmailInput" placeholder="nombre@unlpam.edu.ar">
+                <div class="form-text">Nunca compartiremos tu correo con nadie más (<code>.form-text</code>).</div>
+              </div>
+              <div class="col-md-6">
+                <label for="demoSelect" class="form-label">Menú desplegable (<code>.form-select</code>)</label>
+                <select class="form-select" id="demoSelect" aria-label="Ejemplo de select">
+                  <option selected>Selecciona una comisión...</option>
+                  <option value="1">Comisión 1 — Mañana</option>
+                  <option value="2">Comisión 2 — Tarde</option>
+                  <option value="3">Comisión 3 — Noche</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="demoFile" class="form-label">Subir archivo (<code>type="file"</code>)</label>
+                <input class="form-control" type="file" id="demoFile">
+              </div>
+              <div class="col-md-3">
+                <label for="demoColor" class="form-label">Color (<code>.form-control-color</code>)</label>
+                <input type="color" class="form-control form-control-color" id="demoColor" value="#712cf9" title="Elige un color">
+              </div>
+              <div class="col-md-3">
+                <label for="demoRange" class="form-label">Rango (<code>.form-range</code>)</label>
+                <input type="range" class="form-range" min="0" max="5" step="0.5" id="demoRange">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-checks" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Checks, Radios, Switches y Botones Toggle</h2>
+          <span class="doc-badge-class">.form-check / .form-switch / .btn-check</span>
+        </div>
+        <p class="text-body-secondary">
+          Crea casillas de verificación (checkboxes), botones de opción (radios), interruptores tipo switch (<code>.form-switch</code>) y botones de alternancia (<code>.btn-check</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Checks, Radios, Switches e Indeterminado</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">Checkbox por defecto</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                  <label class="form-check-label" for="flexCheckChecked">Checkbox marcado</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+                  <label class="form-check-label" for="flexCheckIndeterminate">Checkbox indeterminado (JS)</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio1" checked>
+                  <label class="form-check-label" for="flexRadio1">Radio seleccionado</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadio2">
+                  <label class="form-check-label" for="flexRadio2">Segundo radio</label>
+                </div>
+                <div class="form-check form-switch mt-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                  <label class="form-check-label" for="flexSwitchCheckChecked">Interruptor <code>.form-switch</code></label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <p class="small text-body-secondary mb-1">Botones Toggle (<code>.btn-check</code>):</p>
+                <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                <label class="btn btn-outline-primary btn-sm me-1" for="btn-check-outlined">Alternar Check</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+                <label class="btn btn-outline-success btn-sm" for="success-outlined">Activo</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-input-group" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Input Group y Floating Labels</h2>
+          <span class="doc-badge-class">.input-group / .form-floating</span>
+        </div>
+        <p class="text-body-secondary">
+          Extiende controles agregando texto, íconos o botones a los lados con <code>.input-group</code>, o crea etiquetas flotantes modernas con <code>.form-floating</code> (requiere que el <code>&lt;input&gt;</code> tenga un atributo <code>placeholder</code> y vaya antes del <code>&lt;label&gt;</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Grupos de entrada y etiquetas flotantes</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">@</span>
+                  <input type="text" class="form-control" placeholder="Usuario" aria-label="Usuario" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="text" class="form-control" aria-label="Monto en pesos" value="1500">
+                  <span class="input-group-text">.00</span>
+                  <button class="btn btn-primary" type="button">Pagar</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control" id="floatingInputDemo" placeholder="nombre@ejemplo.com" value="estudiante@unlpam.edu.ar">
+                  <label for="floatingInputDemo">Correo electrónico (<code>.form-floating</code>)</label>
+                </div>
+                <div class="form-floating">
+                  <input type="password" class="form-control" id="floatingPasswordDemo" placeholder="Contraseña">
+                  <label for="floatingPasswordDemo">Contraseña</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-validation" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Validación de Formularios</h2>
+          <span class="doc-badge-class">.needs-validation / .is-valid / .is-invalid</span>
+        </div>
+        <p class="text-body-secondary">
+          Proporciona retroalimentación clara al usuario con clases de validación manuales (<code>.is-valid</code>, <code>.is-invalid</code>) o validación automática HTML5 + JS usando <code>.needs-validation</code> y <code>novalidate</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Formulario interactivo con validación (haz clic en "Enviar formulario")</span></div>
+          <div class="bd-example">
+            <form class="row g-3 needs-validation" novalidate>
+              <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="validationCustom01" value="Juan" required>
+                <div class="valid-feedback">¡Se ve bien!</div>
+              </div>
+              <div class="col-md-4">
+                <label for="validationCustomUsername" class="form-label">Usuario</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text" id="inputGroupPrepend">@</span>
+                  <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                  <div class="invalid-feedback">Por favor, elige un nombre de usuario.</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="validationServer04" class="form-label">Provincia</label>
+                <select class="form-select" id="validationServer04" required>
+                  <option selected disabled value="">Elegir...</option>
+                  <option>La Pampa</option>
+                  <option>Buenos Aires</option>
+                  <option>Córdoba</option>
+                </select>
+                <div class="invalid-feedback">Selecciona una provincia válida.</div>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Enviar formulario (Probar validación)</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 5: LOS 24 COMPONENTES DE BOOTSTRAP 5.3
+           ===================================================================== -->
+
+      <!-- 1. ACCORDION -->
+      <section id="comp-accordion" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">1. Accordion (Acordeón)</h2>
+          <span class="doc-badge-class">.accordion / .accordion-item / .accordion-flush</span>
+        </div>
+        <p class="text-body-secondary">
+          Construye acordeones que colapsan verticalmente usando el plugin Collapse de Bootstrap. Agrega <code>.accordion-flush</code> para eliminar bordes exteriores, u omite el atributo <code>data-bs-parent</code> en cada <code>.accordion-collapse</code> para que los paneles permanezcan abiertos simultáneamente (Always Open).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Acordeón estándar interactivo</span></div>
+          <div class="bd-example">
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Ítem de Acordeón #1 (Abierto por defecto)
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <strong>Este es el cuerpo del primer ítem.</strong> Se muestra por defecto gracias a la clase <code>.show</code>. Usa el atributo <code>data-bs-parent="#accordionExample"</code> para cerrar los demás paneles al abrir uno nuevo.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Ítem de Acordeón #2
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <strong>Segundo panel del acordeón.</strong> Puedes colocar cualquier estructura HTML dentro de <code>.accordion-body</code>.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Ítem de Acordeón #3
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <strong>Tercer panel del acordeón.</strong> Animado con transiciones CSS fluidas.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ALERTS -->
+      <section id="comp-alerts" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">2. Alerts (Alertas)</h2>
+          <span class="doc-badge-class">.alert / .alert-{color} / .alert-dismissible</span>
+        </div>
+        <p class="text-body-secondary">
+          Mensajes de retroalimentación contextual disponibles en los 8 colores temáticos (<code>primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>light</code>, <code>dark</code>). Usa <code>.alert-link</code> para enlaces con color adaptado y <code>.alert-dismissible</code> junto a un botón <code>data-bs-dismiss="alert"</code> para poder cerrarlas.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Variantes de alertas, enlaces, íconos y alerta dinámica en vivo</span></div>
+          <div class="bd-example">
+            <div class="alert alert-primary" role="alert">
+              Una alerta <code>.alert-primary</code> simple con <a href="#" class="alert-link">un enlace de ejemplo (.alert-link)</a>.
+            </div>
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+              <span class="me-2 fs-5">✅</span>
+              <div>Una alerta <code>.alert-success</code> con ícono y diseño Flexbox.</div>
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>¡Atención!</strong> Puedes cerrar esta alerta haciendo clic en la X de la derecha (<code>.alert-dismissible</code>).
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+            <!-- Demo de alerta en vivo -->
+            <div id="liveAlertPlaceholder"></div>
+            <button type="button" class="btn btn-primary btn-sm" id="liveAlertBtn">Mostrar alerta en vivo (Live Alert JS)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. BADGE -->
+      <section id="comp-badge" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">3. Badge (Insignias y Contadores)</h2>
+          <span class="doc-badge-class">.badge / .text-bg-* / .rounded-pill</span>
+        </div>
+        <p class="text-body-secondary">
+          Pequeñas etiquetas y contadores que escalan automáticamente al tamaño del elemento padre. Usa las clases de ayuda <code>.text-bg-{color}</code> para garantizar contraste automático de texto y <code>.rounded-pill</code> para bordes tipo cápsula.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Badges en encabezados, botones, notificaciones posicionadas y cápsulas</span></div>
+          <div class="bd-example">
+            <h5>Encabezado de ejemplo <span class="badge text-bg-secondary">Nuevo</span></h5>
+            <div class="d-flex flex-wrap align-items-center gap-3 my-3">
+              <button type="button" class="btn btn-primary">
+                Notificaciones <span class="badge text-bg-secondary">4</span>
+              </button>
+              <button type="button" class="btn btn-dark position-relative">
+                Bandeja de entrada
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  99+
+                  <span class="visually-hidden">mensajes no leídos</span>
+                </span>
+              </button>
+            </div>
+            <div class="d-flex flex-wrap gap-1">
+              <span class="badge rounded-pill text-bg-primary">Primary</span>
+              <span class="badge rounded-pill text-bg-secondary">Secondary</span>
+              <span class="badge rounded-pill text-bg-success">Success</span>
+              <span class="badge rounded-pill text-bg-danger">Danger</span>
+              <span class="badge rounded-pill text-bg-warning">Warning</span>
+              <span class="badge rounded-pill text-bg-info">Info</span>
+              <span class="badge rounded-pill text-bg-light">Light</span>
+              <span class="badge rounded-pill text-bg-dark">Dark</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BREADCRUMB -->
+      <section id="comp-breadcrumb" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">4. Breadcrumb (Migas de Pan)</h2>
+          <span class="doc-badge-class">.breadcrumb / .breadcrumb-item</span>
+        </div>
+        <p class="text-body-secondary">
+          Indica la ubicación de la página actual dentro de una jerarquía de navegación. Los separadores se agregan automáticamente en CSS mediante <code>::before</code> y pueden personalizarse con la variable CSS <code>--bs-breadcrumb-divider</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Breadcrumb estándar y con divisor personalizado</span></div>
+          <div class="bd-example">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Facultad</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Recursos 2026</li>
+              </ol>
+            </nav>
+
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Divisor personalizado con <code>--bs-breadcrumb-divider: '&gt;'</code></li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. BUTTONS -->
+      <section id="comp-buttons" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">5. Buttons (Botones)</h2>
+          <span class="doc-badge-class">.btn / .btn-{color} / .btn-outline-* / .btn-lg / .btn-sm</span>
+        </div>
+        <p class="text-body-secondary">
+          Estilos de botones personalizados para acciones en formularios, cuadros de diálogo y más. Incluye soporte para múltiples tamaños, estados deshabilitados y variantes con borde (outline).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Variantes de color, botones outline y tamaños</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button type="button" class="btn btn-primary">Primary</button>
+              <button type="button" class="btn btn-secondary">Secondary</button>
+              <button type="button" class="btn btn-success">Success</button>
+              <button type="button" class="btn btn-danger">Danger</button>
+              <button type="button" class="btn btn-warning">Warning</button>
+              <button type="button" class="btn btn-info">Info</button>
+              <button type="button" class="btn btn-light">Light</button>
+              <button type="button" class="btn btn-dark">Dark</button>
+              <button type="button" class="btn btn-link">Enlace</button>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button type="button" class="btn btn-outline-primary">Outline Primary</button>
+              <button type="button" class="btn btn-outline-success">Outline Success</button>
+              <button type="button" class="btn btn-outline-danger">Outline Danger</button>
+              <button type="button" class="btn btn-outline-secondary">Outline Secondary</button>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+              <button type="button" class="btn btn-primary btn-lg">Botón Grande (.btn-lg)</button>
+              <button type="button" class="btn btn-primary">Botón Normal</button>
+              <button type="button" class="btn btn-primary btn-sm">Botón Pequeño (.btn-sm)</button>
+              <button type="button" class="btn btn-secondary" disabled>Deshabilitado</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. BUTTON GROUP -->
+      <section id="comp-button-group" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">6. Button Group (Grupo de Botones)</h2>
+          <span class="doc-badge-class">.btn-group / .btn-toolbar / .btn-group-vertical</span>
+        </div>
+        <p class="text-body-secondary">
+          Agrupa una serie de botones en una sola línea con <code>.btn-group</code> o apílalos verticalmente con <code>.btn-group-vertical</code>. Combina varios grupos en barras de herramientas con <code>.btn-toolbar</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Grupos de botones horizontales, estilos mixtos y barra de herramientas</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+              <div class="btn-group" role="group" aria-label="Ejemplo básico">
+                <button type="button" class="btn btn-primary">Izquierda</button>
+                <button type="button" class="btn btn-primary">Centro</button>
+                <button type="button" class="btn btn-primary">Derecha</button>
+              </div>
+
+              <div class="btn-group" role="group" aria-label="Estilos mixtos">
+                <button type="button" class="btn btn-danger">Cancelar</button>
+                <button type="button" class="btn btn-warning">Pausar</button>
+                <button type="button" class="btn btn-success">Confirmar</button>
+              </div>
+            </div>
+
+            <div class="btn-toolbar gap-2" role="toolbar" aria-label="Barra de herramientas con grupos de botones">
+              <div class="btn-group btn-group-sm" role="group" aria-label="Primer grupo">
+                <button type="button" class="btn btn-outline-secondary">1</button>
+                <button type="button" class="btn btn-outline-secondary">2</button>
+                <button type="button" class="btn btn-outline-secondary">3</button>
+                <button type="button" class="btn btn-outline-secondary">4</button>
+              </div>
+              <div class="btn-group btn-group-sm" role="group" aria-label="Segundo grupo">
+                <button type="button" class="btn btn-outline-secondary">5</button>
+                <button type="button" class="btn btn-outline-secondary">6</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. CARD -->
+      <section id="comp-card" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">7. Card (Tarjetas)</h2>
+          <span class="doc-badge-class">.card / .card-header / .card-body / .card-footer</span>
+        </div>
+        <p class="text-body-secondary">
+          Contenedor de contenido flexible y extensible. Incluye opciones para encabezados y pies de tarjeta, imágenes superiores/inferiores, grupos de listas, títulos (<code>.card-title</code>), subtítulos (<code>.card-subtitle</code>) y variantes de color.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Tarjeta con imagen, tarjeta con Header/Footer y tarjeta con color temático</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="card h-100">
+                  <svg class="bd-placeholder-img card-img-top" width="100%" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagen superior de tarjeta" focusable="false">
+                    <rect width="100%" height="100%" fill="#712cf9"></rect>
+                    <text x="50%" y="50%" fill="#ffffff" dy=".3em" text-anchor="middle">.card-img-top</text>
+                  </svg>
+                  <div class="card-body">
+                    <h5 class="card-title">Título de la tarjeta</h5>
+                    <p class="card-text">Texto de ejemplo rápido para construir sobre el título de la tarjeta.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Ir a algún lugar</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card h-100 text-center">
+                  <div class="card-header">Destacado (<code>.card-header</code>)</div>
+                  <div class="card-body">
+                    <h5 class="card-title">Tratamiento especial</h5>
+                    <p class="card-text">Con texto de apoyo debajo como introducción natural a contenido adicional.</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  </div>
+                  <div class="card-footer text-body-secondary">Hace 2 días (<code>.card-footer</code>)</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card text-bg-primary h-100">
+                  <div class="card-header">Tarjeta <code>.text-bg-primary</code></div>
+                  <div class="card-body">
+                    <h5 class="card-title">Color combinado</h5>
+                    <p class="card-text">Usando <code>.text-bg-*</code> Bootstrap ajusta automáticamente el color del texto y bordes.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. CAROUSEL -->
+      <section id="comp-carousel" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">8. Carousel (Carrusel de Diapositivas)</h2>
+          <span class="doc-badge-class">.carousel / .carousel-inner / .carousel-item</span>
+        </div>
+        <p class="text-body-secondary">
+          Presentación de diapositivas para recorrer imágenes o contenido con soporte para indicadores, controles anterior/siguiente, subtítulos (<code>.carousel-caption</code>), transición fundida (<code>.carousel-fade</code>) y reproducción automática (<code>data-bs-ride="carousel"</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Carrusel completo con indicadores, controles y subtítulos</span></div>
+          <div class="bd-example">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner rounded">
+                <div class="carousel-item active">
+                  <svg class="bd-placeholder-img d-block w-100" width="800" height="280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Primera diapositiva" focusable="false">
+                    <rect width="100%" height="100%" fill="#343a40"></rect>
+                    <text x="50%" y="42%" fill="#dee2e6" font-size="24" text-anchor="middle">Primera Diapositiva</text>
+                  </svg>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5> etiqueta de la primera diapositiva</h5>
+                    <p>Contenido representativo para la primera diapositiva del carrusel.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <svg class="bd-placeholder-img d-block w-100" width="800" height="280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Segunda diapositiva" focusable="false">
+                    <rect width="100%" height="100%" fill="#5a1ecc"></rect>
+                    <text x="50%" y="42%" fill="#ffffff" font-size="24" text-anchor="middle">Segunda Diapositiva</text>
+                  </svg>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Etiqueta de la segunda diapositiva</h5>
+                    <p>Navega usando las flechas laterales o los indicadores inferiores.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <svg class="bd-placeholder-img d-block w-100" width="800" height="280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tercera diapositiva" focusable="false">
+                    <rect width="100%" height="100%" fill="#198754"></rect>
+                    <text x="50%" y="42%" fill="#ffffff" font-size="24" text-anchor="middle">Tercera Diapositiva</text>
+                  </svg>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Etiqueta de la tercera diapositiva</h5>
+                    <p>Funciona 100% offline con <code>bootstrap.bundle.min.js</code>.</p>
+                  </div>
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. CLOSE BUTTON -->
+      <section id="comp-close-button" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">9. Close Button (Botón de Cierre)</h2>
+          <span class="doc-badge-class">.btn-close</span>
+        </div>
+        <p class="text-body-secondary">
+          Botón de cierre genérico para descartar contenido como modales, alertas y offcanvas. Incluye soporte para estado <code>disabled</code> y adaptación a modo oscuro con <code>data-bs-theme="dark"</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Botón de cierre normal, deshabilitado y sobre fondo oscuro</span></div>
+          <div class="bd-example d-flex align-items-center gap-4">
+            <div>
+              <span class="small text-body-secondary d-block mb-1">Normal:</span>
+              <button type="button" class="btn-close" aria-label="Cerrar"></button>
+            </div>
+            <div>
+              <span class="small text-body-secondary d-block mb-1">Deshabilitado:</span>
+              <button type="button" class="btn-close" disabled aria-label="Cerrar"></button>
+            </div>
+            <div data-bs-theme="dark" class="bg-dark p-2 rounded">
+              <span class="small text-light d-block mb-1">En fondo oscuro:</span>
+              <button type="button" class="btn-close" aria-label="Cerrar"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. COLLAPSE -->
+      <section id="comp-collapse" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">10. Collapse (Colapsable)</h2>
+          <span class="doc-badge-class">.collapse / .collapse-horizontal / data-bs-toggle="collapse"</span>
+        </div>
+        <p class="text-body-secondary">
+          Alterna la visibilidad del contenido usando botones o enlaces con <code>data-bs-toggle="collapse"</code>. También soporta colapso horizontal agregando <code>.collapse-horizontal</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Collapse vertical y horizontal</span></div>
+          <div class="bd-example">
+            <p class="d-inline-flex flex-wrap gap-2 mb-2">
+              <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Enlace con href
+              </a>
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Botón con data-bs-target
+              </button>
+              <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                Alternar Collapse Horizontal (<code>.collapse-horizontal</code>)
+              </button>
+            </p>
+            <div class="collapse mb-2" id="collapseExample">
+              <div class="card card-body">
+                Contenido oculto por defecto que se despliega verticalmente al hacer clic en cualquiera de los dos disparadores superiores.
+              </div>
+            </div>
+            <div style="min-height: 90px;">
+              <div class="collapse collapse-horizontal" id="collapseWidthExample">
+                <div class="card card-body" style="width: 320px;">
+                  Este bloque se despliega horizontalmente definiendo un ancho fijo en su hijo directo.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. DROPDOWNS -->
+      <section id="comp-dropdowns" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">11. Dropdowns (Menús Desplegables)</h2>
+          <span class="doc-badge-class">.dropdown / .dropdown-menu / .dropdown-item</span>
+        </div>
+        <p class="text-body-secondary">
+          Superposiciones contextuales para mostrar listas de enlaces y acciones. Funciona gracias a Popper (incluido en <code>bootstrap.bundle.min.js</code>). Soporta botones divididos (split button) y direcciones <code>.dropup</code>, <code>.dropend</code> y <code>.dropstart</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Dropdown simple, botón dividido (split) y direcciones</span></div>
+          <div class="bd-example d-flex flex-wrap gap-2">
+            <!-- Dropdown simple -->
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Botón Dropdown
+              </button>
+              <ul class="dropdown-menu">
+                <li><h6 class="dropdown-header">Encabezado del menú</h6></li>
+                <li><a class="dropdown-item" href="#">Acción principal</a></li>
+                <li><a class="dropdown-item active" href="#">Ítem activo</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Enlace separado</a></li>
+              </ul>
+            </div>
+
+            <!-- Split button -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">Botón Dividido</button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Alternar menú</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Editar</a></li>
+                <li><a class="dropdown-item" href="#">Duplicar</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#">Eliminar</a></li>
+              </ul>
+            </div>
+
+            <!-- Dropup -->
+            <div class="btn-group dropup">
+              <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropup (Hacia arriba)
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Opción 1</a></li>
+                <li><a class="dropdown-item" href="#">Opción 2</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. LIST GROUP -->
+      <section id="comp-list-group" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">12. List Group (Grupo de Listas)</h2>
+          <span class="doc-badge-class">.list-group / .list-group-item / .list-group-item-action</span>
+        </div>
+        <p class="text-body-secondary">
+          Muestra series de contenido de forma flexible. Soporta ítems activos y deshabilitados, listas numeradas (<code>.list-group-numbered</code>), listas sin bordes exteriores (<code>.list-group-flush</code>), contadores con Badges y casillas de verificación.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>List group interactivo con enlaces y lista numerada con badges</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="list-group">
+                  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    El ítem de enlace activo
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action">Un segundo ítem accionable</a>
+                  <a href="#" class="list-group-item list-group-item-action list-group-item-success">Ítem con color <code>.list-group-item-success</code></a>
+                  <a class="list-group-item list-group-item-action disabled" aria-disabled="true">Un ítem deshabilitado</a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <ol class="list-group list-group-numbered">
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Subencabezado 1</div>
+                      Contenido para el ítem de la lista
+                    </div>
+                    <span class="badge text-bg-primary rounded-pill">14</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Subencabezado 2</div>
+                      Contenido para el ítem de la lista
+                    </div>
+                    <span class="badge text-bg-primary rounded-pill">8</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13. MODAL -->
+      <section id="comp-modal" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">13. Modal (Ventanas Modales)</h2>
+          <span class="doc-badge-class">.modal / .modal-dialog / .modal-content</span>
+        </div>
+        <p class="text-body-secondary">
+          Cuadros de diálogo superpuestos para notificaciones, confirmaciones o formularios. Soporta centrado vertical (<code>.modal-dialog-centered</code>), fondo estático que no se cierra al hacer clic afuera (<code>data-bs-backdrop="static"</code>), desplazamiento interno (<code>.modal-dialog-scrollable</code>) y tamaños <code>.modal-sm</code>, <code>.modal-lg</code>, <code>.modal-xl</code> y <code>.modal-fullscreen</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Demos en vivo: Modal estándar, fondo estático y contenido dinámico</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-2">
+              <!-- Botón Modal Estándar -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalLive">
+                Abrir Modal Centrado
+              </button>
+
+              <!-- Botón Modal Backdrop Estático -->
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropModal">
+                Modal con Fondo Estático (Static Backdrop)
+              </button>
+
+              <!-- Botón Modal con datos dinámicos -->
+              <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModalVarying" data-bs-whatever="@catedra_pow">
+                Modal con formulario para @catedra_pow
+              </button>
+            </div>
+
+            <!-- Modal 1: Centrado -->
+            <div class="modal fade" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLiveLabel">Título del Modal</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="mb-0">¡Hola! Estás viendo una ventana modal centrada verticalmente con <code>.modal-dialog-centered</code>.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal 2: Static Backdrop -->
+            <div class="modal fade" id="staticBackdropModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Fondo Estático</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    No me cerraré si haces clic fuera de mí ni al presionar la tecla ESC gracias a <code>data-bs-backdrop="static"</code> y <code>data-bs-keyboard="false"</code>.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal 3: Dinámico -->
+            <div class="modal fade" id="exampleModalVarying" tabindex="-1" aria-labelledby="exampleModalVaryingLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalVaryingLabel">Nuevo mensaje</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Destinatario:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                      </div>
+                      <div class="mb-0">
+                        <label for="message-text" class="col-form-label">Mensaje:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Enviar mensaje</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14. NAVBAR -->
+      <section id="comp-navbar" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">14. Navbar (Barra de Navegación)</h2>
+          <span class="doc-badge-class">.navbar / .navbar-expand-lg / .navbar-brand / .navbar-toggler</span>
+        </div>
+        <p class="text-body-secondary">
+          Cabecera de navegación responsiva que colapsa automáticamente en pantallas pequeñas y se expande desde el breakpoint indicado en <code>.navbar-expand-{sm|md|lg|xl|xxl}</code>. Soporta logotipo, enlaces, menús desplegables y formularios de búsqueda.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Navbar responsiva completa con enlaces, dropdown y buscador</span></div>
+          <div class="bd-example">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary rounded border">
+              <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="#">MiSitio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentDemo" aria-controls="navbarSupportedContentDemo" aria-expanded="false" aria-label="Alternar navegación">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContentDemo">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Cursos</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Recursos
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Guías HTML/CSS</a></li>
+                        <li><a class="dropdown-item" href="#">Bootstrap 5.3</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <form class="d-flex" role="search" onsubmit="event.preventDefault()">
+                    <input class="form-control form-control-sm me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+                    <button class="btn btn-sm btn-outline-success" type="submit">Buscar</button>
+                  </form>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. NAVS & TABS -->
+      <section id="comp-navs-tabs" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">15. Navs &amp; Tabs (Navegación y Pestañas)</h2>
+          <span class="doc-badge-class">.nav / .nav-tabs / .nav-pills / .nav-underline</span>
+        </div>
+        <p class="text-body-secondary">
+          Componente base para construir interfaces de navegación horizontal o vertical, pestañas (<code>.nav-tabs</code>), píldoras (<code>.nav-pills</code>) o subrayado (<code>.nav-underline</code>). Con <code>data-bs-toggle="tab"</code> o <code>data-bs-toggle="pill"</code> cambias de panel dinámicamente sin recargar la página.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Pestañas interactivas con paneles (.tab-content) y variante .nav-underline</span></div>
+          <div class="bd-example">
+            <ul class="nav nav-tabs mb-3" id="myTabDemo" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Inicio</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Perfil</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contacto</button>
+              </li>
+            </ul>
+            <div class="tab-content p-3 border rounded mb-3" id="myTabContentDemo">
+              <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <strong>Panel de Inicio:</strong> Contenido asociado a la primera pestaña interactiva.
+              </div>
+              <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <strong>Panel de Perfil:</strong> Cambia con animación suave gracias a la clase <code>.fade</code>.
+              </div>
+              <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                <strong>Panel de Contacto:</strong> Administrado por el plugin Tab de Bootstrap.
+              </div>
+            </div>
+
+            <ul class="nav nav-underline">
+              <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Subrayado Activo (.nav-underline)</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Enlace 2</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Enlace 3</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 16. OFFCANVAS -->
+      <section id="comp-offcanvas" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">16. Offcanvas (Paneles Laterales Ocultos)</h2>
+          <span class="doc-badge-class">.offcanvas / .offcanvas-start / .offcanvas-end / .offcanvas-top / .offcanvas-bottom</span>
+        </div>
+        <p class="text-body-secondary">
+          Crea barras laterales ocultas que se deslizan desde la izquierda (<code>.offcanvas-start</code>), derecha (<code>.offcanvas-end</code>), arriba (<code>.offcanvas-top</code>) o abajo (<code>.offcanvas-bottom</code>). Ideal para menús móviles, carritos de compras o filtros.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Demos en vivo: Offcanvas Izquierdo y Offcanvas Derecho</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasStartDemo" aria-controls="offcanvasStartDemo">
+                Abrir Offcanvas Izquierdo (.offcanvas-start)
+              </button>
+              <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEndDemo" aria-controls="offcanvasEndDemo">
+                Abrir Offcanvas Derecho (.offcanvas-end)
+              </button>
+            </div>
+
+            <!-- Offcanvas Start -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStartDemo" aria-labelledby="offcanvasStartDemoLabel">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasStartDemoLabel">Panel Offcanvas Izquierdo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+              </div>
+              <div class="offcanvas-body">
+                <p>Puedes colocar texto, listas de navegación, formularios o menús desplegables dentro del cuerpo del Offcanvas.</p>
+                <div class="dropdown mt-3">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Botón Dropdown
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Acción</a></li>
+                    <li><a class="dropdown-item" href="#">Otra acción</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Offcanvas End -->
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEndDemo" aria-labelledby="offcanvasEndDemoLabel">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasEndDemoLabel">Panel Offcanvas Derecho</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+              </div>
+              <div class="offcanvas-body">
+                <p>Este panel se desliza desde el borde derecho usando la clase <code>.offcanvas-end</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 17. PAGINATION -->
+      <section id="comp-pagination" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">17. Pagination (Paginación)</h2>
+          <span class="doc-badge-class">.pagination / .page-item / .page-link</span>
+        </div>
+        <p class="text-body-secondary">
+          Indica que existe una serie de páginas relacionadas. Soporta estados <code>.active</code> y <code>.disabled</code>, tamaños (<code>.pagination-lg</code> y <code>.pagination-sm</code>) y alineación con utilidades Flexbox.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Paginación con estados activo/deshabilitado y tamaños</span></div>
+          <div class="bd-example">
+            <nav aria-label="Ejemplo de navegación de páginas">
+              <ul class="pagination">
+                <li class="page-item disabled">
+                  <a class="page-link">Anterior</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                  <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Siguiente</a>
+                </li>
+              </ul>
+            </nav>
+
+            <nav aria-label="Paginación pequeña">
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 18. PLACEHOLDERS -->
+      <section id="comp-placeholders" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">18. Placeholders (Esqueletos de Carga)</h2>
+          <span class="doc-badge-class">.placeholder / .placeholder-glow / .placeholder-wave</span>
+        </div>
+        <p class="text-body-secondary">
+          Utiliza placeholders de carga ("skeleton screens") para indicar que el contenido aún se está cargando. Controla su ancho con clases de columna (<code>.col-6</code>, <code>.col-8</code>) y su animación con <code>.placeholder-glow</code> o <code>.placeholder-wave</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Comparación de tarjeta cargada vs. tarjeta con Placeholders animados</span></div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="card" aria-hidden="true">
+                  <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                      <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                      <span class="placeholder col-7"></span>
+                      <span class="placeholder col-4"></span>
+                      <span class="placeholder col-4"></span>
+                      <span class="placeholder col-6"></span>
+                      <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-5" aria-disabled="true"></a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <p class="placeholder-wave mb-2">
+                  <span class="placeholder col-12 bg-primary"></span>
+                </p>
+                <p class="placeholder-glow mb-0">
+                  <span class="placeholder col-10 bg-success placeholder-lg"></span>
+                  <span class="placeholder col-8 bg-warning placeholder-sm"></span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 19. POPOVERS -->
+      <section id="comp-popovers" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">19. Popovers (Cuadros Emergentes)</h2>
+          <span class="doc-badge-class">data-bs-toggle="popover" / new bootstrap.Popover()</span>
+        </div>
+        <p class="text-body-secondary">
+          Muestra globos de información enriquecida con título y cuerpo al hacer clic o enfocar un elemento. Por razones de rendimiento, <strong>deben inicializarse mediante JavaScript</strong> (ya inicializados en esta página).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Popovers en las 4 direcciones (haz clic en cada botón)</span></div>
+          <div class="bd-example d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-danger" data-bs-toggle="popover" data-bs-title="Título del Popover" data-bs-content="Y aquí hay contenido increíble. Es muy atractivo, ¿verdad?">
+              Clic para alternar Popover
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Popover superior (top)">
+              Popover arriba
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Popover a la derecha (right)">
+              Popover derecha
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Popover inferior (bottom)">
+              Popover abajo
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Popover a la izquierda (left)">
+              Popover izquierda
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 20. PROGRESS -->
+      <section id="comp-progress" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">20. Progress (Barras de Progreso)</h2>
+          <span class="doc-badge-class">.progress / .progress-bar / .progress-bar-striped</span>
+        </div>
+        <p class="text-body-secondary">
+          Barras de progreso personalizadas con soporte para barras apiladas, fondos contextuales, etiquetas de porcentaje, rayas (<code>.progress-bar-striped</code>) y animación CSS (<code>.progress-bar-animated</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Barras de progreso con etiqueta, colores, rayas y animación</span></div>
+          <div class="bd-example">
+            <div class="progress mb-3" role="progressbar" aria-label="Ejemplo con etiqueta" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" style="width: 25%">25%</div>
+            </div>
+            <div class="progress mb-3" role="progressbar" aria-label="Éxito con rayas" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar progress-bar-striped bg-success" style="width: 50%"></div>
+            </div>
+            <div class="progress mb-3" role="progressbar" aria-label="Rayas animadas" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark" style="width: 75%">75% Animado</div>
+            </div>
+            <!-- Barras múltiples apiladas -->
+            <div class="progress-stacked">
+              <div class="progress" role="progressbar" aria-label="Segmento 1" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                <div class="progress-bar">20%</div>
+              </div>
+              <div class="progress" role="progressbar" aria-label="Segmento 2" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+                <div class="progress-bar bg-success">30%</div>
+              </div>
+              <div class="progress" role="progressbar" aria-label="Segmento 3" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                <div class="progress-bar bg-info">25%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 21. SCROLLSPY -->
+      <section id="comp-scrollspy" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">21. Scrollspy (Seguimiento de Desplazamiento)</h2>
+          <span class="doc-badge-class">data-bs-spy="scroll" / data-bs-target="#..."</span>
+        </div>
+        <p class="text-body-secondary">
+          Actualiza automáticamente los enlaces de una barra de navegación o grupo de listas según la posición de scroll del usuario. Desplázate dentro del recuadro inferior para ver cómo cambia la píldora activa:
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Scrollspy en contenedor desplazable</span></div>
+          <div class="bd-example">
+            <nav id="navbar-example2" class="navbar bg-body-tertiary px-3 mb-2 rounded border">
+              <a class="navbar-brand fw-semibold" href="#">Índice Scrollspy</a>
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#scrollspyHeading1">Sección 1</a></li>
+                <li class="nav-item"><a class="nav-link" href="#scrollspyHeading2">Sección 2</a></li>
+                <li class="nav-item"><a class="nav-link" href="#scrollspyHeading3">Sección 3</a></li>
+              </ul>
+            </nav>
+            <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary" tabindex="0">
+              <h5 id="scrollspyHeading1">Primera Sección</h5>
+              <p>Este es contenido de marcador de posición para la página de Scrollspy. A medida que te desplazas hacia abajo dentro de este contenedor, observarás que el enlace correspondiente en la barra superior se resalta con la clase <code>.active</code>.</p>
+              <h5 id="scrollspyHeading2">Segunda Sección</h5>
+              <p>Seguimos bajando para activar la segunda sección. Bootstrap utiliza la API moderna <code>IntersectionObserver</code> del navegador para detectar qué encabezado está visible.</p>
+              <h5 id="scrollspyHeading3">Tercera Sección</h5>
+              <p>Última sección del contenedor de prueba. También puedes hacer clic en las píldoras superiores para desplazarte suavemente gracias a <code>data-bs-smooth-scroll="true"</code>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 22. SPINNERS -->
+      <section id="comp-spinners" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">22. Spinners (Indicadores de Carga)</h2>
+          <span class="doc-badge-class">.spinner-border / .spinner-grow / .spinner-border-sm</span>
+        </div>
+        <p class="text-body-secondary">
+          Indica el estado de carga de un componente o página usando únicamente HTML y CSS. Disponible en versión giratoria (<code>.spinner-border</code>) o pulsante (<code>.spinner-grow</code>), integrable dentro de botones.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Spinners de borde, crecimiento, colores y dentro de botones</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+              <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+              <div class="spinner-border text-success" role="status"><span class="visually-hidden">Cargando...</span></div>
+              <div class="spinner-border text-danger" role="status"><span class="visually-hidden">Cargando...</span></div>
+              <div class="spinner-grow text-warning" role="status"><span class="visually-hidden">Cargando...</span></div>
+              <div class="spinner-grow text-info" role="status"><span class="visually-hidden">Cargando...</span></div>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span class="visually-hidden" role="status">Cargando...</span>
+              </button>
+              <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+                <span role="status">Procesando datos...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 23. TOASTS -->
+      <section id="comp-toasts" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">23. Toasts (Notificaciones Flotantes)</h2>
+          <span class="doc-badge-class">.toast / .toast-header / .toast-body</span>
+        </div>
+        <p class="text-body-secondary">
+          Notificaciones ligeras diseñadas para imitar las alertas "push" de sistemas operativos móviles y de escritorio. Pueden mostrarse estáticamente con <code>.show</code> o dispararse por JavaScript con <code>bootstrap.Toast</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Toast visible en flujo, Toast con color y disparador de Toast flotante</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap gap-3 align-items-start mb-3">
+              <!-- Toast estático demostrativo -->
+              <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <span class="badge text-bg-primary me-2">POW</span>
+                  <strong class="me-auto">Bootstrap 5.3</strong>
+                  <small>Hace 1 min</small>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+                <div class="toast-body">
+                  ¡Hola! Este es un mensaje de tipo Toast visible.
+                </div>
+              </div>
+
+              <!-- Toast con color personalizado -->
+              <div class="toast show align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    ¡Operación guardada con éxito! (<code>.text-bg-success</code>)
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="liveToastBtn">Mostrar Toast flotante en esquina inferior derecha</button>
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <span class="badge text-bg-primary me-2">🔔</span>
+                  <strong class="me-auto">Notificación en Vivo</strong>
+                  <small>Justo ahora</small>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+                <div class="toast-body">
+                  ¡Has activado este Toast flotante usando <code>bootstrap.Toast.getOrCreateInstance()</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 24. TOOLTIPS -->
+      <section id="comp-tooltips" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">24. Tooltips (Descripciones Emergentes)</h2>
+          <span class="doc-badge-class">data-bs-toggle="tooltip" / data-bs-placement="*"</span>
+        </div>
+        <p class="text-body-secondary">
+          Pequeñas etiquetas flotantes que aparecen al pasar el cursor (hover) o enfocar un elemento. Dependen de Popper (incluido en <code>bootstrap.bundle.min.js</code>) y se inicializan con <code>new bootstrap.Tooltip(el)</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Pasa el cursor sobre los botones para ver los Tooltips en 4 direcciones</span></div>
+          <div class="bd-example d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip en la parte superior">
+              Tooltip arriba (top)
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Tooltip a la derecha">
+              Tooltip derecha (right)
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tooltip en la parte inferior">
+              Tooltip abajo (bottom)
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tooltip a la izquierda">
+              Tooltip izquierda (left)
+            </button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<em>Tooltip</em> <u>con</u> <b>HTML</b>">
+              Tooltip con HTML
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 6: HELPERS Y UTILIDADES
+           ===================================================================== -->
+      <section id="helpers-overview" class="doc-section" data-category="utilities">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Helpers (Stacks, Ratio, Text Truncation y Focus Ring)</h2>
+          <span class="doc-badge-class">.hstack / .vstack / .ratio / .text-truncate / .vr</span>
+        </div>
+        <p class="text-body-secondary">
+          Clases auxiliares listas para resolver patrones frecuentes: apilamiento horizontal (<code>.hstack</code>) y vertical (<code>.vstack</code>), divisores verticales (<code>.vr</code>), relaciones de aspecto para videos/iframes (<code>.ratio-16x9</code>) y truncado de texto con puntos suspensivos (<code>.text-truncate</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Stacks horizontales con divisor vertical (.vr) y truncado de texto</span></div>
+          <div class="bd-example">
+            <div class="hstack gap-3 mb-3">
+              <input class="form-control me-auto" type="text" placeholder="Agrega tu ítem aquí..." aria-label="Agrega tu ítem aquí">
+              <button type="button" class="btn btn-secondary">Enviar</button>
+              <div class="vr"></div>
+              <button type="button" class="btn btn-outline-danger">Limpiar</button>
+            </div>
+            <div class="row">
+              <div class="col-5 text-truncate border p-2 rounded bg-body-tertiary">
+                <code>.text-truncate</code>: Este texto es demasiado largo y se cortará automáticamente con puntos suspensivos.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="utilities-overview" class="doc-section" data-category="utilities">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Utilidades (Espaciado, Flexbox, Colores, Bordes y Sombras)</h2>
+          <span class="doc-badge-class">.m-* / .p-* / .d-flex / .shadow-* / .rounded-*</span>
+        </div>
+        <p class="text-body-secondary">
+          La API de utilidades de Bootstrap permite diseñar sin escribir CSS adicional:
+        </p>
+        <ul class="small text-body-secondary mb-3">
+          <li><strong>Espaciado (Margin / Padding):</strong> <code>{m|p}{t|b|s|e|x|y}-{0..5|auto}</code> (ej. <code>.mt-3</code>, <code>.px-4</code>, <code>.mx-auto</code>).</li>
+          <li><strong>Flexbox:</strong> <code>.d-flex</code>, <code>.justify-content-between</code>, <code>.align-items-center</code>, <code>.flex-wrap</code>, <code>.gap-3</code>.</li>
+          <li><strong>Colores y Fondos:</strong> <code>.text-primary</code>, <code>.bg-body-secondary</code>, <code>.bg-opacity-25</code>, <code>.text-bg-dark</code>.</li>
+          <li><strong>Bordes y Sombras:</strong> <code>.border</code>, <code>.border-primary</code>, <code>.rounded-3</code>, <code>.rounded-circle</code>, <code>.shadow-sm</code>, <code>.shadow</code>, <code>.shadow-lg</code>.</li>
+        </ul>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Combinación de utilidades de sombras, bordes, colores y Flexbox</span></div>
+          <div class="bd-example">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div class="p-3 bg-body-tertiary border rounded-3 shadow-sm">
+                <code>.p-3 .border .rounded-3 .shadow-sm</code>
+              </div>
+              <div class="p-3 bg-body rounded-3 shadow">
+                <code>.p-3 .rounded-3 .shadow</code>
+              </div>
+              <div class="p-3 text-bg-primary rounded-pill shadow-lg px-4">
+                <code>.text-bg-primary .rounded-pill .shadow-lg</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pt-3 mt-4 text-body-secondary border-top small d-flex flex-wrap justify-content-between">
+        <span>Documentación Offline de <strong>Bootstrap v5.3.8</strong> — UNLPam · POW 2026</span>
+        <span>Recursos locales desde <code>bootstrap-5.3.8-dist/</code></span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Botón flotante para volver arriba -->
+  <button type="button" id="btnBackToTop" class="btn btn-primary rounded-circle p-2 px-3" title="Volver arriba" aria-label="Volver arriba">
+    ↑
+  </button>
+
+  <!-- Bootstrap 5.3.8 JS Bundle Local (incluye Popper) -->
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script de interactividad de la documentación -->
+  <script src="docs-assets/docs.js"></script>
+</body>
+</html>

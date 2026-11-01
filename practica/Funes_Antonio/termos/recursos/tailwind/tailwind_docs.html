@@ -1,0 +1,1527 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentación Offline Tailwind CSS v4.3 — Guía Completa e Instalación con Vite</title>
+  <!-- Motor Oficial de Tailwind CSS v4 descargado localmente (100% Offline) -->
+  <script src="tailwindcss-v4-dist/tailwindcss-browser.js"></script>
+  <!-- Configuración de variante Dark Mode por clase .dark en Tailwind v4 -->
+  <style type="text/tailwindcss">
+    @custom-variant dark (&:where(.dark, .dark *));
+  </style>
+  <!-- Estilos estructurales de la documentación -->
+  <link rel="stylesheet" href="docs-assets/docs.css">
+</head>
+<body class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Barra de navegación superior -->
+  <header class="sticky top-0 z-40 w-full bg-gradient-to-r from-sky-600 via-cyan-600 to-indigo-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 h-15 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <!-- Botón menú móvil -->
+        <button type="button" id="btnMobileSidebar" class="lg:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20" aria-label="Abrir índice">
+          ☰
+        </button>
+        <a href="#" class="flex items-center gap-2.5 font-bold text-lg tracking-tight">
+          <svg class="w-8 h-8 text-sky-200" viewBox="0 0 54 33" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.514-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.514-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z"/>
+          </svg>
+          <span>Tailwind CSS <span class="ml-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-white text-sky-900">v4.3.3 Offline</span></span>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Buscador rápido -->
+        <div class="relative w-44 sm:w-64">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-white/80 text-sm">🔍</span>
+          <input type="search" id="sidebarSearch" placeholder="Buscar utilidad o componente..." aria-label="Buscar en la documentación"
+            class="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg bg-white/15 text-white placeholder-white/75 border border-white/25 focus:outline-none focus:ring-2 focus:ring-white">
+        </div>
+
+        <!-- Botón de cambio de tema Claro / Oscuro -->
+        <button type="button" id="themeSwitcher" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+          <span>🌓</span>
+          <span id="themeSwitcherLabel" class="hidden sm:inline">Modo Claro</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor principal con Sidebar + Contenido -->
+  <div class="max-w-7xl mx-auto tw-layout">
+    <!-- Sidebar de navegación -->
+    <aside id="twSidebar" class="tw-sidebar hidden lg:block">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-700 lg:hidden">
+        <span class="font-bold text-base">Índice Tailwind v4</span>
+        <button type="button" id="closeMobileSidebar" class="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">✕</button>
+      </div>
+
+      <nav class="tw-links-nav" aria-label="Navegación de documentación">
+        <div class="tw-links-heading">Comenzando</div>
+        <ul class="space-y-0.5 mb-2">
+          <li><a class="nav-link active" href="#intro-vite">Instalación con Vite</a></li>
+          <li><a class="nav-link" href="#intro-offline">Uso Local Offline (@tailwindcss/browser)</a></li>
+          <li><a class="nav-link" href="#intro-dark-mode">Modo Oscuro (dark:*)</a></li>
+        </ul>
+
+        <div class="tw-links-heading">Diseño (Layout)</div>
+        <ul class="space-y-0.5 mb-2">
+          <li><a class="nav-link" href="#layout-responsive">Breakpoints y Contenedores</a></li>
+          <li><a class="nav-link" href="#layout-grid-flex">Sistema Grid y Flexbox</a></li>
+        </ul>
+
+        <div class="tw-links-heading">Contenido y Estilos</div>
+        <ul class="space-y-0.5 mb-2">
+          <li><a class="nav-link" href="#content-typography">Tipografía y Listas</a></li>
+          <li><a class="nav-link" href="#content-colors-gradients">Colores OKLCH y Gradientes</a></li>
+          <li><a class="nav-link" href="#content-tables">Tablas</a></li>
+        </ul>
+
+        <div class="tw-links-heading">Formularios (Forms)</div>
+        <ul class="space-y-0.5 mb-2">
+          <li><a class="nav-link" href="#forms-controls">Inputs, Select y Range</a></li>
+          <li><a class="nav-link" href="#forms-checks">Checks, Radios y Switches (peer)</a></li>
+          <li><a class="nav-link" href="#forms-floating">Input Group y Floating Labels</a></li>
+          <li><a class="nav-link" href="#forms-validation">Validación de Formularios</a></li>
+        </ul>
+
+        <div class="tw-links-heading">Componentes UI (24)</div>
+        <ul class="space-y-0.5 mb-2">
+          <li><a class="nav-link" href="#comp-accordion">1. Accordion</a></li>
+          <li><a class="nav-link" href="#comp-alerts">2. Alerts</a></li>
+          <li><a class="nav-link" href="#comp-badge">3. Badge</a></li>
+          <li><a class="nav-link" href="#comp-breadcrumb">4. Breadcrumb</a></li>
+          <li><a class="nav-link" href="#comp-buttons">5. Buttons</a></li>
+          <li><a class="nav-link" href="#comp-button-group">6. Button group</a></li>
+          <li><a class="nav-link" href="#comp-card">7. Card</a></li>
+          <li><a class="nav-link" href="#comp-carousel">8. Carousel</a></li>
+          <li><a class="nav-link" href="#comp-close-button">9. Close button</a></li>
+          <li><a class="nav-link" href="#comp-collapse">10. Collapse</a></li>
+          <li><a class="nav-link" href="#comp-dropdowns">11. Dropdowns</a></li>
+          <li><a class="nav-link" href="#comp-list-group">12. List group</a></li>
+          <li><a class="nav-link" href="#comp-modal">13. Modal</a></li>
+          <li><a class="nav-link" href="#comp-navbar">14. Navbar</a></li>
+          <li><a class="nav-link" href="#comp-navs-tabs">15. Navs &amp; tabs</a></li>
+          <li><a class="nav-link" href="#comp-offcanvas">16. Offcanvas (Drawer)</a></li>
+          <li><a class="nav-link" href="#comp-pagination">17. Pagination</a></li>
+          <li><a class="nav-link" href="#comp-placeholders">18. Placeholders (Skeleton)</a></li>
+          <li><a class="nav-link" href="#comp-popovers">19. Popovers</a></li>
+          <li><a class="nav-link" href="#comp-progress">20. Progress</a></li>
+          <li><a class="nav-link" href="#comp-scrollspy">21. Scrollspy</a></li>
+          <li><a class="nav-link" href="#comp-spinners">22. Spinners</a></li>
+          <li><a class="nav-link" href="#comp-toasts">23. Toasts</a></li>
+          <li><a class="nav-link" href="#comp-tooltips">24. Tooltips</a></li>
+        </ul>
+
+        <div class="tw-links-heading">Efectos y Utilidades</div>
+        <ul class="space-y-0.5 mb-6">
+          <li><a class="nav-link" href="#utilities-effects">Sombras, Anillos y Blur</a></li>
+          <li><a class="nav-link" href="#utilities-transitions">Transiciones y Transformaciones</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="py-6 px-4 lg:px-2 min-w-0">
+      <!-- Banner de introducción y filtros por categoría -->
+      <div class="p-6 mb-6 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300">
+            Tailwind CSS v4.3.3 Local Dist
+          </span>
+          <span class="text-xs text-slate-500 dark:text-slate-400">
+            Fuente oficial: <code>tailwindcss.com/docs/installation/using-vite</code>
+          </span>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2">Documentación Offline de Tailwind CSS v4</h1>
+        <p class="text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+          Guía interactiva 100% offline impulsada por la distribución local en <code>tailwindcss-v4-dist/tailwindcss-browser.js</code>. Incluye la guía oficial de instalación con <strong>Vite</strong>, todas las utilidades de diseño y los <strong>24 componentes de interfaz</strong> equivalentes a Bootstrap listos para copiar.
+        </p>
+
+        <!-- Filtros rápidos por categoría -->
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
+          <button type="button" data-filter-category="all" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-sky-600 bg-sky-600 text-white cursor-pointer transition">Todo</button>
+          <button type="button" data-filter-category="getting-started" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Comenzando (Vite / Offline)</button>
+          <button type="button" data-filter-category="layout" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Layout y Grid</button>
+          <button type="button" data-filter-category="content" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Tipografía y Colores</button>
+          <button type="button" data-filter-category="forms" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Formularios</button>
+          <button type="button" data-filter-category="components" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Componentes UI (24)</button>
+          <button type="button" data-filter-category="utilities" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer transition">Efectos y Animaciones</button>
+        </div>
+      </div>
+
+      <!-- Alerta sin resultados -->
+      <div id="noSearchResults" class="hidden p-4 mb-6 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-sm">
+        No se encontraron componentes o utilidades que coincidan con tu búsqueda. Prueba con otro término o selecciona la categoría <strong>Todo</strong>.
+      </div>
+
+      <!-- =====================================================================
+           SECCIÓN 1: COMENZANDO (INSTALACIÓN CON VITE Y USO OFFLINE)
+           ===================================================================== -->
+      <section id="intro-vite" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Instalación de Tailwind CSS v4 usando Vite</h2>
+          <span class="doc-badge-class">@tailwindcss/vite</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          La forma recomendada de integrar Tailwind CSS v4 en proyectos modernos (React, Vue, Svelte o Vanilla JS) es utilizando el plugin dedicado de primera clase para <strong>Vite</strong> (extraído de <code>https://tailwindcss.com/docs/installation/using-vite</code>):
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Paso 1 y 2 — Crear el proyecto Vite e instalar Tailwind CSS v4</span></div>
+          <script type="text/plain" class="bd-custom-code" data-lang="Terminal (Bash / PowerShell)">
+# 1. Crear un nuevo proyecto con Vite (si aún no tienes uno)
+npm create vite@latest mi-proyecto
+cd mi-proyecto
+
+# 2. Instalar Tailwind CSS v4 y el plugin oficial de Vite
+npm install tailwindcss @tailwindcss/vite
+          </script>
+        </div>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Paso 3 — Configurar el plugin de Vite en <code>vite.config.ts</code></span></div>
+          <script type="text/plain" class="bd-custom-code" data-lang="vite.config.ts">
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+  ],
+})
+          </script>
+        </div>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Paso 4 y 5 — Importar Tailwind en tu CSS (<code>src/style.css</code>) y ejecutar <code>npm run dev</code></span></div>
+          <script type="text/plain" class="bd-custom-code" data-lang="src/style.css + index.html">
+/* En tu archivo CSS principal (ej. src/style.css): */
+@import "tailwindcss";
+
+<!-- En tu archivo index.html: -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/src/style.css" rel="stylesheet">
+</head>
+<body>
+  <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
+</body>
+</html>
+          </script>
+        </div>
+      </section>
+
+      <section id="intro-offline" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Uso Local 100% Offline sin Node.js (<code>tailwindcss-v4-dist</code>)</h2>
+          <span class="doc-badge-class">@tailwindcss/browser v4.3.3</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Para trabajar directamente en archivos HTML o en servidores PHP/XAMPP sin necesidad de ejecutar un servidor Vite, hemos descargado el motor compilador oficial de navegador de Tailwind v4 en <code>tailwindcss-v4-dist/tailwindcss-browser.js</code>. Solo debes enlazarlo con una etiqueta <code>&lt;script&gt;</code> y compilará en vivo cualquier clase de utilidad o directiva <code>@theme</code> / <code>@utility</code> que escribas.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Plantilla base HTML5 conectada al paquete local <code>tailwindcss-v4-dist</code></span></div>
+          <script type="text/plain" class="bd-custom-code" data-lang="HTML5 Offline">
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Proyecto con Tailwind CSS v4 Offline</title>
+    <!-- Compilador local de Tailwind CSS v4.3.3 -->
+    <script src="tailwindcss-v4-dist/tailwindcss-browser.js"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-unlpam: #0284c7;
+      }
+    </style>
+  </head>
+  <body class="p-8 bg-slate-50">
+    <h1 class="text-3xl font-bold text-unlpam underline">
+      ¡Hola mundo con Tailwind CSS v4 Offline!
+    </h1>
+  </body>
+</html>
+          </script>
+        </div>
+      </section>
+
+      <section id="intro-dark-mode" class="doc-section" data-category="getting-started">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Modo Oscuro (<code>dark:*</code>)</h2>
+          <span class="doc-badge-class">@custom-variant dark</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          En Tailwind CSS v4 puedes prefijar cualquier utilidad con <code>dark:</code> (por ejemplo <code>bg-white dark:bg-slate-800</code>) para definir cómo se ve en modo oscuro. Para controlarlo manualmente mediante la clase <code>.dark</code> en la etiqueta <code>&lt;html&gt;</code>, declara <code>@custom-variant dark (&amp;:where(.dark, .dark *));</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Prueba interactiva de variantes <code>dark:*</code></span></div>
+          <div class="bd-example">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button type="button" data-set-tw-theme="light" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-800 hover:bg-slate-100 cursor-pointer">
+                ☀️ Activar Modo Claro
+              </button>
+              <button type="button" data-set-tw-theme="dark" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-slate-700 bg-slate-900 text-white hover:bg-slate-800 cursor-pointer">
+                🌙 Activar Modo Oscuro
+              </button>
+            </div>
+            <div class="p-5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+              <h3 class="text-lg font-bold text-slate-900 dark:text-white">Tarjeta adaptable al tema</h3>
+              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                Usa <code>bg-white dark:bg-slate-800</code> y <code>text-slate-900 dark:text-white</code> para adaptar colores automáticamente.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 2: DISEÑO (LAYOUT, BREAKPOINTS, GRID Y FLEXBOX)
+           ===================================================================== -->
+      <section id="layout-responsive" class="doc-section" data-category="layout">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Diseño Responsivo (Breakpoints) y Contenedores</h2>
+          <span class="doc-badge-class">sm: / md: / lg: / xl: / 2xl: / max-w-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-3">
+          Tailwind utiliza un sistema <strong>mobile-first</strong>: las clases sin prefijo aplican a todas las pantallas, y las clases con prefijo (<code>sm:</code>, <code>md:</code>, <code>lg:</code>, <code>xl:</code>, <code>2xl:</code>) se aplican desde ese ancho mínimo en adelante:
+        </p>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm text-left border-collapse border border-slate-200 dark:border-slate-700">
+            <thead class="bg-slate-100 dark:bg-slate-800">
+              <tr>
+                <th class="p-2.5 border border-slate-200 dark:border-slate-700">Prefijo</th>
+                <th class="p-2.5 border border-slate-200 dark:border-slate-700">Ancho Mínimo</th>
+                <th class="p-2.5 border border-slate-200 dark:border-slate-700">Media Query CSS Generada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono font-bold text-sky-600">sm:</td><td class="p-2 border border-slate-200 dark:border-slate-700">640px (40rem)</td><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono">@media (width &gt;= 40rem)</td></tr>
+              <tr><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono font-bold text-sky-600">md:</td><td class="p-2 border border-slate-200 dark:border-slate-700">768px (48rem)</td><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono">@media (width &gt;= 48rem)</td></tr>
+              <tr><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono font-bold text-sky-600">lg:</td><td class="p-2 border border-slate-200 dark:border-slate-700">1024px (64rem)</td><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono">@media (width &gt;= 64rem)</td></tr>
+              <tr><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono font-bold text-sky-600">xl:</td><td class="p-2 border border-slate-200 dark:border-slate-700">1280px (80rem)</td><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono">@media (width &gt;= 80rem)</td></tr>
+              <tr><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono font-bold text-sky-600">2xl:</td><td class="p-2 border border-slate-200 dark:border-slate-700">1536px (96rem)</td><td class="p-2 border border-slate-200 dark:border-slate-700 font-mono">@media (width &gt;= 96rem)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Contenedor centrado con ancho máximo y padding responsivo</span></div>
+          <div class="bd-example">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 bg-sky-500/10 border border-sky-500/30 rounded-lg text-center font-mono text-sm">
+              max-w-4xl mx-auto px-4 sm:px-6 lg:px-8
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="layout-grid-flex" class="doc-section" data-category="layout">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Sistema CSS Grid y Flexbox</h2>
+          <span class="doc-badge-class">grid / grid-cols-* / col-span-* / flex / gap-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          A diferencia del sistema rígido de 12 columnas de Bootstrap, en Tailwind puedes crear grillas de cualquier número de columnas con <code>grid grid-cols-{n}</code>, hacer que una celda abarque varias columnas con <code>col-span-{n}</code> y alinear elementos con Flexbox (<code>flex items-center justify-between gap-4</code>).
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Grilla responsiva de 3 columnas y expansión con <code>col-span-*</code></span></div>
+          <div class="bd-example text-center font-mono text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+              <div class="p-3 rounded-lg bg-indigo-500/15 border border-indigo-500/30">grid-cols-1 md:grid-cols-3 (1)</div>
+              <div class="p-3 rounded-lg bg-indigo-500/15 border border-indigo-500/30">grid-cols-1 md:grid-cols-3 (2)</div>
+              <div class="p-3 rounded-lg bg-indigo-500/15 border border-indigo-500/30">grid-cols-1 md:grid-cols-3 (3)</div>
+            </div>
+            <div class="grid grid-cols-12 gap-3">
+              <div class="col-span-12 md:col-span-8 p-3 rounded-lg bg-sky-500/15 border border-sky-500/30">col-span-12 md:col-span-8</div>
+              <div class="col-span-12 md:col-span-4 p-3 rounded-lg bg-sky-500/15 border border-sky-500/30">col-span-12 md:col-span-4</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 3: CONTENIDO (TIPOGRAFÍA, COLORES, GRADIENTES Y TABLAS)
+           ===================================================================== -->
+      <section id="content-typography" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Tipografía, Pesos, Truncado y Citas</h2>
+          <span class="doc-badge-class">text-xs..6xl / font-bold / tracking-tight / truncate / line-clamp-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Tailwind reinicia los tamaños de los encabezados por defecto (Preflight), por lo que controlas explícitamente el tamaño (<code>text-sm</code>, <code>text-xl</code>, <code>text-4xl</code>), grosor (<code>font-medium</code>, <code>font-extrabold</code>) y altura de línea (<code>leading-relaxed</code>).
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Escala tipográfica, resaltado y cita (blockquote)</span></div>
+          <div class="bd-example space-y-3">
+            <h1 class="text-3xl font-extrabold tracking-tight">Título destacado (<code>text-3xl font-extrabold tracking-tight</code>)</h1>
+            <p class="text-lg text-slate-600 dark:text-slate-300">
+              Párrafo introductorio usando <code>text-lg text-slate-600</code> (equivalente a <code>.lead</code> en Bootstrap).
+            </p>
+            <p class="text-sm">
+              Texto con <span class="bg-amber-200 dark:bg-amber-700/60 px-1 rounded">resaltado personalizado</span>, <span class="underline decoration-sky-500 decoration-2 underline-offset-4">subrayado estilizado</span> y atajo de teclado <kbd class="px-1.5 py-0.5 text-xs font-mono bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded">Ctrl + K</kbd>.
+            </p>
+            <blockquote class="pl-4 border-l-4 border-sky-500 italic text-slate-600 dark:text-slate-300">
+              "Un enfoque basado en utilidades permite construir cualquier diseño directamente en tu HTML."
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-colors-gradients" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Paleta de Colores OKLCH y Gradientes en Tailwind v4</h2>
+          <span class="doc-badge-class">bg-{color}-{50..950} / bg-linear-to-r / from-* / via-* / to-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Tailwind CSS v4 moderniza toda su paleta al espacio de color <strong>OKLCH</strong> para lograr colores más vivos y consistentes, e introduce las clases de gradiente <code>bg-linear-to-r</code> (o ángulos como <code>bg-linear-45</code>), <code>bg-radial</code> y <code>bg-conic</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Gradientes lineales, texto con gradiente y modificadores de opacidad (<code>/20</code>)</span></div>
+          <div class="bd-example space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-white font-semibold text-sm text-center">
+              <div class="p-4 rounded-xl bg-linear-to-r from-sky-500 to-indigo-600 shadow-sm">
+                bg-linear-to-r from-sky-500 to-indigo-600
+              </div>
+              <div class="p-4 rounded-xl bg-linear-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-sm">
+                bg-linear-to-br from-emerald-500 to-cyan-600
+              </div>
+              <div class="p-4 rounded-xl bg-linear-to-r from-fuchsia-500 via-rose-500 to-amber-500 shadow-sm">
+                from-fuchsia-500 via-rose-500 to-amber-500
+              </div>
+            </div>
+            <p class="text-2xl font-extrabold bg-linear-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+              Texto con gradiente usando bg-clip-text text-transparent
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="content-tables" class="doc-section" data-category="content">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Tablas Responsivas</h2>
+          <span class="doc-badge-class">w-full / divide-y / odd:bg-* / even:bg-* / hover:bg-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Combina <code>divide-y</code> para bordes horizontales, <code>even:bg-slate-50</code> para filas cebreadas (striped) y <code>hover:bg-slate-100</code> para resaltar la fila bajo el cursor.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Tabla con filas alternadas (even:), efecto hover y badges</span></div>
+          <div class="bd-example">
+            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+              <table class="w-full text-sm text-left">
+                <thead class="bg-slate-800 text-white uppercase text-xs">
+                  <tr>
+                    <th class="px-4 py-3">#</th>
+                    <th class="px-4 py-3">Estudiante</th>
+                    <th class="px-4 py-3">Materia</th>
+                    <th class="px-4 py-3">Estado</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                  <tr class="even:bg-slate-50 dark:even:bg-slate-800/40 hover:bg-sky-50/60 dark:hover:bg-slate-800 transition">
+                    <td class="px-4 py-3 font-medium">1</td>
+                    <td class="px-4 py-3">Ana García</td>
+                    <td class="px-4 py-3">Programación Orientada a la Web</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">Promocionado</span></td>
+                  </tr>
+                  <tr class="even:bg-slate-50 dark:even:bg-slate-800/40 hover:bg-sky-50/60 dark:hover:bg-slate-800 transition">
+                    <td class="px-4 py-3 font-medium">2</td>
+                    <td class="px-4 py-3">Lucas Fernández</td>
+                    <td class="px-4 py-3">Diseño de Interfaces</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">Regular</span></td>
+                  </tr>
+                  <tr class="even:bg-slate-50 dark:even:bg-slate-800/40 hover:bg-sky-50/60 dark:hover:bg-slate-800 transition">
+                    <td class="px-4 py-3 font-medium">3</td>
+                    <td class="px-4 py-3">Sofía Martínez</td>
+                    <td class="px-4 py-3">Bases de Datos</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">En curso</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 4: FORMULARIOS (FORMS)
+           ===================================================================== -->
+      <section id="forms-controls" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Controles de Formulario, Select, File y Range</h2>
+          <span class="doc-badge-class">focus:ring-2 / focus:border-sky-500 / file:* / accent-*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Estiliza campos de formulario usando bordes redondeados, anillos de enfoque (<code>focus:ring-2 focus:ring-sky-500 focus:outline-none</code>), el modificador <code>file:*</code> para botones de carga de archivos y <code>accent-*</code> para controles deslizantes y casillas nativas.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Inputs, Select, Selector de archivos estilizado con <code>file:*</code> y Range</span></div>
+          <div class="bd-example">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Correo electrónico</label>
+                <input type="email" placeholder="nombre@unlpam.edu.ar"
+                  class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <p class="mt-1 text-xs text-slate-500">Nunca compartiremos tu correo electrónico.</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Seleccionar comisión</label>
+                <select class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <option>Comisión 1 — Mañana</option>
+                  <option>Comisión 2 — Tarde</option>
+                  <option>Comisión 3 — Noche</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Subir archivo (con modificador <code>file:*</code>)</label>
+                <input type="file"
+                  class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 dark:file:bg-sky-900/50 dark:file:text-sky-300 cursor-pointer">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Control de rango (<code>accent-sky-600</code>)</label>
+                <input type="range" min="0" max="100" value="65" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer accent-sky-600 mt-2">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-checks" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Checks, Radios y Switches con Estado <code>peer</code></h2>
+          <span class="doc-badge-class">accent-* / peer / peer-checked:*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          La clase <code>peer</code> de Tailwind permite estilizar un elemento hermano cuando un checkbox o radio está marcado (<code>peer-checked:bg-sky-600</code>, <code>peer-checked:translate-x-5</code>), lo que permite construir interruptores (Switches) y tarjetas seleccionables 100% en CSS sin JavaScript.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Checkboxes, Radios y Switch puro en CSS con <code>peer</code></span></div>
+          <div class="bd-example flex flex-wrap items-center gap-6">
+            <label class="inline-flex items-center gap-2 cursor-pointer text-sm">
+              <input type="checkbox" checked class="size-4 rounded accent-sky-600">
+              <span>Checkbox marcado (<code>accent-sky-600</code>)</span>
+            </label>
+
+            <label class="inline-flex items-center gap-2 cursor-pointer text-sm">
+              <input type="radio" name="twRadioDemo" checked class="size-4 accent-sky-600">
+              <span>Opción Radio 1</span>
+            </label>
+            <label class="inline-flex items-center gap-2 cursor-pointer text-sm">
+              <input type="radio" name="twRadioDemo" class="size-4 accent-sky-600">
+              <span>Opción Radio 2</span>
+            </label>
+
+            <!-- Switch con peer -->
+            <label class="inline-flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="relative w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full peer peer-checked:bg-sky-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:size-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              <span class="text-sm font-medium">Interruptor Switch (<code>peer-checked:*</code>)</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-floating" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Input Group y Floating Labels</h2>
+          <span class="doc-badge-class">peer-placeholder-shown:* / peer-focus:*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Combina contenedores flexibles para crear grupos de entrada con prefijos/botones, o usa <code>peer-placeholder-shown:*</code> y <code>peer-focus:*</code> para lograr etiquetas flotantes idénticas a <code>.form-floating</code> de Bootstrap.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Input Group con botón y Floating Label interactivo</span></div>
+          <div class="bd-example grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Input Group -->
+            <div class="flex rounded-lg shadow-xs">
+              <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-slate-500 text-sm">
+                https://
+              </span>
+              <input type="text" placeholder="unlpam.edu.ar"
+                class="flex-1 min-w-0 block w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-r-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
+                Ir
+              </button>
+            </div>
+
+            <!-- Floating Label -->
+            <div class="relative">
+              <input type="email" id="twFloatingEmail" placeholder=" " value="estudiante@unlpam.edu.ar"
+                class="block px-3 pb-2 pt-5 w-full text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 peer">
+              <label for="twFloatingEmail"
+                class="absolute text-xs text-slate-500 duration-150 transform -translate-y-3 scale-90 top-3.5 z-10 origin-[0] left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-3 peer-focus:text-sky-600">
+                Correo electrónico (Floating Label)
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms-validation" class="doc-section" data-category="forms">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Validación de Formularios con Pseudo-clases</h2>
+          <span class="doc-badge-class">invalid:border-rose-500 / peer-invalid:visible / valid:*</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Tailwind permite validar campos en tiempo real sin JavaScript usando las variantes <code>invalid:*</code>, <code>valid:*</code> y <code>peer-invalid:*</code> combinadas con atributos HTML5 como <code>required</code> o <code>type="email"</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Prueba borrando o escribiendo un correo inválido en el campo</span></div>
+          <div class="bd-example max-w-md">
+            <label class="block text-sm font-medium mb-1">Correo institucional (requerido)</label>
+            <input type="email" required value="correo-invalido"
+              class="peer w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 invalid:border-rose-500 invalid:text-rose-600 focus:invalid:ring-rose-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <p class="mt-1 hidden peer-invalid:block text-xs text-rose-600 dark:text-rose-400 font-medium">
+              Por favor, ingresa una dirección de correo electrónico válida (ej. alumno@unlpam.edu.ar).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 5: LOS 24 COMPONENTES DE INTERFAZ CON TAILWIND CSS v4
+           ===================================================================== -->
+
+      <!-- 1. ACCORDION -->
+      <section id="comp-accordion" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">1. Accordion (Acordeón)</h2>
+          <span class="doc-badge-class">&lt;details class="group"&gt; / group-open:rotate-180</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          En Tailwind CSS puedes crear acordeones accesibles sin JavaScript combinando el elemento nativo <code>&lt;details class="group"&gt;</code> con el modificador <code>group-open:*</code> para rotar la flecha automáticamente al abrirse.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Acordeón interactivo con <code>group-open:rotate-180</code></span></div>
+          <div class="bd-example">
+            <div class="divide-y divide-slate-200 dark:divide-slate-700 rounded-xl border border-slate-200 dark:border-slate-700">
+              <details class="group p-4" open>
+                <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+                  <span>¿Cómo funciona Tailwind CSS v4 con Vite?</span>
+                  <span class="transition duration-200 group-open:rotate-180">▼</span>
+                </summary>
+                <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  El plugin <code>@tailwindcss/vite</code> detecta automáticamente todas las clases utilizadas en tus plantillas y genera únicamente el CSS necesario en milisegundos.
+                </p>
+              </details>
+              <details class="group p-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+                  <span>¿Necesito un archivo tailwind.config.js en v4?</span>
+                  <span class="transition duration-200 group-open:rotate-180">▼</span>
+                </summary>
+                <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  No. En Tailwind CSS v4 la configuración es CSS-first usando la directiva <code>@theme { ... }</code> directamente dentro de tu archivo CSS principal.
+                </p>
+              </details>
+              <details class="group p-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+                  <span>¿Puedo usarlo offline en clases prácticas?</span>
+                  <span class="transition duration-200 group-open:rotate-180">▼</span>
+                </summary>
+                <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Sí, enlazando el archivo local <code>tailwindcss-v4-dist/tailwindcss-browser.js</code> incluido en esta carpeta.
+                </p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ALERTS -->
+      <section id="comp-alerts" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">2. Alerts (Alertas Contextuales)</h2>
+          <span class="doc-badge-class">bg-{color}-50 / border-{color}-200 / text-{color}-800</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Construye alertas combinando tonos suaves de fondo (<code>bg-sky-50</code>, <code>bg-emerald-50</code>, <code>bg-amber-50</code>, <code>bg-rose-50</code>), bordes sutiles y texto de alto contraste.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Alertas informativas, de éxito, descartables y Live Alert</span></div>
+          <div class="bd-example space-y-3">
+            <div class="p-4 text-sm text-sky-800 rounded-lg bg-sky-50 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800" role="alert">
+              <span class="font-bold">Información:</span> Alerta informativa con un <a href="#" class="font-semibold underline hover:text-sky-950">enlace destacado</a>.
+            </div>
+            <div class="tw-alert-box flex items-center justify-between p-4 text-sm text-amber-800 rounded-lg bg-amber-50 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800" role="alert">
+              <div><span class="font-bold">¡Atención!</span> Puedes descartar esta alerta haciendo clic en el botón de cierre a la derecha.</div>
+              <button type="button" data-tw-dismiss="alert" class="text-amber-700 hover:text-amber-950 dark:text-amber-300 font-bold px-2 cursor-pointer" aria-label="Cerrar">✕</button>
+            </div>
+            <div id="twLiveAlertContainer"></div>
+            <button type="button" id="twLiveAlertBtn" class="px-3.5 py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer transition">
+              Disparar alerta en vivo (Live Alert)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. BADGE -->
+      <section id="comp-badge" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">3. Badge (Insignias y Contadores)</h2>
+          <span class="doc-badge-class">inline-flex / rounded-full / ring-1 / ring-inset</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Crea insignias tipo cápsula con <code>rounded-full px-2.5 py-0.5 text-xs font-semibold</code> o contadores flotantes posicionados en la esquina de un botón con <code>absolute -top-2 -right-2</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Badges en botones, notificaciones posicionadas y píldoras de color</span></div>
+          <div class="bd-example space-y-4">
+            <div class="flex flex-wrap items-center gap-4">
+              <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white">
+                Mensajes <span class="px-2 py-0.5 text-xs rounded-full bg-white text-sky-700">4</span>
+              </button>
+
+              <button type="button" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg bg-slate-800 text-white">
+                Bandeja de entrada
+                <span class="absolute -top-2 -right-2 px-2 py-0.5 text-xs font-bold rounded-full bg-rose-600 text-white">
+                  99+
+                </span>
+              </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">Sky</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">Success</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">Warning</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300">Danger</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300">Indigo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BREADCRUMB -->
+      <section id="comp-breadcrumb" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">4. Breadcrumb (Migas de Pan)</h2>
+          <span class="doc-badge-class">flex items-center space-x-2 text-sm</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Navegación jerárquica limpia utilizando una lista ordenada <code>&lt;ol class="flex items-center space-x-2"&gt;</code> con separadores personalizables.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Breadcrumb con separadores de barra y de flecha</span></div>
+          <div class="bd-example space-y-3">
+            <nav aria-label="Breadcrumb">
+              <ol class="flex items-center space-x-2 text-sm">
+                <li><a href="#" class="text-sky-600 hover:underline">Inicio</a></li>
+                <li class="text-slate-400">/</li>
+                <li><a href="#" class="text-sky-600 hover:underline">Facultad</a></li>
+                <li class="text-slate-400">/</li>
+                <li class="text-slate-500 font-medium" aria-current="page">Recursos 2026</li>
+              </ol>
+            </nav>
+
+            <nav aria-label="Breadcrumb con flechas">
+              <ol class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium">
+                <li><a href="#" class="text-slate-600 dark:text-slate-300 hover:text-sky-600">🏠 Inicio</a></li>
+                <li class="text-slate-400">›</li>
+                <li><a href="#" class="text-slate-600 dark:text-slate-300 hover:text-sky-600">Tailwind v4</a></li>
+                <li class="text-slate-400">›</li>
+                <li class="text-sky-600 dark:text-sky-400 font-semibold">Breadcrumb</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. BUTTONS -->
+      <section id="comp-buttons" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">5. Buttons (Botones)</h2>
+          <span class="doc-badge-class">px-4 py-2 rounded-lg font-semibold hover:* active:scale-95 disabled:opacity-50</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Diseña botones sólidos, con borde (outline), con gradiente o en distintos tamaños combinando utilidades de relleno, color, sombra y micro-interacción <code>active:scale-95</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Botones sólidos, outline, gradientes y tamaños</span></div>
+          <div class="bd-example space-y-4">
+            <div class="flex flex-wrap gap-2">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 active:scale-95 transition cursor-pointer">Primary</button>
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-600 text-white hover:bg-slate-700 active:scale-95 transition cursor-pointer">Secondary</button>
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95 transition cursor-pointer">Success</button>
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-rose-600 text-white hover:bg-rose-700 active:scale-95 transition cursor-pointer">Danger</button>
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-slate-950 hover:bg-amber-600 active:scale-95 transition cursor-pointer">Warning</button>
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-linear-to-r from-indigo-600 to-violet-600 text-white hover:opacity-95 shadow-sm cursor-pointer">Gradiente</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg border border-sky-600 text-sky-600 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-950/50 transition cursor-pointer">Outline Sky</button>
+              <button type="button" class="px-5 py-2.5 text-base font-semibold rounded-xl bg-sky-600 text-white">Grande (lg)</button>
+              <button type="button" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-sky-600 text-white">Pequeño (sm)</button>
+              <button type="button" disabled class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-400 text-white opacity-50 cursor-not-allowed">Deshabilitado</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. BUTTON GROUP -->
+      <section id="comp-button-group" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">6. Button Group (Grupo de Botones)</h2>
+          <span class="doc-badge-class">inline-flex rounded-lg shadow-xs -space-x-px</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Une múltiples botones en una sola pieza usando <code>inline-flex -space-x-px</code> y redondeando solo el primer (<code>rounded-l-lg</code>) y último (<code>rounded-r-lg</code>) botón.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Grupo de botones segmentados y barra de herramientas</span></div>
+          <div class="bd-example flex flex-wrap items-center gap-4">
+            <div class="inline-flex rounded-lg shadow-xs -space-x-px" role="group">
+              <button type="button" class="px-4 py-2 text-sm font-medium rounded-l-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">
+                Izquierda
+              </button>
+              <button type="button" class="px-4 py-2 text-sm font-medium border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">
+                Centro
+              </button>
+              <button type="button" class="px-4 py-2 text-sm font-medium rounded-r-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">
+                Derecha
+              </button>
+            </div>
+
+            <div class="inline-flex rounded-lg overflow-hidden shadow-xs" role="group">
+              <button type="button" class="px-3.5 py-2 text-sm font-semibold bg-rose-600 text-white hover:bg-rose-700 cursor-pointer">Cancelar</button>
+              <button type="button" class="px-3.5 py-2 text-sm font-semibold bg-amber-500 text-slate-950 hover:bg-amber-600 cursor-pointer">Pausar</button>
+              <button type="button" class="px-3.5 py-2 text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 cursor-pointer">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. CARD -->
+      <section id="comp-card" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">7. Card (Tarjetas)</h2>
+          <span class="doc-badge-class">rounded-xl border shadow-xs overflow-hidden</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Construye tarjetas flexibles con imagen superior, encabezado, cuerpo y pie usando <code>rounded-xl border overflow-hidden flex flex-col</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Tarjetas con imagen superior, Header/Footer y fondo de color</span></div>
+          <div class="bd-example grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Card 1 -->
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xs overflow-hidden flex flex-col">
+              <div class="h-32 bg-linear-to-r from-sky-500 to-indigo-600 flex items-center justify-center text-white font-semibold">
+                Cabecera de Imagen
+              </div>
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 class="font-bold text-base mb-1">Título de la tarjeta</h3>
+                  <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">Diseño limpio con bordes redondeados y sombra sutil.</p>
+                </div>
+                <a href="#" class="inline-block self-start px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700">Ver más</a>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xs flex flex-col text-center">
+              <div class="px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Destacado
+              </div>
+              <div class="p-4 flex-1">
+                <h3 class="font-bold text-base mb-1">Tratamiento especial</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">Con encabezado y pie de tarjeta divididos por bordes.</p>
+                <a href="#" class="inline-block px-3 py-1.5 text-xs font-semibold rounded-lg border border-sky-600 text-sky-600 dark:text-sky-400">Detalles</a>
+              </div>
+              <div class="px-4 py-2 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500">
+                Hace 2 días
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="rounded-xl bg-sky-600 text-white p-5 shadow-sm flex flex-col justify-between">
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-sky-200">Tarjeta Temática</span>
+                <h3 class="font-bold text-lg mt-1 mb-2">Contraste directo</h3>
+                <p class="text-sm text-sky-100">Combinando <code>bg-sky-600 text-white</code> logras tarjetas destacadas al instante.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. CAROUSEL -->
+      <section id="comp-carousel" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">8. Carousel (Carrusel de Diapositivas)</h2>
+          <span class="doc-badge-class">overflow-hidden / flex transition-transform duration-500</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Carrusel fluido utilizando un contenedor con <code>overflow-hidden</code> y una pista interna con <code>flex transition-transform duration-500</code> controlada por botones e indicadores.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Carrusel interactivo con controles Anterior/Siguiente e indicadores</span></div>
+          <div class="bd-example">
+            <div class="relative rounded-xl overflow-hidden">
+              <div id="twCarouselTrack" class="flex transition-transform duration-500 ease-out">
+                <div class="min-w-full h-60 bg-linear-to-r from-slate-800 to-slate-900 text-white flex flex-col items-center justify-center p-6 text-center">
+                  <h3 class="text-2xl font-bold mb-1">Primera Diapositiva</h3>
+                  <p class="text-sm text-slate-300">Transición suave con <code>transition-transform duration-500</code>.</p>
+                </div>
+                <div class="min-w-full h-60 bg-linear-to-r from-sky-600 to-indigo-700 text-white flex flex-col items-center justify-center p-6 text-center">
+                  <h3 class="text-2xl font-bold mb-1">Segunda Diapositiva</h3>
+                  <p class="text-sm text-sky-100">Diseñado íntegramente con utilidades de Tailwind CSS v4.</p>
+                </div>
+                <div class="min-w-full h-60 bg-linear-to-r from-emerald-600 to-teal-700 text-white flex flex-col items-center justify-center p-6 text-center">
+                  <h3 class="text-2xl font-bold mb-1">Tercera Diapositiva</h3>
+                  <p class="text-sm text-emerald-100">100% responsivo y adaptable a cualquier pantalla.</p>
+                </div>
+              </div>
+
+              <!-- Controles -->
+              <button type="button" data-tw-carousel-prev class="absolute left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer" aria-label="Anterior">❮</button>
+              <button type="button" data-tw-carousel-next class="absolute right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center cursor-pointer" aria-label="Siguiente">❯</button>
+
+              <!-- Indicadores -->
+              <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                <button type="button" data-tw-slide-to="0" class="w-6 h-2 rounded-full bg-white cursor-pointer" aria-label="Slide 1"></button>
+                <button type="button" data-tw-slide-to="1" class="w-6 h-2 rounded-full bg-white/50 cursor-pointer" aria-label="Slide 2"></button>
+                <button type="button" data-tw-slide-to="2" class="w-6 h-2 rounded-full bg-white/50 cursor-pointer" aria-label="Slide 3"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. CLOSE BUTTON -->
+      <section id="comp-close-button" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">9. Close Button (Botón de Cierre)</h2>
+          <span class="doc-badge-class">size-8 inline-flex items-center justify-center rounded-lg hover:bg-slate-200</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Botones de cierre accesibles para descartar diálogos, alertas o cajones laterales.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Botones de cierre normal, deshabilitado y sobre fondo oscuro</span></div>
+          <div class="bd-example flex items-center gap-6">
+            <button type="button" class="size-8 inline-flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer" aria-label="Cerrar">
+              ✕
+            </button>
+            <button type="button" disabled class="size-8 inline-flex items-center justify-center rounded-lg text-slate-400 opacity-50 cursor-not-allowed" aria-label="Cerrar deshabilitado">
+              ✕
+            </button>
+            <div class="p-2 rounded-lg bg-slate-900">
+              <button type="button" class="size-8 inline-flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-white/10 cursor-pointer" aria-label="Cerrar en oscuro">
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. COLLAPSE -->
+      <section id="comp-collapse" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">10. Collapse (Colapsable)</h2>
+          <span class="doc-badge-class">hidden / transition-all</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Alterna la visibilidad de cualquier bloque con la utilidad <code>hidden</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Haz clic en el botón para mostrar u ocultar el panel colapsable</span></div>
+          <div class="bd-example">
+            <button type="button" data-tw-collapse="#twCollapseDemo" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
+              Alternar contenido colapsable
+            </button>
+            <div id="twCollapseDemo" class="mt-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-sm">
+              Este bloque se muestra y se oculta alternando la clase <code>hidden</code> de Tailwind CSS.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. DROPDOWNS -->
+      <section id="comp-dropdowns" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">11. Dropdowns (Menús Desplegables)</h2>
+          <span class="doc-badge-class">relative / absolute z-20 mt-2 w-48 rounded-xl shadow-lg</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Posiciona un menú flotante usando un contenedor padre <code>relative inline-block</code> y el menú hijo con <code>absolute left-0 mt-2 w-48 rounded-xl shadow-lg border</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Menú Dropdown interactivo con encabezado y divisor</span></div>
+          <div class="bd-example h-52">
+            <div class="relative inline-block text-left">
+              <button type="button" data-tw-dropdown="#twDropdownMenu1" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-slate-800 text-white hover:bg-slate-700 cursor-pointer">
+                <span>Opciones de Cuenta</span>
+                <span class="text-xs">▼</span>
+              </button>
+              <div id="twDropdownMenu1" class="tw-dropdown-menu hidden absolute left-0 z-20 mt-2 w-52 rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 py-1 text-sm">
+                <div class="px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase">Mi Perfil</div>
+                <a href="#" class="block px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700">Configuración</a>
+                <a href="#" class="block px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700">Mis Cursos</a>
+                <div class="my-1 border-t border-slate-200 dark:border-slate-700"></div>
+                <a href="#" class="block px-3 py-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. LIST GROUP -->
+      <section id="comp-list-group" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">12. List Group (Grupo de Listas)</h2>
+          <span class="doc-badge-class">divide-y divide-slate-200 rounded-xl border</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          La utilidad <code>divide-y</code> agrega automáticamente bordes divisorios entre cada elemento hijo sin necesidad de repetir clases en cada <code>&lt;li&gt;</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Lista accionable y lista con contadores</span></div>
+          <div class="bd-example grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-200 dark:divide-slate-700 overflow-hidden text-sm">
+              <a href="#" class="block px-4 py-3 bg-sky-600 text-white font-semibold">Ítem activo seleccionado</a>
+              <a href="#" class="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Segundo enlace accionable</a>
+              <a href="#" class="block px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition">Tercer enlace accionable</a>
+              <span class="block px-4 py-3 text-slate-400 cursor-not-allowed">Ítem deshabilitado</span>
+            </div>
+
+            <ul class="rounded-xl border border-slate-200 dark:border-slate-700 divide-y divide-slate-200 dark:divide-slate-700 text-sm">
+              <li class="px-4 py-3 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">Bandeja Principal</div>
+                  <div class="text-xs text-slate-500">Mensajes recibidos hoy</div>
+                </div>
+                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300">14</span>
+              </li>
+              <li class="px-4 py-3 flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">Entregas Prácticas</div>
+                  <div class="text-xs text-slate-500">Trabajos pendientes de revisión</div>
+                </div>
+                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">5</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13. MODAL -->
+      <section id="comp-modal" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">13. Modal (Ventanas Modales)</h2>
+          <span class="doc-badge-class">fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Construye ventanas modales superpuestas combinando <code>fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs</code> para el fondo (backdrop) y una caja centrada con <code>max-w-lg w-full rounded-2xl shadow-2xl</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Demo en vivo: Abrir ventana Modal con efecto blur</span></div>
+          <div class="bd-example">
+            <button type="button" data-tw-modal-open="#twModalDemo" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
+              Abrir Modal Centrado
+            </button>
+
+            <!-- Modal -->
+            <div id="twModalDemo" class="tw-modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+              <div class="w-full max-w-md rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                  <h3 class="font-bold text-lg">Confirmar Acción</h3>
+                  <button type="button" data-tw-modal-close class="text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer">✕</button>
+                </div>
+                <div class="p-5 text-sm text-slate-600 dark:text-slate-300">
+                  Este cuadro de diálogo está centrado con <code>flex items-center justify-center</code> y aplica desenfoque al fondo con <code>backdrop-blur-xs</code>.
+                </div>
+                <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-2">
+                  <button type="button" data-tw-modal-close class="px-3.5 py-1.5 text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer">Cancelar</button>
+                  <button type="button" data-tw-modal-close class="px-3.5 py-1.5 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">Aceptar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14. NAVBAR -->
+      <section id="comp-navbar" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">14. Navbar (Barra de Navegación Responsiva)</h2>
+          <span class="doc-badge-class">flex items-center justify-between / hidden md:flex</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Barra de navegación adaptable que muestra los enlaces en línea desde <code>md:flex</code> y un botón hamburguesa en móviles (<code>md:hidden</code>).
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Navbar responsiva con buscador y colapso móvil</span></div>
+          <div class="bd-example">
+            <nav class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3">
+              <div class="flex items-center justify-between">
+                <a href="#" class="font-extrabold text-lg text-sky-600 dark:text-sky-400">MiSitio</a>
+                <button type="button" id="twNavbarToggle" class="md:hidden p-2 rounded-lg border border-slate-300 dark:border-slate-600 cursor-pointer" aria-label="Menú">
+                  ☰
+                </button>
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                  <a href="#" class="text-sky-600 dark:text-sky-400 font-semibold">Inicio</a>
+                  <a href="#" class="hover:text-sky-600">Cursos</a>
+                  <a href="#" class="hover:text-sky-600">Documentación</a>
+                </div>
+                <div class="hidden md:flex items-center gap-2">
+                  <input type="search" placeholder="Buscar..." class="px-3 py-1 text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <button type="button" class="px-3 py-1 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">Ir</button>
+                </div>
+              </div>
+              <!-- Menú colapsable en móvil -->
+              <div id="twNavbarMenu" class="hidden md:hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2 text-sm">
+                <a href="#" class="block py-1 font-semibold text-sky-600">Inicio</a>
+                <a href="#" class="block py-1">Cursos</a>
+                <a href="#" class="block py-1">Documentación</a>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. NAVS & TABS -->
+      <section id="comp-navs-tabs" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">15. Navs &amp; Tabs (Pestañas Interactivas)</h2>
+          <span class="doc-badge-class">border-b / border-b-2 border-sky-600</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Pestañas con indicador inferior activo (<code>border-b-2 border-sky-600 text-sky-600</code>) que alternan paneles de contenido dinámicamente.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Pestañas interactivas con cambio de panel</span></div>
+          <div class="bd-example">
+            <div data-tw-tab-group class="flex border-b border-slate-200 dark:border-slate-700 gap-6 text-sm font-semibold mb-4">
+              <button type="button" data-tw-tab="#twTabPane1" class="pb-2.5 border-b-2 border-sky-600 text-sky-600 dark:text-sky-400 dark:border-sky-400 cursor-pointer">
+                Resumen
+              </button>
+              <button type="button" data-tw-tab="#twTabPane2" class="pb-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">
+                Especificaciones
+              </button>
+              <button type="button" data-tw-tab="#twTabPane3" class="pb-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">
+                Descargas
+              </button>
+            </div>
+            <div id="twTabPane1" class="tw-tab-pane p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm">
+              <strong>Panel Resumen:</strong> Estás viendo el primer panel activo de las pestañas de Tailwind CSS.
+            </div>
+            <div id="twTabPane2" class="tw-tab-pane hidden p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm">
+              <strong>Panel Especificaciones:</strong> Motor CSS basado en Rust (Oxide) y configuración CSS-first con <code>@theme</code>.
+            </div>
+            <div id="twTabPane3" class="tw-tab-pane hidden p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm">
+              <strong>Panel Descargas:</strong> Incluye paquete <code>@tailwindcss/browser</code> v4.3.3 para uso local offline.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 16. OFFCANVAS / DRAWER -->
+      <section id="comp-offcanvas" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">16. Offcanvas / Drawer (Panel Lateral Deslizante)</h2>
+          <span class="doc-badge-class">fixed inset-y-0 left-0 z-50 w-80 shadow-2xl</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Paneles laterales superpuestos (Drawers) anclados al borde izquierdo (<code>left-0</code>) o derecho (<code>right-0</code>) de la ventana con <code>fixed inset-y-0</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Demo en vivo: Abrir Drawer Lateral</span></div>
+          <div class="bd-example">
+            <button type="button" data-tw-drawer-open="#twDrawerDemo" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
+              Abrir Panel Lateral (Offcanvas / Drawer)
+            </button>
+
+            <div id="twDrawerDemo" class="tw-drawer hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-xs">
+              <div class="fixed inset-y-0 right-0 w-80 max-w-full bg-white dark:bg-slate-800 shadow-2xl p-5 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="font-bold text-base">Panel Offcanvas Derecho</h3>
+                    <button type="button" data-tw-drawer-close class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer">✕</button>
+                  </div>
+                  <p class="text-sm text-slate-600 dark:text-slate-300">
+                    Este cajón lateral está fijado al borde derecho usando <code>fixed inset-y-0 right-0 w-80</code>.
+                  </p>
+                </div>
+                <button type="button" data-tw-drawer-close class="w-full py-2 text-sm font-semibold rounded-lg bg-slate-800 dark:bg-slate-700 text-white cursor-pointer">
+                  Cerrar panel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 17. PAGINATION -->
+      <section id="comp-pagination" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">17. Pagination (Paginación)</h2>
+          <span class="doc-badge-class">inline-flex -space-x-px rounded-lg shadow-xs</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Barra de navegación entre páginas con estado activo resaltado y botones Anterior/Siguiente.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Paginación numerada con página activa</span></div>
+          <div class="bd-example">
+            <nav aria-label="Paginación">
+              <ul class="inline-flex -space-x-px text-sm">
+                <li>
+                  <a href="#" class="px-3 py-2 rounded-l-lg border border-slate-300 dark:border-slate-600 text-slate-400 cursor-not-allowed">Anterior</a>
+                </li>
+                <li>
+                  <a href="#" class="px-3.5 py-2 border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">1</a>
+                </li>
+                <li>
+                  <a href="#" aria-current="page" class="px-3.5 py-2 border border-sky-600 bg-sky-600 text-white font-semibold">2</a>
+                </li>
+                <li>
+                  <a href="#" class="px-3.5 py-2 border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">3</a>
+                </li>
+                <li>
+                  <a href="#" class="px-3 py-2 rounded-r-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">Siguiente</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- 18. PLACEHOLDERS (SKELETON) -->
+      <section id="comp-placeholders" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">18. Placeholders / Skeletons (Esqueletos de Carga)</h2>
+          <span class="doc-badge-class">animate-pulse / bg-slate-200 dark:bg-slate-700 rounded</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          La utilidad <code>animate-pulse</code> crea un efecto de parpadeo suave ideal para esqueletos de carga mientras se obtienen datos del servidor.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Tarjeta Skeleton con <code>animate-pulse</code></span></div>
+          <div class="bd-example">
+            <div class="max-w-md p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+              <div class="animate-pulse flex space-x-4">
+                <div class="rounded-full bg-slate-200 dark:bg-slate-700 size-12"></div>
+                <div class="flex-1 space-y-3 py-1">
+                  <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                  <div class="space-y-2">
+                    <div class="h-2.5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <div class="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 19. POPOVERS -->
+      <section id="comp-popovers" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">19. Popovers (Cuadros Emergentes)</h2>
+          <span class="doc-badge-class">relative / absolute bottom-full mb-2 w-64 rounded-xl shadow-xl</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Globos emergentes con cabecera y cuerpo posicionados con <code>absolute</code> respecto al botón disparador.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Haz clic en el botón para alternar el Popover</span></div>
+          <div class="bd-example pt-24">
+            <div class="relative inline-block">
+              <button type="button" data-tw-popover="#twPopoverBox" class="px-4 py-2 text-sm font-semibold rounded-lg bg-rose-600 text-white hover:bg-rose-700 cursor-pointer">
+                Clic para ver Popover
+              </button>
+              <div id="twPopoverBox" class="hidden absolute bottom-full left-0 mb-2 w-64 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl z-20 text-xs">
+                <div class="px-3 py-2 border-b border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-white">
+                  Título del Popover
+                </div>
+                <div class="p-3 text-slate-600 dark:text-slate-300">
+                  Contenido enriquecido emergente construido con posicionamiento absoluto en Tailwind CSS.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 20. PROGRESS -->
+      <section id="comp-progress" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">20. Progress (Barras de Progreso)</h2>
+          <span class="doc-badge-class">w-full bg-slate-200 rounded-full h-4 overflow-hidden</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Barras de progreso simples, con etiquetas de porcentaje o con gradientes de color.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Barras de progreso con porcentaje, colores y barras apiladas</span></div>
+          <div class="bd-example space-y-4">
+            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4 overflow-hidden">
+              <div class="bg-sky-600 h-4 text-[11px] font-bold text-white flex items-center justify-center" style="width: 45%">45%</div>
+            </div>
+            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4 overflow-hidden">
+              <div class="bg-linear-to-r from-emerald-500 to-teal-600 h-4 text-[11px] font-bold text-white flex items-center justify-center" style="width: 75%">75% Completado</div>
+            </div>
+            <!-- Barra múltiple apilada -->
+            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4 overflow-hidden flex">
+              <div class="bg-sky-600 h-4" style="width: 30%" title="30%"></div>
+              <div class="bg-emerald-500 h-4" style="width: 25%" title="25%"></div>
+              <div class="bg-amber-500 h-4" style="width: 20%" title="20%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 21. SCROLLSPY -->
+      <section id="comp-scrollspy" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">21. Scrollspy (Seguimiento de Desplazamiento)</h2>
+          <span class="doc-badge-class">overflow-y-auto scroll-smooth</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Combina <code>scroll-smooth</code> con detección de scroll para resaltar la sección activa mientras el usuario se desplaza por el contenedor:
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Desplázate dentro del contenedor para ver cambiar la píldora activa</span></div>
+          <div class="bd-example">
+            <div class="flex items-center justify-between px-4 py-2 mb-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <span class="font-bold text-sm">Índice Scrollspy</span>
+              <div class="flex gap-1 text-xs font-semibold">
+                <a href="#twSpySec1" data-tw-spy-link class="px-3 py-1 rounded-lg bg-sky-600 text-white">Sección 1</a>
+                <a href="#twSpySec2" data-tw-spy-link class="px-3 py-1 rounded-lg">Sección 2</a>
+                <a href="#twSpySec3" data-tw-spy-link class="px-3 py-1 rounded-lg">Sección 3</a>
+              </div>
+            </div>
+            <div id="twScrollspyContainer" class="h-44 overflow-y-auto scroll-smooth p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-6 text-sm">
+              <div id="twSpySec1" data-tw-spy-section>
+                <h4 class="font-bold text-base mb-1">Sección 1 — Introducción</h4>
+                <p class="text-slate-600 dark:text-slate-300">Desplázate hacia abajo dentro de esta caja para observar cómo el indicador superior cambia automáticamente a la sección visible.</p>
+              </div>
+              <div id="twSpySec2" data-tw-spy-section>
+                <h4 class="font-bold text-base mb-1">Sección 2 — Utilidades</h4>
+                <p class="text-slate-600 dark:text-slate-300">La clase <code>scroll-smooth</code> aplica desplazamiento suave nativo al hacer clic en los enlaces de anclaje.</p>
+              </div>
+              <div id="twSpySec3" data-tw-spy-section>
+                <h4 class="font-bold text-base mb-1">Sección 3 — Conclusión</h4>
+                <p class="text-slate-600 dark:text-slate-300">Has llegado al final del contenedor de prueba de Scrollspy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 22. SPINNERS -->
+      <section id="comp-spinners" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">22. Spinners (Indicadores de Carga)</h2>
+          <span class="doc-badge-class">animate-spin / animate-ping / rounded-full border-4 border-t-transparent</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Crea indicadores giratorios con <code>animate-spin rounded-full border-4 border-sky-600 border-t-transparent</code> o indicadores pulsantes con <code>animate-ping</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Spinners giratorios, pulsantes y dentro de botones</span></div>
+          <div class="bd-example flex flex-wrap items-center gap-6">
+            <div class="size-8 rounded-full border-4 border-sky-600 border-t-transparent animate-spin" role="status" aria-label="Cargando"></div>
+            <div class="size-8 rounded-full border-4 border-emerald-600 border-t-transparent animate-spin" role="status" aria-label="Cargando"></div>
+            <div class="size-8 rounded-full border-4 border-rose-600 border-t-transparent animate-spin" role="status" aria-label="Cargando"></div>
+
+            <span class="relative flex size-4">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full size-4 bg-sky-500"></span>
+            </span>
+
+            <button type="button" disabled class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white opacity-80 cursor-not-allowed">
+              <span class="size-4 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+              <span>Procesando...</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 23. TOASTS -->
+      <section id="comp-toasts" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">23. Toasts (Notificaciones Flotantes)</h2>
+          <span class="doc-badge-class">fixed bottom-5 right-5 z-50 rounded-xl shadow-xl</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Notificaciones ligeras con ícono, mensaje y botón de cierre, tanto en flujo como flotantes en la esquina de la pantalla.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Toast estático y disparador de Toast flotante en vivo</span></div>
+          <div class="bd-example space-y-4">
+            <div class="max-w-xs p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md flex items-start gap-3">
+              <span class="px-2 py-0.5 text-xs font-bold rounded bg-sky-100 text-sky-700">🔔</span>
+              <div class="flex-1 text-xs">
+                <div class="font-bold text-slate-900 dark:text-white">Tailwind CSS v4</div>
+                <div class="text-slate-600 dark:text-slate-300 mt-0.5">Notificación estilo Toast lista para usar.</div>
+              </div>
+            </div>
+
+            <button type="button" id="twLiveToastBtn" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white hover:bg-sky-700 cursor-pointer">
+              Mostrar Toast flotante en esquina inferior derecha
+            </button>
+
+            <div id="twLiveToast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm p-4 rounded-xl bg-slate-900 text-white shadow-2xl border border-slate-700 flex items-center gap-3 text-sm">
+              <span class="text-emerald-400 font-bold">✔</span>
+              <span>¡Cambios guardados correctamente con Tailwind CSS v4!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 24. TOOLTIPS -->
+      <section id="comp-tooltips" class="doc-section" data-category="components">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">24. Tooltips (Descripciones Emergentes 100% CSS)</h2>
+          <span class="doc-badge-class">group / opacity-0 group-hover:opacity-100 transition</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          En Tailwind CSS no necesitas JavaScript para crear Tooltips: basta con marcar el contenedor con <code>group relative</code> y el tooltip con <code>opacity-0 pointer-events-none group-hover:opacity-100 transition</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Pasa el cursor sobre los botones (Tooltips puros con <code>group-hover:*</code>)</span></div>
+          <div class="bd-example flex flex-wrap gap-4 py-6">
+            <!-- Tooltip Arriba -->
+            <div class="group relative inline-block">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-700 text-white cursor-pointer">
+                Tooltip Arriba
+              </button>
+              <span class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-md bg-slate-900 px-2.5 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition">
+                Tooltip en la parte superior
+              </span>
+            </div>
+
+            <!-- Tooltip Abajo -->
+            <div class="group relative inline-block">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-700 text-white cursor-pointer">
+                Tooltip Abajo
+              </button>
+              <span class="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap rounded-md bg-slate-900 px-2.5 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition">
+                Tooltip en la parte inferior
+              </span>
+            </div>
+
+            <!-- Tooltip Derecha -->
+            <div class="group relative inline-block">
+              <button type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white cursor-pointer">
+                Tooltip Derecha
+              </button>
+              <span class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 whitespace-nowrap rounded-md bg-slate-900 px-2.5 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition">
+                Sin una sola línea de JS
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 6: EFECTOS, SOMBRAS, TRANSICIONES Y TRANSFORMACIONES
+           ===================================================================== -->
+      <section id="utilities-effects" class="doc-section" data-category="utilities">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Sombras de Color, Anillos (Rings) y Backdrop Blur</h2>
+          <span class="doc-badge-class">shadow-lg / shadow-sky-500/30 / ring-2 / backdrop-blur-md</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Tailwind permite colorear sombras (por ejemplo <code>shadow-lg shadow-sky-500/30</code>), agregar anillos de contorno sin alterar el tamaño de caja (<code>ring-2 ring-offset-2</code>) y crear efectos de vidrio esmerilado (glassmorphism) con <code>backdrop-blur-md bg-white/30</code>.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Sombras coloreadas, anillos y efecto Glassmorphism</span></div>
+          <div class="bd-example flex flex-wrap items-center gap-6">
+            <button type="button" class="px-5 py-2.5 rounded-xl bg-sky-500 text-white font-semibold shadow-lg shadow-sky-500/40">
+              shadow-lg shadow-sky-500/40
+            </button>
+            <button type="button" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold ring-4 ring-indigo-500/40">
+              ring-4 ring-indigo-500/40
+            </button>
+            <div class="p-4 rounded-xl bg-linear-to-r from-pink-500 to-violet-600">
+              <div class="px-4 py-2 rounded-lg bg-white/25 backdrop-blur-md text-white font-semibold text-sm border border-white/30">
+                bg-white/25 backdrop-blur-md
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="utilities-transitions" class="doc-section" data-category="utilities">
+        <div class="doc-section-title">
+          <h2 class="text-2xl font-bold">Transiciones y Transformaciones 2D/3D</h2>
+          <span class="doc-badge-class">transition / duration-300 / hover:-translate-y-1 / hover:scale-105</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Combina <code>transition duration-300 ease-out</code> con utilidades de transformación como <code>hover:-translate-y-1</code>, <code>hover:scale-105</code> o <code>hover:rotate-3</code> para dar vida a tarjetas y botones.
+        </p>
+
+        <div class="bd-example-snippet">
+          <div class="bd-example-header"><span>Pasa el cursor sobre las tarjetas para probar las transformaciones</span></div>
+          <div class="bd-example grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-sm font-semibold">
+            <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-lg cursor-pointer">
+              hover:-translate-y-1.5
+            </div>
+            <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition duration-300 hover:scale-105 hover:border-sky-500 cursor-pointer">
+              hover:scale-105
+            </div>
+            <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition duration-300 hover:rotate-2 hover:bg-sky-50 dark:hover:bg-slate-700 cursor-pointer">
+              hover:rotate-2
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pt-4 mt-6 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 flex flex-wrap justify-between gap-2">
+        <span>Documentación Offline de <strong>Tailwind CSS v4.3.3</strong> — UNLPam · POW 2026</span>
+        <span>Motor local desde <code>tailwindcss-v4-dist/tailwindcss-browser.js</code></span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Botón flotante para volver arriba -->
+  <button type="button" id="btnBackToTop" class="p-3 rounded-full bg-sky-600 text-white shadow-lg hover:bg-sky-700 cursor-pointer" title="Volver arriba" aria-label="Volver arriba">
+    ↑
+  </button>
+
+  <!-- Script de interactividad de la documentación -->
+  <script src="docs-assets/docs.js"></script>
+</body>
+</html>
