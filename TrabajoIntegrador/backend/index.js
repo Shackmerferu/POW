@@ -23,12 +23,14 @@ db.connect(err => {
 // IMPORTAMOS LAS RUTAS (Agregá la línea de usuarios)
 const authRoutes = require('./api/auth')(db);
 const unidadesRoutes = require('./api/unidades')(db); 
-const usuariosRoutes = require('./api/usuarios')(db); // Línea nueva
+const usuariosRoutes = require('./api/usuarios')(db); 
+const conveniosRoutes = require('./api/convenios')(db);
 
 // LE DECIMOS A NODE DÓNDE USARLAS (Agregá la ruta de users)
 app.use('/api/auth', authRoutes);
 app.use('/api/units', unidadesRoutes); 
 app.use('/api/users', usuariosRoutes); 
+app.use('/api/convenios', conveniosRoutes);
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
