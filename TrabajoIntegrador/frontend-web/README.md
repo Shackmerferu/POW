@@ -1,1 +1,3 @@
 # Documentacion Proyecto de Gestion de Consensos de la Facultad
+
+## Estructura 
