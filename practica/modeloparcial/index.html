@@ -1,54 +1,102 @@
-
+<!-- Indica que el documento utiliza HTML5. -->
 <!DOCTYPE html>
+
+<!-- Define el idioma principal de la página como español. -->
 <html lang="es">
 
 <head>
+    <!-- Permite utilizar caracteres especiales como ñ y tildes. -->
     <meta charset="UTF-8">
+
+    <!-- Adapta el ancho de la página al dispositivo donde se visualiza. -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Descripción de la página que pueden utilizar los buscadores. -->
     <meta name="description" content="Termo Store: termos y mates para acompañarte todos los días.">
+
+    <!-- Identifica al autor del sitio. -->
     <meta name="author" content="Termo Store">
+
+    <!-- Define el color que algunos navegadores utilizan en su interfaz móvil. -->
     <meta name="theme-color" content="#203b32">
 
+    <!-- Texto que aparece en la pestaña del navegador. -->
     <title>Termo Store | Tu momento de mate</title>
 
-    <!-- Bootstrap y estilos propios. -->
+    <!-- Carga Bootstrap 5.3.3 desde un CDN para utilizar sus estilos y componentes. -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Carga la hoja de estilos propia del proyecto. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN. -->
+    <!-- =========================================================
+         BARRA DE NAVEGACIÓN
+         Contiene el logo, los enlaces y las opciones de sesión.
+         ========================================================= -->
+
+    <!-- navbar: barra de navegación de Bootstrap.
+         fixed-top: mantiene la barra fija en la parte superior.
+         navbar-expand-lg: muestra el menú expandido desde pantallas grandes.
+         navbar-dark: adapta los colores de los elementos para fondos oscuros.
+         store-navbar: clase personalizada definida en styles.css. -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top store-navbar">
+
+        <!-- container centra el contenido y limita su ancho según Bootstrap. -->
         <div class="container">
 
+            <!-- Logo de la tienda. href="#" apunta al inicio de la página. -->
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+
+                <!-- Letra decorativa utilizada como icono del logo. -->
                 <span class="brand-icon">T</span>
+
+                <!-- strong resalta visualmente la palabra Store. -->
                 <span>Termo <strong>Store</strong></span>
             </a>
 
+            <!-- Botón que permite abrir o cerrar el menú en pantallas pequeñas.
+                 data-bs-toggle y data-bs-target son atributos de Bootstrap.
+                 aria-* mejora la accesibilidad del componente. -->
             <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarContenido"
                 aria-controls="navbarContenido" aria-expanded="false"
                 aria-label="Abrir menú">
+
+                <!-- Dibuja el icono del menú desplegable. -->
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Contenedor del menú que se contrae en pantallas pequeñas.
+                 Su id coincide con el data-bs-target del botón anterior. -->
             <div class="collapse navbar-collapse" id="navbarContenido">
+
+                <!-- ms-auto desplaza los enlaces hacia la derecha.
+                     gap-lg-3 agrega separación entre elementos en pantallas grandes. -->
                 <div class="navbar-nav ms-auto align-items-lg-center gap-lg-3 py-3 py-lg-0">
 
+                    <!-- Lleva al usuario a la sección del catálogo. -->
                     <a class="nav-link" href="#catalogo" id="navCatalogo">Catálogo</a>
+
+                    <!-- Lleva al usuario a la sección del carrito. -->
                     <a class="nav-link" href="#carrito" id="navCarrito">Mi carrito</a>
 
+                    <!-- JavaScript actualiza este texto según el estado de la sesión. -->
                     <span id="usuarioInfo" class="user-label">Invitado</span>
 
-                    <!-- Abre el modal de autenticación. -->
+                    <!-- Abre el modal de inicio de sesión.
+                         Bootstrap encuentra el modal mediante su id. -->
                     <button id="btnLogin" type="button"
                         class="btn btn-outline-light nav-action"
                         data-bs-toggle="modal" data-bs-target="#modalLogin">
                         Iniciar sesión
                     </button>
 
+                    <!-- Botón para cerrar sesión.
+                         d-none lo oculta inicialmente.
+                         JavaScript puede mostrarlo cuando el usuario inicia sesión. -->
                     <button id="btnLogout" type="button"
                         class="btn btn-warning nav-action d-none">
                         Cerrar sesión
@@ -60,27 +108,43 @@
     </nav>
 
 
-    <!-- PORTADA. -->
+    <!-- =========================================================
+         PORTADA
+         Es la sección inicial que presenta la tienda.
+         ========================================================= -->
+
     <header class="hero">
+
+        <!-- Capa visual que permite aplicar un efecto sobre el fondo. -->
         <div class="hero-overlay"></div>
 
+        <!-- Contenedor del contenido principal de la portada. -->
         <div class="container hero-content">
+
+            <!-- Texto breve que acompaña al título principal. -->
             <span class="eyebrow">TU RITUAL, TU ESTILO</span>
 
+            <!-- h1 representa el título principal de la página.
+                 br introduce un salto de línea. -->
             <h1>
                 El mate de todos los días.<br>
                 <span>Como más te gusta.</span>
             </h1>
 
+            <!-- Texto descriptivo de la tienda. -->
             <p>
                 Descubrí termos y mates pensados para acompañarte
                 en cada momento.
             </p>
 
+            <!-- Enlace que desplaza al usuario hasta el catálogo.
+                 btn y btn-lg son clases de Bootstrap.
+                 hero-button es una clase propia. -->
             <a href="#catalogo" class="btn btn-warning btn-lg hero-button">
                 Explorar catálogo <span aria-hidden="true">→</span>
             </a>
 
+            <!-- Beneficios destacados de la tienda. -->
             <div class="hero-benefits">
                 <span>● Calidad para todos los días</span>
                 <span>● Encontrá tu estilo</span>
@@ -89,59 +153,107 @@
     </header>
 
 
-    <!-- CONTENIDO PRINCIPAL. -->
+    <!-- =========================================================
+         CONTENIDO PRINCIPAL
+         Incluye catálogo, carrito y panel administrativo.
+         ========================================================= -->
+
+    <!-- container centra el contenido.
+         py-4 agrega espacio vertical arriba y abajo. -->
     <main class="container py-4">
 
-        <!-- Mensajes generales del catálogo y otras operaciones. -->
+        <!-- Contenedor donde JavaScript puede mostrar mensajes
+             de éxito, error o información general.
+             aria-live="polite" anuncia cambios a lectores de pantalla
+             sin interrumpir inmediatamente al usuario. -->
         <div id="alertas" class="mb-3" aria-live="polite"></div>
 
 
-        <!-- CATÁLOGO. -->
+        <!-- =====================================================
+             CATÁLOGO DE PRODUCTOS
+             ===================================================== -->
+
+        <!-- El id permite llegar a esta sección mediante href="#catalogo". -->
         <section id="catalogo">
+
+            <!-- Título de la sección. -->
             <h2 class="mb-4">Catálogo de productos</h2>
 
+            <!-- Contenedor del filtro por categoría. -->
             <div class="mb-4">
+
+                <!-- for conecta la etiqueta con el select que tiene ese id. -->
                 <label for="filtroCategoria" class="form-label">
                     Filtrar por categoría
                 </label>
 
+                <!-- Lista desplegable que permite seleccionar una categoría.
+                     JavaScript puede leer el valor seleccionado para filtrar. -->
                 <select id="filtroCategoria" class="form-select">
+
+                    <!-- Muestra todas las categorías. -->
                     <option value="todos">Todos los productos</option>
+
+                    <!-- Opción para mostrar únicamente termos. -->
                     <option value="termo">Termos</option>
+
+                    <!-- Opción para mostrar únicamente mates. -->
                     <option value="mate">Mates</option>
                 </select>
             </div>
 
-            <!-- Los productos se cargan mediante JavaScript. -->
+            <!-- Contenedor vacío al inicio.
+                 JavaScript consulta los productos y genera su HTML dinámicamente.
+                 row y g-4 son clases de Bootstrap para organizar columnas y espacios. -->
             <div id="productos" class="row g-4"></div>
         </section>
 
 
-        <!-- CARRITO. -->
+        <!-- =====================================================
+             CARRITO DE COMPRAS
+             ===================================================== -->
+
+        <!-- mt-5 agrega margen superior para separar esta sección del catálogo. -->
         <section id="carrito" class="mt-5">
+
+            <!-- Título del carrito. -->
             <h2 class="mb-4">Tu carrito</h2>
 
+            <!-- Contenedor visual del carrito, estilizado en styles.css. -->
             <div class="cart-panel">
 
+                <!-- Aquí JavaScript muestra los productos agregados,
+                     sus cantidades y los controles para modificarlos. -->
                 <div id="carritoItems">
+
+                    <!-- Mensaje inicial cuando el carrito está vacío. -->
                     <p class="empty-cart">
                         Todavía no agregaste productos.
                     </p>
                 </div>
 
+                <!-- Resumen del total y botón para vaciar el carrito. -->
                 <div class="cart-summary">
+
                     <div>
+                        <!-- Etiqueta descriptiva del importe. -->
                         <span class="summary-label">Total de tu compra</span>
+
+                        <!-- JavaScript actualiza este elemento con el total calculado. -->
                         <h3 id="totalCarrito">Total: $0.00</h3>
                     </div>
 
+                    <!-- Botón cuyo evento JavaScript elimina los productos del carrito. -->
                     <button id="btnVaciarCarrito" type="button"
                         class="btn btn-outline-danger">
                         Vaciar carrito
                     </button>
                 </div>
 
+                <!-- Zona destinada al botón para confirmar la compra. -->
                 <div class="cart-checkout">
+
+                    <!-- JavaScript controla la compra y envía los datos al servidor. -->
                     <button id="btnComprar" type="button"
                         class="btn btn-sm btn-success">
                         Comprar
@@ -152,74 +264,128 @@
         </section>
 
 
-        <!-- PANEL DE ADMINISTRACIÓN. -->
+        <!-- =====================================================
+             PANEL DE ADMINISTRACIÓN
+             Permite crear, editar y administrar productos.
+             ===================================================== -->
+
+        <!-- d-none oculta el panel inicialmente.
+             JavaScript puede mostrarlo si corresponde al rol del usuario. -->
         <section id="adminPanel" class="mt-4 d-none">
+
+            <!-- Título del panel administrativo. -->
             <h2 class="mb-4">Panel de administración</h2>
 
-            <!-- CREAR O EDITAR PRODUCTOS. -->
+            <!-- -------------------------------------------------
+                 FORMULARIO PARA CREAR O EDITAR PRODUCTOS
+                 ------------------------------------------------- -->
+
             <div class="card mb-4">
+
+                <!-- Encabezado visual de la tarjeta. -->
                 <div class="card-header">
                     <h3 class="h5 mb-0">Agregar o editar producto</h3>
                 </div>
 
                 <div class="card-body">
+
+                    <!-- Formulario que JavaScript utiliza para guardar productos. -->
                     <form id="formProducto">
 
+                        <!-- Campo oculto para identificar el producto que se edita.
+                             Si está vacío, puede interpretarse como una creación. -->
                         <input type="hidden" id="productoId" name="id">
+
+                        <!-- Campo oculto donde se guarda el token de seguridad
+                             que puede enviarse al servidor para validar la operación. -->
                         <input type="hidden" id="tokenForm" name="token">
 
+                        <!-- Sistema de filas y columnas de Bootstrap para organizar campos. -->
                         <div class="row g-3">
 
+                            <!-- Columna del nombre del producto. -->
                             <div class="col-md-6">
+
+                                <!-- La etiqueta queda asociada al input por su id. -->
                                 <label for="nombreProducto" class="form-label">
                                     Nombre
                                 </label>
+
+                                <!-- Campo obligatorio para ingresar el nombre. -->
                                 <input type="text" id="nombreProducto"
                                     name="nombre" class="form-control" required>
                             </div>
 
+                            <!-- Columna de la categoría. -->
                             <div class="col-md-6">
+
                                 <label for="categoriaProducto" class="form-label">
                                     Categoría
                                 </label>
+
+                                <!-- Select obligatorio para seleccionar el tipo de producto. -->
                                 <select id="categoriaProducto" name="categoria"
                                     class="form-select" required>
+
+                                    <!-- Valor vacío que funciona como opción inicial. -->
                                     <option value="">Seleccionar categoría</option>
+
                                     <option value="termo">Termo</option>
                                     <option value="mate">Mate</option>
                                 </select>
                             </div>
 
+                            <!-- La descripción ocupa todo el ancho de la fila. -->
                             <div class="col-12">
+
                                 <label for="descripcionProducto" class="form-label">
                                     Descripción
                                 </label>
+
+                                <!-- textarea permite escribir varias líneas de texto.
+                                     rows establece su altura inicial aproximada. -->
                                 <textarea id="descripcionProducto"
                                     name="descripcion" class="form-control"
                                     rows="3" required></textarea>
                             </div>
 
+                            <!-- Columna para la ruta o ubicación de la imagen. -->
                             <div class="col-md-6">
+
                                 <label for="imagenProducto" class="form-label">
                                     Ruta de la imagen
                                 </label>
+
+                                <!-- El valor ingresado se envía con el formulario.
+                                     La ruta debe ser válida para que la imagen se muestre. -->
                                 <input type="text" id="imagenProducto"
                                     name="imagen" class="form-control" required>
                             </div>
 
+                            <!-- Columna para el precio. -->
                             <div class="col-md-3">
+
                                 <label for="precioProducto" class="form-label">
                                     Precio
                                 </label>
+
+                                <!-- type="number" acepta valores numéricos.
+                                     min evita valores menores que 0.01 en la validación del navegador.
+                                     step permite valores con dos decimales. -->
                                 <input type="number" id="precioProducto"
                                     name="precio" class="form-control"
                                     min="0.01" step="0.01" required>
                             </div>
 
+                            <!-- Columna para la cantidad disponible. -->
                             <div class="col-md-3">
+
                                 <label for="stockProducto" class="form-label">
                                     Stock
                                 </label>
+
+                                <!-- El stock debe ser un entero igual o mayor que cero.
+                                     La validación definitiva también debe realizarse en el servidor. -->
                                 <input type="number" id="stockProducto"
                                     name="stock" class="form-control"
                                     min="0" step="1" required>
@@ -227,11 +393,16 @@
 
                         </div>
 
+                        <!-- Botones del formulario. -->
                         <div class="d-flex flex-wrap gap-2 mt-4">
+
+                            <!-- Al enviar el formulario, JavaScript procesa los datos
+                                 y solicita al servidor que guarde el producto. -->
                             <button type="submit" class="btn btn-primary">
                                 Guardar producto
                             </button>
 
+                            <!-- Cancela la edición actual mediante JavaScript. -->
                             <button type="button" id="btnCancelarEdicion"
                                 class="btn btn-outline-secondary">
                                 Cancelar edición
@@ -243,13 +414,21 @@
             </div>
 
 
-            <!-- LISTADO DE PRODUCTOS ADMINISTRABLES. -->
+            <!-- -------------------------------------------------
+                 LISTADO ADMINISTRATIVO DE PRODUCTOS
+                 ------------------------------------------------- -->
+
             <div class="card">
+
+                <!-- Encabezado de la tarjeta. -->
                 <div class="card-header">
                     <h3 class="h5 mb-0">Administrar productos</h3>
                 </div>
 
                 <div class="card-body">
+
+                    <!-- JavaScript carga aquí los productos disponibles
+                         para que el administrador pueda gestionarlos. -->
                     <div id="adminProductos" class="row g-4"></div>
                 </div>
             </div>
@@ -259,78 +438,123 @@
     </main>
 
 
-    <!-- PIE DE PÁGINA. -->
+    <!-- =========================================================
+         PIE DE PÁGINA
+         ========================================================= -->
+
     <footer class="store-footer">
+
+        <!-- Contenedor que alinea el contenido del pie de página. -->
         <div class="container footer-content">
+
+            <!-- Enlace con el nombre de la tienda. -->
             <a class="footer-brand" href="#">Termo Store</a>
+
+            <!-- Frase representativa del negocio. -->
             <p>Tu próximo mate empieza acá.</p>
+
+            <!-- Aviso de derechos reservados. -->
             <span>© 2026 Termo Store. Todos los derechos reservados.</span>
         </div>
     </footer>
 
 
-    <!-- MODAL DE INICIO DE SESIÓN Y REGISTRO. -->
+    <!-- =========================================================
+         MODAL DE AUTENTICACIÓN
+         Permite iniciar sesión o registrarse sin cambiar de página.
+         ========================================================= -->
+
+    <!-- modal: componente de Bootstrap.
+         fade: agrega una transición visual.
+         tabindex="-1": permite gestionar el foco del modal.
+         aria-labelledby identifica el título accesible del modal.
+         aria-hidden indica que inicialmente está oculto. -->
     <div class="modal fade" id="modalLogin" tabindex="-1"
         aria-labelledby="tituloModalLogin" aria-hidden="true">
 
+        <!-- Centra verticalmente la ventana modal. -->
         <div class="modal-dialog modal-dialog-centered">
+
+            <!-- Contenedor visual del contenido del modal. -->
             <div class="modal-content login-modal">
 
-                <!-- Se reutiliza el mismo formulario para ambos modos. -->
+                <!-- El mismo formulario se utiliza para iniciar sesión
+                     y para registrarse. JavaScript distingue ambos modos. -->
                 <form id="formLogin">
 
+                    <!-- Cabecera del modal: texto e indicador de cierre. -->
                     <div class="modal-header">
+
                         <div>
                             <span class="eyebrow">BIENVENIDO/A</span>
 
+                            <!-- JavaScript puede modificar este título
+                                 al alternar entre login y registro. -->
                             <h2 class="modal-title fs-4" id="tituloModalLogin">
                                 Iniciar sesión
                             </h2>
                         </div>
 
+                        <!-- Botón de cierre proporcionado por Bootstrap. -->
                         <button type="button" class="btn-close"
                             data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
 
 
+                    <!-- Cuerpo del modal: mensajes y campos de autenticación. -->
                     <div class="modal-body">
 
-                        <!-- Los mensajes de autenticación se muestran dentro del modal. -->
+                        <!-- JavaScript muestra aquí los errores o mensajes
+                             relacionados específicamente con la autenticación. -->
                         <div id="alertasLogin" class="mb-3"
                             aria-live="polite" role="status"></div>
 
+                        <!-- Texto que JavaScript puede adaptar según el modo. -->
                         <p id="descripcionAutenticacion" class="panel-description">
                             Ingresá a tu cuenta para continuar.
                         </p>
 
 
-                        <!-- Este campo solo se utiliza durante el registro.
-                             JavaScript debe habilitarlo y mostrarlo en ese modo. -->
+                        <!-- Campo exclusivo del registro.
+                             d-none lo oculta inicialmente.
+                             disabled impide que se use mientras esté deshabilitado.
+                             JavaScript debe mostrarlo y habilitarlo al registrarse. -->
                         <div id="campoNombreRegistro" class="d-none">
+
                             <label for="nombreRegistro" class="form-label">
                                 Nombre completo
                             </label>
 
+                            <!-- autocomplete="name" permite al navegador sugerir
+                                 un nombre guardado, si está disponible. -->
                             <input type="text" name="nombre" id="nombreRegistro"
                                 class="form-control mb-3" autocomplete="name"
                                 disabled>
                         </div>
 
 
+                        <!-- Campo del correo electrónico. -->
                         <label for="emailLogin" class="form-label">
                             Correo electrónico
                         </label>
 
+                        <!-- type="email" permite al navegador validar el formato básico.
+                             name="email" es el nombre del dato enviado por el formulario.
+                             autocomplete="username" identifica el correo como usuario de acceso. -->
                         <input name="email" id="emailLogin" type="email"
                             class="form-control mb-3"
                             placeholder="nombre@ejemplo.com"
                             autocomplete="username" required>
 
 
+                        <!-- Campo de la contraseña. -->
                         <label for="passwordLogin" class="form-label">
                             Contraseña
                         </label>
 
+                        <!-- type="password" oculta los caracteres introducidos.
+                             minlength exige al menos ocho caracteres en la validación del navegador.
+                             required impide enviar el formulario vacío. -->
                         <input name="password" id="passwordLogin" type="password"
                             class="form-control"
                             placeholder="Tu contraseña"
@@ -340,13 +564,17 @@
                     </div>
 
 
-                    <!-- Permite cambiar entre iniciar sesión y registrarse.
-                         No navega a otra página. -->
+                    <!-- Zona para alternar entre el modo de inicio de sesión
+                         y el modo de registro. -->
                     <div class="text-center px-3 mt-3">
+
+                        <!-- JavaScript puede modificar el mensaje según el modo actual. -->
                         <p id="textoRegistro" class="mb-2">
                             ¿Todavía no tenés una cuenta?
                         </p>
 
+                        <!-- Este botón no envía el formulario porque su tipo es button.
+                             JavaScript debe cambiar el modo al pulsarlo. -->
                         <button type="button" id="btnCambiarModo"
                             class="btn btn-outline-primary w-100">
                             Registrarse
@@ -354,14 +582,18 @@
                     </div>
 
 
+                    <!-- Pie del modal: cancelar o enviar los datos. -->
                     <div class="modal-footer">
 
+                        <!-- Cierra el modal sin enviar el formulario. -->
                         <button type="button" class="btn btn-light"
                             data-bs-dismiss="modal">
                             Cancelar
                         </button>
 
-                        <!-- JavaScript cambiará el texto según el modo. -->
+                        <!-- Envía el formulario.
+                             JavaScript puede cambiar el texto entre "Entrar"
+                             y una acción de registro, según el modo seleccionado. -->
                         <button type="submit" id="btnEnviarAutenticacion"
                             class="btn btn-success">
                             Entrar
@@ -375,13 +607,21 @@
     </div>
 
 
-    <!-- Bootstrap debe cargarse antes de los scripts propios. -->
+    <!-- =========================================================
+         CARGA DE SCRIPTS
+         El orden permite que las bibliotecas necesarias estén disponibles.
+         ========================================================= -->
+
+    <!-- Carga Bootstrap JavaScript, incluyendo Popper.
+         Se necesita para funcionalidades como el menú desplegable y el modal. -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Lógica de sesión, catálogo, carrito y autenticación. -->
+    <!-- Carga la lógica principal:
+         sesión, catálogo, carrito, autenticación y compra. -->
     <script src="js/app.js"></script>
 
-    <!-- Operaciones administrativas de productos. -->
+    <!-- Carga la lógica específica del panel administrativo.
+         Se incluye después de app.js para mantener el orden elegido en el proyecto. -->
     <script src="js/admin-productos.js"></script>
 
 </body>

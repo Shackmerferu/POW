@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Metadatos combinados</title>
+  <!-- Librerías externas -->
+  <script src="ExifReader-main/dist/exif-reader.js"></script>
+ 
+  <script type="module">
+    
+
+    window.handleFile = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const output = document.getElementById("output");
+      output.innerHTML = `<h3>Archivo: ${file.name}</h3>`;
+
+      // Detectar tipo MIME
+      if (file.type.startsWith("image/")) {
+        const buffer = await file.arrayBuffer();
+        const tags = ExifReader.load(buffer);
+        
+       
+
+    alert("titulo: "+tags["Headline"]?.description);
+    alert("titulo_imagen: " + tags["title"]?.description);
+    alert("descripcion:" + tags["Caption/Abstract"]?.description);
+    alert("texto con mas info" + tags["ExtDescrAccessibility"]?.description);
+    alert("texto alternativo" + tags["AltTextAccessibility"]?.description);
+
+  
+        
+       
+      } 
+      else {
+        output.innerHTML += "<p>Tipo de archivo no soportado.</p>";
+      }
+    }
+  </script>
+</head>
+<body>
+  <h2>Subir archivo (Imagen, PDF o Audio)</h2>
+  <input type="file" onchange="handleFile(event)" />
+  <div id="output"></div>
+</body>
+</html>
