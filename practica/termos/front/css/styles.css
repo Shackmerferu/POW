@@ -894,6 +894,18 @@ textarea.form-control {
   box-shadow: 0 24px 70px rgba(15, 31, 25, 0.26);
 }
 
+/* El <form> del modal de termo envuelve header/body/footer, por lo que
+   hay que convertirlo en columna flexible para que el scrollable de
+   Bootstrap funcione: el body scrollea y el footer queda siempre visible.
+   min-height: 0 es clave para que el form pueda encoger (si no, flexbox
+   lo mantiene en su alto de contenido y el footer queda recortado). */
+.modal-content > form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .modal-header {
   align-items: flex-start;
   padding: 1.3rem 1.5rem;

@@ -297,6 +297,26 @@ function abrirModalProducto(id) {
    3. CARGA DE UN TERMO NUEVO
    ============================================================ */
 
+// La API guarda cada imagen como "<timestamp>-<nombre original>"
+// (ver registrar_productos.php). Para detectar si la imagen que se
+// esta por cargar ya corresponde a un termo existente, se compara el
+// nombre original (la parte que va despues del primer "-") ignorando
+// mayusculas/minusculas. Devuelve el producto repetido o null.
+function buscarTermoPorImagen(nombreArchivo) {
+  const nombre = String(nombreArchivo ?? "").trim().toLowerCase();
+
+  if (!nombre) return null;
+
+  return productos.find((producto) => {
+    const guardada = String(producto.imagen ?? "");
+    const sinPrefijo = guardada.includes("-")
+      ? guardada.slice(guardada.indexOf("-") + 1)
+      : guardada;
+
+    return sinPrefijo.trim().toLowerCase() === nombre;
+  }) ?? null;
+}
+
 function configurarFormularioTermo() {
   const formulario = document.getElementById("form-termo");
   const archivo = document.getElementById("termo-imagen");
@@ -343,6 +363,23 @@ function configurarFormularioTermo() {
       App.showAlert(alertas, "La imagen supera los 8 MB permitidos.", "danger");
       archivo.value = "";
       preview.classList.add("d-none");
+      return;
+    }
+
+    // Si la imagen ya esta cargada en la base de datos, no se admite:
+    // evita crear el mismo termo dos veces.
+    const duplicado = buscarTermoPorImagen(imagen.name);
+
+    if (duplicado) {
+      archivo.value = "";
+      preview.classList.add("d-none");
+      App.showAlert(
+        alertas,
+        `Esta imagen ya corresponde al termo "${duplicado.titulo}". ` +
+        `No se cargan termos repetidos: para revisarlo, tocá "Ver detalle" ` +
+        `en el listado.`,
+        "warning"
+      );
       return;
     }
 
