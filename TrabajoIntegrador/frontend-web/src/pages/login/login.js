@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import logo from "../../logo.png";
 
@@ -37,7 +38,7 @@ function Login() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="ejemplo@unlpam.edu.ar"
+              placeholder="toni122"
             />
           </div>
 
@@ -56,6 +57,9 @@ function Login() {
             Iniciar Sesión
           </button>
         </form>
+        <p className="redirect-text">
+          ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+        </p>
       </div>
     </div>
   );
