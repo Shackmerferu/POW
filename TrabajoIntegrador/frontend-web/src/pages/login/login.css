@@ -1,18 +1,36 @@
 .login-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow: hidden;
   background-color: #f4f6f9;
 }
 
+.login-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../utils/fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(3px);
+  transform: scale(1.05);
+  z-index: 0;
+}
+
 .login-card {
+  position: relative;
+  z-index: 1;
   background: #ffffff;
   padding: 2.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  box-sizing: border-box;
 }
 
 .login-logo {

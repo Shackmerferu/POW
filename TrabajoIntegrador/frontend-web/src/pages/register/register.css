@@ -1,14 +1,31 @@
 .register-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow: hidden;
   background-color: #f4f6f9;
   padding: 0.75rem;
   box-sizing: border-box;
 }
 
+.register-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../utils/fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(3px);
+  transform: scale(1.05);
+  z-index: 0;
+}
+
 .register-card {
+  position: relative;
+  z-index: 1;
   background: #ffffff;
   padding: 1.5rem 2rem;
   border-radius: 8px;
