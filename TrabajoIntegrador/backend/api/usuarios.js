@@ -43,6 +43,31 @@ module.exports = (db) => {
             });
         });
     });
+    // ENDPOINT PARA REGISTRAR UN USUARIO NUEVO (POST /api/users)
+   router.post('/', (req, res) => {
+        const { legajo, contrasena, nombre_completo, id_unidad } = req.body;
+
+        if (!legajo || !contrasena || !nombre_completo) {
+            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios del usuario" });
+        }
+
+        // Validación nueva: comprobamos que sea un número y que tenga exactamente 4 caracteres
+        const legajoStr = legajo.toString();
+        if (isNaN(legajo) || legajoStr.length !== 4) {
+            return res.status(400).json({ status: 400, mensaje: "El legajo debe contener exactamente 4 números (ej: 1234)" });
+        }
+
+        const query = 'INSERT INTO usuarios (legajo, contrasena, nombre_completo, rol, id_unidad, activo) VALUES (?, ?, ?, ?, ?, ?)';
+        
+        db.query(query, [legajo, contrasena, nombre_completo, 'visitante', id_unidad || null, 1], (error, resultados) => {
+            if (error) {
+                console.error("Error creando usuario:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error interno al registrar usuario" });
+            }
+            
+            res.json({ status: 201, mensaje: "¡Usuario registrado con éxito como VISITANTE!", nuevoId: resultados.insertId });
+        });
+    });
 
     // Al final, devolvemos el mini-semáforo configurado para que index.js lo reciba.
     return router;
