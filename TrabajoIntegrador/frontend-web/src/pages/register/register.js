@@ -6,7 +6,6 @@ import logo from "../../logo.png";
 function Register() {
   const navigate = useNavigate();
 
-  // 1. Estado inicial sin email, enfocado en legajo (VARCHAR de 4)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,6 +16,7 @@ function Register() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const showErrorWithTimeout = (message) => {
     setError(message);
@@ -33,12 +33,12 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const legajoLimpio = formData.legajo.trim();
 
-    // Validar campos obligatorios completos
+    // 1. Validar campos obligatorios
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
@@ -49,59 +49,50 @@ function Register() {
       return;
     }
 
-    // VALIDACIÓN: Expresión regular para exigir exactamente 4 números (VARCHAR(4))
+    // 2. Validar exactamente 4 números para el legajo
     const legajoRegex = /^\d{4}$/;
     if (!legajoRegex.test(legajoLimpio)) {
       showErrorWithTimeout("El legajo debe contener exactamente 4 números (ejemplo: 0012).");
       return;
     }
 
-    setError("");
+    setLoading(true);
 
-    // --- SIMULACIÓN DE BASE DE DATOS LOCAL (localStorage) ---
-    const existingUsers = JSON.parse(localStorage.getItem("users_db")) || [
-      {
-        legajo: "0001",
-        contrasena: "123456",
-        nombre_completo: "Germán (Admin Global)",
-        rol: "administracion",
-        id_unidad: null,
-      },
-      {
-        legajo: "1001",
-        contrasena: "123456",
-        nombre_completo: "Tony (Gestor Ingeniería)",
-        rol: "gestion",
-        id_unidad: 1,
-      },
-    ];
+    try {
+      // Unificar Nombre y Apellido para la columna `nombre_completo` de MySQL
+      const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
 
-    // Validar unicidad del Legajo
-    const userExists = existingUsers.some((u) => u.legajo === legajoLimpio);
-    if (userExists) {
-      showErrorWithTimeout("El Legajo ingresado ya se encuentra registrado.");
-      return;
+      // 3. Petición HTTP POST a la API REST de Node.js (puerto 8000)
+      const response = await fetch("http://localhost:8000/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          legajo: legajoLimpio,
+          contrasena: formData.password,
+          nombre_completo: nombreCompleto, // Envia el string concatenado
+          id_unidad: parseInt(formData.id_unidad),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && (data.status === 201 || data.status === 200)) {
+        setError("");
+        setSuccess("¡Cuenta creada con éxito en la base de datos! Redirigiendo al login...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        showErrorWithTimeout(data.mensaje || "El legajo ingresado ya se encuentra registrado.");
+      }
+    } catch (err) {
+      console.error("Error al conectar con la API:", err);
+      showErrorWithTimeout("No se pudo conectar con el servidor backend (puerto 8000).");
+    } finally {
+      setLoading(false);
     }
-
-    // Estructura lista para MySQL
-    const newUser = {
-      legajo: legajoLimpio, // Guarda la cadena conservando ceros ("0012")
-      contrasena: formData.password,
-      nombre_completo: `${formData.firstName} ${formData.lastName}`.trim(),
-      rol: "consulta", // Rol por defecto (lectura/descarga)
-      id_unidad: parseInt(formData.id_unidad),
-      activo: 1,
-      id: Date.now(),
-    };
-
-    existingUsers.push(newUser);
-    localStorage.setItem("users_db", JSON.stringify(existingUsers));
-
-    setSuccess("¡Cuenta creada con éxito! Se asignó el rol de consulta. Redirigiendo al login...");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2500);
   };
 
   return (
@@ -157,7 +148,6 @@ function Register() {
                 inputMode="numeric"
                 value={formData.legajo}
                 onChange={(e) => {
-                  // Filtra en tiempo real para dejar solo caracteres numéricos
                   const soloNumeros = e.target.value.replace(/\D/g, "");
                   setFormData({ ...formData, legajo: soloNumeros });
                 }}
@@ -178,7 +168,7 @@ function Register() {
             </div>
           </div>
 
-          {/* Selección por Radio Buttons */}
+          {/* Selección por Radio Buttons de la Unidad Académica */}
           <div className="form-group">
             <label className="radio-group-title">Seleccione la Unidad Académica:</label>
             <div className="radio-options">
@@ -206,8 +196,8 @@ function Register() {
             </div>
           </div>
 
-          <button type="submit" className="btn-primary">
-            Crear Cuenta
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Guardando en BD..." : "Crear Cuenta"}
           </button>
         </form>
 

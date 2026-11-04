@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (db) => {
-
-    // POST http://localhost:8000/api/auth
+    
+    // POST /api/auth
     router.post('/', (req, res) => {
         const { legajo, contrasena } = req.body || {};
 
@@ -11,8 +11,10 @@ module.exports = (db) => {
             return res.status(400).json({ status: 400, mensaje: "Completá el legajo y la contraseña." });
         }
 
-        const legajoLimpio = String(legajo).trim();
+        // 1. Sanitizar legajo: Asegurar string de 4 dígitos (rellena ceros a la izquierda si ingresan ej: "15" -> "0015")
+        const legajoLimpio = String(legajo).trim().padStart(4, '0');
 
+        // 2. Consulta SQL
         const query = 'SELECT * FROM usuarios WHERE legajo = ? AND contrasena = ?';
         db.query(query, [legajoLimpio, contrasena], (error, resultados) => {
             if (error) {
@@ -23,10 +25,12 @@ module.exports = (db) => {
             if (resultados.length > 0) {
                 const usuario = resultados[0];
                 
+                // Verificar si la cuenta está activa
                 if (!usuario.activo) {
                     return res.status(403).json({ status: 403, mensaje: "El usuario se encuentra inactivo." });
                 }
 
+                // Respuesta exitosa
                 res.json({
                     status: 200,
                     mensaje: "Login correcto",
