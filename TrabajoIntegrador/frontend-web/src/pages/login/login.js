@@ -8,8 +8,6 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -21,7 +19,6 @@ function Login() {
     setError("");
     console.log("Enviando datos al servidor:", { email, password });
     alert("¡Inicio de sesión registrado!");
-    navigate("/convenios");
   };
 
   return (
@@ -29,6 +26,7 @@ function Login() {
       <div className="login-card">
         <img src={logo} alt="Logo institucional" className="login-logo" />
         <h2>Sistema de Convenios UNLPam</h2>
+        
 
         {error && <div className="error-message">{error}</div>}
 
