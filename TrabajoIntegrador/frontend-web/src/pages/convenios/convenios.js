@@ -1,7 +1,7 @@
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import "./convenios.css";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
 import iconopersona from "../../cosas/imagenes/persona.png";
@@ -17,6 +17,8 @@ const filters = [
 ]
 
 const options = ["Opcion A", "Opcion B", "Opcion C", "Opcion D"]
+
+
 
 export default function App() {
   const navigate = useNavigate()
@@ -72,12 +74,12 @@ export default function App() {
         </div>
 
         <nav className="navigation" aria-label="Navegación principal">
-          <a href="#inicio">Inicio</a>
-          <a href="#panel">Panel</a>
-          <a className="profile" href="#perfil">
+          <Link to="/">Inicio</Link>
+          <Link to="/dashboard">Panel</Link>
+          <Link className="profile" to="/perfil">
              <img src={iconopersona} alt="Flecha indicativa Label" />
             <span>Mi Perfil</span>
-          </a>
+          </Link>
           <button type="button" className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
             Cerrar sesión
           </button>
