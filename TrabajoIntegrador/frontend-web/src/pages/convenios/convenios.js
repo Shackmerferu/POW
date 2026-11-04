@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./convenios.css";
 import logoFacultad from "../../cosas/imagenes/logo.png";
-import flechalabel from "../../cosas/imagenes/flecha label.svg";
-import iconopersona from "../../cosas/imagenes/persona.svg";
+import flechalabel from "../../cosas/imagenes/flecha label.png";
+import iconopersona from "../../cosas/imagenes/persona.png";
 const assetPath = "../../src/cosas/imagenes"
 
 const filters = [
