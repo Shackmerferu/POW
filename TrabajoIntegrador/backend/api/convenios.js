@@ -31,6 +31,35 @@ module.exports = (db) => {
             });
         });
     });
+    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
+    router.post('/', (req, res) => {
+        
+        // 1. Atrapamos los datos que manda el frontend
+        const { resolucion, nombre, id_unidad } = req.body;
+
+        // 2. Control de seguridad: verificamos que no falte nada
+        if (!resolucion || !nombre || !id_unidad) {
+            return res.status(400).json({ status: 400, mensaje: "Faltan completar datos del convenio" });
+        }
+
+        // 3. Preparamos la consulta con "?" para evitar inyecciones SQL
+        const query = 'INSERT INTO convenios (resolucion, nombre, id_unidad) VALUES (?, ?, ?)';
+        
+        // 4. Ejecutamos la inserción en MySQL
+        db.query(query, [resolucion, nombre, id_unidad], (error, resultados) => {
+            if (error) {
+                console.error("Error guardando convenio:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar" });
+            }
+            
+            // 201 significa "Creado con éxito"
+            res.json({ 
+                status: 201, 
+                mensaje: "¡Convenio creado con éxito!",
+                nuevoId: resultados.insertId 
+            });
+        });
+    });
 
     return router; // Devolvemos el router configurado
 };
