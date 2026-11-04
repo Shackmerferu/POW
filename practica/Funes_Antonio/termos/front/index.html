@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Acceso al sistema de administración de termos.">
+    <meta name="theme-color" content="#203b32">
+    <title>Sistema Termos  | Iniciar sesión</title>
+
+    <!-- Bootstrap local: el front queda autocontenido, sin depender de internet. -->
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="login-page">
+
+    <main class="login-shell">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10 col-xl-9">
+                    <div class="card login-card border-0 shadow-lg">
+                        <div class="row g-0">
+
+                            <!-- Columna decorativa / informativa -->
+                            <div class="col-md-5 login-aside d-none d-md-flex">
+                                <div>
+                                    <span class="brand-mark brand-mark-light" aria-hidden="true">T</span>
+                                    <span class="login-aside-brand">Sistema <strong>Termos</strong></span>
+                                </div>
+
+                                <div class="login-aside-copy">
+                                    <span class="eyebrow eyebrow-light">PANEL DE ADMINISTRACIÓN</span>
+                                    <h1>Todo tu catálogo,<br><span>en un solo lugar.</span></h1>
+                                    <p>Gestiona termos, consulta personas y mantené la información del sistema al día.</p>
+                                </div>
+
+                            </div>
+
+                            <!-- Columna del formulario -->
+                            <div class="col-md-7">
+                                <div class="login-form-col">
+
+                                    <div class="d-md-none mb-4 text-center">
+                                        <span class="brand-mark" aria-hidden="true">T</span>
+                                    </div>
+
+                                    <span class="eyebrow">BIENVENIDO/A</span>
+                                    <h2 class="login-title">Iniciar sesión</h2>
+                                    <p class="login-subtitle">Ingresá tus credenciales para acceder al panel.</p>
+
+                                    <!-- Alertas de error / informacion -->
+                                    <div id="login-alert" aria-live="polite"></div>
+
+                                    <form id="form-login" novalidate>
+
+                                        <div class="mb-3">
+                                            <label for="usuario" class="form-label">Usuario</label>
+                                            <input type="text" id="usuario" name="usuario"
+                                                   class="form-control" placeholder="Ej.: gaston"
+                                                   autocomplete="username" required>
+                                            <div class="invalid-feedback">Ingresá el usuario.</div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="password" class="form-label">Contraseña</label>
+                                            <div class="input-group">
+                                                <input type="password" id="password" name="password"
+                                                       class="form-control" placeholder="Tu contraseña"
+                                                       autocomplete="current-password" required>
+                                                <button type="button" id="btn-ver-password"
+                                                        class="btn btn-outline-secondary btn-ver-password"
+                                                        aria-label="Mostrar contraseña">Mostrar</button>
+                                            </div>
+                                            <div class="invalid-feedback">Ingresá la contraseña.</div>
+                                        </div>
+
+                                        <button type="submit" id="btn-ingresar"
+                                                class="btn btn-success btn-lg w-100">
+                                            Ingresar
+                                        </button>
+                                    </form>
+
+                                  
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Orden importante: primero configuración y utilidades, después la página. -->
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>
