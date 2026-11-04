@@ -4,24 +4,65 @@ import "./login.css";
 import logo from "../../logo.png";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  // 1. ESTADO DEL FORMULARIO (Legajo en lugar de email para coincidir con la DB)
+  const [legajo, setLegajo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
+  // Función para cerrar automáticamente los mensajes de error a los 5 segundos
+  const showErrorWithTimeout = (message) => {
+    setError(message);
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  };
+
+  // 2. MANEJADOR DEL ENVÍO DEL FORMULARIO
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError("Por favor, ingresa tu usuario y contraseña.");
+    if (!legajo.trim() || !password) {
+      showErrorWithTimeout("Por favor, ingresa tu usuario/legajo y contraseña.");
       return;
     }
 
-    setError("");
-    console.log("Enviando datos al servidor:", { email, password });
-    alert("¡Inicio de sesión registrado!");
-    navigate("/convenios");
+    // --- SIMULACIÓN DE AUTENTICACIÓN CON LA DB LOCAL ---
+    const usersDB = JSON.parse(localStorage.getItem("users_db")) || [
+      // Usuarios por defecto coincidentes con el dump SQL de tu base de datos
+      {
+        legajo: "ADMIN-001",
+        contrasena: "123456",
+        nombre_completo: "Germán (Admin Global)",
+        rol: "administracion",
+        id_unidad: null,
+      },
+      {
+        legajo: "GEST-001",
+        contrasena: "123456",
+        nombre_completo: "Tony (Gestor Ingeniería)",
+        rol: "gestion",
+        id_unidad: 1,
+      },
+    ];
+
+    // Buscar si coinciden las credenciales (Legajo o Correo)
+    const validUser = usersDB.find(
+      (u) =>
+        (u.legajo === legajo.trim() || u.email === legajo.toLowerCase().trim()) &&
+        (u.contrasena === password || u.password === password)
+    );
+
+    if (validUser) {
+      setError("");
+      // Guardar la sesión activa del usuario
+      localStorage.setItem("active_user", JSON.stringify(validUser));
+      // Redirigir al Dashboard / Convenios
+      navigate("/dashboard");
+    } else {
+      showErrorWithTimeout("Usuario/Legajo o contraseña incorrectos.");
+    }
   };
 
   return (
@@ -34,13 +75,13 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Usuario/Legajo</label>
+            <label htmlFor="legajo">Usuario / Legajo / Correo</label>
             <input
               type="text"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="toni122"
+              id="legajo"
+              value={legajo}
+              onChange={(e) => setLegajo(e.target.value)}
+              placeholder="Ej. GEST-001 o usuario@unlpam.edu.ar"
             />
           </div>
 
@@ -59,6 +100,7 @@ function Login() {
             Iniciar Sesión
           </button>
         </form>
+
         <p className="redirect-text">
           ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
         </p>

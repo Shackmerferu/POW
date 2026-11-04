@@ -143,7 +143,7 @@ INSERT INTO `unidades_academicas` (`id`, `nombre`, `descripcion`) VALUES
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `legajo` varchar(50) NOT NULL,
+  `legajo` integer(4) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
   `nombre_completo` varchar(150) NOT NULL,
   `rol` enum('administracion','gestion','revision','consulta') NOT NULL,
