@@ -6,29 +6,26 @@ import logo from "../../logo.png";
 function Register() {
   const navigate = useNavigate();
 
-  
+  // 1. Estado inicial sin email, enfocado en legajo (VARCHAR de 4)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    legajo: "",
     password: "",
-    unit: "Facultad de Ingeniería",
+    id_unidad: "1", // 1: Facultad de Ingeniería, 2: Rectorado
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  
   const showErrorWithTimeout = (message) => {
     setError(message);
     setSuccess("");
- 
     setTimeout(() => {
       setError("");
     }, 5000);
   };
 
- 
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -36,57 +33,75 @@ function Register() {
     });
   };
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
 
-   
+    const legajoLimpio = formData.legajo.trim();
+
+    // Validar campos obligatorios completos
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
-      !formData.email.trim() ||
+      !legajoLimpio ||
       !formData.password
     ) {
       showErrorWithTimeout("Por favor, completa todos los campos requeridos.");
       return;
     }
 
-   
-    const emailLowerCase = formData.email.toLowerCase().trim();
-    if (!emailLowerCase.endsWith("@unlpam.edu.ar")) {
-      showErrorWithTimeout("El correo es invalido");
+    // VALIDACIÓN: Expresión regular para exigir exactamente 4 números (VARCHAR(4))
+    const legajoRegex = /^\d{4}$/;
+    if (!legajoRegex.test(legajoLimpio)) {
+      showErrorWithTimeout("El legajo debe contener exactamente 4 números (ejemplo: 0012).");
       return;
     }
 
- 
     setError("");
 
-   
-    const existingUsers = JSON.parse(localStorage.getItem("users_db")) || [];
+    // --- SIMULACIÓN DE BASE DE DATOS LOCAL (localStorage) ---
+    const existingUsers = JSON.parse(localStorage.getItem("users_db")) || [
+      {
+        legajo: "0001",
+        contrasena: "123456",
+        nombre_completo: "Germán (Admin Global)",
+        rol: "administracion",
+        id_unidad: null,
+      },
+      {
+        legajo: "1001",
+        contrasena: "123456",
+        nombre_completo: "Tony (Gestor Ingeniería)",
+        rol: "gestion",
+        id_unidad: 1,
+      },
+    ];
 
-    
-    const userExists = existingUsers.some((u) => u.email === emailLowerCase);
+    // Validar unicidad del Legajo
+    const userExists = existingUsers.some((u) => u.legajo === legajoLimpio);
     if (userExists) {
-      showErrorWithTimeout("El correo ya se encuentra registrado.");
+      showErrorWithTimeout("El Legajo ingresado ya se encuentra registrado.");
       return;
     }
 
-    
+    // Estructura lista para MySQL
     const newUser = {
-      ...formData,
-      email: emailLowerCase,
-      role: "visitante",
+      legajo: legajoLimpio, // Guarda la cadena conservando ceros ("0012")
+      contrasena: formData.password,
+      nombre_completo: `${formData.firstName} ${formData.lastName}`.trim(),
+      rol: "consulta", // Rol por defecto (lectura/descarga)
+      id_unidad: parseInt(formData.id_unidad),
+      activo: 1,
       id: Date.now(),
     };
 
     existingUsers.push(newUser);
     localStorage.setItem("users_db", JSON.stringify(existingUsers));
 
-    setSuccess("¡Cuenta creada con éxito! Redirigiendo al inicio de sesión...");
+    setSuccess("¡Cuenta creada con éxito! Se asignó el rol de consulta. Redirigiendo al login...");
 
     setTimeout(() => {
       navigate("/login");
-    }, 2000);
+    }, 2500);
   };
 
   return (
@@ -103,7 +118,7 @@ function Register() {
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSubmit}>
-         
+          {/* Fila: Nombre y Apellido */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName">Nombre</label>
@@ -130,16 +145,23 @@ function Register() {
             </div>
           </div>
 
+          {/* Fila: Legajo y Contraseña */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email">Correo</label>
+              <label htmlFor="legajo">Legajo (4 números)</label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Correo"
+                type="text"
+                id="legajo"
+                name="legajo"
+                maxLength={4}
+                inputMode="numeric"
+                value={formData.legajo}
+                onChange={(e) => {
+                  // Filtra en tiempo real para dejar solo caracteres numéricos
+                  const soloNumeros = e.target.value.replace(/\D/g, "");
+                  setFormData({ ...formData, legajo: soloNumeros });
+                }}
+                placeholder="0012"
               />
             </div>
 
@@ -151,8 +173,36 @@ function Register() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder=""
+                placeholder="••••••••"
               />
+            </div>
+          </div>
+
+          {/* Selección por Radio Buttons */}
+          <div className="form-group">
+            <label className="radio-group-title">Seleccione la Unidad Académica:</label>
+            <div className="radio-options">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="id_unidad"
+                  value="1"
+                  checked={formData.id_unidad === "1"}
+                  onChange={handleChange}
+                />
+                <span>Facultad de Ingeniería</span>
+              </label>
+
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="id_unidad"
+                  value="2"
+                  checked={formData.id_unidad === "2"}
+                  onChange={handleChange}
+                />
+                <span>Rectorado</span>
+              </label>
             </div>
           </div>
 

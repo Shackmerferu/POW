@@ -3,10 +3,12 @@ const cors = require('cors');
 const mysql = require('mysql2');
 
 const app = express();
+
+// Middlewares obligatorios
 app.use(cors());
 app.use(express.json());
 
-// 1. Conexión a la Base de Datos
+// Conexión a la base de datos MySQL en XAMPP
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -15,23 +17,23 @@ const db = mysql.createConnection({
 });
 
 db.connect(err => {
-    if (err) throw err;
-    console.log('¡Conexión exitosa a gestion_convenios!');
+    if (err) {
+        console.error('Error conectando a MySQL:', err);
+        return;
+    }
+    console.log('Conexión exitosa a gestion_convenios');
 });
 
-// 2. IMPORTAMOS NUESTRAS RUTAS SEPARADAS
-// IMPORTAMOS LAS RUTAS (Agregá la línea de usuarios)
+// Importar rutas pasando la conexión db
 const authRoutes = require('./api/auth')(db);
-const unidadesRoutes = require('./api/unidades')(db); 
-const usuariosRoutes = require('./api/usuarios')(db); 
-const conveniosRoutes = require('./api/convenios')(db);
+const usuariosRoutes = require('./api/usuarios')(db);
 
-// LE DECIMOS A NODE DÓNDE USARLAS (Agregá la ruta de users)
+// Prefijos base de las rutas
 app.use('/api/auth', authRoutes);
-app.use('/api/units', unidadesRoutes); 
-app.use('/api/users', usuariosRoutes); 
-app.use('/api/convenios', conveniosRoutes);
-const PORT = 3000;
+app.use('/api/usuarios', usuariosRoutes);
+
+// El servidor debe escuchar en el puerto 8000
+const PORT = 8000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor Backend corriendo en http://localhost:${PORT}`);
 });

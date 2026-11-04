@@ -4,64 +4,56 @@ import "./login.css";
 import logo from "../../logo.png";
 
 function Login() {
-  // 1. ESTADO DEL FORMULARIO (Legajo en lugar de email para coincidir con la DB)
   const [legajo, setLegajo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  // Función para cerrar automáticamente los mensajes de error a los 5 segundos
   const showErrorWithTimeout = (message) => {
     setError(message);
-    setTimeout(() => {
-      setError("");
-    }, 5000);
+    setTimeout(() => setError(""), 5000);
   };
 
-  // 2. MANEJADOR DEL ENVÍO DEL FORMULARIO
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!legajo.trim() || !password) {
-      showErrorWithTimeout("Por favor, ingresa tu usuario/legajo y contraseña.");
+    const legajoLimpio = legajo.trim();
+
+    if (!legajoLimpio || !password) {
+      showErrorWithTimeout("Por favor, ingresa tu legajo y contraseña.");
       return;
     }
 
-    // --- SIMULACIÓN DE AUTENTICACIÓN CON LA DB LOCAL ---
-    const usersDB = JSON.parse(localStorage.getItem("users_db")) || [
-      // Usuarios por defecto coincidentes con el dump SQL de tu base de datos
-      {
-        legajo: "ADMIN-001",
-        contrasena: "123456",
-        nombre_completo: "Germán (Admin Global)",
-        rol: "administracion",
-        id_unidad: null,
-      },
-      {
-        legajo: "GEST-001",
-        contrasena: "123456",
-        nombre_completo: "Tony (Gestor Ingeniería)",
-        rol: "gestion",
-        id_unidad: 1,
-      },
-    ];
+    setLoading(true);
 
-    // Buscar si coinciden las credenciales (Legajo o Correo)
-    const validUser = usersDB.find(
-      (u) =>
-        (u.legajo === legajo.trim() || u.email === legajo.toLowerCase().trim()) &&
-        (u.contrasena === password || u.password === password)
-    );
+    try {
+      const response = await fetch("http://localhost:8000/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ legajo: legajoLimpio, contrasena: password }),
+      });
 
-    if (validUser) {
-      setError("");
-      // Guardar la sesión activa del usuario
-      localStorage.setItem("active_user", JSON.stringify(validUser));
-      // Redirigir al Dashboard / Convenios
-      navigate("/dashboard");
-    } else {
-      showErrorWithTimeout("Usuario/Legajo o contraseña incorrectos.");
+      const data = await response.json();
+
+      if (response.ok && (data.status === 200 || response.status === 200)) {
+        setError("");
+        localStorage.setItem("active_user", JSON.stringify(data.usuario));
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        navigate("/dashboard");
+      } else {
+        showErrorWithTimeout(data.mensaje || "Credenciales incorrectas.");
+      }
+    } catch (err) {
+      console.error("Error en fetch:", err);
+      showErrorWithTimeout("No se pudo conectar con el servidor backend.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,13 +67,15 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="legajo">Usuario / Legajo / Correo</label>
+            <label htmlFor="legajo">Legajo (4 números)</label>
             <input
               type="text"
               id="legajo"
+              maxLength={4}
+              inputMode="numeric"
               value={legajo}
-              onChange={(e) => setLegajo(e.target.value)}
-              placeholder="Ej. GEST-001 o usuario@unlpam.edu.ar"
+              onChange={(e) => setLegajo(e.target.value.replace(/\D/g, ""))}
+              placeholder="0012"
             />
           </div>
 
@@ -96,8 +90,8 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="btn-primary">
-            Iniciar Sesión
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Cargando..." : "Iniciar Sesión"}
           </button>
         </form>
 

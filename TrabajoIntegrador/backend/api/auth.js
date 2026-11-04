@@ -1,34 +1,46 @@
 const express = require('express');
 const router = express.Router();
 
-// Recibimos la conexión a la base de datos (se la pasamos desde index.js)
 module.exports = (db) => {
-    
-    // Endpoint POST /api/auth
+
+    // POST http://localhost:8000/api/auth
     router.post('/', (req, res) => {
-        const { legajo, contrasena } = req.body;
+        const { legajo, contrasena } = req.body || {};
 
         if (!legajo || !contrasena) {
-            return res.status(400).json({ status: 400, mensaje: "Completá el legajo y la contraseña" });
+            return res.status(400).json({ status: 400, mensaje: "Completá el legajo y la contraseña." });
         }
 
+        const legajoLimpio = String(legajo).trim();
+
         const query = 'SELECT * FROM usuarios WHERE legajo = ? AND contrasena = ?';
-        db.query(query, [legajo, contrasena], (error, resultados) => {
+        db.query(query, [legajoLimpio, contrasena], (error, resultados) => {
             if (error) {
                 console.error("Error BD:", error);
-                return res.status(500).json({ status: 500, mensaje: "Error servidor" });
+                return res.status(500).json({ status: 500, mensaje: "Error interno del servidor." });
             }
 
             if (resultados.length > 0) {
                 const usuario = resultados[0];
+                
+                if (!usuario.activo) {
+                    return res.status(403).json({ status: 403, mensaje: "El usuario se encuentra inactivo." });
+                }
+
                 res.json({
                     status: 200,
                     mensaje: "Login correcto",
                     token: "token-secreto-unlpam-12345", 
-                    usuario: { nombre: usuario.nombre_completo, rol: usuario.rol }
+                    usuario: { 
+                        id: usuario.id,
+                        legajo: usuario.legajo,
+                        nombre: usuario.nombre_completo, 
+                        rol: usuario.rol,
+                        id_unidad: usuario.id_unidad
+                    }
                 });
             } else {
-                res.status(401).json({ status: 401, mensaje: "Credenciales incorrectas" });
+                res.status(401).json({ status: 401, mensaje: "Credenciales incorrectas." });
             }
         });
     });
