@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import logo from "../../logo.png";
 
+const API_URL = "http://localhost:3000/api";
+
 function Login() {
   const [legajo, setLegajo] = useState("");
   const [password, setPassword] = useState("");
@@ -62,6 +64,7 @@ function Login() {
       <div className="login-card">
         <img src={logo} alt="Logo institucional" className="login-logo" />
         <h2>Sistema de Convenios UNLPam</h2>
+        
 
         {error && <div className="error-message">{error}</div>}
 

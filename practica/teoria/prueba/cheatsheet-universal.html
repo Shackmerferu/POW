@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheatsheet Universal — Parcial POW (termos)</title>
+
+    <!-- Bootstrap LOCAL: en el parcial NUNCA uses CDN (el enunciado
+         da lib/bootstrap dentro de recursos). Nota: este archivo de ejemplo vive
+         en teoria/prueba/; en tu proyecto sería lib/bootstrap/... -->
+    <link href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* CSS propio: en tu parcial esto es css/styles.css */
+        :root {
+            --color-principal: #203b32;
+            --color-acento: #f0ad4e;
+        }
+        body { padding-top: 4.5rem; background: #f6f7f5; }
+        .cheat-nav { background: var(--color-principal); }
+        section.bloque {
+            background: #fff;
+            border: 1px solid #e3e5e2;
+            border-radius: .75rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            scroll-margin-top: 5rem;
+        }
+        h2.titulo-bloque {
+            color: var(--color-principal);
+            border-bottom: 3px solid var(--color-acento);
+            padding-bottom: .4rem;
+            margin-bottom: 1rem;
+        }
+        .paso {
+            border-left: 4px solid var(--color-acento);
+            background: #fffaf0;
+            padding: .75rem 1rem;
+            margin: 1rem 0;
+            border-radius: .25rem;
+        }
+        .paso strong.numero-paso {
+            display: inline-block;
+            background: var(--color-acento);
+            color: #212529;
+            border-radius: 50%;
+            width: 1.8em; height: 1.8em;
+            text-align: center; line-height: 1.8em;
+            margin-right: .5rem;
+        }
+        pre.code {
+            background: #1e2430;
+            color: #e6e9ef;
+            padding: 1rem;
+            border-radius: .5rem;
+            overflow-x: auto;
+            font-size: .85rem;
+        }
+        .etiqueta { display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:#6c757d; margin-bottom:.25rem; }
+        .aviso { border-left: 4px solid #dc3545; background:#fdf3f4; padding:.75rem 1rem; border-radius:.25rem; }
+        .dato { border-left: 4px solid #0d6efd; background:#f0f6ff; padding:.75rem 1rem; border-radius:.25rem; }
+        .trampa { border-left: 4px solid #fd7e14; background:#fff4e6; padding:.75rem 1rem; border-radius:.25rem; }
+        .fila-indice a { text-decoration: none; }
+        .fila-indice a.active { color: var(--color-acento) !important; }
+    </style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top cheat-nav">
+    <div class="container">
+        <a class="navbar-brand" href="#inicio">📘 Cheatsheet Parcial</a>
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menuCheatsheet"
+            aria-controls="menuCheatsheet" aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuCheatsheet">
+            <div class="navbar-nav ms-auto fila-indice">
+                <a class="nav-link" href="#b0">Mapa</a>
+                <a class="nav-link" href="#b1">1. Preparación</a>
+                <a class="nav-link" href="#b2">2. Esqueleto</a>
+                <a class="nav-link" href="#b3">3. Maquetado</a>
+                <a class="nav-link" href="#b4">4. Bootstrap</a>
+                <a class="nav-link" href="#b5">5. CSS</a>
+                <a class="nav-link" href="#b6">6. HTML↔JS</a>
+                <a class="nav-link" href="#b7">7. Fetch + Token</a>
+                <a class="nav-link" href="#b8">8. API dada</a>
+                <a class="nav-link" href="#b9">9. Recetas parciales</a>
+                <a class="nav-link" href="#b10">10. Entrega</a>
+                <a class="nav-link" href="#b11">11. Debug</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container my-4">
+
+<!-- ============ INICIO ============ -->
+<div class="text-center mb-4" id="inicio">
+    <h1 class="fw-bold">Cheatsheet Universal del Parcial POW</h1>
+    <p class="lead">HTML + CSS + Bootstrap + JS + Fetch + API PHP dada — <strong>leyendo y aplicando, en orden</strong>.</p>
+    <div class="dato mt-3">
+        <strong>Cómo funciona ESTE parcial:</strong> la API (<code>api/*.php</code>) y la BD (<code>termos.sql</code>)
+        <strong>vienen dadas y NO se tocan</strong>. Vos construís el <code>front/</code> (HTML + CSS + JS)
+        que se conecta a esa API con <code>fetch</code> y un <code>token</code>.
+    </div>
+    <div class="trampa mt-2">
+        <strong>Las 4 trampas de esta API (tenelas en la cabeza SIEMPRE):</strong>
+        <ol class="mb-0 ps-3">
+            <li>Los errores llegan con <strong>error HTTP 200</strong>, pero adentro del JSON viene <code>status: 500</code>. Nunca confíes solo en <code>respuesta.ok</code>: chequea <code>resultado.status</code>.</li>
+            <li>El campo de error se llama <strong><code>menssage</code></strong> (con doble s, typo del enunciado).</li>
+            <li><code>verifica_token.php</code> responde <strong><code>tpken_presente</code></strong>; login devuelve <strong><code>id_usurio</code></strong>. Aceptá ambos nombres posibles.</li>
+            <li>Tabla de productos vacía → <code>status 500</code> con <code>"algo malo paso"</code>: eso significa "listado vacío", no error.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ============ BLOQUE 0: MAPA ============ -->
+<section class="bloque" id="b0">
+    <h2 class="titulo-bloque">0. Mapa del parcial: qué te dan y qué te piden</h2>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="paso h-100"><strong class="numero-paso">✓</strong>
+                <strong>Te dan (recursos/, api/):</strong>
+                <ul class="mb-0 mt-2">
+                    <li><code>termos.sql</code> → bases <code>usuarios</code>, <code>productos</code>, <code>personas</code>, <code>localidades_la_pampa</code>.</li>
+                    <li><code>api/</code> → los 9 endpoints PHP (NO modificarlos).</li>
+                    <li><code>recursos/</code> → Bootstrap local, imágenes de productos, ExifReader.</li>
+                    <li>Mockup / enunciado con requisitos exactos y usuario <code>gaston / 12345</code>.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paso h-100"><strong class="numero-paso">→</strong>
+                <strong>Tenés que construir (front/):</strong>
+                <ul class="mb-0 mt-2">
+                    <li><strong>Login</strong> (<code>index.html</code>) con token en <code>sessionStorage</code>.</li>
+                    <li><strong>Panel protegido</strong> (<code>panel.html</code>) con listado de termos.</li>
+                    <li><strong>Carga de termo</strong> (multipart + metadatos ExifReader).</li>
+                    <li><strong>Personas</strong> (buscar por DNI con búsqueda binaria, alta/edición).</li>
+                    <li>Todo responsive, accesible y con mensajes exactos.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="paso mt-3"><strong class="numero-paso">⛏</strong>
+        <strong>Estructura de carpetas que tenés que crear:</strong>
+<pre class="code mt-2 mb-0">termos/
+├─ api/            &lt;-- dada por el enunciado (hermana de front/)
+├─ termos.sql
+└─ front/          &lt;-- TODO lo tuyo va acá
+    ├─ index.html        (login)
+    ├─ panel.html        (panel protegido)
+    ├─ css/styles.css
+    ├─ js/config.js      (rutas de la API + claves de sessionStorage)
+    ├─ js/app.js         (helpers: fetch, escapeHtml, token, alertas)
+    ├─ js/login.js
+    ├─ js/panel.js
+    └─ lib/
+        ├─ bootstrap/css/bootstrap.min.css + js/bootstrap.bundle.min.js
+        └─ ExifReader-main/dist/exif-reader.js</pre>
+    </div>
+</section>
+
+<!-- ============ BLOQUE 1: PREPARACION ============ -->
+<section class="bloque" id="b1">
+    <h2 class="titulo-bloque">1. Preparación (primeros 15 min del parcial)</h2>
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>Encender XAMPP:</strong> Apache + MySQL (Panel de Control de XAMPP, los dos botones en verde). Sin esto, nada funciona y fetch tira <code>Failed to fetch</code>.</div>
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Importar la BD:</strong> phpMyAdmin → nueva base <code>termos</code> → Importar → <code>termos.sql</code>. Verificá que aparezcan las 4 tablas y probá <code>SELECT * FROM productos;</code>.</div>
+    <div class="paso"><strong class="numero-paso">3</strong> <strong>Probar la API sin frontend</strong> (esto define TODO tu trabajo):
+<pre class="code mt-2 mb-0">http://localhost/termos/api/ciudades.php          --&gt; mira el JSON bruto
+http://localhost/termos/api/listar_productos.php  --&gt; sin token: {"status":500,"menssage":"Desautorizado"}
+
+--&gt; Así descubrís los nombres EXACTOS de los campos del JSON:
+--&gt; productos: id, titulo, titulo_imagen, descripcion, texto_alternativo,
+--&gt;            descripcion_larga, imagen
+--&gt; ciudades:   localidades[] { id, nombre_ciudad, ... }
+--&gt; personas:   persona[] { dni, id, nombre, apellido, direccion, ciudad, provincia, email, telefono }</pre>
+    </div>
+    <div class="paso"><strong class="numero-paso">4</strong> <strong>Crear la estructura de carpetas</strong> del mapa (bloque 0) y copiar los recursos: <code>lib/bootstrap</code> y <code>lib/ExifReader-main</code> desde <code>recursos/</code>.</div>
+    <div class="paso"><strong class="numero-paso">5</strong> <strong>Abrir por localhost, NUNCA con doble click:</strong> <code>http://localhost/termos/front/index.html</code>. Con <code>file://</code> la API no responde (o se necesita override). Siempre navegá las páginas desde el servidor.</div>
+
+    <div class="trampa mt-3"><strong>Trampa clásica:</strong> las imágenes que cargás NO se guardan en <code>front/</code>: la API las guarda en <code>api/imagenes/</code> y en la BD queda solo el nombre del archivo. Para mostrar una imagen, el front arma la URL completa: <code>API.imagenes + "/" + producto.imagen</code>.</div>
+</section>
+
+<!-- ============ BLOQUE 2: ESQUELETO ============ -->
+<section class="bloque" id="b2">
+    <h2 class="titulo-bloque">2. Esqueleto base (copiar en todo .html nuevo)</h2>
+    <p>Paginas del parcial: <code>index.html</code> (login) y <code>panel.html</code> (protegida). El esqueleto es el mismo; cambia lo que va adentro.</p>
+<pre class="code">&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;                                     &lt;!-- OBLIGATORIO: tildes y ñ --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt; &lt;!-- OBLIGATORIO: responsive --&gt;
+    &lt;title&gt;Termo Store — Iniciar sesión&lt;/title&gt;
+
+    &lt;!-- Bootstrap LOCAL del parcial (dentro de lib/) --&gt;
+    &lt;link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;script src="lib/bootstrap/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt; &lt;!-- popper incluido: hace falta para los modales --&gt;
+
+    &lt;!-- Tu CSS SIEMPRE DESPUÉS de Bootstrap (pisa sus estilos) --&gt;
+    &lt;link rel="stylesheet" href="css/styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- maquetado (bloque 3) --&gt;
+
+    &lt;!-- Tus scripts: config PRIMERO (define API_BASE/API), luego app, luego página --&gt;
+    &lt;script src="js/config.js"&gt;&lt;/script&gt;
+    &lt;script src="js/app.js"&gt;&lt;/script&gt;
+    &lt;script src="js/login.js"&gt;&lt;/script&gt;     &lt;!-- en panel.html: js/panel.js --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    <div class="aviso"><strong>Orden de scripts:</strong> <code>config.js</code> → <code>app.js</code> → <code>login.js</code>/<code>panel.js</code>. Si los invertís, variables undefined al cargar la página.</div>
+    <div class="paso mt-3"><strong class="numero-paso">1</strong> <strong>Chequeo de arranque (memorizar):</strong> ¿charset? ¿viewport? ¿Bootstrap ANTES que mi CSS? ¿bundle.js presente (los modales lo necesitan)? ¿scripts en orden? ¿página abierta por localhost? 6 sí = bien.</div>
+</section>
+
+<!-- ============ BLOQUE 3: MAQUETADO ============ -->
+<section class="bloque" id="b3">
+    <h2 class="titulo-bloque">3. Maquetado: cómo se arma la página</h2>
+    <p>Maquetar = separar la página en bloques semánticos + Bootstrap para distribuirla. Regla de oro: <strong>todo elemento que JS deba leer, escribir o escuchar necesita <code>id</code> o <code>data-*</code></strong>.</p>
+<pre class="code">&lt;body&gt;
+    &lt;nav&gt;      &lt;!-- barra de navegación --&gt;
+    &lt;header&gt;   &lt;!-- portada / hero --&gt;
+    &lt;main&gt;     &lt;!-- contenido principal (SOLO HAY UNO por página) --&gt;
+        &lt;section&gt; ... &lt;/section&gt;    &lt;!-- cada zona grande --&gt;
+    &lt;/main&gt;
+    &lt;footer&gt;&lt;/footer&gt;
+&lt;/body&gt;</pre>
+
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>Leé el enunciado y listá las zonas</strong>: ¿navbar? ¿tarjetas? ¿modal de carga? ¿formularios personas? Cada zona = <code>&lt;section&gt;</code> con ids coherentes (<code>gridProductos</code>, <code>formPersona</code>, <code>alertas</code>).</div>
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Los listados van como contenedores vacíos:</strong> JS los rellena con los datos de la API.
+<pre class="code mt-2 mb-0">&lt;div class="row g-3" id="gridProductos"&gt;&lt;/div&gt;   &lt;!-- grilla de tarjetas de termos --&gt;
+&lt;div id="alertas"&gt;&lt;/div&gt;                        &lt;-- donde JS pone mensajes de éxito/error --&gt;</pre>
+    </div>
+    <div class="paso"><strong class="numero-paso">3</strong> <strong>Formularios:</strong> cada campo con <code>name</code> (lo que viaja al PHP), <code>id</code> (lo que lee JS) y <code>&lt;label&gt;</code>. En este parcial muchos formularios van en modales:
+<pre class="code mt-2 mb-0">&lt;form id="formPersona" class="needs-validation" novalidate&gt;
+    &lt;div class="mb-3"&gt;
+        &lt;label for="dni" class="form-label"&gt;DNI&lt;/label&gt;
+        &lt;input type="number" class="form-control" id="dni" name="dni" required&gt;
+    &lt;/div&gt;
+    &lt;div class="mb-3"&gt;
+        &lt;label for="ciudad" class="form-label"&gt;Ciudad&lt;/label&gt;
+        &lt;select class="form-select" id="ciudad" name="ciudad" required&gt;&lt;/select&gt; &lt;!-- JS llena esto --&gt;
+    &lt;/div&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+&lt;/form&gt;</pre>
+    </div>
+    <div class="paso"><strong class="numero-paso">4</strong> <strong>Accesibilidad que pide ESTE parcial:</strong> la imagen del termo lleva <code>alt</code> (texto_alternativo), <code>title</code> (titulo_imagen) y <code>aria-description</code> (descripcion_larga). Los botones/campos llevan <code>aria-label</code> descriptivo. Son puntos del enunciado, no opcional.</div>
+</section>
+
+<!-- ============ BLOQUE 4: BOOTSTRAP ============ -->
+<section class="bloque" id="b4">
+    <h2 class="titulo-bloque">4. Bootstrap: las piezas que pide este parcial</h2>
+
+    <h5>A) Grilla (la más importante)</h5>
+    <p><code>container → row → col</code>. Cada fila suma 12 columnas. <code>col-12 col-sm-6 col-xl-4</code> significa: celular 1 por fila, tablet 2, desktop 3.</p>
+
+    <h5>B) Navbar colapsable (punto del enunciado)</h5>
+<pre class="code">&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"&gt;
+    &lt;div class="container"&gt;
+        &lt;a class="navbar-brand" href="panel.html"&gt;Logo&lt;/a&gt;
+        &lt;button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menu"&gt;
+            &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;div class="collapse navbar-collapse" id="menu"&gt;
+            &lt;div class="navbar-nav ms-auto"&gt;
+                &lt;button id="btn-cargar-termo" class="btn btn-primary"&gt;Cargar termo&lt;/button&gt;
+                &lt;button id="btn-salir" class="btn btn-outline-light"&gt;Salir&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</pre>
+
+    <h5>C) Card de producto (generada por JS)</h5>
+<pre class="code">&lt;div class="col-12 col-sm-6 col-xl-4"&gt;
+    &lt;article class="card h-100"&gt;          &lt;!-- h-100: todas de igual alto --&gt;
+        &lt;img src="..." class="card-img-top" alt="..." &gt;
+        &lt;div class="card-body"&gt;
+            &lt;h3 class="card-title"&gt;Título&lt;/h3&gt;
+            &lt;p class="card-text"&gt;Descripción&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/article&gt;
+&lt;/div&gt;</pre>
+
+    <h5>D) Modal (login, ver termo, cargar termo)</h5>
+<pre class="code">&lt;div class="modal fade" id="modalVerTermo" tabindex="-1"&gt;
+    &lt;div class="modal-dialog"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;div class="modal-header"&gt;
+                &lt;h5 class="modal-title" id="ver-titulo"&gt;&lt;/h5&gt;
+                &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class="modal-body"&gt;&lt;img id="ver-imagen" ...&gt;&lt;p id="ver-descripcion"&gt;&lt;/p&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+    <p>Para abrir/cerrar por JS (cuando el click viene de una tarjeta dinámica):</p>
+<pre class="code">bootstrap.Modal.getOrCreateInstance(document.getElementById("modalVerTermo")).show();
+// .hide() para cerrarlo</pre>
+
+    <h5>E) Alertas con el mensaje (los mensajes son puntos del parcial)</h5>
+<pre class="code">&lt;div id="alertas"&gt;&lt;/div&gt;
+&lt;-- JS: --&gt;
+alertas.innerHTML = `
+    &lt;div class="alert alert-success alert-dismissible fade show" role="alert"&gt;
+        ${mensaje}
+        &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+    &lt;/div&gt;`;
+// tipos: alert-success | alert-danger | alert-warning</pre>
+
+    <h5>F) Chuleta de clases de utilidades</h5>
+    <table class="table table-sm table-bordered">
+        <thead><tr><th>Necesito...</th><th>Clase</th></tr></thead>
+        <tbody>
+            <tr><td>Botón primario/outline/danger</td><td><code>btn btn-primary</code> / <code>btn-outline-light</code> / <code>btn-danger</code></td></tr>
+            <tr><td>Campo de formulario</td><td><code>form-control</code> / <code>form-select</code> + <code>mb-3</code></td></tr>
+            <tr><td>Estado de validación</td><td><code>needs-validation</code> / <code>is-invalid</code> / <code>was-validated</code></td></tr>
+            <tr><td>Espacios</td><td><code>mt-*, mb-3, p-4, gap-3</code></td></tr>
+            <tr><td>Ocultar/mostrar con JS</td><td><code>d-none</code> / <code>d-block</code> (clase add/remove)</td></tr>
+            <tr><td>Centrar</td><td><code>text-center</code> · <code>d-flex justify-content-center align-items-center</code></td></tr>
+            <tr><td>Etiqueta de estado</td><td><code>badge text-bg-success</code></td></tr>
+            <tr><td>Spinner de carga</td><td><code>spinner-border</code></td></tr>
+            <tr><td>Ancho completo</td><td><code>w-100</code> / <code>h-100</code></td></tr>
+            <tr><td>Tooltip en <code>&lt;img&gt;</code></td><td>lo resuelve el atributo <code>title</code> (no es clase)</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ============ BLOQUE 5: CSS ============ -->
+<section class="bloque" id="b5">
+    <h2 class="titulo-bloque">5. CSS propio (css/styles.css): la capa de identidad</h2>
+    <p><strong>Regla:</strong> Bootstrap pone el layout; tu CSS pone colores, tipografía y detalles. Todo cambio va en <code>styles.css</code> — <strong>nunca edites bootstrap.min.css</strong>.</p>
+<pre class="code">/* 1) VARIABLES: colores del sitio en un solo lugar */
+:root {
+    --color-principal: #203b32;
+    --color-acento: #f0ad4e;
+}
+
+/* 2) Etiqueta: afecta TODOS los body */
+body { background: #f6f7f5; }
+
+/* 3) Clase: la que más vas a usar */
+.login-card { max-width: 420px; margin: auto; }
+
+/* 4) Id: solo ese elemento */
+#gridProductos .card:hover { transform: scale(1.02); }
+
+/* 5) Descendiente: ".nav-link DENTRO de navbar" */
+.navbar .nav-link { color: white; }
+
+/* 6) Estado: hover/focus (los "estados de foco" son punto del parcial) */
+input:focus { border-color: var(--color-acento); }
+.btn:focus-visible { outline: 3px solid var(--color-acento); }
+
+/* 7) Media query solo para lo que Bootstrap no cubre */
+@media (max-width: 767px) {
+    .hero { min-height: 40vh; }
+}</pre>
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>Para pisar Bootstrap:</strong> cargá tu CSS después y escribí el mismo selector (<code>.btn-primary { background: var(--color-principal); }</code>). Último recurso: <code>!important</code>.</div>
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Responsive del parcial:</strong> probá con F12 → modo dispositivo (mobile/tablet/desktop). Sin scroll horizontal (regla de la checklist): si aparece, un <code>&lt;img&gt;</code> u <code>&lt;table&gt;</code> te está desbordando → <code>img { max-width: 100%; }</code> o <code>table-responsive</code>.</div>
+</section>
+
+<!-- ============ BLOQUE 6: HTML <-> JS ============ -->
+<section class="bloque" id="b6">
+    <h2 class="titulo-bloque">6. Conectar el HTML con JavaScript</h2>
+    <p>JS controla la página con tres herramientas: <strong>getElementById</strong> (leer/escribir), <strong>eventos</strong> (reaccionar) y <strong>innerHTML/value</strong> (escribir/leer). Estructura recomendada de tus .js (así es el <code>app.js</code> del proyecto resuelto):</p>
+<pre class="code">// ============ js/app.js — helpers que usa TODA la página ============
+"use strict";
+
+/* --- Lectura/escritura de la sesión (token en sessionStorage) --- */
+const App = {
+
+    saveSession(token, usuario) {
+        sessionStorage.setItem(APP_STORAGE.token, token);
+        sessionStorage.setItem(APP_STORAGE.usuario, JSON.stringify(usuario ?? {}));
+    },
+
+    getToken()   { return sessionStorage.getItem(APP_STORAGE.token) ?? ""; },
+    getUsuario() { try { return JSON.parse(sessionStorage.getItem(APP_STORAGE.usuario) ?? "null"); } catch { return null; } },
+
+    clearSession() {
+        sessionStorage.removeItem(APP_STORAGE.token);
+        sessionStorage.removeItem(APP_STORAGE.usuario);
+    },
+
+    /* --- Alertas --- */
+    showAlert(contenedor, mensaje, tipo = "danger") {
+        const seguro = App.escapeHtml(mensaje);
+        contenedor.innerHTML = `
+            &lt;div class="alert alert-${tipo} alert-dismissible fade show" role="alert" aria-live="polite"&gt;
+                ${seguro}
+                &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+            &lt;/div&gt;`;
+    },
+
+    /* --- Escapar TODO dato que llegue de la API o de un usuario (XSS) --- */
+    escapeHtml(valor) {
+        return String(valor ?? "").replace(/[&amp;&lt;&gt;"']/g, (caracter) =&gt; {
+            return { "&amp;": "&amp;amp;", "&lt;": "&amp;lt;", "&gt;": "&amp;gt;",
+                     '"': "&amp;quot;", "'": "&amp;#39;" }[caracter];
+        });
+    },
+
+    /* --- URL de imagen: API.imagenes + nombre del archivo --- */
+    imageUrl(nombre) {
+        const limpio = String(nombre ?? "").replace(/^\/+/, "");
+        return `${API.imagenes}/${encodeURIComponent(limpio)}`;
+    },
+
+    /* --- Parser tolerante: la API a veces "contamina" el JSON ---- */
+    parseJson(texto) {
+        if (!texto || !texto.trim()) return {};
+        try { return JSON.parse(texto); }
+        catch {
+            const inicio = texto.indexOf("{");
+            const fin = texto.lastIndexOf("}");
+            if (inicio &gt;= 0 &amp;&amp; fin &gt; inicio) {
+                return JSON.parse(texto.slice(inicio, fin + 1));
+            }
+            throw new Error("La API no devolvió JSON válido");
+        }
+    },
+
+    /* --- Requerir sesión en páginas protegidas (panel.html) --- */
+    async requireSession() {
+        const token = App.getToken();
+        if (!token) { window.location.replace("index.html"); return null; }
+
+        try {
+            const datos = await App.getJSON(API.verificaToken, { token });
+            const presente = datos.tpken_presente === true || datos.token_presente === true;
+            if (datos.status === 200 &amp;&amp; presente) return token;
+        } catch { /* sigue */ }
+
+        App.clearSession();
+        window.location.replace("index.html");
+        return null;
+    }
+};</pre>
+
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>Eventos en la página (login.js / panel.js):</strong>
+<pre class="code mt-2 mb-0">// Formulario: SIEMPRE "submit" + preventDefault (que no recargue)
+formulario.addEventListener("submit", async (evento) =&gt; {
+    evento.preventDefault();
+    if (!formulario.checkValidity()) { formulario.classList.add("was-validated"); return; }
+    // ...fetch...
+});
+
+// Botones sueltos: "click"
+document.getElementById("btn-salir").addEventListener("click", salir);</pre>
+    </div>
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Proteger una página:</strong> <code>panel.html</code> arranca con un loader y el contenido oculto (<code>d-none</code>). Al confirmar token → mostrar. Si no hay token → redirigir a index. Se prueba: abrir panel.html en una pestaña nueva sin haber iniciado sesión.</div>
+</section>
+
+<!-- ============ BLOQUE 7: FETCH + TOKEN ============ -->
+<section class="bloque" id="b7">
+    <h2 class="titulo-bloque">7. Fetch contra esta API (GET/POST + token)</h2>
+    <p><strong>Concepto AJAX:</strong> pedir datos al servidor sin recargar la página; PHP responde JSON; JS lo dibuja. En este parcial hay 3 formas de llamar (reutilizalas tal cual):</p>
+<pre class="code">// ============ GET con parámetros en la query ============
+async function getJSON(url, parametros = {}) {
+    const query = new URLSearchParams(parametros);   // ?token=...&amp;id=...
+    const respuesta = await fetch(`${url}?${query}`);
+
+    // IMPORTANTE: la API contesta HTTP 200 hasta en los errores.
+    // Se lee SIEMPRE el status LÓGICO de adentro del JSON.
+    return App.parseJson(await respuesta.text());
+}
+
+// ============ POST con campos de texto (x-www-form-urlencoded) ============
+async function postUrlEncoded(url, campos = {}) {
+    const cuerpo = new URLSearchParams(campos);
+    const respuesta = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: cuerpo
+    });
+    return App.parseJson(await respuesta.text());
+}
+
+// ============ POST con archivo (multipart/form-data) ============
+async function postForm(url, formDatos, extra = {}) {
+    if (extra.token) formDatos.append("token", extra.token);
+    // NO configurar Content-Type a mano: el navegador arma el multipart
+    // con su "boundary" y si lo pisás, se rompe.
+    const respuesta = await fetch(url, { method: "POST", body: formDatos });
+    return App.parseJson(await respuesta.text());
+}</pre>
+
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>El chequeo de TODA respuesta:</strong>
+<pre class="code mt-2 mb-0">const resultado = await App.getJSON(url, { token });
+if (resultado.status !== 200) {
+    throw new Error(resultado.menssage || resultado.message || "Error desconocido");
+}
+// a partir de acá: resultado.data | resultado.persona | resultado.localidades | ...</pre>
+    <ul class="mb-0 mt-2">
+        <li><code>respuesta.json()</code> corta todo si el contenido no es JSON → por eso usamos <code>parseJson</code> tolerante.</li>
+        <li><code>resultado.menssage</code> (doble s) es el nombre real de esta API. Probá ambos por las dudas.</li>
+        <li>Listado de productos vacío o falla de BD → <code>status 500</code> → tratá como "sin productos" en vez de error fatal (a menos que el token esté mal: ahí sí salí a relogear).</li>
+    </ul></div>
+
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Cuándo GET y cuándo POST:</strong> leer/listar/consultar = GET (parámetros en la URL). Enviar/insertar/actualizar/login/archivo = POST (datos en el body, el token viaja como campo aparte del body).</div>
+
+    <div class="dato"><strong>Vieja escuela</strong> (si el enunciado pide XHR clásico):
+<pre class="code mt-2 mb-0">const xhr = new XMLHttpRequest();
+xhr.open("GET", "api/listar_productos.php?token=" + token, true);
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) {
+        const resultado = JSON.parse(xhr.responseText);
+        // render...
+    }
+};
+xhr.send();</pre></div>
+</section>
+
+<!-- ============ BLOQUE 8: API DADA ============ -->
+<section class="bloque" id="b8">
+    <h2 class="titulo-bloque">8. Mapa de la API dada (lo que NO tenés que escribir, pero SÍ entender)</h2>
+    <p>La API vive en <code>../api</code> (hermana de <code>front/</code>). <code>config.js</code> calcula la ruta automáticamente:</p>
+<pre class="code">/* js/config.js — fuente ÚNICA de verdad de las rutas */
+const API_BASE = window.location.protocol === "file:"
+    ? "http://localhost/termos/api"
+    : new URL("../api/", window.location.href).href.replace(/\/+$/, "");
+
+const API = {
+    login:             `${API_BASE}/login.php`,
+    verificaToken:     `${API_BASE}/verifica_token.php`,
+    listarProductos:   `${API_BASE}/listar_productos.php`,
+    registrarProducto: `${API_BASE}/registrar_productos.php`,
+    personasCantidad:  `${API_BASE}/personas_cantidad.php`,
+    personasListar:    `${API_BASE}/personas_listar.php`,
+    personasGuardar:   `${API_BASE}/personas_guardar.php`,
+    personasEditar:    `${API_BASE}/personas_guardar_editar.php`,
+    ciudades:          `${API_BASE}/ciudades.php`,
+    imagenes:          `${API_BASE}/imagenes`
+};</pre>
+
+    <p class="mt-3">Cada endpoint: qué recibe, qué devuelve, qué trampa tiene:</p>
+    <table class="table table-sm table-bordered">
+        <thead><tr><th>Endpoint</th><th>Recibe</th><th>Devuelve (JSON)</th><th>Trampa</th></tr></thead>
+        <tbody>
+            <tr><td><code>login.php</code> POST</td><td><code>usuario</code>, <code>password</code></td><td><code>{status, token, nombre, apellido, id_usurio}</code></td><td>Los campos son <strong>usuario</strong>/<strong>password</strong> (no user/clave) y el id es <strong><code>id_usurio</code></strong> (typo). Error: <code>menssage</code>.</td></tr>
+            <tr><td><code>verifica_token.php</code></td><td><code>?token=</code></td><td><code>{status, tpken_presente}</code></td><td>El campo es <code><strong>tpken</strong>_presente</code>: aceptá también <code>token_presente</code>.</td></tr>
+            <tr><td><code>listar_productos.php</code></td><td><code>?token=</code></td><td><code>{status:200, data:[productos]}</code></td><td>No ordena (el front ordena por título). Tabla vacía → <code>status 500 "algo malo paso"</code> = lista vacía. Token malo → 500 "Desautorizado".</td></tr>
+            <tr><td><code>ciudades.php</code></td><td>—</td><td><code>{localidades:[{id, nombre_ciudad, ...}]}</code></td><td>No ordena: ordená por <code>nombre_ciudad</code> en el front.</td></tr>
+            <tr><td><code>personas_cantidad.php</code></td><td>token</td><td><code>{cantidad}</code></td><td>Necesaria para la búsqueda binaria: define el <code>fin = cantidad</code>.</td></tr>
+            <tr><td><code>personas_listar.php</code></td><td><code>?id=N&amp;token=</code></td><td><code>{persona:[{...}]}</code></td><td>Devuelve <strong>array</strong> (tomamos <code>[0]</code>). Si no existe ese id, cuidado con la respuesta.</td></tr>
+            <tr><td><code>personas_guardar.php</code></td><td>POST: <code>dni, nombre, apellido, direccion, ciudad, provincia, email, telefono, token</code></td><td><code>{status, menssage}</code></td><td>El mensaje de éxito exacto lo pinta el front si status === 200.</td></tr>
+            <tr><td><code>personas_guardar_editar.php</code></td><td>POST: campos + <code>id</code></td><td><code>{status, menssage}</code></td><td>Devuelve <strong>status 505 si el UPDATE no modifica fila</strong>: el front lo acepta como éxito (¡edita sin cambios!).</td></tr>
+            <tr><td><code>registrar_productos.php</code></td><td>POST multipart: los 5 textos + <code>imagen</code> (archivo) + <code>token</code></td><td><code>{status, menssage}</code></td><td>Guarda la imagen en <code>api/imagenes/</code> y en la BD guarda el nombre. Multipart: imagen PRIMERO en el form (punto del enunciado).</td></tr>
+            <tr><td>Módulo <code>imagenes/</code></td><td>—</td><td>archivos .jpg</td><td>URL completa = <code>API.imagenes + "/" + producto.imagen</code>.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>La imagen del panel</strong>: el <code>src</code> se arma con <code>App.imageUrl(producto.imagen)</code>. Si la imagen no carga, <code>onerror</code> → poner una imagen reservda o una clase CSS de fondo según el mockup.</div>
+</section>
+
+<!-- ============ BLOQUE 9: RECETAS ============ -->
+<section class="bloque" id="b9">
+    <h2 class="titulo-bloque">9. Receta paso a paso: cómo se resuelve este parcial (3h 15min)</h2>
+
+    <p><strong>Regla de oro:</strong> primero funcional, después bonito. Y punto por punto del enunciado, los mensajes son lo más estático que te van a mirar.</p>
+
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>Leer todo el enunciado y subrayar:</strong> endpoints, parámetros exactos, textos exactos de los mensajes, puntos extra (orden por título, atributos de imagen, metadatos, edición vs alta). De ahí sale tu checklist.</div>
+
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>Preparar (0:00–0:15):</strong> XAMPP + importar SQL + probar endpoints en el navegador (bloque 1) + crear carpetas de front/.</div>
+
+    <div class="paso"><strong class="numero-paso">3</strong> <strong>Maquetar (0:15–0:50):</strong> index.html y panel.html con Navbar, formularios con name/id, modal(es), alertas, footer. Verificar responsive ANTES de escribir JS.</div>
+
+    <div class="paso"><strong class="numero-paso">4</strong> <strong>config.js + app.js (helpers)</strong> del bloque 6 y 7 (API map, sessionStorage, getJSON/postUrl/postForm, escapeHtml, requireSession).</div>
+
+    <div class="paso"><strong class="numero-paso">5</strong> <strong>Login y sesión (0:15–0:50):</strong>
+<pre class="code mt-2 mb-0">formulario.addEventListener("submit", async (evento) =&gt; {
+    evento.preventDefault();
+
+    if (!formulario.checkValidity()) {
+        formulario.classList.add("was-validated");
+        return;                                         // que el usuario corrija
+    }
+
+    const usuario = formulario.elements.usuario.value.trim();
+    const password = formulario.elements.password.value;
+
+    try {
+        const datos = await App.postUrlEncoded(API.login, { usuario, password });
+
+        if (datos.status !== 200 || !datos.token) {
+            throw new Error(datos.menssage || "Credenciales incorrectas");
+        }
+
+        App.saveSession(datos.token, {
+            nombre:   datos.nombre,
+            apellido: datos.apellido,
+            id:       datos.id_usurio || datos.id_usuario   // acepto LOS DOS (typo)
+        });
+
+        window.location.replace("panel.html");              // replace = no queda en historial
+
+    } catch (error) {
+        App.showAlert(alertas, error.message, "danger");    // NUNCA alert() (es punto de la checklist)
+    }
+});</pre>
+        <ul class="mb-0 mt-2">
+            <li><code>sessionStorage</code> NO <code>localStorage</code>: se borra al cerrar el navegador (más seguro).</li>
+            <li>Si ya hay sesión válida al abrir index.html → redirigir directo a panel.html.</li>
+            <li>Logout: <code>confirm()</code> y <code>replace("index.html")</code> luego de <code>clearSession()</code>.</li>
+        </ul></div>
+
+    <div class="paso"><strong class="numero-paso">6</strong> <strong>Listado de termos (0:50–1:35):</strong>
+<pre class="code mt-2 mb-0">const datos = await App.getJSON(API.listarProductos, { token });
+
+if (datos.status === 200) {
+    productosPorId = new Map(datos.data.map(p =&gt; [String(p.id), p]));
+
+    // Requisito del parcial: ordenar por título (la API no lo hace)
+    const ordenados = datos.data.slice().sort((a, b) =&gt;
+        a.titulo.localeCompare(b.titulo, "es", { sensitivity: "base" })
+    );
+
+    grid.innerHTML = ordenados.map(renderTarjeta).join("");
+} else if (/algo malo paso/i.test(datos.menssage || "")) {
+    // tabla vacía: mensaje gris, NO error
+    grid.innerHTML = '&lt;p class="text-muted"&gt;No hay termos cargados.&lt;/p&gt;';
+} else {
+    throw new Error(datos.menssage || "No se pudo listar");
+}
+
+function renderTarjeta(producto) {
+    // TODO dato que llegue de la API pasa por escapeHtml
+    const titulo = App.escapeHtml(producto.titulo);
+    const alt    = App.escapeHtml(producto.texto_alternativo || producto.titulo);
+    const title  = App.escapeHtml(producto.titulo_imagen || producto.titulo);
+    const aria   = App.escapeHtml(producto.descripcion_larga || "");
+    const buenTexto = App.escapeHtml(producto.descripcion || "");
+    const src = App.escapeHtml(App.imageUrl(producto.imagen));   // api/imagenes/...
+
+    // data-ver y data-id: la DELEGACIÓN de eventos (ver abajo) los usa
+    return `
+        &lt;div class="col-12 col-sm-6 col-xl-4"&gt;
+            &lt;article class="card h-100"&gt;
+                &lt;button type="button" data-ver="${App.escapeHtml(producto.id)}" aria-label="Ampliar ${titulo}"&gt;
+                    &lt;img src="${src}" class="card-img-top"
+                         alt="${alt}" title="${title}" aria-description="${aria}" loading="lazy"&gt;
+                &lt;/button&gt;
+                &lt;div class="card-body"&gt;
+                    &lt;h3 class="card-title"&gt;${titulo}&lt;/h3&gt;
+                    &lt;p class="card-text"&gt;${buenTexto}&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/article&gt;
+        &lt;/div&gt;`;
+}</pre>
+    </div>
+
+    <div class="paso"><strong class="numero-paso">7</strong> <strong>Modal + delegación de eventos</strong> (los botones de las tarjetas se crean DESPUÉS de que la página cargó, así que el evento va en el CONTENEDOR, no en cada botón):
+<pre class="code mt-2 mb-0">// Delegación: un solo listener para toda la grilla
+grid.addEventListener("click", (evento) =&gt; {
+    const boton = evento.target.closest("[data-ver]");
+    if (!boton) return;
+    abrirModalProducto(boton.dataset.ver);
+});
+
+function abrirModalProducto(id) {
+    const producto = productosPorId.get(String(id));
+    if (!producto) return;
+
+    document.getElementById("ver-titulo").textContent  = producto.titulo;          // textContent = seguro
+    document.getElementById("ver-imagen").src          = App.imageUrl(producto.imagen);
+    document.getElementById("ver-imagen").alt          = producto.texto_alternativo || "";
+    document.getElementById("ver-descripcion").textContent = producto.descripcion_larga || "";
+
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalVerTermo")).show();
+}</pre>
+    </div>
+
+    <div class="paso"><strong class="numero-paso">8</strong> <strong>Carga de termo (1:35–2:15):</strong> modal con <code>&lt;input type="file" accept="image/*"&gt;</code> PRIMERO (requisito). Al elegir la imagen, <strong>ExifReader</strong> lee los metadatos IPTC/XMP y AUTOCOMPLETA los 5 campos; el followup editable:
+<pre class="code mt-2 mb-0">async function leerMetadatos(archivo) {
+    const buffer = await archivo.arrayBuffer();
+    const tags = ExifReader.load(buffer);
+
+    const texto = (tag) =&gt; {
+        if (!tag) return "";
+        const valor = tag.description ?? tag.value;
+        return String(valor ?? "").trim();
+    };
+
+    return {
+        titulo:             texto(tags.Headline)          || texto(tags.title),
+        titulo_imagen:      texto(tags.title)             || texto(tags.Headline),
+        descripcion:        texto(tags["Caption/Abstract"]) || texto(tags.description),
+        descripcion_larga:  texto(tags.ExtDescrAccessibility) || texto(tags.description),
+        texto_alternativo:  texto(tags.AltTextAccessibility)  || texto(tags.Headline)
+    };
+}
+
+// POST multipart: imagen = new FormData()
+const datos = new FormData();
+datos.append("imagen", archivo);              // imagen PRIMERO (punto del enunciado)
+datos.append("titulo", campoTitulo.value.trim());
+datos.append("titulo_imagen", campoTituloImagen.value.trim());
+datos.append("descripcion", campoDescripcion.value.trim());
+datos.append("descripcion_larga", campoDescripcionLarga.value.trim());
+datos.append("texto_alternativo", campoAlt.value.trim());
+
+const respuesta = await App.postForm(API.registrarProducto, datos, { token });
+
+if (respuesta.status !== 200) {
+    throw new Error(respuesta.menssage || "No se pudo guardar");
+}
+
+modal.hide();
+await cargarProductos();          // recarga el listado con el termo nuevo
+App.showAlert(alertas, "Termo cargado con éxito.", "success");</pre>
+        <ul class="mb-0 mt-2">
+            <li>Si la imagen no tiene metadatos: aviso suave + campos vacíos que el usuario completará manualmente (lógica de borde del parcial).</li>
+            <li>Vista previa: <code>URL.createObjectURL(archivo)</code> en un <code>&lt;img&gt;</code> del modal.</li>
+        </ul></div>
+
+    <div class="paso"><strong class="numero-paso">9</strong> <strong>Personas: búsqueda binaria por DNI (2:15–2:50).</strong> No existe "buscar por DNI" en la API → nosotros lo construimos: pedimos la <strong>cantidad</strong> y consultamos el <strong>id del medio</strong> hasta encontrar (la tabla está ordenada por id):
+<pre class="code mt-2 mb-0">async function buscarPersonaPorDni(dniBuscado) {
+    const cantidadRespuesta = await App.getJSON(API.personasCantidad, { token });
+    if (cantidadRespuesta.status !== 200) throw new Error("No se pudo obtener la cantidad");
+
+    let inicio = 1;
+    let fin = Number(cantidadRespuesta.cantidad);       // límite superior: 99 personas
+
+    while (inicio &lt;= fin) {
+        const medio = Math.floor((inicio + fin) / 2);
+
+        const respuesta = await App.getJSON(API.personasListar, { id: medio });
+        if (respuesta.status !== 200 || !Array.isArray(respuesta.persona) || respuesta.persona.length === 0) {
+            fin = medio - 1;
+            continue;
+        }
+
+        const persona = respuesta.persona[0];
+        const dniMedio = Number(persona.dni);           // convertir a Number: comparar tipos iguales
+
+        if (dniMedio === dniBuscado) return persona;
+        if (dniMedio &lt; dniBuscado) inicio = medio + 1;  // el DNI buscado es mayor: vamos a la derecha
+        else fin = medio - 1;                          // es menor: a la izquierda
+    }
+    return null;    // no encontrado -&gt; MODO ALTA
+}</pre>
+    </div>
+
+    <div class="paso"><strong class="numero-paso">10</strong> <strong>Alta o edición según el DNI:</strong> al hacer submit del DNI:
+        <ul class="mt-2 mb-0">
+            <li><strong>DNI existe:</strong> <strong>modo editar</strong> → precargar formulario con los datos traídos → el campo DNI queda <strong>deshabilitado</strong> (no se puede cambiar la clave primaria) → botón "Actualizar" → <code>personas_guardar_editar.php</code> (con <code>id</code> de la persona).</li>
+            <li><strong>DNI no existe:</strong> <strong>modo alta</strong> → formulario vacío con el <strong>DNI precargado</strong> → botón "Guardar" → <code>personas_guardar.php</code>.</li>
+            <li><strong>Ciudades:</strong> llenar el select con <code>ciudades.php</code>, ordenar por <code>nombre_ciudad</code> ascendente.</li>
+            <li><strong>Provincia:</strong> fija en "La Pampa" (id 5), <code>disabled</code> o <code>readonly</code>.</li>
+        </ul>
+        <strong>Mensajes EXACTOS que pide el parcial:</strong>
+<pre class="code mt-2 mb-0">// Alta (status 200):
+App.showAlert(alertas, `La persona ${nombre} ${apellido} fue dada de alta con éxito.`, "success");
+// Edición (status 200 o 505 — 505 significa "no cambió ninguna fila", se acepta igual):
+App.showAlert(alertas, `Los datos de ${nombre} ${apellido} fueron actualizados.`, "success");</pre>
+    </div>
+
+    <div class="paso"><strong class="numero-paso">11</strong> <strong>Logout con confirmación:</strong>
+<pre class="code mt-2 mb-0">btnSalir.addEventListener("click", () =&gt; {
+    if (!window.confirm("¿Está seguro de que desea cerrar sesión?")) return;  // cancelado = nada
+    App.clearSession();
+    window.location.replace("index.html");
+});</pre>
+    </div>
+
+    <div class="paso"><strong class="numero-paso">12</strong> <strong>Diseño y responsive (2:50–3:05):</strong> grilla <code>col-12 col-sm-6 col-xl-4</code>, navbar colapsable, formularios legibles, foco visible, contrastes. Probá en 425px, 768px y 1200px (DevTools).</div>
+
+    <div class="paso"><strong class="numero-paso">13</strong> <strong>Pruebas finales (3:05–3:15):</strong> login mal, login bien, recarga del panel, panel sin token (pestaña nueva), alta de termo, imagen sin metadatos, DNI existente y falso, alta y edición de persona, consola sin errores, documento de consideraciones listo.</div>
+</section>
+
+<!-- ============ BLOQUE 10: ENTREGA ============ -->
+<section class="bloque" id="b10">
+    <h2 class="titulo-bloque">10. Checklist final de entrega (lo que te miran)</h2>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <h5>Funcionalidad</h5>
+            <ul class="small">
+                <li>Login <code>gaston / 12345</code>; error sin navegar.</li>
+                <li>Token en <code>sessionStorage</code>; index redirige si ya hay sesión.</li>
+                <li><code>panel.html</code> protegido (sin token → index).</li>
+                <li>Token verificado contra <code>verifica_token.php</code>.</li>
+                <li>Logout con confirmación; sin endpoint de logout en la API: se limpia sessionStorage.</li>
+                <li>Listado + orden por título + modal de detalle.</li>
+                <li>Alta de termo: imagen primero + metadatos autocompletados + multipart + token.</li>
+                <li>Listado actualizado tras guardar + mensaje de éxito.</li>
+                <li>Búsqueda binaria por DNI + alta con DNI precargado + edición con DNI disabled.</li>
+                <li>Ciudades ordenadas + provincia fija en 5 disabled.</li>
+                <li>Mensajes exactos de alta y edición.</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h5>Calidad (rompen la nota si faltan)</h5>
+            <ul class="small">
+                <li>Consola sin errores y sin <code>console.log</code> de depuración.</li>
+                <li>Sin <code>alert()</code> para errores (usar alertas Bootstrap).</li>
+                <li>Nada de datos de usuario sin <code>escapeHtml</code> en <code>innerHTML</code>.</li>
+                <li>Sin credenciales en la URL; sin CDN; sin rutas absolutas.</li>
+                <li><strong>CERO cambios en <code>api/*.php</code></strong></li>
+                <li>Documento de consideraciones incluido (decisiones + cómo ejecutar).</li>
+                <li>Atributos accesibles: <code>alt</code>, <code>title</code>, <code>aria-description</code>, <code>aria-label</code>.</li>
+                <li>Responsive: mobile/tablet/desktop, sin scroll horizontal, foco visible.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="paso mt-3"><strong class="numero-paso">⏱</strong> <strong>Simulación mental antes de entregar:</strong> mirá toda la aplicación como si acabara de recibirla un profesor: si algo se rompe en los primeros 10 segundos, es lo primero que va a ver.</div>
+</section>
+
+<!-- ============ BLOQUE 11: DEBUG ============ -->
+<section class="bloque" id="b11">
+    <h2 class="titulo-bloque">11. Debugging: los 3 movimientos + los errores típicos</h2>
+    <div class="paso"><strong class="numero-paso">1</strong> <strong>F12 → Console:</strong> mirá los errores rojos primero. Si no sabés dónde se corta el flujo, poné <code>console.log("1", variable)</code>, <code>console.log("2", variable)</code>... etiquetando cada paso de la función hasta encontrar el que no aparece.</div>
+    <div class="paso"><strong class="numero-paso">2</strong> <strong>F12 → Network:</strong> ¿el pedido existe? ¿la URL es la correcta? clic en el request → <em>Response</em> para ver el JSON crudo que devolvió la API.</div>
+    <div class="paso"><strong class="numero-paso">3</strong> <strong>Bisecar:</strong> ¿fallo en datos o en dibujo? Meté un array hardcodeado en el render: si dibuja, el problema es el fetch/API; si no, el problema es el HTML/render.</div>
+
+    <h5 class="mt-3">Tabla de errores típicos (con las trampas de ESTA API)</h5>
+    <table class="table table-sm table-bordered">
+        <thead><tr><th>Síntoma</th><th>Causa</th><th>Solución</th></tr></thead>
+        <tbody>
+            <tr><td>"Failed to fetch"</td><td>Apache/MySQL apagados, URL mal escrita o página abierta con doble click (<code>file://</code>)</td><td>XAMPP en verde + URL del <code>config.js</code> + abrir por <code>localhost</code></td></tr>
+            <tr><td><code>resultado.data</code> undefined</td><td>la API devolvió otra estructura o error 500</td><td>mirar Network → Response y loguear el <code>resultado</code> entero antes del <code>if</code></td></tr>
+            <tr><td>Siempre dice "Desautorizado"</td><td>token no viaja o es distinto</td><td>GET: <code>?token=</code>. POST: <code>form.append("token", ...)</code>. El mismo valor que guardó el login.</td></tr>
+            <tr><td><code>resultado.menssage</code> undefined</td><td>en algunas respuestas el campo es <code>message</code></td><td>usar <code>menssage || message</code></td></tr>
+            <tr><td>JSON.parse lanza error</td><td>la API pegó un warning de PHP antes del JSON</td><td><code>App.parseJson</code> tolerante + ver la respuesta cruda</td></tr>
+            <tr><td>Modal no abre</td><td>falta <code>bootstrap.bundle.min.js</code> o id mal</td><td>cargar bundle y confirmar el id</td></tr>
+            <tr><td>Click en tarjetas no funciona</td><td>event listeners registrados en los botones generados DESPUÉS de crearlos</td><td><strong>delegación</strong>: listener en el contenedor + <code>closest("[data-ver]")</code></td></tr>
+            <tr><td>Formulario recarga la página</td><td>falta <code>preventDefault()</code></td><td>primera línea del handler de submit</td></tr>
+            <tr><td>Edición dice error con <code>status 505</code></td><td>la API devuelve 505 cuando UPDATE no cambia fila → es ÉXITO</td><td><code>status === 200 || status === 505</code> → éxito</td></tr>
+            <tr><td>Imagen rota en la tarjeta</td><td>nombre del archivo mal o URL sin carpeta</td><td>URL completa: <code>API.imagenes + "/" + producto.imagen</code></td></tr>
+            <tr><td>DNI entra como texto (<code>"10123458"</code>) y no matchеа</td><td>tipos</td><td>comparar con <code>Number(persona.dni) === Number(dniBuscado)</code></td></tr>
+        </tbody>
+    </table>
+</section>
+
+<footer class="text-center text-muted py-4">
+    <small>Cheatsheet universal POW — adaptado al parcial 2026 (termos). Usalo junto a los cheatsheets temáticos de <code>teoria/</code> y al <code>front/CHEATSHEET_PARCIAL.md</code> del proyecto.</small>
+</footer>
+
+</main>
+
+<script>
+    // Resalta el link del índice activo mientras scrolleás
+    const links = document.querySelectorAll(".fila-indice a");
+    const secciones = [...document.querySelectorAll("section.bloque")];
+
+    const observer = new IntersectionObserver((entradas) => {
+        entradas.forEach((entrada) =&gt; {
+            if (entrada.isIntersecting) {
+                links.forEach(l => l.classList.remove("active"));
+                const link = document.querySelector(
+                    `.fila-indice a[href="#${entrada.target.id}"]`
+                );
+                if (link) link.classList.add("active");
+            }
+        });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+
+    secciones.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

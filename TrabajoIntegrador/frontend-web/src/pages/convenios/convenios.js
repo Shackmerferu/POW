@@ -1,9 +1,13 @@
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import "./convenios.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
-import flechalabel from "../../cosas/imagenes/flecha label.svg";
-import iconopersona from "../../cosas/imagenes/persona.svg";
+import flechalabel from "../../cosas/imagenes/flecha label.png";
+import iconopersona from "../../cosas/imagenes/persona.png";
 const assetPath = "../../src/cosas/imagenes"
+
+const API_URL = "http://localhost:3000/api"
 
 const filters = [
   { id: "nombre", label: "Nombre", placeholder: "Convenio Facultad" },
@@ -15,6 +19,45 @@ const filters = [
 const options = ["Opcion A", "Opcion B", "Opcion C", "Opcion D"]
 
 export default function App() {
+  const navigate = useNavigate()
+
+  function limpiarSesion() {
+    localStorage.removeItem("token")
+    localStorage.removeItem("usuario")
+  }
+
+  function handleLogout() {
+    limpiarSesion()
+    navigate("/login", { replace: true })
+  }
+
+  // Handling del login: al montar la página verificamos la sesión con la API.
+  // Si no hay token guardado o la API lo rechaza, volvemos al login.
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+
+    if (!token) {
+      navigate("/login", { replace: true })
+      return
+    }
+
+    fetch(`${API_URL}/auth/verify`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          // Token inválido (401): cerramos sesión y volvemos al login
+          limpiarSesion()
+          navigate("/login", { replace: true })
+        }
+      })
+      .catch(() => {
+        // Si la API no responde (servidor apagado) no forzamos el logout,
+        // pero mostramos el aviso en la consola
+        console.warn("No se pudo verificar la sesión: la API no está disponible")
+      })
+  }, [navigate])
+
   function handleSubmit(event) {
     event.preventDefault()
   }
@@ -35,6 +78,9 @@ export default function App() {
              <img src={iconopersona} alt="Flecha indicativa Label" />
             <span>Mi Perfil</span>
           </a>
+          <button type="button" className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </nav>
       </header>
 
