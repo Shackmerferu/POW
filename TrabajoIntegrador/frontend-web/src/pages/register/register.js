@@ -139,7 +139,7 @@ function Register() {
           {/* Fila: Legajo y Contraseña */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="legajo">Legajo (4 números)</label>
+              <label htmlFor="legajo">Legajo</label>
               <input
                 type="text"
                 id="legajo"
@@ -151,7 +151,7 @@ function Register() {
                   const soloNumeros = e.target.value.replace(/\D/g, "");
                   setFormData({ ...formData, legajo: soloNumeros });
                 }}
-                placeholder="0012"
+                placeholder="1111"
               />
             </div>
 
