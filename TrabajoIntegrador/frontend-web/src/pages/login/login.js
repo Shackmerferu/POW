@@ -6,44 +6,56 @@ import logo from "../../logo.png";
 const API_URL = "http://localhost:3000/api";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [legajo, setLegajo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [cargando, setCargando] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  const showErrorWithTimeout = (message) => {
+    setError(message);
+    setTimeout(() => setError(""), 5000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError("Por favor, ingresa tu usuario y contraseña.");
+    const legajoLimpio = legajo.trim();
+
+    if (!legajoLimpio || !password) {
+      showErrorWithTimeout("Por favor, ingresa tu legajo y contraseña.");
       return;
     }
 
-    setCargando(true);
-    setError("");
+    setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/auth`, {
+      const response = await fetch("http://localhost:8000/api/auth", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ legajo: email, contrasena: password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ legajo: legajoLimpio, contrasena: password }),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (res.ok && data.token) {
-        // Guardamos la sesión en localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("usuario", JSON.stringify(data.usuario));
-        navigate("/convenios");
+      if (response.ok && (data.status === 200 || response.status === 200)) {
+        setError("");
+        localStorage.setItem("active_user", JSON.stringify(data.usuario));
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        navigate("/dashboard");
       } else {
-        setError(data.mensaje || "Credenciales incorrectas.");
+        showErrorWithTimeout(data.mensaje || "Credenciales incorrectas.");
       }
     } catch (err) {
-      setError("No se pudo conectar con el servidor. ¿Está corriendo el backend?");
+      console.error("Error en fetch:", err);
+      showErrorWithTimeout("No se pudo conectar con el servidor backend.");
     } finally {
-      setCargando(false);
+      setLoading(false);
     }
   };
 
@@ -58,13 +70,15 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Usuario/Legajo</label>
+            <label htmlFor="legajo">Legajo (4 números)</label>
             <input
               type="text"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="toni122"
+              id="legajo"
+              maxLength={4}
+              inputMode="numeric"
+              value={legajo}
+              onChange={(e) => setLegajo(e.target.value.replace(/\D/g, ""))}
+              placeholder="0012"
             />
           </div>
 
@@ -79,10 +93,11 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="btn-primary" disabled={cargando}>
-            {cargando ? "Iniciando..." : "Iniciar Sesión"}
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Cargando..." : "Iniciar Sesión"}
           </button>
         </form>
+
         <p className="redirect-text">
           ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
         </p>

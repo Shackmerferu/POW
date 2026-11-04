@@ -6,29 +6,26 @@ import logo from "../../logo.png";
 function Register() {
   const navigate = useNavigate();
 
-  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    legajo: "",
     password: "",
-    unit: "Facultad de Ingeniería",
+    id_unidad: "1", // 1: Facultad de Ingeniería, 2: Rectorado
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  
   const showErrorWithTimeout = (message) => {
     setError(message);
     setSuccess("");
- 
     setTimeout(() => {
       setError("");
     }, 5000);
   };
 
- 
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -36,57 +33,66 @@ function Register() {
     });
   };
 
-  
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
+    const legajoLimpio = formData.legajo.trim();
+
+    // 1. Validar campos obligatorios
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
-      !formData.email.trim() ||
+      !legajoLimpio ||
       !formData.password
     ) {
       showErrorWithTimeout("Por favor, completa todos los campos requeridos.");
       return;
     }
 
-   
-    const emailLowerCase = formData.email.toLowerCase().trim();
-    if (!emailLowerCase.endsWith("@unlpam.edu.ar")) {
-      showErrorWithTimeout("El correo es invalido");
+    // 2. Validar exactamente 4 números para el legajo
+    const legajoRegex = /^\d{4}$/;
+    if (!legajoRegex.test(legajoLimpio)) {
+      showErrorWithTimeout("El legajo debe contener exactamente 4 números (ejemplo: 0012).");
       return;
     }
 
- 
-    setError("");
+    setLoading(true);
 
-   
-    const existingUsers = JSON.parse(localStorage.getItem("users_db")) || [];
+    try {
+      // Unificar Nombre y Apellido para la columna `nombre_completo` de MySQL
+      const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
 
-    
-    const userExists = existingUsers.some((u) => u.email === emailLowerCase);
-    if (userExists) {
-      showErrorWithTimeout("El correo ya se encuentra registrado.");
-      return;
+      // 3. Petición HTTP POST a la API REST de Node.js (puerto 8000)
+      const response = await fetch("http://localhost:8000/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          legajo: legajoLimpio,
+          contrasena: formData.password,
+          nombre_completo: nombreCompleto, // Envia el string concatenado
+          id_unidad: parseInt(formData.id_unidad),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && (data.status === 201 || data.status === 200)) {
+        setError("");
+        setSuccess("¡Cuenta creada con éxito en la base de datos! Redirigiendo al login...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        showErrorWithTimeout(data.mensaje || "El legajo ingresado ya se encuentra registrado.");
+      }
+    } catch (err) {
+      console.error("Error al conectar con la API:", err);
+      showErrorWithTimeout("No se pudo conectar con el servidor backend (puerto 8000).");
+    } finally {
+      setLoading(false);
     }
-
-    
-    const newUser = {
-      ...formData,
-      email: emailLowerCase,
-      role: "visitante",
-      id: Date.now(),
-    };
-
-    existingUsers.push(newUser);
-    localStorage.setItem("users_db", JSON.stringify(existingUsers));
-
-    setSuccess("¡Cuenta creada con éxito! Redirigiendo al inicio de sesión...");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
   };
 
   return (
@@ -103,7 +109,7 @@ function Register() {
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSubmit}>
-         
+          {/* Fila: Nombre y Apellido */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName">Nombre</label>
@@ -130,16 +136,22 @@ function Register() {
             </div>
           </div>
 
+          {/* Fila: Legajo y Contraseña */}
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email">Correo</label>
+              <label htmlFor="legajo">Legajo (4 números)</label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Correo"
+                type="text"
+                id="legajo"
+                name="legajo"
+                maxLength={4}
+                inputMode="numeric"
+                value={formData.legajo}
+                onChange={(e) => {
+                  const soloNumeros = e.target.value.replace(/\D/g, "");
+                  setFormData({ ...formData, legajo: soloNumeros });
+                }}
+                placeholder="0012"
               />
             </div>
 
@@ -151,13 +163,41 @@ function Register() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder=""
+                placeholder="••••••••"
               />
             </div>
           </div>
 
-          <button type="submit" className="btn-primary">
-            Crear Cuenta
+          {/* Selección por Radio Buttons de la Unidad Académica */}
+          <div className="form-group">
+            <label className="radio-group-title">Seleccione la Unidad Académica:</label>
+            <div className="radio-options">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="id_unidad"
+                  value="1"
+                  checked={formData.id_unidad === "1"}
+                  onChange={handleChange}
+                />
+                <span>Facultad de Ingeniería</span>
+              </label>
+
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="id_unidad"
+                  value="2"
+                  checked={formData.id_unidad === "2"}
+                  onChange={handleChange}
+                />
+                <span>Rectorado</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Guardando en BD..." : "Crear Cuenta"}
           </button>
         </form>
 
