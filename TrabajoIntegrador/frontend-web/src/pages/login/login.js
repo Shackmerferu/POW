@@ -3,12 +3,16 @@ import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import logo from "../../logo.png";
 
+const API_URL = "http://localhost:3000/api";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -16,9 +20,31 @@ function Login() {
       return;
     }
 
+    setCargando(true);
     setError("");
-    console.log("Enviando datos al servidor:", { email, password });
-    alert("¡Inicio de sesión registrado!");
+
+    try {
+      const res = await fetch(`${API_URL}/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ legajo: email, contrasena: password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        // Guardamos la sesión en localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        navigate("/convenios");
+      } else {
+        setError(data.mensaje || "Credenciales incorrectas.");
+      }
+    } catch (err) {
+      setError("No se pudo conectar con el servidor. ¿Está corriendo el backend?");
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -53,8 +79,8 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="btn-primary">
-            Iniciar Sesión
+          <button type="submit" className="btn-primary" disabled={cargando}>
+            {cargando ? "Iniciando..." : "Iniciar Sesión"}
           </button>
         </form>
         <p className="redirect-text">

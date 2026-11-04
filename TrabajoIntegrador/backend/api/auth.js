@@ -4,6 +4,18 @@ const router = express.Router();
 // Recibimos la conexión a la base de datos (se la pasamos desde index.js)
 module.exports = (db) => {
     
+    // Endpoint GET /api/auth/verify
+    // Sirve para que el frontend valide si el token guardado sigue siendo válido
+    router.get('/verify', (req, res) => {
+        const token = (req.headers.authorization || '').replace('Bearer ', '');
+
+        if (token && token === 'token-secreto-unlpam-12345') {
+            return res.json({ status: 200, mensaje: "Sesión válida" });
+        }
+
+        res.status(401).json({ status: 401, mensaje: "Sesión inválida o expirada" });
+    });
+
     // Endpoint POST /api/auth
     router.post('/', (req, res) => {
         const { legajo, contrasena } = req.body;
