@@ -91,6 +91,7 @@
 
 .brand {
   display: flex;
+  justify-content: space-between;
   flex: 1;
   align-items: center;
   gap: 24px;
@@ -122,18 +123,7 @@
   line-height: normal;
   text-align: center;
   white-space: nowrap;
-}
-
-.brand__pill {
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: #0088ff;
-  color: #fff;
-  font-family: "Open Sans:Bold", "Open Sans", sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: normal;
-  font-variation-settings: "wdth" 100;
+  color: #1f4f99;
 }
 
 .navigation {
@@ -524,4 +514,68 @@
     margin-top: 48px;
     padding-left: 20px;
   }
+}
+
+.no-contenido {
+  display: flex;
+  flex-direction: row;
+}
+
+.no-contenido p {
+  margin: auto;
+  padding-left: 5%;
+}
+
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-dropdown-container .dropdown-menu {
+  position: absolute;
+  right: 0;
+  left: auto;
+  z-index: 1050;
+  min-width: 12rem;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.profile-dropdown-container .dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: #212529;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.profile-dropdown-container .dropdown-item:hover,
+.profile-dropdown-container .dropdown-item:focus {
+  color: #1e2125;
+  background-color: #f8f9fa;
+}
+
+.profile-dropdown-container .dropdown-item-text {
+  display: block;
+  padding: 0.25rem 1rem;
+  color: #6c757d;
+}
+
+.profile-dropdown-container .dropdown-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #dee2e6;
+}
+
+.top-navigation .navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
