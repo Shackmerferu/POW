@@ -1,6 +1,6 @@
 import "./convenios.css";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
 import persona from "../../cosas/imagenes/persona.png";
@@ -23,6 +23,7 @@ export default function App() {
   function limpiarSesion() {
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
+    localStorage.removeItem("active_user");
   }
 
   function handleLogout() {
@@ -76,7 +77,7 @@ export default function App() {
             src={logoFacultad}
             alt="Facultad de Ingeniería"
           />
-          <p className="brand__title">SISTEMA CONVENIOS - UNLPAM </p>
+          <p className="brand__title">SISTEMA CONVENIOS</p>
 
           <nav className="navigation" aria-label="Navegación principal">
 
@@ -87,9 +88,17 @@ export default function App() {
               </button>
               <ul class="dropdown-menu" >
                 <li><h6 class="dropdown-header">Menu</h6></li>
-                <li><a class="dropdown-item" href="#">Configuracion</a></li>
-                <li><a class="dropdown-item active" href="#">Panel Administrativo</a></li>
-                <li><a class="dropdown-item" href="#">Enlace separado</a></li>
+                <li><a class="dropdown-item" href="/config">Configuracion</a></li>
+                <li><a class="dropdown-item active" href="/dashboard">Panel Administrativo</a></li>
+                <li>
+                  <button
+                    className="dropdown-item logout-button"
+                    type="button"
+                    onClick={handleLogout}
+                  >
+                    Cerrar sesión
+                  </button>
+                </li>
               </ul>
             </div>
           </nav>
