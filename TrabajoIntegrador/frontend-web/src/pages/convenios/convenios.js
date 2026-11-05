@@ -126,6 +126,38 @@ export default function App() {
                     type="text"
                     placeholder={filter.placeholder}
                     className="form-control"
+                   inputMode={
+                      filter.id === "anio" || filter.id === "numero"
+                        ? "numeric"
+                        : undefined
+                    }
+                    maxLength={
+                      filter.id === "anio" ? 4 : filter.id === "numero" ? 10 : undefined
+                    }
+                    pattern={
+                      filter.id === "anio"
+                        ? "[0-9]{4}"
+                        : filter.id === "numero"
+                          ? "[0-9]{1,10}"
+                          : undefined
+                    }
+                    title={
+                      filter.id === "anio"
+                        ? "Ingresá el año con 4 números"
+                        : filter.id === "numero"
+                          ? "Ingresá hasta 10 dígitos para el número de convenio"
+                          : undefined
+                    }
+                    onChange={
+                      filter.id === "anio" || filter.id === "numero"
+                        ? (event) => {
+                            const limite = filter.id === "anio" ? 4 : 10;
+                            event.target.value = event.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, limite);
+                          }
+                        : undefined
+                    }
                   />
                 </label>
               ))}
