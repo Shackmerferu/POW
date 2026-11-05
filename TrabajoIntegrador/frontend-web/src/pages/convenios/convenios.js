@@ -87,8 +87,8 @@ export default function App() {
               </button>
               <ul class="dropdown-menu" >
                 <li><h6 class="dropdown-header">Menu</h6></li>
-                <li><a class="dropdown-item" href="#">Acción principal</a></li>
-                <li><a class="dropdown-item active" href="#">Ítem activo</a></li>
+                <li><a class="dropdown-item" href="#">Configuracion</a></li>
+                <li><a class="dropdown-item active" href="#">Panel Administrativo</a></li>
                 <li><a class="dropdown-item" href="#">Enlace separado</a></li>
               </ul>
             </div>
