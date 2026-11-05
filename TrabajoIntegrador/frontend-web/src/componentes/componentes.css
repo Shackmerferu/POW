@@ -1,0 +1,784 @@
+/* ==========================================================================
+   COMPONENTES REUTILIZABLES DEL PANEL
+   Paleta: azul institucional #1f4f99; superficies blancas; grays neutros.
+   Sin amarillos; sin rojos/verdes semafóricos para estados.
+   Shape: cuadrados y rectas (radio 4px, 0 sombras suaves pesadas).
+   ========================================================================== */
+
+/* --- Etiquetas (estado / tipo / rol): pastillas neutras ------------------- */
+.etiqueta {
+  display: inline-block;
+  border: 1px solid #d7dce3;
+  border-radius: 3px;
+  background-color: #f3f5f7;
+  color: #2c3441;
+  font-size: 0.7rem;
+  padding: 0.18rem 0.6rem 0.2rem;
+  white-space: nowrap;
+}
+
+.etiqueta--tipo {
+  color: #1f4f99;
+  background-color: #eef2f8;
+  border-color: #cdd8e9;
+}
+
+.etiqueta--rol {
+  color: #1f4f99;
+  background-color: #f3f5f7;
+  border-color: #d7dce3;
+  font-weight: 600;
+}
+
+/* --- Tarjeta dato (métricas) ---------------------------------------------- */
+.tarjeta-dato {
+  display: block;
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.8rem 0.95rem 0.75rem;
+}
+
+.tarjeta-dato__titulo {
+  color: #64707d;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.tarjeta-dato__cantidad {
+  color: #1f4f99;
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin: 0.3rem 0 0.15rem;
+}
+
+.tarjeta-dato__detalle {
+  color: #7a838f;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+/* --- Bloque distribución -------------------------------------------------- */
+.bloque-distribucion {
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.85rem 0.95rem;
+}
+
+.bloque-distribucion__titulo {
+  color: #1f4f99;
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+}
+
+.bloque-distribucion__vacio {
+  color: #96a0ac;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.bloque-distribucion__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bloque-distribucion__franja {
+  display: grid;
+  grid-template-columns: minmax(86px, 190px) 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #33404e;
+}
+
+.bloque-distribucion__item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bloque-distribucion__pista {
+  display: block;
+  height: 10px;
+  background-color: #eef1f5;
+  overflow: hidden;
+}
+
+.bloque-distribucion__barra {
+  display: block;
+  height: 100%;
+  background: #1f4f99;
+}
+
+.bloque-distribucion__cantidad {
+  min-width: 1.6rem;
+  text-align: right;
+  color: #1f4f99;
+  font-weight: 600;
+}
+
+/* --- Datos vacíos --------------------------------------------------------- */
+.datos-vacios {
+  border: 1px dashed #ccd4dc;
+  background-color: #f7f8fa;
+  color: #77818c;
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 1.4rem 1rem;
+}
+
+/* --- Tabla ---------------------------------------------------------------- */
+.tabla-envoltura {
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #25313e;
+}
+
+.tabla thead th {
+  background-color: #eef2f8;
+  color: #1f4f99;
+  text-align: left;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #d6dde7;
+  padding: 0.62rem 0.75rem;
+  white-space: nowrap;
+}
+
+.tabla tbody td {
+  border-bottom: 1px solid #eef1f4;
+  padding: 0.55rem 0.75rem;
+  vertical-align: middle;
+}
+
+.tabla tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.tabla__celda-principal {
+  font-weight: 600;
+  color: #1f4f99;
+}
+
+.tabla__celda-neutra {
+  color: #64707d;
+}
+
+.tabla__accion {
+  border: 1px solid #1f4f99;
+  background: #fff;
+  color: #1f4f99;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.tabla__accion:hover {
+  background: #eef2f8;
+}
+
+/* --- Paginación ------------------------------------------------------------ */
+.paginacion {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-content: flex-end;
+  margin-top: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.paginacion__pagina,
+.paginacion__flecha {
+  border: 1px solid #dbe0e6;
+  background: #fff;
+  color: #3a4653;
+  min-width: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.paginacion__flecha:disabled {
+  color: #aeb6c0;
+  cursor: default;
+}
+
+.paginacion__pagina--activa {
+  background-color: #dbe7f4; /* azul claro sutil sobre el blanco */
+  border-color: #1f4f99;
+  color: #1f4f99;
+  font-weight: 700;
+}
+
+/* --- Filtro búsqueda ------------------------------------------------------- */
+.filtro-busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.75rem;
+  align-items: flex-end;
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.8rem 0.95rem;
+  margin-bottom: 0.9rem;
+}
+
+.filtro-busqueda__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filtro-busqueda__campo--texto {
+  flex: 1 1 240px;
+}
+
+.filtro-busqueda__campo > span {
+  font-size: 0.72rem;
+  color: #64707d;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.filtro-busqueda__campo input,
+.filtro-busqueda__campo select {
+  font: inherit;
+  font-size: 0.85rem;
+  color: #25313e;
+  border: 1px solid #ccd4dc;
+  border-radius: 3px;
+  padding: 0.36rem 0.5rem;
+  background: #fff;
+  min-width: 9.5rem;
+}
+
+.filtro-busqueda__campo input:focus,
+.filtro-busqueda__campo select:focus {
+  outline: 2px solid rgba(31, 79, 153, 0.35);
+  outline-offset: 0;
+}
+
+/* --- Botones generales ------------------------------------------------------ */
+.btn-panel {
+  font: inherit;
+  font-size: 0.82rem;
+  border: 1px solid #1f4f99;
+  background-color: #1f4f99;
+  color: #fff;
+  border-radius: 3px;
+  padding: 0.42rem 0.85rem;
+  cursor: pointer;
+}
+
+.btn-panel:hover:enabled {
+  background-color: #1a4280;
+}
+
+.btn-panel--neutro {
+  background-color: #fff;
+  color: #1f4f99;
+}
+
+.btn-panel--neutro:hover:enabled {
+  background-color: #eef2f8;
+}
+
+.btn-panel:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.boton-exportar {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+/* --- Vista previa del documento ----------------------------------------- */
+.vista-previa {
+  border: 1px solid #dfe4ea;
+  background-color: #f8fafc;
+  padding: 0.7rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.vista-previa__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.vista-previa__tipo {
+  color: #64707d;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.vista-previa__nombre {
+  color: #1f4f99;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 0.1rem 0 0.1rem;
+}
+
+.vista-previa__meta {
+  color: #7a838f;
+  font-size: 0.74rem;
+  margin: 0;
+}
+
+.vista-previa__marco {
+  height: 260px;
+  border: 1px solid #dfe4ea;
+  background-color: #f1f3f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.vista-previa__iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Hoja simulada (cuando no hay URL real qué incrustar) */
+.vista-previa__hoja {
+  width: min(280px, 80%);
+  height: 84%;
+  background-color: #fff;
+  border: 1px solid #dfe4ea;
+  padding: 1rem 0.9rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.vista-previa__linea {
+  display: block;
+  height: 6px;
+  background-color: #eef1f5;
+  width: 80%;
+}
+
+.vista-previa__linea--titulo {
+  width: 55%;
+  background-color: #cdd8e9;
+}
+
+.vista-previa__linea--firma {
+  margin-top: auto;
+  width: 40%;
+}
+
+.vista-previa__band {
+  color: #93a0ad;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0.4rem 0 0;
+}
+
+.vista-previa__vacio {
+  color: #9aa4af;
+  font-size: 0.82rem;
+}
+
+.vista-previa__aviso {
+  background-color: #eef2f8;
+  border: 1px solid #cdd8e9;
+  color: #1f4f99;
+  font-size: 0.78rem;
+  padding: 0.5rem 0.65rem;
+  margin: 0;
+}
+
+.vista-previa__nota {
+  color: #93a0ad;
+  font-size: 0.72rem;
+  margin: 0;
+}
+
+/* --- Menú de acciones (dropdown puro, sin Bootstrap) --------------------- */
+.menu-acciones {
+  position: relative;
+}
+
+.menu-acciones__toggle {
+  font: inherit;
+  font-size: 0.8rem;
+  border: 1px solid #1f4f99;
+  background-color: #1f4f99;
+  color: #fff;
+  border-radius: 3px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.menu-acciones__toggle:hover:enabled {
+  background-color: #1a4280;
+}
+
+.menu-acciones__toggle:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.menu-acciones__lista {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 210px;
+  background-color: #fff;
+  border: 1px solid #d6dde7;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  z-index: 30;
+}
+
+.menu-acciones__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  color: #25313e;
+  padding: 0.42rem 0.75rem;
+  cursor: pointer;
+}
+
+.menu-acciones__item:hover {
+  background-color: #eef2f8;
+  color: #1f4f99;
+}
+
+/* Línea divisoria sutil antes de la acción de cierre (aprobar/rechazar) */
+.menu-acciones__item--separador {
+  border-top: 1px solid #eef1f4;
+}
+
+/* Fila del documento actualmente en vista previa */
+.ficha__documento--seleccionado {
+  background-color: #eef2f8;
+}
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 34, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.4rem 1rem;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.modal-ficha {
+  width: min(760px, 100%);
+  background: #fff;
+  border: 1px solid #d6dde7;
+}
+
+.modal-ficha__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.15rem 0.85rem;
+  border-bottom: 1px solid #e6eaee;
+}
+
+.modal-ficha__cabecera h2 {
+  color: #1f4f99;
+  font-size: 1.02rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.modal-ficha__cerrar {
+  border: 1px solid #d6dde7;
+  background: #fff;
+  color: #4a5560;
+  border-radius: 3px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.modal-ficha__cuerpo {
+  padding: 0.95rem 1.15rem 1.2rem;
+}
+
+.ficha__encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.ficha__codigo {
+  color: #64707d;
+  font-size: 0.78rem;
+  margin-left: auto;
+}
+
+.ficha__datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 1rem;
+  margin: 0 0 0.85rem;
+}
+
+.ficha__datos > div {
+  border: 1px solid #eef1f4;
+  background-color: #fafbfc;
+  padding: 0.4rem 0.6rem;
+}
+
+.ficha__datos dt {
+  color: #7a838f;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ficha__datos dd {
+  color: #25313e;
+  font-size: 0.82rem;
+  margin: 0.15rem 0 0;
+  line-height: 1.45;
+}
+
+.ficha__seccion {
+  color: #1f4f99;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0.8rem 0 0.35rem;
+}
+
+.ficha__texto {
+  color: #33404e;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ficha__partes,
+.ficha__documentos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ficha__partes li {
+  border: 1px solid #eef1f4;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.82rem;
+  color: #25313e;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  align-items: baseline;
+}
+
+.ficha__partes span {
+  color: #64707d;
+  font-size: 0.78rem;
+}
+
+.ficha__documentos li {
+  display: flex;
+  gap: 0.65rem;
+  align-items: baseline;
+  border-bottom: 1px solid #f0f2f5;
+  padding: 0.35rem 0.1rem;
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.ficha__documentos li:last-child {
+  border-bottom: none;
+}
+
+.ficha__documento-tipo {
+  color: #1f4f99;
+  font-weight: 600;
+  min-width: 6.5rem;
+}
+
+.ficha__documento-nombre {
+  color: #25313e;
+  flex: 1;
+}
+
+.ficha__documento-fecha {
+  color: #7a838f;
+  white-space: nowrap;
+}
+
+/* --- Menu lateral ------------------------------------------------------------ */
+.menu-lateral {
+  width: 224px;
+  min-height: 100vh;
+  background-color: #fff;
+  border-right: 1px solid #e0e5ea;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+}
+
+.menu-lateral__sup {
+  padding: 1rem 1rem 0.9rem;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.menu-lateral__marca {
+  color: #1f4f99;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.menu-lateral__marca-sub {
+  color: #7a838f;
+  font-size: 0.75rem;
+  margin: 0.15rem 0 0;
+}
+
+.menu-lateral__nav ul {
+  list-style: none;
+  margin: 0.6rem 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.menu-lateral__inciso {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: #33404e;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.menu-lateral__inciso:hover {
+  background-color: #f4f6f9;
+}
+
+/* RESALTADO ACTIVO: tono sutil y claro derivado del #1f4f99,
+   mas evidente que el hover pero sin contrastar la lectura. */
+.menu-lateral__inciso--activo {
+  background-color: rgba(31, 79, 153, 0.1);
+  color: #1f4f99;
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #1f4f99;
+}
+
+.menu-lateral__icono {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: inline-flex;
+  flex: none;
+}
+
+.menu-lateral__icono svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  opacity: 0.85;
+}
+
+.menu-lateral__pie {
+  margin-top: auto;
+  border-top: 1px solid #eef1f4;
+  padding: 0.9rem 1rem 1.1rem;
+}
+
+.menu-lateral__usuario-nombre {
+  color: #25313e;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.menu-lateral__usuario-dato {
+  color: #7a838f;
+  font-size: 0.74rem;
+  margin: 0.1rem 0 0.6rem;
+}
+
+.menu-lateral__salir {
+  width: 100%;
+  font: inherit;
+  font-size: 0.8rem;
+  border: 1px solid #d6dde7;
+  background: #fff;
+  color: #33404e;
+  border-radius: 3px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.menu-lateral__salir:hover {
+  border-color: #1f4f99;
+  color: #1f4f99;
+}
+
+/* --- Responsivo -------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .ficha__datos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .menu-lateral {
+    width: 64px;
+  }
+
+  .menu-lateral__sup,
+  .menu-lateral__pie,
+  .menu-lateral__inciso span:last-child {
+    display: none;
+  }
+
+  .menu-lateral__inciso {
+    justify-content: center;
+    padding: 0.65rem 0;
+  }
+}

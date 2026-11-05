@@ -1,0 +1,104 @@
+/* ==========================================================================
+   HEADER GENERAL — barra navegacional compartida entre las páginas.
+   Es sticky para que el usuario siempre tenga a mano el cambio de pestaña
+   (Convenios · Panel de gestión) y su perfil.
+   ========================================================================== */
+
+.header-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 56px;
+  padding: 0.4rem 1.25rem;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e5ea;
+}
+
+.header-bar__marca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.header-bar__logo {
+  width: 30px;
+  height: auto;
+}
+
+.header-bar__marca span {
+  color: #1f4f99;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* Accesos directos entre pestañas generales */
+.header-bar__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.header-bar__link {
+  color: #33404e;
+  font-size: 0.85rem;
+  text-decoration: none;
+  border-radius: 3px;
+  padding: 0.35rem 0.7rem;
+}
+
+.header-bar__link:hover {
+  background-color: #f4f6f9;
+}
+
+/* Pestaña activa: resaltado sutil y claro derivado de #1f4f99,
+   exactamente el mismo tono que usa el menú lateral */
+.header-bar__link--activo {
+  background-color: rgba(31, 79, 153, 0.1);
+  color: #1f4f99;
+  font-weight: 700;
+}
+
+/* Perfil a la derecha */
+.header-bar__perfil-zona {
+  margin-left: auto;
+}
+
+.header-bar__perfil {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #33404e;
+  background-color: #fff;
+  border: 1px solid #d7dce3;
+  border-radius: 3px;
+  padding: 0.32rem 0.7rem;
+}
+
+.header-bar__perfil:hover {
+  border-color: #1f4f99;
+  color: #1f4f99;
+}
+
+.header-bar__persona {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .header-bar {
+    gap: 0.6rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .header-bar__marca span {
+    display: none;
+  }
+}
