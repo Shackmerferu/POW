@@ -1,46 +1,50 @@
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import "./convenios.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
-import iconopersona from "../../cosas/imagenes/persona.png";
-const assetPath = "../../src/cosas/imagenes"
+import persona from "../../cosas/imagenes/persona.png";
 
-const API_URL = "http://localhost:3000/api"
+const API_URL = "http://localhost:3000/api";
 
 const filters = [
   { id: "nombre", label: "Nombre", placeholder: "Convenio Facultad" },
   { id: "numero", label: "Número", placeholder: "103  " },
   { id: "anio", label: "Año", placeholder: "2024" },
   { id: "tipo", label: "Tipo", placeholder: "Convenio" },
-]
+];
 
-const options = ["Opcion A", "Opcion B", "Opcion C", "Opcion D"]
-
-
+const options = ["Opcion A", "Opcion B", "Opcion C", "Opcion D"];
 
 export default function App() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [usuario, setUsuario] = useState(null);
 
   function limpiarSesion() {
-    localStorage.removeItem("token")
-    localStorage.removeItem("usuario")
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
   }
 
   function handleLogout() {
-    limpiarSesion()
-    navigate("/login", { replace: true })
+    limpiarSesion();
+    navigate("/login", { replace: true });
   }
 
-  // Handling del login: al montar la página verificamos la sesión con la API.
-  // Si no hay token guardado o la API lo rechaza, volvemos al login.
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("usuario");
+
+    if (storedUser) {
+      try {
+        setUsuario(JSON.parse(storedUser));
+      } catch (e) {
+        // Ignorar error de parseo
+      }
+    }
 
     if (!token) {
-      navigate("/login", { replace: true })
-      return
+      navigate("/login", { replace: true });
+      return;
     }
 
     fetch(`${API_URL}/auth/verify`, {
@@ -48,43 +52,49 @@ export default function App() {
     })
       .then((res) => {
         if (!res.ok) {
-          // Token inválido (401): cerramos sesión y volvemos al login
-          limpiarSesion()
-          navigate("/login", { replace: true })
+          limpiarSesion();
+          navigate("/login", { replace: true });
         }
       })
       .catch(() => {
-        // Si la API no responde (servidor apagado) no forzamos el logout,
-        // pero mostramos el aviso en la consola
-        console.warn("No se pudo verificar la sesión: la API no está disponible")
-      })
-  }, [navigate])
+        console.warn(
+          "No se pudo verificar la sesión: la API no está disponible",
+        );
+      });
+  }, [navigate]);
 
   function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
   }
 
   return (
     <main className="app-shell">
       <header className="top-navigation">
         <div className="brand">
-          <img className="brand__logo" src={logoFacultad} alt="Facultad de Ingeniería" />
-          <p className="brand__title">Sistema de gestión de convenios</p>
-          <span className="brand__pill">CONVENIOS</span>
-        </div>
+          <img
+            className="brand__logo"
+            src={logoFacultad}
+            alt="Facultad de Ingeniería"
+          />
+          <p className="brand__title">SISTEMA CONVENIOS - UNLPAM </p>
 
-        <nav className="navigation" aria-label="Navegación principal">
-          <Link to="/convenios">Inicio</Link>
-          <Link to="/dashboard">Panel</Link>
-          <Link className="profile" to="/perfil">
-             <img src={iconopersona} alt="Flecha indicativa Label" />
-            <span>Mi Perfil</span>
-          </Link>
-          <button type="button" className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
-            Cerrar sesión
-          </button>
-        </nav>
-      </header>
+          <nav className="navigation" aria-label="Navegación principal">
+
+            <div class="dropdown flex-direction-row ">
+               
+              <button class="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src={persona} className="pe-2" alt="Flecha indicativa Label" /> Mi Perfil
+              </button>
+              <ul class="dropdown-menu" >
+                <li><h6 class="dropdown-header">Menu</h6></li>
+                <li><a class="dropdown-item" href="#">Acción principal</a></li>
+                <li><a class="dropdown-item active" href="#">Ítem activo</a></li>
+                <li><a class="dropdown-item" href="#">Enlace separado</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div >
+      </header >
 
       <section className="search-section" id="inicio">
         <div className="search-header">
@@ -98,14 +108,9 @@ export default function App() {
         <div className="search-layout">
           <form className="search-form" onSubmit={handleSubmit}>
             <div className="fields">
-              {filters.map((filter, index) => (
+              {filters.map((filter) => (
                 <label className="field" key={filter.id}>
-                  <span className={index === 0 ? "name-label" : undefined}>
-                    {index === 0 && (
-                      <img src={flechalabel} alt="Flecha indicativa Label" />
-                    )}
-                    {filter.label}
-                  </span>
+                  <span className="name-label">{filter.label}</span>
                   <input
                     id={filter.id}
                     name={filter.id}
@@ -130,17 +135,22 @@ export default function App() {
               ))}
             </fieldset>
 
-            <button className="btn btn-primary" type="submit">Buscar</button>
+            <button className="btn btn-primary" type="submit">
+              Buscar
+            </button>
           </form>
 
           <div className="results" aria-live="polite">
             <div className="vertical-line"></div>
             <div className="contenido-dinamico">
-              <p>No hay resultados que mostrar, Intente nuevamente</p>
+              <div className="no-contenido">
+                <img src={flechalabel} alt="Flecha indicativa Label" />
+                <p>No hay resultados que mostrar, Intente nuevamente</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
-    </main>
-  )
+    </main >
+  );
 }
