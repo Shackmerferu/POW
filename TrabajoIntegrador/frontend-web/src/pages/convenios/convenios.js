@@ -74,7 +74,7 @@ export default function App() {
         </div>
 
         <nav className="navigation" aria-label="Navegación principal">
-          <Link to="/">Inicio</Link>
+          <Link to="/convenios">Inicio</Link>
           <Link to="/dashboard">Panel</Link>
           <Link className="profile" to="/perfil">
              <img src={iconopersona} alt="Flecha indicativa Label" />
