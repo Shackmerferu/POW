@@ -6,9 +6,9 @@ const router = express.Router();
 // 2. EXPORTACIÓN RECIBIENDO LA CONEXIÓN DB DE MYSQL
 module.exports = (db) => {
 
-    // =========================================================================
+  
     // ENDPOINT 1: OBTENER TODOS LOS USUARIOS (GET /api/usuarios)
-    // =========================================================================
+
     router.get('/', (req, res) => {
         const query = 'SELECT id, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
 
@@ -29,9 +29,9 @@ module.exports = (db) => {
         });
     });
 
-    // =========================================================================
+   
     // ENDPOINT 2: REGISTRAR UN NUEVO USUARIO (POST /api/usuarios)
-    // =========================================================================
+  
     router.post('/', (req, res) => {
         const { legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
 
@@ -103,6 +103,53 @@ module.exports = (db) => {
                         id_unidad: unidadId
                     }
                 });
+            });
+        });
+    });
+
+
+    
+    // ENDPOINT 3: MODIFICAR ROL Y UNIDAD DE UN USUARIO (PUT /api/usuarios/:id)
+
+    router.put('/:id', (req, res) => {
+        const idUsuario = req.params.id; // Agarramos el ID que viene en la URL
+        const { rol, id_unidad, activo } = req.body; // Agarramos los datos que mandan para cambiar
+
+        // Exigimos que al menos manden un rol para actualizar
+        if (!rol) {
+            return res.status(400).json({ status: 400, mensaje: "El campo 'rol' es obligatorio para la actualización." });
+        }
+
+        // Si no mandan el estado "activo", asumimos que sigue siendo 1 (activo)
+        const estadoActivo = activo !== undefined ? activo : 1;
+        const unidadId = id_unidad ? parseInt(id_unidad) : null;
+
+        const updateQuery = `
+            UPDATE usuarios 
+            SET rol = ?, id_unidad = ?, activo = ? 
+            WHERE id = ?
+        `;
+
+        db.query(updateQuery, [rol, unidadId, estadoActivo, idUsuario], (error, resultados) => {
+            if (error) {
+                console.error("Error actualizando usuario en MySQL:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error interno al actualizar el usuario." });
+            }
+
+            // affectedRows nos dice si MySQL encontró y modificó esa fila
+            if (resultados.affectedRows === 0) {
+                return res.status(404).json({ status: 404, mensaje: "No se encontró ningún usuario con ese ID." });
+            }
+
+            res.json({
+                status: 200,
+                mensaje: "¡Usuario actualizado correctamente!",
+                datosActualizados: {
+                    id: idUsuario,
+                    rol: rol,
+                    id_unidad: unidadId,
+                    activo: estadoActivo
+                }
             });
         });
     });
