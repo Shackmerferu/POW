@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Estilos Personalizados - Sistema de Convenios UNLPam
+   ========================================================================== */
+
+:root {
+    --color-unlpam-primary: #1a365d;    /* Azul institucional oscuro */
+    --color-unlpam-secondary: #2b6cb0;  /* Azul de interacción */
+    --color-unlpam-hover: #1d4ed8;      /* Azul claro para focus/hover */
+    --color-danger-hover: #dc3545;      /* Rojo para cerrar sesión */
+}
+
+/* Tipografía y estilos base */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #334155;
+}
+
+/* Colores de texto institucionales */
+.text-unlpam {
+    color: var(--color-unlpam-primary) !important;
+}
+
+/* Botones principales */
+.btn-unlpam {
+    background-color: var(--color-unlpam-secondary);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-unlpam:hover {
+    background-color: var(--color-unlpam-primary);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Botón outline para Mi Perfil */
+.btn-outline-custom {
+    color: var(--color-unlpam-primary);
+    border: 1.5px solid var(--color-unlpam-secondary);
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover, 
+.btn-outline-custom:focus,
+.show > .btn-outline-custom {
+    background-color: var(--color-unlpam-secondary);
+    color: #ffffff !important;
+}
+
+/* Inputs del Formulario */
+.custom-input {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-input:focus {
+    border-color: var(--color-unlpam-secondary);
+    box-shadow: 0 0 0 0.25rem rgba(43, 108, 176, 0.25);
+}
+
+/* Línea divisoria vertical */
+.divider-vertical {
+    width: 3px;
+    background-color: var(--color-unlpam-secondary);
+    min-height: 100%;
+    border-radius: 2px;
+}
+
+/* Hover Rojo para el botón de Cerrar Sesión */
+.text-logout {
+    color: #475569;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.text-logout:hover,
+.text-logout:focus {
+    background-color: #fee2e2 !important;
+    color: var(--color-danger-hover) !important;
+    font-weight: 600;
+}
+
+/* Estilos del Footer */
+.footer-unlpam {
+    background-color: var(--color-unlpam-primary);
+}
+
+.text-white-50 {
+    color: #94a3b8 !important;
+}
+
+.footer-unlpam a:hover {
+    color: #ffffff !important;
+    text-decoration: underline !important;
+}

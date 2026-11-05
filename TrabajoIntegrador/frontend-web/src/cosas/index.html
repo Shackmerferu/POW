@@ -1,185 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Facultad de Ingeniería</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
-    rel="stylesheet"
-  >
-
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/portada.css">
-  <link rel="stylesheet" href="css/inicio.css">
-  <link rel="stylesheet" href="css/sesion.css">
-  <link rel="stylesheet" href="css/consensos.css">
-  <link rel="stylesheet" href="css/busqueda.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Convenios - UNLPam</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="styles.css">
 </head>
+<body class="d-flex flex-column min-vh-100 bg-light">
 
-<body>
-  <!-- Este menú permite revisar las cinco pantallas. -->
-  <nav class="navegacion" aria-label="Pantallas del proyecto">
-    <a href="#portada">Portada</a>
-    <a href="#inicio">Ingreso</a>
-    <a href="#sesion">Iniciar sesión</a>
-    <a href="#consensos">Consensos</a>
-    <a href="#busqueda">Búsqueda</a>
-  </nav>
+    <!-- NAVBAR / ENCABEZADO -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
+        <div class="container-fluid px-4">
+            <!-- Logo Izquierda -->
+            <a class="navbar-brand d-flex align-items-center me-0" href="#">
+                <!-- Puedes cambiar src con la ruta de tu logo -->
+                <img src="logo.png" alt="Facultad de Ingeniería" height="45" class="d-inline-block align-text-top" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x45?text=FACULTAD+DE+INGENIERIA';">
+            </a>
 
-  <main>
-    <!-- Pantalla 1 -->
-    <section
-      id="portada"
-      class="pantalla"
-      aria-label="Portada de la Facultad de Ingeniería"
-    >
-      <img
-        class="logo"
-        src="imagenes/logo.png"
-        alt="Facultad de Ingeniería"
-        width="160"
-        height="210"
-      >
-      <footer class="pie">Grupo 3 | 2026 © Copyright</footer>
-    </section>
+            <!-- Título Centrado -->
+            <div class="mx-auto text-center">
+                <h2 class="h4 mb-0 fw-bold text-unlpam">Sistema de convenios</h2>
+            </div>
 
-    <!-- Pantalla 2 -->
-    <section id="inicio" class="pantalla" aria-label="Opciones de ingreso">
-      <img
-        class="logo"
-        src="imagenes/logo.png"
-        alt="Facultad de Ingeniería"
-        width="160"
-        height="210"
-      >
+            <!-- Botón Responsive Hamburguesa -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-      <div class="opciones-ingreso">
-        <a class="boton" href="#sesion">Iniciar sesion</a>
-        <a class="boton" href="#consensos">Ingresar como invitado</a>
-      </div>
+            <!-- Links y Perfil a la Derecha -->
+            <div class="collapse navbar-collapse flex-grow-0" id="navbarContent">
+                <ul class="navbar-nav align-items-center ms-auto gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3" href="#">Panel</a>
+                    </li>
+                    
+                    <!-- Menú Desplegable de Mi Perfil -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-outline-custom d-flex align-items-center gap-2 px-3 py-1 rounded-pill" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="fw-semibold">Mi Perfil</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2"></i>Ver Mi Perfil</a></li>
+                            <li><a class="dropdown-item py-2" href="#"><i class="bi bi-speedometer2 me-2"></i>Panel de Control</a></li>
+                            <li><a class="dropdown-item py-2" href="#"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item py-2 text-logout d-flex align-items-center" type="button">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                                </button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-      <footer class="pie">Grupo 3 | 2026 © Copyright</footer>
-    </section>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container-fluid px-4 py-4 flex-grow-1">
+        <!-- Encabezado de Sección -->
+        <div class="mb-4">
+            <h1 class="h3 fw-bold text-unlpam mb-1">Buscar convenios</h1>
+            <p class="text-muted small">Filtra por nombre, número, año y tipo para encontrar convenios rápidamente.</p>
+        </div>
 
-    <!-- Pantalla 3 -->
-    <section id="sesion" class="pantalla" aria-label="Inicio de sesión">
-      <img
-        class="logo"
-        src="imagenes/logo.png"
-        alt="Facultad de Ingeniería"
-        width="160"
-        height="210"
-      >
+        <!-- Seccion de Formulario y Resultados -->
+        <div class="row g-4">
+            <!-- Columna Formulario (Izquierda) -->
+            <div class="col-lg-4 col-md-5">
+                <form class="card card-body border-0 shadow-sm p-4 rounded-3">
+                    <!-- Campo Nombre -->
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label fw-bold text-secondary">Nombre</label>
+                        <input type="text" class="form-control custom-input" id="nombre" value="Convenio Facultad">
+                    </div>
 
-      <h1 class="bienvenida">
-        Bienvenido , por favor ingresa tus<br>
-        credenciales de usuario
-      </h1>
+                    <!-- Campo Número -->
+                    <div class="mb-3">
+                        <label for="numero" class="form-label fw-bold text-secondary">Número</label>
+                        <input type="text" class="form-control custom-input" id="numero" value="sasasasasasdadasdas">
+                    </div>
 
-      <form class="credenciales" id="form-sesion">
-        <label class="campo">
-          <span>Legajo</span>
-          <input
-            name="legajo"
-            type="text"
-            autocomplete="username"
-            required
-          >
-        </label>
+                    <!-- Campo Año -->
+                    <div class="mb-3">
+                        <label for="ano" class="form-label fw-bold text-secondary">Año</label>
+                        <input type="text" class="form-control custom-input" id="ano" value="asdasdasd">
+                    </div>
 
-        <label class="campo">
-          <span>Contraseña</span>
-          <input
-            name="contrasena"
-            type="password"
-            autocomplete="current-password"
-            required
-          >
-        </label>
-      </form>
+                    <!-- Campo Tipo -->
+                    <div class="mb-4">
+                        <label for="tipo" class="form-label fw-bold text-secondary">Tipo</label>
+                        <input type="text" class="form-control custom-input" id="tipo" value="fasdasdasdas">
+                    </div>
 
-      <div class="ayuda-sesion">
-        <p>
-          Problemas para iniciar sesion?
-          <!-- Agregar aquí la dirección de soporte real. -->
-          <span class="enlace">Click Aqui</span>
-        </p>
-        <!-- Agregar aquí la dirección de recuperación real. -->
-        <span class="enlace">Olvidaste tu contraseña?</span>
-      </div>
+                    <!-- Opciones Radio -->
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="opciones" id="opcA" checked>
+                                <label class="form-check-label fw-semibold" for="opcA">Opcion A</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="opciones" id="opcB">
+                                <label class="form-check-label fw-semibold" for="opcB">Opcion B</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="opciones" id="opcC">
+                                <label class="form-check-label fw-semibold" for="opcC">Opcion C</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="opciones" id="opcD">
+                                <label class="form-check-label fw-semibold" for="opcD">Opcion D</label>
+                            </div>
+                        </div>
+                    </div>
 
-      <!-- Presentación visual: requiere conectar la autenticación. -->
-      <button class="boton conectar" type="button">
-        Conectarse
-      </button>
+                    <!-- Boton Buscar -->
+                    <div>
+                        <button type="button" class="btn btn-unlpam px-4 py-2 fw-semibold w-auto">Buscar</button>
+                    </div>
+                </form>
+            </div>
 
-      <footer class="pie">Grupo 3 | 2026 © Copyright</footer>
-    </section>
+            <!-- Columna Separador y Mensaje (Derecha) -->
+            <div class="col-lg-8 col-md-7 d-flex">
+                <div class="divider-vertical me-3 d-none d-md-block"></div>
+                <div class="pt-2 d-flex align-items-start gap-2">
+                    <!-- Flecha Azul en el lado derecho de la linea vertical -->
+                    <i class="bi bi-caret-right-fill text-unlpam fs-4 lh-1"></i>
+                    <p class="fw-bold text-dark mb-0 pt-1">No hay resultados que mostrar, Intente nuevamente</p>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    <!-- Pantalla 4 -->
-    <section id="consensos" class="pantalla" aria-labelledby="titulo-consensos">
-      <header class="cabecera-consensos">
-        <h1 id="titulo-consensos">Concensos</h1>
-        <a
-          class="buscar"
-          href="#busqueda"
-          aria-label="Buscar consenso"
-        ></a>
-      </header>
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="footer-unlpam text-white mt-auto pt-4 pb-3">
+        <div class="container-fluid px-4">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Facultad de Ingeniería - UNLPam</h5>
+                    <p class="small text-light-50 mb-0">Sistema de Gestión de Convenios Institucionales Marcos, Específicos y Pasantías.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Enlaces Rápidos</h5>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Portal UNLPam</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Reglamento de Convenios</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Ayuda y Soporte Técnico</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Contacto</h5>
+                    <p class="small text-white-50 mb-1"><i class="bi bi-geo-alt me-2"></i>General Pico, La Pampa, Argentina</p>
+                    <p class="small text-white-50 mb-0"><i class="bi bi-envelope me-2"></i>convenios@ing.unlpam.edu.ar</p>
+                </div>
+            </div>
+            <hr class="border-secondary my-3">
+            <div class="text-center small text-white-50">
+                &copy; 2026 Universidad Nacional de La Pampa. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
 
-      <!-- Las seis tarjetas visibles están vacías en el diseño. -->
-      <div class="tarjetas" aria-label="Tarjetas sin contenido">
-        <div class="tarjeta"></div>
-        <div class="tarjeta"></div>
-        <div class="tarjeta"></div>
-        <div class="tarjeta"></div>
-        <div class="tarjeta"></div>
-        <div class="tarjeta"></div>
-      </div>
-
-      <footer class="pie">Grupo 3 | 2026 © Copyright</footer>
-    </section>
-
-    <!-- Pantalla 5 -->
-    <section id="busqueda" class="pantalla" aria-labelledby="titulo-busqueda">
-      <img
-        class="logo"
-        src="imagenes/logo.png"
-        alt="Facultad de Ingeniería"
-        width="50"
-        height="66"
-      >
-
-      <h1 id="titulo-busqueda">Busqueda Consenso</h1>
-
-      <div class="filtros" role="search" aria-label="Filtros de consenso">
-        <label class="campo">
-          <span>Nombre</span>
-          <input name="nombre" type="search">
-        </label>
-
-        <label class="campo">
-          <span>Numero</span>
-          <input name="numero" type="text" inputmode="numeric">
-        </label>
-
-        <label class="campo">
-          <span>Año</span>
-          <input name="anio" type="text" inputmode="numeric" maxlength="4">
-        </label>
-
-        <label class="campo">
-          <span>Tipo</span>
-          <input name="tipo" type="text">
-        </label>
-      </div>
-
-      <footer class="pie">Grupo 3 | 2026 © Copyright</footer>
-    </section>
-  </main>
+    <!-- Bootstrap 5.3 JS Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
