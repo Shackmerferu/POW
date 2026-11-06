@@ -37,26 +37,26 @@ module.exports = (db) => {
                 }
 
                 // 1. FABRICAMOS EL TOKEN (La "pulsera VIP")
-                const token = jwt.sign(
-                    { 
-                        id: usuario.id, 
-                        rol: usuario.rol, 
-                        id_unidad: usuario.id_unidad 
-                    },
-                    'EL_VIP', 
+            const token = jwt.sign(
+                { 
+                    id: usuario.id, 
+                    rol: usuario.rol, 
+                    id_unidad: usuario.id_unidad 
+                },
+                'EL_VIP', 
                     { expiresIn: '2h' } // El token vence en 2 horas por seguridad
-                );
+            );
 
                 // Por seguridad, eliminamos la contraseña encriptada del objeto antes de mandarlo al front
                 delete usuario.contrasena;
-
+          
                 // 2. DEVOLVEMOS EL TOKEN AL FRONTEND
-                res.json({
-                    status: 200,
-                    mensaje: "Login exitoso",
-                    usuario: usuario,
-                    token: token 
-                });
+            res.json({
+                status: 200,
+                mensaje: "Login exitoso",
+                usuario: usuario,
+                token: token 
+            });
 
             } catch (compareError) {
                 console.error("Error al comparar contraseñas:", compareError);
