@@ -5,6 +5,7 @@ import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
 import persona from "../../cosas/imagenes/persona.png";
 import menu from "../../cosas/imagenes/list.svg"
+import API_URL from "../config/config.js"
 
 const API_URL = "http://localhost:3000/api";
 
