@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
 import persona from "../../cosas/imagenes/persona.png";
+import menu from "../../cosas/imagenes/list.svg"
+import API_URL from "../config/config.js"
 
 const API_URL = "http://localhost:3000/api";
 
@@ -81,15 +83,16 @@ export default function App() {
 
           <nav className="navigation" aria-label="Navegación principal">
 
-            <div className="dropdown flex-direction-row">
-              <button className="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src={persona} className="pe-2" alt="Flecha indicativa Label" /> Mi Perfil
+            <div class="dropdown flex-direction-row ">
+               
+              <button class="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src={menu} className="pe-2" alt="Flecha indicativa Label" /> Menu
               </button>
-              <ul className="dropdown-menu">
-                <li><h6 className="dropdown-header">Menu</h6></li>
-                <li><a className="dropdown-item" href="/config">Configuracion</a></li>
-                <li><a className="dropdown-item active" href="/dashboard">Panel Administrativo</a></li>
-                <li><hr className="dropdown-divider" /></li>
+              <ul class="dropdown-menu" >
+                <li><h6 class="dropdown-header">Menu</h6></li>
+                <li><a class="dropdown-item" href="/convenios">Busqueda</a></li>
+                <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
+                <li><a className="dropdown-item" href="/config">Configuración</a></li>
                 <li>
                   <button
                     className="dropdown-item logout-button"
