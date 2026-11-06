@@ -6,7 +6,7 @@ import logo from "../../logo.png";
 const API_URL = "http://localhost:3000/api";
 
 function Login() {
-  const [legajo, setLegajo] = useState("");
+  const [dni, setDni] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,10 +21,15 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const legajoLimpio = legajo.trim();
+    const dniLimpio = dni.trim();
 
-    if (!legajoLimpio || !password) {
-      showErrorWithTimeout("Por favor, ingresa tu legajo y contraseña.");
+    if (!dniLimpio || !password) {
+      showErrorWithTimeout("Por favor, ingresa tu DNI y contraseña.");
+      return;
+    }
+
+    if (!/^\d{7,8}$/.test(dniLimpio)) {
+      showErrorWithTimeout("El DNI debe contener 7 u 8 dígitos numéricos.");
       return;
     }
 
@@ -36,7 +41,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ legajo: legajoLimpio, contrasena: password }),
+        body: JSON.stringify({ dni: dniLimpio, contrasena: password }),
       });
 
       const data = await response.json();
@@ -64,21 +69,26 @@ function Login() {
       <div className="login-card">
         <img src={logo} alt="Logo institucional" className="login-logo" />
         <h2>Sistema de Convenios UNLPam</h2>
-        
+        <p className="login-subtitle">Ingrese sus credenciales institucionales</p>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="legajo">Legajo (4 números)</label>
+            <label htmlFor="dni">DNI</label>
             <input
               type="text"
-              id="legajo"
-              maxLength={4}
+              id="dni"
+              name="dni"
+              autoComplete="username"
               inputMode="numeric"
-              value={legajo}
-              onChange={(e) => setLegajo(e.target.value.replace(/\D/g, ""))}
-              placeholder="0012"
+              maxLength={8}
+              value={dni}
+              onChange={(e) => {
+                const soloNumeros = e.target.value.replace(/\D/g, "");
+                setDni(soloNumeros);
+              }}
+              placeholder="Ingrese su número de DNI"
             />
           </div>
 
@@ -94,7 +104,7 @@ function Login() {
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Cargando..." : "Iniciar Sesión"}
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
         </form>
 

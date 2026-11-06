@@ -11,7 +11,7 @@ module.exports = (db) => {
     // ENDPOINT 1: OBTENER TODOS LOS USUARIOS (GET /api/usuarios)
     // =========================================================================
     router.get('/', (req, res) => {
-        const query = 'SELECT id, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
+        const query = 'SELECT id, dni, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
 
         db.query(query, (error, resultados) => {
             if (error) {
@@ -34,18 +34,28 @@ module.exports = (db) => {
     // ENDPOINT 2: REGISTRAR UN NUEVO USUARIO (POST /api/usuarios)
     // =========================================================================
     router.post('/', (req, res) => {
-        const { legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
+        const { dni, legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
 
         // Validar que los campos obligatorios existan
-        if (!legajo || !contrasena || !nombre_completo) {
+        if (!dni || !legajo || !contrasena || !nombre_completo) {
             return res.status(400).json({ 
                 status: 400, 
-                mensaje: "Faltan datos obligatorios (legajo, contraseña y nombre completo)." 
+                mensaje: "Faltan datos obligatorios (DNI, legajo, contraseña y nombre completo)." 
             });
         }
 
         // Sanitización
+        const dniLimpio = String(dni).trim();
         const legajoLimpio = String(legajo).trim();
+
+        // VALIDACIÓN DE DNI
+        const regexDni = /^\d{7,8}$/;
+        if (!regexDni.test(dniLimpio)) {
+            return res.status(400).json({ 
+                status: 400, 
+                mensaje: "El DNI debe contener 7 u 8 dígitos numéricos." 
+            });
+        }
 
         // VALIDACIÓN DE LEGAJO
         const regexLegajo = /^\d{4}$/;
@@ -56,17 +66,23 @@ module.exports = (db) => {
             });
         }
 
-        // PASO A: Comprobar que el legajo no esté registrado en la BD
-        const checkQuery = 'SELECT id FROM usuarios WHERE legajo = ?';
+        // PASO A: Comprobar que el DNI y el legajo no estén registrados en la BD
+        const checkQuery = 'SELECT id, dni, legajo FROM usuarios WHERE dni = ? OR legajo = ?';
         
         // Le agregamos 'async' a este callback para poder usar await con bcrypt
-        db.query(checkQuery, [legajoLimpio], async (checkErr, results) => {
+        db.query(checkQuery, [dniLimpio, legajoLimpio], async (checkErr, results) => {
             if (checkErr) {
-                console.error("Error validando legajo duplicado:", checkErr);
+                console.error("Error validando DNI/legajo duplicado:", checkErr);
                 return res.status(500).json({ status: 500, mensaje: "Error interno en el servidor." });
             }
 
-            if (results.length > 0) {
+            const dniDuplicado = results.some((usuario) => String(usuario.dni) === dniLimpio);
+            if (dniDuplicado) {
+                return res.status(400).json({ status: 400, mensaje: "El DNI ingresado ya se encuentra registrado." });
+            }
+
+            const legajoDuplicado = results.some((usuario) => String(usuario.legajo) === legajoLimpio);
+            if (legajoDuplicado) {
                 return res.status(400).json({ status: 400, mensaje: "El legajo ingresado ya se encuentra registrado." });
             }
 
@@ -77,15 +93,15 @@ module.exports = (db) => {
 
                 // PASO B: Insertar el usuario con la contraseña ya encriptada
                 const insertQuery = `
-                    INSERT INTO usuarios (legajo, contrasena, nombre_completo, rol, id_unidad, activo) 
-                    VALUES (?, ?, ?, ?, ?, 1)
+                    INSERT INTO usuarios (dni, legajo, contrasena, nombre_completo, rol, id_unidad, activo) 
+                    VALUES (?, ?, ?, ?, ?, ?, 1)
                 `;
 
                 const rolDefault = 'consulta';
                 const unidadId = id_unidad ? parseInt(id_unidad) : null;
 
                 // ATENCIÓN ACÁ: Mandamos 'contrasenaHasheada' en vez de 'contrasena'
-                db.query(insertQuery, [legajoLimpio, contrasenaHasheada, nombre_completo.trim(), rolDefault, unidadId], (error, resultados) => {
+                db.query(insertQuery, [dniLimpio, legajoLimpio, contrasenaHasheada, nombre_completo.trim(), rolDefault, unidadId], (error, resultados) => {
                     if (error) {
                         console.error("Error creando usuario en MySQL:", error);
                         return res.status(500).json({ status: 500, mensaje: "Error interno al registrar usuario en la base de datos." });
@@ -97,6 +113,7 @@ module.exports = (db) => {
                         nuevoId: resultados.insertId,
                         usuario: {
                             id: resultados.insertId,
+                            dni: dniLimpio,
                             legajo: legajoLimpio,
                             nombre_completo: nombre_completo.trim(),
                             rol: rolDefault,

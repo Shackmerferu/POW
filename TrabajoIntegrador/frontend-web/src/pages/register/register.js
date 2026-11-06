@@ -9,6 +9,7 @@ function Register() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    dni: "",
     legajo: "",
     password: "",
     id_unidad: "1", 
@@ -36,16 +37,24 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const dniLimpio = formData.dni.trim();
     const legajoLimpio = formData.legajo.trim();
 
     
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
+      !dniLimpio ||
       !legajoLimpio ||
       !formData.password
     ) {
       showErrorWithTimeout("Por favor, completa todos los campos requeridos.");
+      return;
+    }
+
+    const dniRegex = /^\d{7,8}$/;
+    if (!dniRegex.test(dniLimpio)) {
+      showErrorWithTimeout("El DNI debe contener 7 u 8 números.");
       return;
     }
 
@@ -69,6 +78,7 @@ function Register() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          dni: dniLimpio,
           legajo: legajoLimpio,
           contrasena: formData.password,
           nombre_completo: nombreCompleto, // Envia el string concatenado
@@ -85,7 +95,7 @@ function Register() {
           navigate("/login");
         }, 2000);
       } else {
-        showErrorWithTimeout(data.mensaje || "El legajo ingresado ya se encuentra registrado.");
+        showErrorWithTimeout(data.mensaje || "El DNI o legajo ingresado ya se encuentra registrado.");
       }
     } catch (err) {
       console.error("Error al conectar con la API:", err);
@@ -95,7 +105,7 @@ function Register() {
     }
   };
 
-  return (
+return (
     <div className="register-container">
       <div className="register-card">
         <div className="register-header">
@@ -109,7 +119,7 @@ function Register() {
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSubmit}>
-          
+          {/* Fila 1: Nombre y Apellido */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName">Nombre</label>
@@ -136,39 +146,52 @@ function Register() {
             </div>
           </div>
 
-          {/* Fila: Legajo y Contraseña */}
+          {/* Fila 2: DNI y Legajo */}
           <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="dni">DNI</label>
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                maxLength={8}
+                inputMode="numeric"
+                value={formData.dni}
+                onChange={(e) => {
+                  const soloNumeros = e.target.value.replace(/\D/g, "");
+                  setFormData({ ...formData, dni: soloNumeros });
+                }}
+                placeholder="Ej. 40123456"
+              />
+            </div>
+
             <div className="form-group">
               <label htmlFor="legajo">Legajo</label>
               <input
                 type="text"
                 id="legajo"
                 name="legajo"
-                maxLength={4}
-                inputMode="numeric"
                 value={formData.legajo}
-                onChange={(e) => {
-                  const soloNumeros = e.target.value.replace(/\D/g, "");
-                  setFormData({ ...formData, legajo: soloNumeros });
-                }}
-                placeholder="1111"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="Ej. 0012"
               />
             </div>
           </div>
 
-          {/* Selección por Radio Buttons de la Unidad Académica */}
+          {/* Fila 3: Contraseña */}
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+            />
+          </div>
+
+          {/* Selección por Radio Buttons */}
           <div className="form-group">
             <label className="radio-group-title">Seleccione la Unidad Académica:</label>
             <div className="radio-options">
@@ -197,7 +220,7 @@ function Register() {
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Guardando en BD..." : "Crear Cuenta"}
+            {loading ? "Creando..." : "Crear Cuenta"}
           </button>
         </form>
 

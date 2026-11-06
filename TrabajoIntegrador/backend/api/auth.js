@@ -5,25 +5,31 @@ const bcrypt = require('bcrypt'); // <-- Importamos la librería de seguridad
 
 module.exports = (db) => {
     router.post('/', (req, res) => {
-        const { legajo, contrasena } = req.body;
+        const { dni, contrasena } = req.body;
 
-        if (!legajo || !contrasena) {
+        if (!dni || !contrasena) {
             return res.status(400).json({ status: 400, mensaje: "Faltan datos." });
         }
 
-        // CAMBIO CLAVE: Sacamos el "AND contrasena = ?" y pedimos que nos traiga la contrasena encriptada
-        const query = 'SELECT id, legajo, contrasena, nombre_completo, rol, id_unidad FROM usuarios WHERE legajo = ? AND activo = 1';
+        const dniLimpio = String(dni).trim();
+
+        if (!/^\d{7,8}$/.test(dniLimpio)) {
+            return res.status(400).json({ status: 400, mensaje: "El DNI debe contener 7 u 8 dígitos numéricos." });
+        }
+
+        // Buscamos al usuario por DNI y traemos la contraseña encriptada para compararla con bcrypt
+        const query = 'SELECT id, dni, legajo, contrasena, nombre_completo, rol, id_unidad FROM usuarios WHERE dni = ? AND activo = 1';
         
         // Agregamos "async" acá para poder esperar a bcrypt
-        db.query(query, [legajo], async (error, resultados) => {
+        db.query(query, [dniLimpio], async (error, resultados) => {
             if (error) {
                 console.error("Error en login:", error);
                 return res.status(500).json({ status: 500, mensaje: "Error interno del servidor." });
             }
 
-            // Si no encuentra el legajo
+            // Si no encuentra el DNI
             if (resultados.length === 0) {
-                return res.status(401).json({ status: 401, mensaje: "Legajo o contraseña incorrectos." });
+                return res.status(401).json({ status: 401, mensaje: "DNI o contraseña incorrectos." });
             }
 
             const usuario = resultados[0];
@@ -33,7 +39,7 @@ module.exports = (db) => {
                 const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
 
                 if (!contrasenaValida) {
-                    return res.status(401).json({ status: 401, mensaje: "Legajo o contraseña incorrectos." });
+                    return res.status(401).json({ status: 401, mensaje: "DNI o contraseña incorrectos." });
                 }
 
                 // 1. FABRICAMOS EL TOKEN (La "pulsera VIP")

@@ -143,7 +143,8 @@ INSERT INTO `unidades_academicas` (`id`, `nombre`, `descripcion`) VALUES
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `legajo` integer(4) NOT NULL,
+  `dni` varchar(8) NOT NULL,
+  `legajo` int(4) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
   `nombre_completo` varchar(150) NOT NULL,
   `rol` enum('administracion','gestion','revision','consulta') NOT NULL,
@@ -155,9 +156,13 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `legajo`, `contrasena`, `nombre_completo`, `rol`, `id_unidad`, `activo`) VALUES
-(1, 'ADMIN-001', '123456', 'Germán (Admin Global)', 'administracion', NULL, 1),
-(2, 'GEST-001', '123456', 'Tony (Gestor Ingeniería)', 'gestion', 1, 1);
+INSERT INTO `usuarios` (`id`, `dni`, `legajo`, `contrasena`, `nombre_completo`, `rol`, `id_unidad`, `activo`) VALUES
+(1, '11111111', 9292, '$2b$10$11KrgBHL0VNr1aIvqtI0KOd.THJibmiq9AN8sB/E8v.3a/c/aMQp6', 'Gestor01', 'gestion', 1, 1),
+(2, '42489167', 20, '$2b$10$CnC213Wt0PLLof9wuwJJquZ7z1y/F6qfl35Iok8gfPPXM8WOWfUt.', 'Antonio Funes', 'administracion', NULL, 1),
+(3, '42755835', 10, '$2b$10$5DOlCraI9se2.9GPDhTlCeLn01B.YL0mFkUSmUS0ZASoMiJ63IrzC', 'German Dieser', 'administracion', NULL, 1),
+(4, '44758393', 30, '$2b$10$gBr8nGRSlS8Ltaw0COFCm.WKOx4u.ZN.NYNYOsd2E9PHyobW84axq', 'Luciano Cayssials', 'administracion', NULL, 1),
+(5, '40000001', 40, '$2b$10$qGp6mlkcKzkY43IJjR948e89D9PDlTyP.wiqSEAT.4f4lMZnFU.2W', 'Usuario Rectorado', 'revision', 2, 1),
+(6, '40000002', 50, '$2b$10$zf7pdnCdfbimjNb.ha7wCekWOec313fkF9G1pgOx2dkjuLl9jTFTi', 'Usuario Consulta', 'consulta', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -218,6 +223,7 @@ ALTER TABLE `unidades_academicas`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `dni_unico` (`dni`),
   ADD UNIQUE KEY `legajo` (`legajo`),
   ADD KEY `id_unidad` (`id_unidad`);
 
@@ -265,7 +271,7 @@ ALTER TABLE `unidades_academicas`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
