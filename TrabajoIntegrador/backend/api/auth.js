@@ -4,6 +4,25 @@ const jwt = require('jsonwebtoken'); // Importamos la librería de JWT
 const bcrypt = require('bcrypt'); // <-- Importamos la librería de seguridad
 
 module.exports = (db) => {
+    // Verifica que el token enviado por el frontend siga siendo válido.
+    router.get('/verify', (req, res) => {
+        const autorizacion = req.headers.authorization || '';
+        const token = autorizacion.startsWith('Bearer ')
+            ? autorizacion.slice(7)
+            : null;
+
+        if (!token) {
+            return res.status(401).json({ status: 401, mensaje: "Token no proporcionado." });
+        }
+
+        try {
+            const datos = jwt.verify(token, 'EL_VIP');
+            return res.json({ status: 200, usuario: datos });
+        } catch (error) {
+            return res.status(401).json({ status: 401, mensaje: "Token inválido o vencido." });
+        }
+    });
+
     router.post('/', (req, res) => {
         const { dni, contrasena } = req.body;
 

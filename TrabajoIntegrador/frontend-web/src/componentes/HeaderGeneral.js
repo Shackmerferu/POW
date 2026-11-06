@@ -7,17 +7,21 @@
 
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import logoFacultad from "../../cosas/imagenes/logo.png";
-import persona from "../../cosas/imagenes/persona.png";
+import logoFacultad from "../cosas/imagenes/logo.png";
+import persona from "../cosas/imagenes/persona.png";
+import {
+  puedeVerConfiguracion,
+  puedeVerPanel,
+} from "../utils/permisos";
+import { limpiarSesion, obtenerUsuario } from "../utils/sesion";
 import "./headerGeneral.css";
 
 export default function HeaderGeneral() {
   const navigate = useNavigate();
+  const usuario = obtenerUsuario();
 
   const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("active_user");
+    limpiarSesion();
     navigate("/login", { replace: true });
   };
 
@@ -36,9 +40,11 @@ export default function HeaderGeneral() {
         <NavLink to="/convenios" className={claseSegun}>
           Convenios
         </NavLink>
-        <NavLink to="/dashboard" className={claseSegun}>
-          Panel de gestión
-        </NavLink>
+        {puedeVerPanel(usuario) && (
+          <NavLink to="/dashboard" className={claseSegun}>
+            Panel de gestión
+          </NavLink>
+        )}
       </nav>
 
       {/* Menú de perfil (despliega con Bootstrap, ya cargado globalmente) */}
@@ -56,16 +62,20 @@ export default function HeaderGeneral() {
           <li>
             <h6 className="dropdown-header">Menu</h6>
           </li>
-          <li>
-            <Link className="dropdown-item" to="/config">
-              Configuración
-            </Link>
-          </li>
-          <li>
-            <Link className="dropdown-item" to="/dashboard">
-              Panel Administrativo
-            </Link>
-          </li>
+          {puedeVerConfiguracion(usuario) && (
+            <li>
+              <Link className="dropdown-item" to="/config">
+                Configuración
+              </Link>
+            </li>
+          )}
+          {puedeVerPanel(usuario) && (
+            <li>
+              <Link className="dropdown-item" to="/dashboard">
+                Panel Administrativo
+              </Link>
+            </li>
+          )}
           <li>
             <button type="button" className="dropdown-item" onClick={cerrarSesion}>
               Cerrar sesión

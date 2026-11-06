@@ -1,0 +1,14 @@
+.config-page {
+  min-height: 100vh;
+  background: #f4f6fa;
+}
+
+.config-page__contenido {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.config-page__contenido h1 {
+  color: #1f4f99;
+}

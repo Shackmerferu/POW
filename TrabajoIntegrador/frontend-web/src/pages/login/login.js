@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import logo from "../../logo.png";
+import { rutaInicioPorRol } from "../../utils/permisos";
+import { guardarSesion } from "../../utils/sesion";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://localhost:8000/api";
 
 function Login() {
   const [dni, setDni] = useState("");
@@ -36,7 +38,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth", {
+      const response = await fetch(`${API_URL}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,11 +50,12 @@ function Login() {
 
       if (response.ok && (data.status === 200 || response.status === 200)) {
         setError("");
-        localStorage.setItem("active_user", JSON.stringify(data.usuario));
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
-        navigate("/convenios");
+        guardarSesion(data.usuario, data.token);
+        const destino = rutaInicioPorRol(data.usuario);
+        console.info(
+          `Login OK · rol: ${data.usuario?.rol} · destino: ${destino}`
+        );
+        navigate(destino, { replace: true });
       } else {
         showErrorWithTimeout(data.mensaje || "Credenciales incorrectas.");
       }
