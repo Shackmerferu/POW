@@ -111,9 +111,7 @@ module.exports = (db) => {
         });
     });
 
-    // =========================================================================
-    // ENDPOINT 3: MODIFICAR ROL Y UNIDAD DE UN USUARIO (PUT /api/usuarios/:id)
-    // =========================================================================
+    
     router.put('/:id', (req, res) => {
         const idUsuario = req.params.id; 
         const { rol, id_unidad, activo } = req.body; 

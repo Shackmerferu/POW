@@ -11,7 +11,7 @@ function Register() {
     lastName: "",
     legajo: "",
     password: "",
-    id_unidad: "1", // 1: Facultad de Ingeniería, 2: Rectorado
+    id_unidad: "1", 
   });
 
   const [error, setError] = useState("");
@@ -38,7 +38,7 @@ function Register() {
 
     const legajoLimpio = formData.legajo.trim();
 
-    // 1. Validar campos obligatorios
+    
     if (
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
@@ -49,7 +49,7 @@ function Register() {
       return;
     }
 
-    // 2. Validar exactamente 4 números para el legajo
+    
     const legajoRegex = /^\d{4}$/;
     if (!legajoRegex.test(legajoLimpio)) {
       showErrorWithTimeout("El legajo debe contener exactamente 4 números (ejemplo: 0012).");
@@ -59,10 +59,10 @@ function Register() {
     setLoading(true);
 
     try {
-      // Unificar Nombre y Apellido para la columna `nombre_completo` de MySQL
+      
       const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
 
-      // 3. Petición HTTP POST a la API REST de Node.js (puerto 8000)
+     
       const response = await fetch("http://localhost:8000/api/usuarios", {
         method: "POST",
         headers: {
@@ -109,7 +109,7 @@ function Register() {
         {success && <div className="success-message">{success}</div>}
 
         <form onSubmit={handleSubmit}>
-          {/* Fila: Nombre y Apellido */}
+          
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName">Nombre</label>

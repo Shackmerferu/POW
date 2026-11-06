@@ -142,16 +142,102 @@
   color: #1f4f99;
 }
 
-.logout-button {
-  width: 100%;
-  text-align: left;
-  transition: color 160ms ease;
+/* Botón "Mi Perfil" del menú de navegación */
+.navigation .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #374151;
+  font-family: "Open Sans:SemiBold", "Open Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
 }
 
-.logout-button:hover,
-.logout-button:focus-visible {
-  background-color: transparent;
+.navigation .dropdown-toggle:hover,
+.navigation .dropdown-toggle:focus,
+.navigation .dropdown-toggle:focus-visible,
+.navigation .dropdown-toggle.show {
+  border-color: transparent;
+  background: #f3f4f6;
+  box-shadow: none;
+  color: #1f4f99;
+  outline: none;
+}
+
+.navigation .dropdown-toggle::after {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Menú desplegable */
+.navigation .dropdown-menu {
+  min-width: 220px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgb(15 23 42 / 12%);
+}
+
+.navigation .dropdown-header {
+  padding: 4px 12px 8px;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.navigation .dropdown-menu .dropdown-item {
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: #4b5563;
+  font-family: "Open Sans:Regular", "Open Sans", sans-serif;
+  font-size: 15px;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.navigation .dropdown-menu .dropdown-item:hover,
+.navigation .dropdown-menu .dropdown-item:focus {
+  background: #f3f4f6;
+  color: #111827;
+  outline: none;
+}
+
+.navigation .dropdown-menu .dropdown-item.active,
+.navigation .dropdown-menu .dropdown-item:active {
+  background: #eef2f7;
+  color: #1f4f99;
+  font-weight: 600;
+}
+
+/* Separador sutil antes de cerrar sesión */
+.navigation .dropdown-divider {
+  margin: 8px 4px;
+  border-top: 1px solid #eceff3;
+}
+
+/* Cerrar sesión: detalle rojo minimalista */
+.navigation .dropdown-menu .dropdown-item.logout-button {
+  width: 100%;
+  background: transparent;
   color: #dc3545;
+  text-align: left;
+}
+
+.navigation .dropdown-menu .dropdown-item.logout-button:hover,
+.navigation .dropdown-menu .dropdown-item.logout-button:focus-visible {
+  background: #fef2f2;
+  color: #b91c1c;
+  outline: none;
 }
 
 .profile {

@@ -81,15 +81,15 @@ export default function App() {
 
           <nav className="navigation" aria-label="Navegación principal">
 
-            <div class="dropdown flex-direction-row ">
-               
-              <button class="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div className="dropdown flex-direction-row">
+              <button className="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src={persona} className="pe-2" alt="Flecha indicativa Label" /> Mi Perfil
               </button>
-              <ul class="dropdown-menu" >
-                <li><h6 class="dropdown-header">Menu</h6></li>
-                <li><a class="dropdown-item" href="/config">Configuracion</a></li>
-                <li><a class="dropdown-item active" href="/dashboard">Panel Administrativo</a></li>
+              <ul className="dropdown-menu">
+                <li><h6 className="dropdown-header">Menu</h6></li>
+                <li><a className="dropdown-item" href="/config">Configuracion</a></li>
+                <li><a className="dropdown-item active" href="/dashboard">Panel Administrativo</a></li>
+                <li><hr className="dropdown-divider" /></li>
                 <li>
                   <button
                     className="dropdown-item logout-button"
