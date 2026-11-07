@@ -8,19 +8,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+// Usamos un pool en lugar de una conexión única: si MySQL cierra una conexión
+// inactiva, el pool la descarta y abre otra en la próxima consulta. Con
+// createConnection, ese cierre emitía un error no manejado y tumbaba Node.
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'gestion_convenios'
+    database: 'gestion_convenios',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.connect(err => {
+// Probamos una conexión al arrancar para detectar credenciales o base inválidas.
+db.getConnection((err, connection) => {
     if (err) {
         console.error('Error conectando a MySQL:', err);
         return;
     }
     console.log('Conexión exitosa a gestion_convenios');
+    connection.release();
 });
 
 
