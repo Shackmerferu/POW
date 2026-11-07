@@ -1,4 +1,5 @@
 import React from "react";
+import { puedeAdministrarUsuarios } from "../utils/permisos";
 import "./componentes.css";
 
 /**
@@ -43,7 +44,9 @@ export default function MenuLateral({ pestañaActiva, alSeleccionar, usuario, on
   const incisos = [
     { id: "metricas", texto: "Métricas" },
     { id: "administracion", texto: "Administración" },
-    { id: "roles", texto: "Roles" },
+    ...(puedeAdministrarUsuarios(usuario)
+      ? [{ id: "roles", texto: "Roles" }]
+      : []),
     { id: "vencimientos", texto: "Vencimientos" },
   ];
 

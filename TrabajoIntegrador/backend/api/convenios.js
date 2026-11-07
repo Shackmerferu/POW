@@ -32,27 +32,122 @@ module.exports = (db) => {
         });
     });
     // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
+    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
     router.post('/', (req, res) => {
         
-        // 1. Atrapamos los datos que manda el frontend
-        const { resolucion, nombre, id_unidad } = req.body;
+        // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
+        const { 
+            codigo_unico, 
+            titulo, 
+            tipo, 
+            objeto, 
+            id_unidad_responsable, 
+            // Estos son opcionales (permiten NULL)
+            estado, marco_legal, confidencialidad, fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_antecedente 
+        } = req.body;
 
-        // 2. Control de seguridad: verificamos que no falte nada
-        if (!resolucion || !nombre || !id_unidad) {
-            return res.status(400).json({ status: 400, mensaje: "Faltan completar datos del convenio" });
+        // 2. Control estricto: exigimos los que dicen "No" en Nulo en phpMyAdmin
+        if (!codigo_unico || !titulo || !tipo || !objeto || !id_unidad_responsable) {
+            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios (código, título, tipo, objeto o unidad)" });
         }
 
-        // 3. Preparamos la consulta con "?" para evitar inyecciones SQL
-        const query = 'INSERT INTO convenios (resolucion, nombre, id_unidad) VALUES (?, ?, ?)';
+        // 3. Preparamos la consulta SQL
+        const query = `
+            INSERT INTO convenios (
+                codigo_unico, titulo, tipo, estado, objeto, marco_legal, confidencialidad, 
+                fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_unidad_responsable, id_antecedente
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
         
-        // 4. Ejecutamos la inserción en MySQL
-        db.query(query, [resolucion, nombre, id_unidad], (error, resultados) => {
+        // Si no mandan estado, tu base usa 'borrador' por defecto. Si no mandan confidencialidad, va 0.
+        const estadoFinal = estado || 'borrador';
+        const confFinal = confidencialidad !== undefined ? confidencialidad : 0;
+
+        // 4. Mapeamos los valores (reemplazando undefined por null para que MySQL no se queje)
+        const valores = [
+            codigo_unico, 
+            titulo, 
+            tipo, 
+            estadoFinal, 
+            objeto, 
+            marco_legal || null, 
+            confFinal,
+            fecha_firma || null, 
+            fecha_inicio || null, 
+            fecha_vencimiento || null, 
+            dias_preaviso || null, 
+            id_unidad_responsable, 
+            id_antecedente || null
+        ];
+
+        // 5. Ejecutamos la inserción
+        db.query(query, valores, (error, resultados) => {
             if (error) {
                 console.error("Error guardando convenio:", error);
-                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar" });
+                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar en la base de datos" });
             }
             
-            // 201 significa "Creado con éxito"
+            res.json({ 
+                status: 201, 
+                mensaje: "¡Convenio creado con éxito!",
+                nuevoId: resultados.insertId 
+            });
+        });
+    });// ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
+    router.post('/', (req, res) => {
+        
+        // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
+        const { 
+            codigo_unico, 
+            titulo, 
+            tipo, 
+            objeto, 
+            id_unidad_responsable, 
+            // Estos son opcionales (permiten NULL)
+            estado, marco_legal, confidencialidad, fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_antecedente 
+        } = req.body;
+
+        // 2. Control estricto: exigimos los que dicen "No" en Nulo en phpMyAdmin
+        if (!codigo_unico || !titulo || !tipo || !objeto || !id_unidad_responsable) {
+            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios (código, título, tipo, objeto o unidad)" });
+        }
+
+        // 3. Preparamos la consulta SQL
+        const query = `
+            INSERT INTO convenios (
+                codigo_unico, titulo, tipo, estado, objeto, marco_legal, confidencialidad, 
+                fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_unidad_responsable, id_antecedente
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        
+        // Si no mandan estado, tu base usa 'borrador' por defecto. Si no mandan confidencialidad, va 0.
+        const estadoFinal = estado || 'borrador';
+        const confFinal = confidencialidad !== undefined ? confidencialidad : 0;
+
+        // 4. Mapeamos los valores (reemplazando undefined por null para que MySQL no se queje)
+        const valores = [
+            codigo_unico, 
+            titulo, 
+            tipo, 
+            estadoFinal, 
+            objeto, 
+            marco_legal || null, 
+            confFinal,
+            fecha_firma || null, 
+            fecha_inicio || null, 
+            fecha_vencimiento || null, 
+            dias_preaviso || null, 
+            id_unidad_responsable, 
+            id_antecedente || null
+        ];
+
+        // 5. Ejecutamos la inserción
+        db.query(query, valores, (error, resultados) => {
+            if (error) {
+                console.error("Error guardando convenio:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar en la base de datos" });
+            }
+            
             res.json({ 
                 status: 201, 
                 mensaje: "¡Convenio creado con éxito!",

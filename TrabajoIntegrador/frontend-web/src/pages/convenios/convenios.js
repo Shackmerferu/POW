@@ -1,11 +1,18 @@
 import "./convenios.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
-import persona from "../../cosas/imagenes/persona.png";
 import menu from "../../cosas/imagenes/list.svg"
-import { API_URL } from "../config/config"
+import{ API_URL } from "../config/config"
+import {
+  puedeVerConfiguracion,
+  puedeVerConvenios,
+  puedeVerPanel,
+  rutaInicioPorRol,
+} from "../../utils/permisos";
+import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
+
 
 
 const filters = [
@@ -21,12 +28,6 @@ export default function App() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
 
-  function limpiarSesion() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("active_user");
-  }
-
   function handleLogout() {
     limpiarSesion();
     navigate("/login", { replace: true });
@@ -34,14 +35,10 @@ export default function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("usuario");
+    const storedUser = obtenerUsuario();
 
     if (storedUser) {
-      try {
-        setUsuario(JSON.parse(storedUser));
-      } catch (e) {
-        // Ignorar error de parseo
-      }
+      setUsuario(storedUser);
     }
 
     if (!token) {
@@ -53,7 +50,9 @@ export default function App() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        if (!res.ok) {
+        // Solo cerramos sesión si el backend rechaza el token explícitamente.
+        // Un 404/500 o un error de red no deben borrar una sesión válida.
+        if (res.status === 401 || res.status === 403) {
           limpiarSesion();
           navigate("/login", { replace: true });
         }
@@ -69,6 +68,10 @@ export default function App() {
     event.preventDefault();
   }
 
+  if (usuario && !puedeVerConvenios(usuario)) {
+    return <Navigate to={rutaInicioPorRol(usuario)} replace />;
+  }
+
   return (
     <main className="app-shell">
       <header className="top-navigation">
@@ -82,16 +85,20 @@ export default function App() {
 
           <nav className="navigation" aria-label="Navegación principal">
 
-            <div class="dropdown flex-direction-row ">
+            <div className="dropdown flex-direction-row ">
                
-              <button class="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <button className="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src={menu} className="pe-2" alt="Flecha indicativa Label" /> Menu
               </button>
-              <ul class="dropdown-menu" >
-                <li><h6 class="dropdown-header">Menu</h6></li>
-                <li><a class="dropdown-item" href="/convenios">Busqueda</a></li>
-                <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
-                <li><a className="dropdown-item" href="/config">Configuración</a></li>
+              <ul className="dropdown-menu" >
+                <li><h6 className="dropdown-header">Menu</h6></li>
+                <li><a className="dropdown-item" href="/convenios">Busqueda</a></li>
+                {puedeVerPanel(usuario) && (
+                  <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
+                )}
+                {puedeVerConfiguracion(usuario) && (
+                  <li><a className="dropdown-item" href="/config">Configuración</a></li>
+                )}
                 <li>
                   <button
                     className="dropdown-item logout-button"

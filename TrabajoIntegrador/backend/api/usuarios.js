@@ -2,15 +2,16 @@
 // Importamos Express para manejar las rutas y el Router para empaquetar los endpoints.
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt'); // <-- IMPORTAMOS LA LIBRERÍA DE SEGURIDAD
 
 // 2. EXPORTACIÓN RECIBIENDO LA CONEXIÓN DB DE MYSQL
 module.exports = (db) => {
 
-  
+    // =========================================================================
     // ENDPOINT 1: OBTENER TODOS LOS USUARIOS (GET /api/usuarios)
-
+    // =========================================================================
     router.get('/', (req, res) => {
-        const query = 'SELECT id, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
+        const query = 'SELECT id, dni, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
 
         db.query(query, (error, resultados) => {
             if (error) {
@@ -29,24 +30,34 @@ module.exports = (db) => {
         });
     });
 
-   
+    // =========================================================================
     // ENDPOINT 2: REGISTRAR UN NUEVO USUARIO (POST /api/usuarios)
-  
+    // =========================================================================
     router.post('/', (req, res) => {
-        const { legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
+        const { dni, legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
 
         // Validar que los campos obligatorios existan
-        if (!legajo || !contrasena || !nombre_completo) {
+        if (!dni || !legajo || !contrasena || !nombre_completo) {
             return res.status(400).json({ 
                 status: 400, 
-                mensaje: "Faltan datos obligatorios (legajo, contraseña y nombre completo)." 
+                mensaje: "Faltan datos obligatorios (DNI, legajo, contraseña y nombre completo)." 
             });
         }
 
-        // Sanitización: aseguramos que legajo sea string y quitamos espacios accidentales
+        // Sanitización
+        const dniLimpio = String(dni).trim();
         const legajoLimpio = String(legajo).trim();
 
-        // VALIDACIÓN DE LEGAJO: Debe tener exactamente 4 números y preservar ceros iniciales (VARCHAR(4))
+        // VALIDACIÓN DE DNI
+        const regexDni = /^\d{7,8}$/;
+        if (!regexDni.test(dniLimpio)) {
+            return res.status(400).json({ 
+                status: 400, 
+                mensaje: "El DNI debe contener 7 u 8 dígitos numéricos." 
+            });
+        }
+
+        // VALIDACIÓN DE LEGAJO
         const regexLegajo = /^\d{4}$/;
         if (!regexLegajo.test(legajoLimpio)) {
             return res.status(400).json({ 
@@ -55,72 +66,77 @@ module.exports = (db) => {
             });
         }
 
-        // PASO A: Comprobar que el legajo no esté registrado en la BD (Evita error por UNIQUE KEY en MySQL)
-        const checkQuery = 'SELECT id FROM usuarios WHERE legajo = ?';
-        db.query(checkQuery, [legajoLimpio], (checkErr, results) => {
+        // PASO A: Comprobar que el DNI y el legajo no estén registrados en la BD
+        const checkQuery = 'SELECT id, dni, legajo FROM usuarios WHERE dni = ? OR legajo = ?';
+        
+        // Le agregamos 'async' a este callback para poder usar await con bcrypt
+        db.query(checkQuery, [dniLimpio, legajoLimpio], async (checkErr, results) => {
             if (checkErr) {
-                console.error("Error validando legajo duplicado:", checkErr);
-                return res.status(500).json({ 
-                    status: 500, 
-                    mensaje: "Error interno en el servidor." 
-                });
+                console.error("Error validando DNI/legajo duplicado:", checkErr);
+                return res.status(500).json({ status: 500, mensaje: "Error interno en el servidor." });
             }
 
-            if (results.length > 0) {
-                return res.status(400).json({ 
-                    status: 400, 
-                    mensaje: "El legajo ingresado ya se encuentra registrado." 
-                });
+            const dniDuplicado = results.some((usuario) => String(usuario.dni) === dniLimpio);
+            if (dniDuplicado) {
+                return res.status(400).json({ status: 400, mensaje: "El DNI ingresado ya se encuentra registrado." });
             }
 
-            // PASO B: Insertar el usuario con el rol de solo lectura/consulta por defecto ('consulta')
-            const insertQuery = `
-                INSERT INTO usuarios (legajo, contrasena, nombre_completo, rol, id_unidad, activo) 
-                VALUES (?, ?, ?, ?, ?, 1)
-            `;
+            const legajoDuplicado = results.some((usuario) => String(usuario.legajo) === legajoLimpio);
+            if (legajoDuplicado) {
+                return res.status(400).json({ status: 400, mensaje: "El legajo ingresado ya se encuentra registrado." });
+            }
 
-            const rolDefault = 'consulta'; // Enum válido en la base de datos (administracion, gestion, revision, consulta)
-            const unidadId = id_unidad ? parseInt(id_unidad) : null;
+            try {
+                // PASO INTERMEDIO: ENCRIPTAR LA CONTRASEÑA
+                // El número 10 es el "salt rounds" (nivel de complejidad del algoritmo)
+                const contrasenaHasheada = await bcrypt.hash(contrasena, 10);
 
-            db.query(insertQuery, [legajoLimpio, contrasena, nombre_completo.trim(), rolDefault, unidadId], (error, resultados) => {
-                if (error) {
-                    console.error("Error creando usuario en MySQL:", error);
-                    return res.status(500).json({ 
-                        status: 500, 
-                        mensaje: "Error interno al registrar usuario en la base de datos." 
-                    });
-                }
+                // PASO B: Insertar el usuario con la contraseña ya encriptada
+                const insertQuery = `
+                    INSERT INTO usuarios (dni, legajo, contrasena, nombre_completo, rol, id_unidad, activo) 
+                    VALUES (?, ?, ?, ?, ?, ?, 1)
+                `;
 
-                res.status(201).json({
-                    status: 201,
-                    mensaje: "¡Usuario registrado con éxito con el rol de CONSULTA!",
-                    nuevoId: resultados.insertId,
-                    usuario: {
-                        id: resultados.insertId,
-                        legajo: legajoLimpio,
-                        nombre_completo: nombre_completo.trim(),
-                        rol: rolDefault,
-                        id_unidad: unidadId
+                const rolDefault = 'consulta';
+                const unidadId = id_unidad ? parseInt(id_unidad) : null;
+
+                // ATENCIÓN ACÁ: Mandamos 'contrasenaHasheada' en vez de 'contrasena'
+                db.query(insertQuery, [dniLimpio, legajoLimpio, contrasenaHasheada, nombre_completo.trim(), rolDefault, unidadId], (error, resultados) => {
+                    if (error) {
+                        console.error("Error creando usuario en MySQL:", error);
+                        return res.status(500).json({ status: 500, mensaje: "Error interno al registrar usuario en la base de datos." });
                     }
+
+                    res.status(201).json({
+                        status: 201,
+                        mensaje: "¡Usuario registrado con éxito con el rol de CONSULTA!",
+                        nuevoId: resultados.insertId,
+                        usuario: {
+                            id: resultados.insertId,
+                            dni: dniLimpio,
+                            legajo: legajoLimpio,
+                            nombre_completo: nombre_completo.trim(),
+                            rol: rolDefault,
+                            id_unidad: unidadId
+                        }
+                    });
                 });
-            });
+            } catch (hashError) {
+                console.error("Error al hashear la contraseña:", hashError);
+                return res.status(500).json({ status: 500, mensaje: "Error de seguridad al procesar la cuenta." });
+            }
         });
     });
 
-
     
-    // ENDPOINT 3: MODIFICAR ROL Y UNIDAD DE UN USUARIO (PUT /api/usuarios/:id)
-
     router.put('/:id', (req, res) => {
-        const idUsuario = req.params.id; // Agarramos el ID que viene en la URL
-        const { rol, id_unidad, activo } = req.body; // Agarramos los datos que mandan para cambiar
+        const idUsuario = req.params.id; 
+        const { rol, id_unidad, activo } = req.body; 
 
-        // Exigimos que al menos manden un rol para actualizar
         if (!rol) {
             return res.status(400).json({ status: 400, mensaje: "El campo 'rol' es obligatorio para la actualización." });
         }
 
-        // Si no mandan el estado "activo", asumimos que sigue siendo 1 (activo)
         const estadoActivo = activo !== undefined ? activo : 1;
         const unidadId = id_unidad ? parseInt(id_unidad) : null;
 
@@ -136,7 +152,6 @@ module.exports = (db) => {
                 return res.status(500).json({ status: 500, mensaje: "Error interno al actualizar el usuario." });
             }
 
-            // affectedRows nos dice si MySQL encontró y modificó esa fila
             if (resultados.affectedRows === 0) {
                 return res.status(404).json({ status: 404, mensaje: "No se encontró ningún usuario con ese ID." });
             }
@@ -144,16 +159,10 @@ module.exports = (db) => {
             res.json({
                 status: 200,
                 mensaje: "¡Usuario actualizado correctamente!",
-                datosActualizados: {
-                    id: idUsuario,
-                    rol: rol,
-                    id_unidad: unidadId,
-                    activo: estadoActivo
-                }
+                datosActualizados: { id: idUsuario, rol: rol, id_unidad: unidadId, activo: estadoActivo }
             });
         });
     });
 
-    // Devolvemos el router configurado
     return router;
 };

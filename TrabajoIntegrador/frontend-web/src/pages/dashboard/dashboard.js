@@ -1,6 +1,6 @@
 // Toda la lógica del panel vive en un único componente React.
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import "./dashboard.css";
 
 import logoFacultad from "../../cosas/imagenes/logo.png";
@@ -18,6 +18,13 @@ import { EtiquetaEstado, EtiquetaTipo, EtiquetaRol } from "../../componentes/Eti
 
 import { CONVENIOS, UNIDADES, USUARIOS, PERSONAS, MATRIZ_PERMISOS, contarPersonasUnicas } from "../../datos/datosPanel";
 import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
+import {
+  puedeTenerAlcanceGlobal,
+  puedeVerConfiguracion,
+  puedeVerPanel,
+  rutaInicioPorRol,
+} from "../../utils/permisos";
+import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
 import {
   calcularVigencia,
   formatoEntero,
@@ -41,17 +48,11 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const usuario = useMemo(() => {
-    const guardado = localStorage.getItem("active_user");
-    if (guardado) {
-      try {
-        const data = JSON.parse(guardado);
-        if (data && data.rol) return data;
-      } catch (e) {}
-    }
-    return USUARIOS[0];
+    const data = obtenerUsuario();
+    return data && data.rol ? data : null;
   }, []);
 
-  const alcanceGlobal = usuario?.rol === "administracion" || usuario?.id_unidad === null;
+  const alcanceGlobal = puedeTenerAlcanceGlobal(usuario);
 
   const [pestaña, setPestaña] = useState("metricas");
   const [convenioFicha, setConvenioFicha] = useState(null);
@@ -74,7 +75,9 @@ function Dashboard() {
 
   const conveniosAlcance = useMemo(() => {
     if (alcanceGlobal) return CONVENIOS;
-    return CONVENIOS.filter((c) => c.id_unidad_responsable === usuario.id_unidad);
+    return CONVENIOS.filter(
+      (c) => Number(c.id_unidad_responsable) === Number(usuario?.id_unidad)
+    );
   }, [alcanceGlobal, usuario]);
 
   const conveniosFiltrados = useMemo(() => {
@@ -198,10 +201,19 @@ function Dashboard() {
   };
 
   const cerrarSesion = () => {
-    localStorage.removeItem("active_user");
-    localStorage.removeItem("token");
+    limpiarSesion();
     navigate("/login", { replace: true });
   };
+
+  if (!usuario) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Defensa extra: si un rol sin acceso al panel llega hasta acá, lo devolvemos
+  // a su pantalla de inicio (por ejemplo, consulta -> /convenios).
+  if (!puedeVerPanel(usuario)) {
+    return <Navigate to={rutaInicioPorRol(usuario)} replace />;
+  }
 
   return (
     <div className="dashboard">
@@ -221,9 +233,13 @@ function Dashboard() {
               </button>
               <ul className="dropdown-menu">
                 <li><h6 className="dropdown-header">Menu</h6></li>
-                <li><a class="dropdown-item" href="/convenios">Busqueda</a></li>
-                <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
-                <li><a className="dropdown-item" href="/config">Configuración</a></li>
+                <li><a className="dropdown-item" href="/convenios">Busqueda</a></li>
+                {puedeVerPanel(usuario) && (
+                  <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
+                )}
+                {puedeVerConfiguracion(usuario) && (
+                  <li><a className="dropdown-item" href="/config">Configuración</a></li>
+                )}
                 <li>
                   <button
                     className="dropdown-item logout-button"

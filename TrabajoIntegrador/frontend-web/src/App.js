@@ -1,21 +1,25 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { puedeAccederA, rutaInicioPorRol, RUTAS } from "./utils/permisos";
+import { obtenerUsuario } from "./utils/sesion";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Dashboard from "./pages/dashboard/dashboard";
 import Convenios from "./pages/convenios/convenios";
+import Config from "./pages/config/config";
 import "./App.css";
 
-// COMPONENTE GUARDIÁN (Protege las rutas privadas)
-const PrivateRoute = () => {
-  const activeUser = localStorage.getItem("active_user");
+const RutaProtegida = ({ ruta }) => {
+  const usuario = obtenerUsuario();
 
-  // Si no hay un usuario activo guardado en localStorage, redirige al Login
-  if (!activeUser) {
-    return <Navigate to="/login" replace />;
+  if (!usuario) {
+    return <Navigate to={RUTAS.LOGIN} replace />;
   }
 
-  // Si la sesión existe, permite el paso hacia la pantalla solicitada
+  if (!puedeAccederA(ruta, usuario)) {
+    return <Navigate to={rutaInicioPorRol(usuario)} replace />;
+  }
+
   return <Outlet />;
 };
 
@@ -23,20 +27,28 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirección por defecto: al ingresar a la raíz '/', lleva al Login */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate to={rutaInicioPorRol(obtenerUsuario())} replace />
+          }
+        />
 
-        {/* ----------------- RUTAS PÚBLICAS ----------------- */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ----------------- RUTAS PROTEGIDAS ----------------- */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/convenios" element={<Convenios />} />
+        <Route element={<RutaProtegida ruta={RUTAS.PANEL} />}>
+          <Route path={RUTAS.PANEL} element={<Dashboard />} />
         </Route>
 
-        {/* Ruta para capturar cualquier dirección inexistente */}
+        <Route element={<RutaProtegida ruta={RUTAS.CONVENIOS} />}>
+          <Route path={RUTAS.CONVENIOS} element={<Convenios />} />
+        </Route>
+
+        <Route element={<RutaProtegida ruta={RUTAS.CONFIGURACION} />}>
+          <Route path={RUTAS.CONFIGURACION} element={<Config />} />
+        </Route>
+
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
