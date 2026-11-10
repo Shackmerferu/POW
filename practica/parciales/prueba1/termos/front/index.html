@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 
@@ -5,45 +6,102 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Inicio de Sesión</title>
+    <title>Acceso al sistema</title>
 
     <link rel="stylesheet" href="../recursos/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
 </head>
 
 <body>
-    <main class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card h-100 w-50">
-            <div class="bg-primary text-white card-header text-center ">
-                <h3>Inicio Sesion</h3>
+
+    <main class="container min-vh-100 d-flex justify-content-center align-items-center">
+
+        <div class="card w-50">
+
+            <!-- INICIO DE SESIÓN -->
+            <section id="vistaLogin">
+
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Inicio de sesión</h3>
+                </div>
+
+                <form id="formLogin" class="d-flex flex-column gap-3 p-4">
+
+                    <div>
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="usuario"
+                            name="usuario" placeholder="Ingrese su usuario" required />
+                    </div>
+
+                    <div>
+                        <label for="contrasenia" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="contrasenia"
+                            name="password" placeholder="Ingrese su contraseña" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-50 me-auto ms-auto">
+                        Iniciar sesión
+                    </button>
+
+                    <p id="mensaje" class="text-center mb-0"></p>
+
+                    <div class="text-center">
+                        ¿No tenés una cuenta?
+                        <a href="#" id="irRegistro">Registrarse</a>
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- REGISTRO -->
+            <section id="vistaRegistro" class="d-none">
+
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Registro</h3>
+                </div>
+
+                <form id="formRegistro" class="d-flex flex-column gap-3 p-4">
+
+                    <div>
+                        <label for="nuevoUsuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="nuevoUsuario"
+                            name="usuario" placeholder="Ingrese un usuario" required />
+                    </div>
+
+                    <div>
+                        <label for="nuevaContrasenia" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="nuevaContrasenia"
+                            name="password" placeholder="Ingrese una contraseña" required />
+                    </div>
+
+                    <div>
+                        <label for="repetirContrasenia" class="form-label">Repetir contraseña</label>
+                        <input type="password" class="form-control" id="repetirContrasenia"
+                            name="repetirPassword" placeholder="Repita su contraseña" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Registrarse
+                    </button>
+
+                    <div class="text-center">
+                        ¿Ya tenés una cuenta?
+                        <a href="#" id="irLogin">Iniciar sesión</a>
+                    </div>
+
+                </form>
+
+            </section>
+
+            <div class="card-footer bg-primary text-white text-center">
+                Sistema Termos
             </div>
 
-            <form id="formLogin" class="d-flex flex-column gap-3 mb-3 mt-3 w-75 mx-auto">
-                <div>
-                    <label for="usuario" class="form-label">Usuario</label>
-
-                    <input type="text" class="form-control" id="usuario" name="usuario"
-                        placeholder="Ingrese su usuario" required />
-                </div>
-
-                <div>
-                    <label for="contrasenia" class="form-label">Contraseña</label>
-
-                    <input type="password" class="form-control" id="contrasenia" name="password" placeholder="12345"
-                        required />
-                </div>
-
-                <button type="submit" class="btn btn-primary mx-auto mt-2">
-                    Iniciar Sesion
-                </button>
-
-                <p id="mensaje" class="text-center"></p>
-            </form>
-
-            <div class="card-footer text-center bg-primary text-white">Sistema Termos</div>
         </div>
-    </main>
-    <script src="../recursos/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
-    <script src="js/login.js" defer></script>
-</body>
 
+    </main>
+
+    <script src="js/login.js" defer></script>
+
+</body>
 </html>

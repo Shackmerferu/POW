@@ -28,7 +28,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContentDemo">
 
-                    <ul class="navbar-nav me-auto ms-auto mb-2 mb-lg-1">
+                    <ul class="navbar-nav me-auto ms-auto mb-2 mb-lg-1 gap-2">
 
                         <li class="nav-item">
                             <button type="button" id="btn-inicio" class="btn btn-primary">
@@ -115,9 +115,9 @@
         <!-- VISTA PERSONAS -->
         <section id="personas" class="d-none">
             <div class="container">
-            <!-- BUSCAR PERSONA -->
+                <!-- BUSCAR PERSONA -->
 
-            
+
                 <div class="card card-body">
 
                     <h1 class="card-title">Diccionario de Personas</h1>
@@ -145,135 +145,135 @@
                     </form>
 
                 </div>
-            
 
-            <!-- MENSAJE DE RESULTADO -->
 
-            <div id="mensaje-persona" class="alert alert-success mt-4 d-none"></div>
+                <!-- MENSAJE DE RESULTADO -->
 
-            <!-- FORMULARIO DE ACTUALIZACIÓN -->
+                <div id="mensaje-persona" class="alert alert-success mt-4 d-none"></div>
 
-            <section id="vista-actualizar-persona" class="d-none mt-4">
+                <!-- FORMULARIO DE ACTUALIZACIÓN -->
 
-                <div class="card card-body">
+                <section id="vista-actualizar-persona" class="d-none mt-4">
 
-                    <h3>Actualizar persona</h3>
+                    <div class="card card-body">
 
-                    <form id="form-actualizar-persona">
+                        <h3>Actualizar persona</h3>
 
-                        <div class="mb-3">
-                            <label for="dni-actualizar" class="form-label">DNI</label>
-                            <input type="number" id="dni-actualizar" class="form-control" disabled>
-                        </div>
+                        <form id="form-actualizar-persona">
 
-                        <div class="mb-3">
-                            <label for="nombre-actualizar" class="form-label">Nombre</label>
-                            <input type="text" id="nombre-actualizar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="dni-actualizar" class="form-label">DNI</label>
+                                <input type="number" id="dni-actualizar" class="form-control" disabled>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="apellido-actualizar" class="form-label">Apellido</label>
-                            <input type="text" id="apellido-actualizar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="nombre-actualizar" class="form-label">Nombre</label>
+                                <input type="text" id="nombre-actualizar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="direccion-actualizar" class="form-label">Dirección</label>
-                            <input type="text" id="direccion-actualizar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="apellido-actualizar" class="form-label">Apellido</label>
+                                <input type="text" id="apellido-actualizar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="ciudad-actualizar" class="form-label">Ciudad</label>
-                            <select id="ciudad-actualizar" class="form-select" required></select>
-                        </div>
+                            <div class="mb-3">
+                                <label for="direccion-actualizar" class="form-label">Dirección</label>
+                                <input type="text" id="direccion-actualizar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="provincia-actualizar" class="form-label">Provincia</label>
-                            <select id="provincia-actualizar" class="form-select" disabled>
-                                <option value="5" selected>La Pampa</option>
-                            </select>
-                        </div>
+                            <div class="mb-3">
+                                <label for="ciudad-actualizar" class="form-label">Ciudad</label>
+                                <select id="ciudad-actualizar" class="form-select" required></select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="email-actualizar" class="form-label">Email</label>
-                            <input type="email" id="email-actualizar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="provincia-actualizar" class="form-label">Provincia</label>
+                                <select id="provincia-actualizar" class="form-select" disabled>
+                                    <option value="5" selected>La Pampa</option>
+                                </select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="telefono-actualizar" class="form-label">Teléfono</label>
-                            <input type="text" id="telefono-actualizar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="email-actualizar" class="form-label">Email</label>
+                                <input type="email" id="email-actualizar" class="form-control" required>
+                            </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            Actualizar persona
-                        </button>
+                            <div class="mb-3">
+                                <label for="telefono-actualizar" class="form-label">Teléfono</label>
+                                <input type="text" id="telefono-actualizar" class="form-control" required>
+                            </div>
 
-                    </form>
+                            <button type="submit" class="btn btn-primary">
+                                Actualizar persona
+                            </button>
 
-                </div>
+                        </form>
 
-            </section>
+                    </div>
 
-            <!-- FORMULARIO DE REGISTRO -->
+                </section>
 
-            <section id="vista-registrar-persona" class="d-none mt-4">
+                <!-- FORMULARIO DE REGISTRO -->
 
-                <div class="card card-body">
+                <section id="vista-registrar-persona" class="d-none mt-4">
 
-                    <h3>Registrar persona</h3>
+                    <div class="card card-body">
 
-                    <form id="form-registrar-persona">
+                        <h3>Registrar persona</h3>
 
-                        <div class="mb-3">
-                            <label for="dni-registrar" class="form-label">DNI</label>
-                            <input type="number" id="dni-registrar" class="form-control" readonly required>
-                        </div>
+                        <form id="form-registrar-persona">
 
-                        <div class="mb-3">
-                            <label for="nombre-registrar" class="form-label">Nombre</label>
-                            <input type="text" id="nombre-registrar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="dni-registrar" class="form-label">DNI</label>
+                                <input type="number" id="dni-registrar" class="form-control" readonly required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="apellido-registrar" class="form-label">Apellido</label>
-                            <input type="text" id="apellido-registrar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="nombre-registrar" class="form-label">Nombre</label>
+                                <input type="text" id="nombre-registrar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="direccion-registrar" class="form-label">Dirección</label>
-                            <input type="text" id="direccion-registrar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="apellido-registrar" class="form-label">Apellido</label>
+                                <input type="text" id="apellido-registrar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="ciudad-registrar" class="form-label">Ciudad</label>
-                            <select id="ciudad-registrar" class="form-select" required></select>
-                        </div>
+                            <div class="mb-3">
+                                <label for="direccion-registrar" class="form-label">Dirección</label>
+                                <input type="text" id="direccion-registrar" class="form-control" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="provincia-registrar" class="form-label">Provincia</label>
-                            <select id="provincia-registrar" class="form-select" disabled>
-                                <option value="5" selected>La Pampa</option>
-                            </select>
-                        </div>
+                            <div class="mb-3">
+                                <label for="ciudad-registrar" class="form-label">Ciudad</label>
+                                <select id="ciudad-registrar" class="form-select" required></select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="email-registrar" class="form-label">Email</label>
-                            <input type="email" id="email-registrar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="provincia-registrar" class="form-label">Provincia</label>
+                                <select id="provincia-registrar" class="form-select" disabled>
+                                    <option value="5" selected>La Pampa</option>
+                                </select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="telefono-registrar" class="form-label">Teléfono</label>
-                            <input type="text" id="telefono-registrar" class="form-control" required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="email-registrar" class="form-label">Email</label>
+                                <input type="email" id="email-registrar" class="form-control" required>
+                            </div>
 
-                        <button type="submit" class="btn btn-success">
-                            Registrar persona
-                        </button>
+                            <div class="mb-3">
+                                <label for="telefono-registrar" class="form-label">Teléfono</label>
+                                <input type="text" id="telefono-registrar" class="form-control" required>
+                            </div>
 
-                    </form>
+                            <button type="submit" class="btn btn-success">
+                                Registrar persona
+                            </button>
 
-                </div>
+                        </form>
 
-            </section>
+                    </div>
+
+                </section>
             </div>
         </section>
 
@@ -336,26 +336,37 @@
 
                         <form id="formAgregarTermo">
 
+                            <!-- Título del producto -->
                             <div class="mb-3">
-                                <label for="tituloTermo" class="form-label">Título</label>
-                                <input type="text" class="form-control" id="tituloTermo" required>
+                                <label for="tituloTermo" class="form-label">Título del producto</label>
+                                <input type="text" class="form-control" id="tituloTermo">
                             </div>
 
+                            <!-- Título de la imagen -->
+                            <div class="mb-3">
+                                <label for="tituloImagenTermo" class="form-label">Título de la imagen</label>
+                                <input type="text" class="form-control" id="tituloImagenTermo">
+                            </div>
+
+                            <!-- Descripción -->
                             <div class="mb-3">
                                 <label for="descripcionTermo" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="descripcionTermo" required>
+                                <textarea class="form-control" id="descripcionTermo"></textarea>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="descripcionLargaTermo" class="form-label">Descripción larga</label>
-                                <textarea class="form-control" id="descripcionLargaTermo" rows="3"></textarea>
-                            </div>
-
+                            <!-- Texto alternativo -->
                             <div class="mb-3">
                                 <label for="textoAlternativoTermo" class="form-label">Texto alternativo</label>
-                                <input type="text" class="form-control" id="textoAlternativoTermo">
+                                <textarea class="form-control" id="textoAlternativoTermo"></textarea>
                             </div>
 
+                            <!-- Descripción larga -->
+                            <div class="mb-3">
+                                <label for="descripcionLargaTermo" class="form-label">Descripción larga</label>
+                                <textarea class="form-control" id="descripcionLargaTermo"></textarea>
+                            </div>
+
+                            <!-- Imagen -->
                             <div class="mb-3">
                                 <label for="imagenTermo" class="form-label">Imagen</label>
                                 <input type="file" class="form-control" id="imagenTermo" accept="image/*">
@@ -385,10 +396,22 @@
 
     </main>
 
+    <!-- ExifReader -->
+    <script src="lib/ExifReader-main/dist/exif-reader.js"></script>
 
+    <!-- Bootstrap -->
     <script src="../recursos/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Funciones generales del panel -->
     <script src="js/panel.js"></script>
+
+    <!-- Termos -->
+    <script src="js/termos-listado.js"></script>
+    <script src="js/termos-agregar.js"></script>
+
+    <!-- Personas -->
+    <script src="js/personas-consulta.js"></script>
+    <script src="js/personas-actualizar.js"></script>
 
 </body>
 
