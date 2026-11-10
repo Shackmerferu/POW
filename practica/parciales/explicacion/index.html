@@ -10,7 +10,7 @@
 <!-- lang="es": Le avisa a Google Chrome que la página está en español, así no le salta el cartelito molesto de "Desea traducir esta página" al usuario cada vez que entra. -->
 
 <head>
-<!-- <head>: Es la "cabeza". Acá van las configuraciones y los enchufes. Todo lo que pongas adentro de esta etiqueta es INVISIBLE para el usuario. -->
+    <!-- <head>: Es la "cabeza". Acá van las configuraciones y los enchufes. Todo lo que pongas adentro de esta etiqueta es INVISIBLE para el usuario. -->
 
     <meta charset="UTF-8">
     <!-- meta charset="UTF-8": Le enseña al navegador a leer caracteres latinos. Sin esto, los acentos (á, é) y las eñes (ñ) de "Gestión" o "Contraseña" se ven como rombos negros de error. -->
@@ -18,7 +18,7 @@
     <title>Logeo termo</title>
     <!-- <title>: Es el texto que va a aparecer arriba de todo de tu monitor, en la pestañita del navegador web. -->
 
-   <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <!-- <link>: Es un enchufe para conectar archivos de diseño externo. -->
     <!-- rel="stylesheet": Le aclara "el archivo que te voy a enchufar es una Hoja de Estilos (CSS)". -->
     <!-- href="...": (Hypertext Reference) Es la ruta de conexión. Le dice "Entrá a la carpeta css y traeme el diseño de Bootstrap". -->
@@ -31,8 +31,8 @@
 =========================================== -->
 
 <body class="bg-light">
-<!-- <body>: Es el cuerpo. Todo lo que esté acá adentro es lo que físicamente se dibuja en el rectángulo de la pantalla. -->
-<!-- class="bg-light": Es la primera magia de Bootstrap. "bg" significa Background (Fondo) y "light" es claro/gris. Pinta todo el fondo de la pantalla de un grisecito tenue para que no sea ese blanco puro que te quema los ojos. -->
+    <!-- <body>: Es el cuerpo. Todo lo que esté acá adentro es lo que físicamente se dibuja en el rectángulo de la pantalla. -->
+    <!-- class="bg-light": Es la primera magia de Bootstrap. "bg" significa Background (Fondo) y "light" es claro/gris. Pinta todo el fondo de la pantalla de un grisecito tenue para que no sea ese blanco puro que te quema los ojos. -->
 
 
     <!-- ==========================================
@@ -40,16 +40,16 @@
     =========================================== -->
 
     <div id="pantalla-login" class="container mt-5">
-    <!-- <div>: (Division). Es una caja vacía invisible. La usamos muchísimo para agrupar pedazos de la página. -->
-    <!-- id="pantalla-login": Es el DNI de esta caja. Único e irrepetible. Con este nombre, JavaScript la encuentra al instante para prenderla y apagarla. -->
-    <!-- class="container mt-5": (Bootstrap) 'container' centra toda la caja en el medio del monitor y le pone paredes (márgenes) a los costados para que no se estire. 'mt-5' significa Margin Top 5, le da un empujón hacia abajo separándola del techo. -->
+        <!-- <div>: (Division). Es una caja vacía invisible. La usamos muchísimo para agrupar pedazos de la página. -->
+        <!-- id="pantalla-login": Es el DNI de esta caja. Único e irrepetible. Con este nombre, JavaScript la encuentra al instante para prenderla y apagarla. -->
+        <!-- class="container mt-5": (Bootstrap) 'container' centra toda la caja en el medio del monitor y le pone paredes (márgenes) a los costados para que no se estire. 'mt-5' significa Margin Top 5, le da un empujón hacia abajo separándola del techo. -->
 
         <div class="card p-4 mx-auto shadow" style="max-width: 400px;">
-        <!-- class="card": Arma una "tarjeta" blanca con bordes sutilmente redondeados. -->
-        <!-- p-4: Padding 4. Le da "aire" por el lado de adentro, para que el título y los botones no se peguen a los bordes de la tarjeta. -->
-        <!-- mx-auto: Margin en el eje X automático. Empuja la caja desde la izquierda y derecha por igual, logrando que el cuadradito del login quede perfectamente centrado. -->
-        <!-- shadow: Le pone una sombrita difuminada atrás para que parezca que la caja flota sobre el fondo gris. -->
-        <!-- style="max-width: 400px;": Es un freno de mano. Limita el ancho para que la tarjeta de login no se estire deforme de punta a punta del monitor. -->
+            <!-- class="card": Arma una "tarjeta" blanca con bordes sutilmente redondeados. -->
+            <!-- p-4: Padding 4. Le da "aire" por el lado de adentro, para que el título y los botones no se peguen a los bordes de la tarjeta. -->
+            <!-- mx-auto: Margin en el eje X automático. Empuja la caja desde la izquierda y derecha por igual, logrando que el cuadradito del login quede perfectamente centrado. -->
+            <!-- shadow: Le pone una sombrita difuminada atrás para que parezca que la caja flota sobre el fondo gris. -->
+            <!-- style="max-width: 400px;": Es un freno de mano. Limita el ancho para que la tarjeta de login no se estire deforme de punta a punta del monitor. -->
 
             <h3 class="text-center mb-4">Ingreso de la tienda</h3>
             <!-- <h3>: Título de tamaño 3 (h1 es el más grande de la web, h6 el más chico). -->
@@ -79,61 +79,64 @@
          CAJA 2: EL SISTEMA PRINCIPAL (TIENDA)
     =========================================== -->
 
-    <div id="pantalla-sistema" class="container mt-5 d-none">
-    <!-- d-none: (Display None). Esta es la clase más importante de tu examen. Hace que toooooda esta caja (con sus botones y su tabla) nazca siendo INVISIBLE. JavaScript se la va a arrancar recién cuando la API devuelva un Token 200 OK. -->
+    <div id="pantalla-sistema" class="container-fluid mt-5 d-none">
+        <!-- d-none: (Display None). Esta es la clase más importante de tu examen. Hace que toooooda esta caja (con sus botones y su tabla) nazca siendo INVISIBLE. JavaScript se la va a arrancar recién cuando la API devuelva un Token 200 OK. -->
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-        <!-- d-flex: (Flexbox). Transforma la caja en elástica. -->
-        <!-- justify-content-between: Agarra lo que tiene adentro (el título h2 y el botón salir) y los tira a los extremos con fuerza centrífuga. El Título queda pegado a la pared izquierda, el botón pegado a la pared derecha. -->
-        <!-- align-items-center: Se asegura de que queden a la misma altura verticalmente, sin chocar contra el techo de la caja. -->
+            <!-- d-flex: (Flexbox). Transforma la caja en elástica. -->
+            <!-- justify-content-between: Agarra lo que tiene adentro (el título h2 y el botón salir) y los tira a los extremos con fuerza centrífuga. El Título queda pegado a la pared izquierda, el botón pegado a la pared derecha. -->
+            <!-- align-items-center: Se asegura de que queden a la misma altura verticalmente, sin chocar contra el techo de la caja. -->
 
             <h2>Gestión de Termos</h2>
-            
+
             <button id="btn-salir" class="btn btn-danger">Cerrar Sesión</button>
             <!-- btn-danger: Pinta el botón de color Rojo intenso (Peligro/Alerta). -->
 
         </div>
-        
-        <div class="mb-4">
-            <button id="btn-ver-termos" class="btn btn-success">Ver Catálogo</button>
-            <!-- btn-success: Pinta el botón de Verde (Éxito/Aceptar). -->
+        <div id="pantalla-sistema" class="container">
+            <div class="mb-4">
+                <button id="btn-ver-termos" class="btn btn-success">Ver Catálogo</button>
+                <!-- btn-success: Pinta el botón de Verde (Éxito/Aceptar). -->
 
-            <button id="btn-alta" class="btn btn-outline-primary">Alta Producto</button>
-            <!-- btn-outline-primary: Botón azul transparente, que solo dibuja el reborde exterior. Queda finísimo. Cuando le pasás el mouse por arriba, se rellena todo de azul sólido. -->
-        </div>
+                <button id="btn-alta" class="btn btn-outline-primary">Alta Producto</button>
+                <!-- btn-outline-primary: Botón azul transparente, que solo dibuja el reborde exterior. Queda finísimo. Cuando le pasás el mouse por arriba, se rellena todo de azul sólido. -->
+            </div>
 
-        <div id="resultados" class="p-3 bg-white border rounded shadow-sm">
-        <!-- id="resultados": Esta es la "Caja Mágica". Está vacía a propósito. Acá es donde tu JavaScript (después del fetch) va a escupir la lista de los termos. -->
-        <!-- p-3 bg-white border rounded shadow-sm: Son "retoques estéticos". Padding 3, fondo blanco, un borde gris sutil, bordes redondeados y una sombra suave para que parezca un panel de control real. -->
-            
-            Acá aparecerán los resultados...
-            
+            <div id="resultados" class="p-3 bg-white border rounded shadow-sm">
+                <!-- id="resultados": Esta es la "Caja Mágica". Está vacía a propósito. Acá es donde tu JavaScript (después del fetch) va a escupir la lista de los termos. -->
+                <!-- p-3 bg-white border rounded shadow-sm: Son "retoques estéticos". Padding 3, fondo blanco, un borde gris sutil, bordes redondeados y una sombra suave para que parezca un panel de control real. -->
+
+                Acá aparecerán los resultados...
+
+            </div>
         </div>
     </div>
 
 
-   
+
     <!-- PANTALLA DE REGISTRO (Arranca oculta con d-none) -->
-<div id="pantalla-registro" class="container mt-5 d-none">
-    <div class="card p-4 mx-auto shadow" style="max-width: 400px;">
-        <h3 class="text-center mb-4">Crear Cuenta Nueva</h3>
-        
-        <input type="text" id="reg-usuario" class="form-control mb-3" placeholder="Elegí un Usuario">
-        <input type="password" id="reg-clave" class="form-control mb-3" placeholder="Elegí una Contraseña">
-        
-        <button id="btn-registrar" class="btn btn-success w-100 mb-2">Registrarme</button>
-        
-        <!-- Botón sutil para volver al login si se arrepiente -->
-        <button id="btn-volver-login" class="btn btn-link w-100">Ya tengo cuenta, iniciar sesión</button>
+    <div id="pantalla-registro" class="container mt-5 d-none">
+        <div class="card p-4 mx-auto shadow" style="max-width: 400px;">
+            <h3 class="text-center mb-4">Crear Cuenta Nueva</h3>
+
+            <input type="text" id="reg-usuario" class="form-control mb-3" placeholder="Elegí un Usuario">
+            <input type="password" id="reg-clave" class="form-control mb-3" placeholder="Elegí una Contraseña">
+
+            <button id="btn-registrar" class="btn btn-success w-100 mb-2">Registrarme</button>
+
+            <!-- Botón sutil para volver al login si se arrepiente -->
+            <button id="btn-volver-login" class="btn btn-link w-100">Ya tengo cuenta, iniciar sesión</button>
+        </div>
     </div>
-</div>
-  <!-- ==========================================
+    <!-- ==========================================
          EL CEREBRO
     =========================================== -->
 
     <script src="js/app.js"></script>
+    <script src="../../bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
     <!-- <script>: Enchufe para la programación. -->
     <!-- src="...": (Source). Ruta que busca a tu cadete de JavaScript. -->
-    
+
 </body>
+
 </html>
