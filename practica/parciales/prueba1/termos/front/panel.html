@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de administración</title>
+
+    <link rel="stylesheet" href="../recursos/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+</head>
+
+<body class="m-0">
+
+    <header>
+        <nav class="navbar navbar-expand-lg bg-primary navbar-dark m-0">
+            <div class="container-fluid">
+
+                <a class="navbar-brand fw-bold text-white" href="#">
+                    <h4 class="mb-0">Sistema Termos</h4>
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContentDemo">
+
+                    <ul class="navbar-nav me-auto ms-auto mb-2 mb-lg-1 gap-2">
+
+                        <li class="nav-item">
+                            <button type="button" id="btn-inicio" class="btn btn-primary">
+                                Inicio
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button type="button" id="btn-termos" class="btn btn-primary">
+                                Termos
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button type="button" id="btn-personas" class="btn btn-primary">
+                                Personas
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <button type="button" id="btn-salir" class="btn btn-danger btn-sm">
+                    Cerrar sesión
+                </button>
+
+            </div>
+        </nav>
+    </header>
+
+
+    <main class="container-fluid mt-3 mb-3">
+
+        <!-- VISTA INICIO -->
+        <section id="inicio">
+
+            <div class="d-flex flex-column gap-3 w-100 me-auto">
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <h1 class="card-title">Inicio</h1>
+
+                        <p class="card-text">
+                            Bienvenido al Sistema Termos, selecciona alguna de las pestañas para interactuar con el
+                            sistema.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VISTA TERMOS -->
+        <section id="termos" class="d-none">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h1 class="card-title">Termos</h1>
+                    <p class="card-text">Catalogo de termos</p>
+                </div>
+
+                <div>
+                    <button type="button" id="btnAgregarTermo" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#modalAgregarTermo">
+                        Agregar termo
+                    </button>
+                </div>
+
+            </div>
+
+            <div id="lista-termos" class="d-flex flex-column gap-3 w-100 ms-auto me-auto mt-2">
+
+                <!-- JavaScript insertará las tarjetas aquí -->
+
+            </div>
+
+        </section>
+
+        <!-- VISTA PERSONAS -->
+        <section id="personas" class="d-none">
+            <div class="container ">
+                <!-- BUSCAR PERSONA -->
+
+
+                <div class="card card-body">
+
+                    <h1 class="card-title">Diccionario de Personas</h1>
+                    <p class="card-text">Consulta por DNI</p>
+
+                    <form id="form-buscar-persona" novalidate>
+
+                        <div class="mb-3">
+                            <label for="dni-buscar" class="form-label">
+                                DNI de la persona
+                            </label>
+
+                            <input type="number" id="dni-buscar" class="form-control" min="3000000" max="50000000"
+                                step="1" required>
+
+                            <div class="form-text">
+                                Rango permitido: 3.000.000 a 50.000.000.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            Consultar persona
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- MENSAJE DE RESULTADO -->
+
+                <div id="mensaje-persona" class="alert alert-success mt-4 d-none"></div>
+
+                <!-- FORMULARIO DE ACTUALIZACIÓN -->
+
+                <section id="vista-actualizar-persona" class="d-none mt-4">
+
+                    <div class="card card-body">
+
+                        <h3>Actualizar persona</h3>
+
+                        <form id="form-actualizar-persona">
+
+                            <div class="mb-3">
+                                <label for="dni-actualizar" class="form-label">DNI</label>
+                                <input type="number" id="dni-actualizar" class="form-control" disabled>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nombre-actualizar" class="form-label">Nombre</label>
+                                <input type="text" id="nombre-actualizar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="apellido-actualizar" class="form-label">Apellido</label>
+                                <input type="text" id="apellido-actualizar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="direccion-actualizar" class="form-label">Dirección</label>
+                                <input type="text" id="direccion-actualizar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ciudad-actualizar" class="form-label">Ciudad</label>
+                                <select id="ciudad-actualizar" class="form-select" required></select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="provincia-actualizar" class="form-label">Provincia</label>
+                                <select id="provincia-actualizar" class="form-select" disabled>
+                                    <option value="5" selected>La Pampa</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email-actualizar" class="form-label">Email</label>
+                                <input type="email" id="email-actualizar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefono-actualizar" class="form-label">Teléfono</label>
+                                <input type="text" id="telefono-actualizar" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                Actualizar persona
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+                <!-- FORMULARIO DE REGISTRO -->
+
+                <section id="vista-registrar-persona" class="d-none mt-4">
+
+                    <div class="card card-body">
+
+                        <h3>Registrar persona</h3>
+
+                        <form id="form-registrar-persona">
+
+                            <div class="mb-3">
+                                <label for="dni-registrar" class="form-label">DNI</label>
+                                <input type="number" id="dni-registrar" class="form-control" readonly required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nombre-registrar" class="form-label">Nombre</label>
+                                <input type="text" id="nombre-registrar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="apellido-registrar" class="form-label">Apellido</label>
+                                <input type="text" id="apellido-registrar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="direccion-registrar" class="form-label">Dirección</label>
+                                <input type="text" id="direccion-registrar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ciudad-registrar" class="form-label">Ciudad</label>
+                                <select id="ciudad-registrar" class="form-select" required></select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="provincia-registrar" class="form-label">Provincia</label>
+                                <select id="provincia-registrar" class="form-select" disabled>
+                                    <option value="5" selected>La Pampa</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email-registrar" class="form-label">Email</label>
+                                <input type="email" id="email-registrar" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telefono-registrar" class="form-label">Teléfono</label>
+                                <input type="text" id="telefono-registrar" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">
+                                Registrar persona
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </section>
+            </div>
+        </section>
+
+
+        <!-- MODAL DE DETALLES -->
+        <div class="modal fade" id="modalTermo" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title" id="modalTitulo"></h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <img id="modalImagen" class="img-fluid rounded mb-3" alt="">
+
+                        <p id="modalDescripcion"></p>
+
+                        <p id="modalDescripcionLarga"></p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- MODAL DE AGREGAR TERMO -->
+        <div class="modal fade" id="modalAgregarTermo" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar termo</h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <form id="formAgregarTermo">
+
+                            <!-- Título del producto -->
+                            <div class="mb-3">
+                                <label for="tituloTermo" class="form-label">Título del producto</label>
+                                <input type="text" class="form-control" id="tituloTermo">
+                            </div>
+
+                            <!-- Título de la imagen -->
+                            <div class="mb-3">
+                                <label for="tituloImagenTermo" class="form-label">Título de la imagen</label>
+                                <input type="text" class="form-control" id="tituloImagenTermo">
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcionTermo" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcionTermo"></textarea>
+                            </div>
+
+                            <!-- Texto alternativo -->
+                            <div class="mb-3">
+                                <label for="textoAlternativoTermo" class="form-label">Texto alternativo</label>
+                                <textarea class="form-control" id="textoAlternativoTermo"></textarea>
+                            </div>
+
+                            <!-- Descripción larga -->
+                            <div class="mb-3">
+                                <label for="descripcionLargaTermo" class="form-label">Descripción larga</label>
+                                <textarea class="form-control" id="descripcionLargaTermo"></textarea>
+                            </div>
+
+                            <!-- Imagen -->
+                            <div class="mb-3">
+                                <label for="imagenTermo" class="form-label">Imagen</label>
+                                <input type="file" class="form-control" id="imagenTermo" accept="image/*">
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="submit" form="formAgregarTermo" class="btn btn-success">
+                            Guardar termo
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ExifReader -->
+    <script src="lib/ExifReader-main/dist/exif-reader.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="../recursos/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Funciones generales del panel -->
+    <script src="js/panel.js"></script>
+
+    <!-- Termos -->
+    <script src="js/termos-listado.js"></script>
+    <script src="js/termos-agregar.js"></script>
+
+    <!-- Personas -->
+    <script src="js/personas-consulta.js"></script>
+    <script src="js/personas-actualizar.js"></script>
+
+</body>
+
+</html>
