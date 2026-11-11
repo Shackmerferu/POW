@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentación Offline Bootstrap 5.3.8 — Posicionamiento y Maquetado con Flexbox</title>
+  <!-- Bootstrap 5.3.8 CSS Local (mismos assets que la guía principal) -->
+  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+  <!-- Estilos de la documentación offline (se reutilizan para mantener el mismo diseño) -->
+  <link rel="stylesheet" href="docs-assets/docs.css">
+</head>
+<body>
+
+  <!-- Barra de navegación superior -->
+  <header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top">
+    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Navegación principal">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="26" fill="currentColor" class="bi bi-bootstrap-fill" viewBox="0 0 16 16">
+          <path d="M6.375 7.125V4.658h1.78c.973 0 1.542.457 1.542 1.237 0 .802-.604 1.23-1.764 1.23zm0 3.762h1.898c1.184 0 1.81-.48 1.81-1.377 0-.885-.65-1.348-1.886-1.348H6.375z"/>
+          <path d="M4.002 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4zm1.06 12V3.545h3.399c1.587 0 2.543.809 2.543 2.11 0 .884-.65 1.675-1.483 1.816v.1c1.143.117 1.904.931 1.904 2.033 0 1.488-1.084 2.396-2.888 2.396z"/>
+        </svg>
+        <span>Maquetado <span class="badge bg-light text-dark ms-1">v5.3.8 Offline</span></span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdSidebarOffcanvas" aria-controls="bdSidebarOffcanvas" aria-label="Abrir índice de navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="d-flex align-items-center gap-2 ms-auto mt-2 mt-lg-0">
+        <!-- Buscador rápido -->
+        <div class="input-group input-group-sm" style="max-width: 260px;">
+          <span class="input-group-text bg-white bg-opacity-10 text-white border-light border-opacity-25">🔍</span>
+          <input type="search" id="sidebarSearch" class="form-control bg-white bg-opacity-10 text-white border-light border-opacity-25" placeholder="Buscar clase de maquetado..." aria-label="Buscar en la documentación">
+        </div>
+
+        <!-- Botón de cambio de tema Claro / Oscuro -->
+        <button type="button" id="themeSwitcher" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1 text-nowrap">
+          <span>🌓</span>
+          <span id="themeSwitcherLabel">Modo Claro</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenedor principal con Sidebar + Contenido -->
+  <div class="container-xxl bd-layout">
+    <!-- Sidebar de navegación (Offcanvas en móvil, fijo en escritorio) -->
+    <aside class="bd-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebarOffcanvas" aria-labelledby="bdSidebarOffcanvasLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold" id="bdSidebarOffcanvasLabel">Índice: Maquetado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#bdSidebarOffcanvas" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="offcanvas-body d-block">
+        <nav class="bd-links-nav" aria-label="Navegación de documentación">
+          <div class="bd-links-heading">Comenzando</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link active" href="#maq-intro">Cómo se maqueta en Bootstrap</a></li>
+            <li><a class="nav-link" href="#maq-eje">El eje de Flexbox (main / cross)</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Flexbox (posición y flujo)</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#maq-d-flex"><code>.d-flex</code> y dirección</a></li>
+            <li><a class="nav-link" href="#maq-flex-fill">Reparto: <code>.flex-fill</code> / <code>.flex-grow</code></a></li>
+            <li><a class="nav-link" href="#maq-flex-wrap"><code>.flex-wrap</code> y <code>.order-*</code></a></li>
+          </ul>
+
+          <div class="bd-links-heading">Alineación</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#maq-justify"><code>.justify-content-*</code></a></li>
+            <li><a class="nav-link" href="#maq-align"><code>.align-items-*</code> y <code>.align-self-*</code></a></li>
+            <li><a class="nav-link" href="#maq-centrado">Centrado total (patrón del login)</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Márgenes automáticos</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#maq-auto"><code>.me-auto</code> / <code>.ms-auto</code> / <code>.mx-auto</code></a></li>
+          </ul>
+
+          <div class="bd-links-heading">Tamaños</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#maq-widths"><code>.w-*</code>, <code>.vh-*</code> y <code>.min-vh-100</code></a></li>
+          </ul>
+
+          <div class="bd-links-heading">Display y Espaciado</div>
+          <ul class="list-unstyled mb-2">
+            <li><a class="nav-link" href="#maq-display"><code>.d-none</code> y variantes</a></li>
+            <li><a class="nav-link" href="#maq-gap"><code>.gap-*</code> vs <code>.mb-*</code></a></li>
+            <li><a class="nav-link" href="#maq-spacing"><code>.mt-3</code> / <code>.mb-3</code> (sintaxis m/p)</a></li>
+          </ul>
+
+          <div class="bd-links-heading">Patrones (tu proyecto)</div>
+          <ul class="list-unstyled mb-4">
+            <li><a class="nav-link" href="#maq-navbar">Navbar: clase por clase</a></li>
+            <li><a class="nav-link" href="#maq-recetas">Recetas exactas del panel</a></li>
+            <li><a class="nav-link" href="#maq-cheatsheet">Tabla resumen</a></li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="py-4 px-lg-3">
+      <!-- Encabezado y filtros por categoría -->
+      <div class="p-4 mb-4 rounded-3 bg-body-tertiary border">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+          <span class="badge text-bg-primary">Técnicas de maquetado</span>
+          <span class="text-body-secondary small">Fuente oficial: <code>getbootstrap.com/docs/5.3/utilities/flex/</code></span>
+        </div>
+        <h1 class="display-6 fw-bold mb-2">Posicionamiento y Maquetado con Flexbox en Bootstrap 5.3</h1>
+        <p class="lead mb-3">
+          Guía 100% offline que explica las técnicas y propiedades que se usan para <strong>maquetar</strong> (ubicar, alinear y distribuir elementos) con las utilidades de Flexbox, márgenes automáticos y tamaños de Bootstrap: <code>.d-flex</code>, <code>.flex-column</code>, <code>.justify-content-between</code>, <code>.align-items-center</code>, <code>.gap-3</code>, <code>.me-auto</code>, <code>.w-100</code>, <code>.min-vh-100</code>, etc. Los ejemplos replican los patrones reales del Sistema Termos (login y panel).
+        </p>
+        <!-- Filtros rápidos por categoría -->
+        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
+          <button type="button" class="btn btn-sm btn-outline-primary active" data-filter-category="all">Todo</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="intro">Conceptos</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="flex">Flexbox</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="align">Alineación</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="autos">Márgenes auto</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="sizes">Tamaños</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="display">Display y Espaciado</button>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-filter-category="patrones">Patrones del proyecto</button>
+        </div>
+      </div>
+
+      <!-- Alerta cuando no hay resultados de búsqueda -->
+      <div id="noSearchResults" class="alert alert-warning d-none" role="alert">
+        No se encontraron secciones que coincidan con tu búsqueda. Prueba con otro término o selecciona la categoría <strong>Todo</strong>.
+      </div>
+
+      <!-- =====================================================================
+           SECCIÓN 1: CONCEPTOS
+           ===================================================================== -->
+      <section id="maq-intro" class="doc-section" data-category="intro">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Cómo se maqueta en Bootstrap (la idea central)</h2>
+          <span class="doc-badge-class">display: flex / contenedor + ítems</span>
+        </div>
+        <p class="text-body-secondary">
+          Maquetar es <strong>organizar cajas</strong>: decidir qué va en línea, qué apilado, qué va a la izquierda y qué a la derecha. En Bootstrap 5 la herramienta central para eso es <strong>Flexbox</strong>. La mecánica siempre es la misma y tiene dos roles:
+        </p>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Rol</th>
+                <th>Clase</th>
+                <th>Qué significa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Contenedor flexible</strong></td>
+                <td><code>.d-flex</code></td>
+                <td>El elemento que <em>organiza</em> a sus hijos. Al aplicarle <code>.d-flex</code> sus hijos directos pasan a apoyarse en línea (por defecto en fila).</td>
+              </tr>
+              <tr>
+                <td><strong>Ítems flexibles</strong></td>
+                <td>los hijos directos</td>
+                <td>Los elementos que <em>son organizados</em>. Solo los hijos <strong>directos</strong> del contenedor obedecen a <code>justify-content</code>, <code>align-items</code> y <code>gap</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>El contenedor <code>.d-flex</code> organiza a sus hijos directos (los tres bloques internos)</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary">
+              <div class="p-2 bg-primary bg-opacity-10 border border-primary rounded flex-fill text-center">Hijo 1</div>
+              <div class="p-2 bg-success bg-opacity-10 border border-success rounded flex-fill text-center">Hijo 2</div>
+              <div class="p-2 bg-danger bg-opacity-10 border border-danger rounded flex-fill text-center">Hijo 3</div>
+            </div>
+            <p class="small text-body-secondary mt-2 mb-0">
+              Si en lugar de <code>.d-flex</code> el contenedor no tuviera nada, los tres bloques (por ser <code>div</code>) se apilarían uno debajo del otro: el flujo normal de bloque.
+            </p>
+          </div>
+        </div>
+        <div class="alert alert-info d-flex align-items-start" role="alert">
+          <span class="me-2 fs-5">💡</span>
+          <div>
+            <strong>Regla de lectura:</strong> las clases de alineación (<code>justify-content-*</code>, <code>align-items-*</code>, <code>gap-*</code>) se ponen <strong>en el padre</strong> y afectan a sus hijos; las clases de tamaño y margen automático (<code>.w-50</code>, <code>.me-auto</code>) se ponen <strong>en el hijo</strong> que querés mover.
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-eje" class="doc-section" data-category="intro">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">El eje de Flexbox: main axis y cross axis</h2>
+          <span class="doc-badge-class">justify-content = eje principal / align-items = eje cruzado</span>
+        </div>
+        <p class="text-body-secondary">
+          Toda la confusión de Flexbox desaparece cuando se entiende que hay <strong>dos ejes</strong> que dependen de la dirección del contenedor:
+        </p>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Dirección del contenedor</th>
+                <th>Eje principal (lo controla <code>justify-content</code>)</th>
+                <th>Eje cruzado (lo controla <code>align-items</code>)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>.flex-row</code> (por defecto) → horizontal</td>
+                <td><strong>Horizontal</strong> → izquierda / centro / derecha</td>
+                <td><strong>Vertical</strong> → arriba / centro / abajo</td>
+              </tr>
+              <tr>
+                <td><code>.flex-column</code> → vertical</td>
+                <td><strong>Vertical</strong> → arriba / centro / abajo</td>
+                <td><strong>Horizontal</strong> → izquierda / centro / derecha</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Misma clase <code>justify-content-center</code>: en fila centra horizontal, en columna centra vertical</span>
+          </div>
+          <div class="bd-example">
+            <p class="small text-body-secondary mb-1"><code>d-flex justify-content-center</code> (fila → centra en horizontal):</p>
+            <div class="d-flex justify-content-center gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">A</div>
+              <div class="p-2 bg-success text-white rounded">B</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>d-flex flex-column justify-content-center</code> (columna → centra en vertical):</p>
+            <div class="d-flex flex-column justify-content-center gap-2 p-2 border rounded bg-body-tertiary" style="height: 130px;">
+              <div class="p-2 bg-primary text-white rounded" style="width: fit-content;">A</div>
+              <div class="p-2 bg-success text-white rounded" style="width: fit-content;">B</div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-warning mb-0" role="alert">
+          <strong>Por eso</strong> el login de tu proyecto usa <em>las dos</em> clases: <code>justify-content-center</code> (centra la tarjeta en horizontal) <strong>y</strong> <code>align-items-center</code> (la centra en vertical). Una sola no alcanza.
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 2: FLEXBOX
+           ===================================================================== -->
+      <section id="maq-d-flex" class="doc-section" data-category="flex">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Activar Flex y elegir dirección: <code>.d-flex</code> + <code>.flex-*</code></h2>
+          <span class="doc-badge-class">.d-flex / .flex-column / .flex-row-reverse</span>
+        </div>
+        <p class="text-body-secondary">
+          <code>.d-flex</code> convierte un elemento en contenedor flexible (aplica <code>display: flex</code>) y <code>.flex-{dirección}</code> decide hacia dónde se apoyan los hijos: <code>.flex-row</code> (fila, por defecto), <code>.flex-column</code> (columna), <code>.flex-row-reverse</code> y <code>.flex-column-reverse</code> (invierten el orden visual). Todos tienen versión responsiva: <code>.flex-md-column</code>, <code>.flex-lg-row</code>, etc.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Las cuatro direcciones básicas</span>
+          </div>
+          <div class="bd-example">
+            <p class="small text-body-secondary mb-1"><code>.flex-row</code> — uno al lado del otro (por defecto):</p>
+            <div class="d-flex flex-row gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">1</div>
+              <div class="p-2 bg-success text-white rounded">2</div>
+              <div class="p-2 bg-danger text-white rounded">3</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.flex-column</code> — apilados (el patrón de tus formularios):</p>
+            <div class="d-flex flex-column gap-2 p-2 border rounded bg-body-tertiary mb-3" style="width: fit-content;">
+              <div class="p-2 bg-primary text-white rounded">1</div>
+              <div class="p-2 bg-success text-white rounded">2</div>
+              <div class="p-2 bg-danger text-white rounded">3</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.flex-row-reverse</code> — visualmente invertido:</p>
+            <div class="d-flex flex-row-reverse gap-2 p-2 border rounded bg-body-tertiary">
+              <div class="p-2 bg-primary text-white rounded">1</div>
+              <div class="p-2 bg-success text-white rounded">2</div>
+              <div class="p-2 bg-danger text-white rounded">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Patrón real: formulario apilado con <code>d-flex flex-column gap-3 p-4</code> (así está armado tu login)</span>
+          </div>
+          <div class="bd-example">
+            <form class="d-flex flex-column gap-3 p-3 border rounded bg-body-tertiary" onsubmit="event.preventDefault()">
+              <div>
+                <label class="form-label" for="maq-demo-usuario">Usuario</label>
+                <input type="text" class="form-control" id="maq-demo-usuario" placeholder="Ingrese su usuario">
+              </div>
+              <div>
+                <label class="form-label" for="maq-demo-pass">Contraseña</label>
+                <input type="password" class="form-control" id="maq-demo-pass" placeholder="Ingrese su contraseña">
+              </div>
+              <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </form>
+          </div>
+        </div>
+        <div class="alert alert-info mb-0" role="alert">
+          <strong>¿Por qué <code>flex-column</code> y no <code>div</code> normales?</strong> Visualmente parecen iguales, pero un contenedor flex te da superpoderes que los bloques no tienen: <code>gap</code> para separar (sin margenes que se acumulan), <code>justify-content</code>, <code>align-items</code> y márgenes automáticos para distribuir los hijos. Es la base de todo el resto de esta guía.
+        </div>
+      </section>
+
+      <section id="maq-flex-fill" class="doc-section" data-category="flex">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Reparto del espacio: <code>.flex-fill</code>, <code>.flex-grow-*</code> y <code>.flex-shrink-*</code></h2>
+          <span class="doc-badge-class">.flex-fill / .flex-grow-1 / .flex-shrink-0</span>
+        </div>
+        <p class="text-body-secondary">
+          Cuando sobra (o falta) espacio en el eje principal, Flexbox lo reparte entre los hijos según estas propiedades. <code>.flex-fill</code> (= <code>flex: 1 1 auto</code>) hace que el hijo <strong>crezca hasta ocupar el espacio libre</strong>. <code>.flex-grow-1</code> / <code>.flex-grow-0</code> activan o desactivan el crecimiento; <code>.flex-shrink-0</code> / <code>.flex-shrink-1</code> controlan si el hijo puede encogerse (útil para evitar que un botón o un sidebar se aplasten).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Sin flex-fill, con flex-fill en uno, y con flex-grow en dos (reparto proporcional)</span>
+          </div>
+          <div class="bd-example">
+            <p class="small text-body-secondary mb-1">Hijos con su ancho natural (queda espacio libre a la derecha):</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">Uno</div>
+              <div class="p-2 bg-success text-white rounded">Dos</div>
+            </div>
+            <p class="small text-body-secondary mb-1">El segundo hijo con <code>.flex-fill</code> absorbe todo el espacio libre:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">Uno</div>
+              <div class="p-2 bg-success text-white rounded flex-fill text-center">Dos (.flex-fill)</div>
+            </div>
+            <p class="small text-body-secondary mb-1">Tres hijos con <code>.flex-grow-1</code> se reparten el espacio por igual:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary">
+              <div class="p-2 bg-primary text-white rounded flex-grow-1 text-center">grow</div>
+              <div class="p-2 bg-success text-white rounded flex-grow-1 text-center">grow</div>
+              <div class="p-2 bg-danger text-white rounded flex-grow-1 text-center">grow</div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Patrón típico de maquetado: sidebar fija + contenido que crece (<code>.flex-shrink-0</code> + <code>.flex-fill</code>)</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex gap-3 border rounded p-2 bg-body-tertiary">
+              <div class="p-2 bg-secondary bg-opacity-25 border rounded flex-shrink-0" style="width: 130px;">
+                <code>.flex-shrink-0</code><br>Sidebar que nunca se aplasta
+              </div>
+              <div class="p-2 bg-primary bg-opacity-10 border border-primary rounded flex-fill">
+                <code>.flex-fill</code> — Contenido principal: crece y ocupa el resto del ancho.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-flex-wrap" class="doc-section" data-category="flex">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Corte de línea y orden visual: <code>.flex-wrap</code> y <code>.order-*</code></h2>
+          <span class="doc-badge-class">.flex-wrap / .flex-nowrap / .order-1..5</span>
+        </div>
+        <p class="text-body-secondary">
+          Por defecto los ítems flex <strong>no bajan de línea</strong> (<code>.flex-nowrap</code>), por lo que si no entran, se aprietan o desbordan. Con <code>.flex-wrap</code> permiten bajar a la siguiente línea cuando no hay lugar (comportamiento responsivo natural para chips, botones y cards). El orden visual se altera con <code>.order-{0..5}</code> (y <code>.order-first</code> / <code>.order-last</code>), sin tocar el HTML; también tiene versiones responsivas (<code>.order-md-1</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Con <code>.flex-nowrap</code> se aprietan; con <code>.flex-wrap</code> bajan de línea; con <code>.order-*</code> se reordenan</span>
+          </div>
+          <div class="bd-example">
+            <p class="small text-body-secondary mb-1"><code>.flex-nowrap</code> (default): se comprimen para entrar todos:</p>
+            <div class="d-flex flex-nowrap gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">Etiqueta uno</div>
+              <div class="p-2 bg-success text-white rounded">Etiqueta dos</div>
+              <div class="p-2 bg-danger text-white rounded">Etiqueta tres</div>
+              <div class="p-2 bg-warning text-dark rounded">Etiqueta cuatro</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.flex-wrap</code>: los que no entran bajan de línea:</p>
+            <div class="d-flex flex-wrap gap-2 p-2 border rounded bg-body-tertiary mb-3">
+              <div class="p-2 bg-primary text-white rounded">Etiqueta uno</div>
+              <div class="p-2 bg-success text-white rounded">Etiqueta dos</div>
+              <div class="p-2 bg-danger text-white rounded">Etiqueta tres</div>
+              <div class="p-2 bg-warning text-dark rounded">Etiqueta cuatro</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.order-*</code>: el HTML dice 1, 2, 3 pero se pintan reordenados:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary">
+              <div class="p-2 bg-success text-white rounded order-2">HTML 1 (order-2)</div>
+              <div class="p-2 bg-danger text-white rounded order-3">HTML 2 (order-3)</div>
+              <div class="p-2 bg-primary text-white rounded order-1">HTML 3 (order-1)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 3: ALINEACIÓN
+           ===================================================================== -->
+      <section id="maq-justify" class="doc-section" data-category="align">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Distribución en el eje principal: <code>.justify-content-*</code></h2>
+          <span class="doc-badge-class">.justify-content-between / -center / -end / -start</span>
+        </div>
+        <p class="text-body-secondary">
+          Controla cómo se distribuyen los hijos <strong>a lo largo del eje principal</strong> (horizontal en fila, vertical en columna). Es la clase que usás cuando querés "algo a la izquierda y algo a la derecha" (<code>.justify-content-between</code>) o "todo centrado" (<code>.justify-content-center</code>).
+        </p>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Clase</th>
+                <th>Resultado</th>
+                <th>Uso típico en maquetado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>.justify-content-start</code></td><td>Agrupados al inicio</td><td>Es el default: menú de botones a la izquierda.</td></tr>
+              <tr><td><code>.justify-content-center</code></td><td>Centrados</td><td>Barra de botones centrada, login centrado.</td></tr>
+              <tr><td><code>.justify-content-end</code></td><td>Agrupados al final</td><td>Botones de acción a la derecha de un footer.</td></tr>
+              <tr><td><code>.justify-content-between</code></td><td>Primero al inicio, último al final, el medio repartido</td><td><strong>Header de vista: título a la izquierda + botón a la derecha</strong> (tu sección #termos).</td></tr>
+              <tr><td><code>.justify-content-around</code></td><td>Espacio igual alrededor de cada ítem</td><td>Menús tipo app con íconos separados.</td></tr>
+              <tr><td><code>.justify-content-evenly</code></td><td>Espacio exactamente igual entre todos</td><td>Barra de navegación inferior móvil.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Los seis valores, cada uno en su propia fila</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex justify-content-start gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">start</div><div class="p-2 bg-success text-white rounded">•</div><div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <div class="d-flex justify-content-center gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">•</div><div class="p-2 bg-success text-white rounded">center</div><div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">•</div><div class="p-2 bg-success text-white rounded">•</div><div class="p-2 bg-danger text-white rounded">end</div>
+            </div>
+            <div class="d-flex justify-content-between p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">between</div><div class="p-2 bg-success text-white rounded">•</div><div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <div class="d-flex justify-content-around p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">around</div><div class="p-2 bg-success text-white rounded">•</div><div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <div class="d-flex justify-content-evenly p-2 border rounded bg-body-tertiary">
+              <div class="p-2 bg-primary text-white rounded">evenly</div><div class="p-2 bg-success text-white rounded">•</div><div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Patrón real: <code>d-flex justify-content-between align-items-center</code> — título a la izquierda, botón a la derecha, centrados en vertical</span>
+          </div>
+          <div class="bd-example">
+            <div class="card">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                  <h1 class="card-title h4 mb-1">Termos</h1>
+                  <p class="card-text mb-0">Catálogo de termos</p>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalAgregarTermo">Agregar termo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-align" class="doc-section" data-category="align">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Alineación en el eje cruzado: <code>.align-items-*</code> y <code>.align-self-*</code></h2>
+          <span class="doc-badge-class">.align-items-center / -start / -end / -stretch / -baseline</span>
+        </div>
+        <p class="text-body-secondary">
+          Controla cómo se alinean los hijos <strong>en el eje cruzado</strong> (vertical cuando el contenedor es fila). Es la mitad que falta del centrado total, y también la que hace que "el título y el botón queden parejos" en un header con <code>justify-content-between</code>. El valor por defecto es <code>stretch</code> (todos estirados a la altura del más alto). Con <code>.align-self-{valor}</code> un hijo individual rompe la regla del padre.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Los cinco valores sobre contenedores fila de altura fija (los hijos tienen alturas distintas a propósito)</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex align-items-start gap-2 p-2 border rounded bg-body-tertiary mb-2" style="height: 90px;">
+              <div class="p-2 bg-primary text-white rounded">start</div><div class="p-4 bg-success text-white rounded">•</div>
+            </div>
+            <div class="d-flex align-items-center gap-2 p-2 border rounded bg-body-tertiary mb-2" style="height: 90px;">
+              <div class="p-2 bg-primary text-white rounded">center</div><div class="p-4 bg-success text-white rounded">•</div>
+            </div>
+            <div class="d-flex align-items-end gap-2 p-2 border rounded bg-body-tertiary mb-2" style="height: 90px;">
+              <div class="p-2 bg-primary text-white rounded">end</div><div class="p-4 bg-success text-white rounded">•</div>
+            </div>
+            <div class="d-flex align-items-baseline gap-2 p-2 border rounded bg-body-tertiary mb-2" style="height: 90px;">
+              <div class="p-2 bg-primary text-white rounded fs-1">baseline</div><div class="p-4 bg-success text-white rounded small">texto chico</div>
+            </div>
+            <div class="d-flex align-items-stretch gap-2 p-2 border rounded bg-body-tertiary" style="height: 90px;">
+              <div class="p-2 bg-primary text-white rounded">stretch (default): estira a la altura del más alto</div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span><code>.align-self-*</code>: un hijo individual se despega del criterio del padre</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex align-items-start gap-2 p-2 border rounded bg-body-tertiary" style="height: 110px;">
+              <div class="p-2 bg-primary text-white rounded">start (regla del padre)</div>
+              <div class="p-2 bg-danger text-white rounded align-self-center">align-self-center</div>
+              <div class="p-2 bg-success text-white rounded align-self-end">align-self-end</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-centrado" class="doc-section" data-category="align">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Centrado total: el patrón del login (<code>min-vh-100</code> + flex)</h2>
+          <span class="doc-badge-class">.min-vh-100 + .d-flex + .justify-content-center + .align-items-center</span>
+        </div>
+        <p class="text-body-secondary">
+          Es la receta que usás en <code>index.html</code> para centrar la tarjeta de login en <strong>toda la pantalla</strong>. Se descompone así: el contenedor principal ocupa como mínimo el 100% de la altura de la ventana (<code>.min-vh-100</code>), se vuelve flex (<code>.d-flex</code>) y centra a su hijo en los dos ejes (<code>.justify-content-center</code> + <code>.align-items-center</code>). La tarjeta define su ancho con <code>.w-50</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Simulación del patrón (el recuadro azul simula la ventana del navegador)</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex justify-content-center align-items-center border border-primary border-2 rounded bg-primary bg-opacity-10" style="height: 480px;">
+              <div class="card w-50">
+                <div class="card-header bg-primary text-white text-center">
+                  <h3 class="h5 mb-0">Inicio de sesión</h3>
+                </div>
+                <form class="d-flex flex-column gap-3 p-4" onsubmit="event.preventDefault()">
+                  <div>
+                    <label class="form-label" for="maq-login-user">Usuario</label>
+                    <input type="text" class="form-control" id="maq-login-user">
+                  </div>
+                  <div>
+                    <label class="form-label" for="maq-login-pass">Contraseña</label>
+                    <input type="password" class="form-control" id="maq-login-pass">
+                  </div>
+                  <button type="submit" class="btn btn-primary w-50 me-auto ms-auto">Iniciar sesión</button>
+                </form>
+                <div class="card-footer bg-primary text-white text-center">Sistema Termos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle mb-0">
+            <thead class="table-light">
+              <tr><th>Clase del patrón</th><th>Rol que cumple</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>.min-vh-100</code></td><td><code>min-height: 100vh</code>: el contenedor mide al menos toda la ventana, para que el centrado vertical tenga lugar (sin altura, <code>align-items-center</code> no tiene nada que centrar).</td></tr>
+              <tr><td><code>.d-flex</code></td><td>Convierte al <code>&lt;main&gt;</code> en contenedor flex; la tarjeta pasa a ser ítem.</td></tr>
+              <tr><td><code>.justify-content-center</code></td><td>Centra la tarjeta en el eje principal → <strong>horizontal</strong>.</td></tr>
+              <tr><td><code>.align-items-center</code></td><td>Centra la tarjeta en el eje cruzado → <strong>vertical</strong>.</td></tr>
+              <tr><td><code>.w-50</code></td><td>La tarjeta ocupa la mitad del ancho; el centrado hace el resto.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>⚠️ Pitfall: cuando el ítem es MÁS ALTO que el contenedor, <code>align-items-center</code> lo desborda por ambos lados</span>
+          </div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <p class="small text-body-secondary mb-1">Con <code>height</code> fija (insuficiente): la card se corta arriba y abajo</p>
+                <div class="d-flex justify-content-center align-items-center border border-danger border-2 rounded bg-body-tertiary" style="height: 150px;">
+                  <div class="card m-0" style="width: 75%;">
+                    <div class="card-body p-2 small">Card más alta que el contenedor: sobresale arriba y abajo (la mitad de lo que excede, por cada lado).</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <p class="small text-body-secondary mb-1">Con <code>min-height</code> (como <code>.min-vh-100</code>): el contenedor crece y nada se corta</p>
+                <div class="d-flex justify-content-center align-items-center border border-success border-2 rounded bg-body-tertiary" style="min-height: 150px;">
+                  <div class="card m-0" style="width: 75%;">
+                    <div class="card-body p-2 small">La misma card: el contenedor creció hasta cubrirla. Por eso el patrón real usa <code>min-height</code> y no <code>height</code>.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="small text-body-secondary mt-3 mb-0">
+              <strong>Conclusión:</strong> para centrar verticalmente contenido de altura desconocida (un formulario, un listado dinámico) usá siempre <code>min-height</code> (ej. <code>.min-vh-100</code>) en el contenedor. Si usás una <code>height</code> fija y el contenido la supera, Flexbox lo desborda en los dos sentidos y el contenido "se escapa" del contenedor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 4: MÁRGENES AUTOMÁTICOS
+           ===================================================================== -->
+      <section id="maq-auto" class="doc-section" data-category="autos">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Márgenes automáticos: <code>.me-auto</code>, <code>.ms-auto</code>, <code>.mx-auto</code></h2>
+          <span class="doc-badge-class">.me-auto / .ms-auto / .mx-auto / .my-auto</span>
+        </div>
+        <p class="text-body-secondary">
+          Un margen <code>auto</code> <strong>absorbe todo el espacio libre</strong> del eje en el que actúa. Es la herramienta más fina de posicionamiento en flex: empuja al elemento (y a los que lo rodean) hacia un lado o lo centra. La <code>s</code> y la <code>e</code> son lógicas: <code>ms</code> = margin-start (izquierda en LTR) y <code>me</code> = margin-end (derecha en LTR).
+        </p>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Clase en un hijo flex</th>
+                <th>Efecto</th>
+                <th>Cuándo usarlo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>.me-auto</code></td>
+                <td>El espacio libre va a su derecha → <strong>empuja a los demás hacia la derecha</strong> (el elemento queda a la izquierda).</td>
+                <td>Marca/título a la izquierda, resto del menú a la derecha.</td>
+              </tr>
+              <tr>
+                <td><code>.ms-auto</code></td>
+                <td>El espacio libre va a su izquierda → <strong>el elemento se va al final</strong> (derecha).</td>
+                <td>Botón "Cerrar sesión" pegado a la derecha del navbar.</td>
+              </tr>
+              <tr>
+                <td><code>.me-auto .ms-auto</code> (juntos)</td>
+                <td>El espacio libre se reparte a ambos lados → <strong>centrado</strong>.</td>
+                <td>Botón del login: <code>w-50 me-auto ms-auto</code>.</td>
+              </tr>
+              <tr>
+                <td><code>.mx-auto</code></td>
+                <td>Igual que los dos juntos (margen auto a ambos lados).</td>
+                <td>Centrar bloques con ancho definido.</td>
+              </tr>
+              <tr>
+                <td><code>.my-auto</code></td>
+                <td>Margen auto arriba y abajo → <strong>centrado vertical</strong> dentro de un flex.</td>
+                <td>Centrar un ítem en la altura de una barra.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Los cuatro efectos comparados (cada fila es un <code>.d-flex</code>)</span>
+          </div>
+          <div class="bd-example">
+            <p class="small text-body-secondary mb-1"><code>.me-auto</code> en el primer ítem → lo empuja a la izquierda, el resto va al final:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded me-auto">me-auto</div>
+              <div class="p-2 bg-success text-white rounded">•</div>
+              <div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.ms-auto</code> en el último ítem → se va al final:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">•</div>
+              <div class="p-2 bg-success text-white rounded">•</div>
+              <div class="p-2 bg-danger text-white rounded ms-auto">ms-auto</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.me-auto .ms-auto</code> en el ítem del medio → queda centrado:</p>
+            <div class="d-flex gap-2 p-2 border rounded bg-body-tertiary mb-2">
+              <div class="p-2 bg-primary text-white rounded">•</div>
+              <div class="p-2 bg-success text-white rounded me-auto ms-auto">centrado</div>
+              <div class="p-2 bg-danger text-white rounded">•</div>
+            </div>
+            <p class="small text-body-secondary mb-1"><code>.my-auto</code> → centrado vertical dentro de una barra de altura fija:</p>
+            <div class="d-flex align-items-stretch gap-2 p-2 border rounded bg-body-tertiary" style="height: 90px;">
+              <div class="p-2 bg-danger text-white rounded my-auto">my-auto</div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Patrón real del login: botón al 50% del ancho y centrado con <code>w-50 me-auto ms-auto</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="d-flex flex-column gap-3 p-3 border rounded bg-body-tertiary">
+              <input type="text" class="form-control" aria-label="Campo de demostración">
+              <button type="button" class="btn btn-primary w-50 me-auto ms-auto">Iniciar sesión (w-50 me-auto ms-auto)</button>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-warning mb-0" role="alert">
+          <strong>Diferencia con <code>justify-content</code>:</strong> <code>justify-content</code> mueve <em>a todos</em> los hijos como grupo; los márgenes <code>auto</code> mueven <em>uno solo</em> (y arrastran a sus vecinos). Para "título a la izquierda y botón a la derecha" sirven ambos: <code>justify-content-between</code> en el padre, o <code>.ms-auto</code> en el botón. El <code>auto</code> es más flexible cuando hay más de dos elementos.
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 5: TAMAÑOS
+           ===================================================================== -->
+      <section id="maq-widths" class="doc-section" data-category="sizes">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Tamaños relativos: <code>.w-*</code>, <code>.h-*</code>, <code>.vh-*</code> y <code>.min-vh-*</code></h2>
+          <span class="doc-badge-class">.w-25 / .w-50 / .w-75 / .w-100 / .mw-100 / .min-vh-100</span>
+        </div>
+        <p class="text-body-secondary">
+          Definen el ancho o alto de un elemento en porcentaje del <strong>contenedor padre</strong>. En maquetado se combinan con flex: el tamaño dice "cuánto ocupa" y el flex dice "dónde va". Recordá que un porcentaje solo funciona si el padre tiene altura/ancho definidos (por eso el centrado vertical necesita <code>.min-vh-100</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Anchos porcentuales (<code>.w-25</code>, <code>.w-50</code>, <code>.w-75</code>, <code>.w-100</code>) y tope máximo <code>.mw-100</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="border rounded p-2 bg-body-tertiary mb-2">
+              <div class="w-25 p-2 bg-primary text-white rounded mb-2">.w-25</div>
+              <div class="w-50 p-2 bg-success text-white rounded mb-2">.w-50</div>
+              <div class="w-75 p-2 bg-warning text-dark rounded mb-2">.w-75</div>
+              <div class="w-100 p-2 bg-danger text-white rounded">.w-100</div>
+            </div>
+            <div class="overflow-hidden border rounded p-2 bg-body-tertiary" style="height: 70px;">
+              <div class="mw-100 p-2 bg-primary text-white rounded" style="width: 2000px;">.mw-100 — nunca supera el ancho del padre (evita desbordes horizontales)</div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered align-middle mb-0">
+            <thead class="table-light">
+              <tr><th>Clase</th><th>CSS</th><th>Uso en maquetado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>.w-25 / .w-50 / .w-75 / .w-100</code></td><td><code>width: 25% ... 100%</code></td><td>Tarjeta de login al 50%, listados al 100%.</td></tr>
+              <tr><td><code>.w-auto</code></td><td><code>width: auto</code></td><td>Resetear un ancho porcentual.</td></tr>
+              <tr><td><code>.mw-100</code></td><td><code>max-width: 100%</code></td><td>Que una caja o imagen nunca desborde al padre.</td></tr>
+              <tr><td><code>.h-100</code></td><td><code>height: 100%</code></td><td>Columnas o cards de la misma altura (requiere padre con altura).</td></tr>
+              <tr><td><code>.vh-100 / .min-vh-100</code></td><td><code>height / min-height: 100vh</code></td><td>Secciones que ocupan toda la ventana (hero, login centrado).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 6: DISPLAY Y ESPACIADO
+           ===================================================================== -->
+      <section id="maq-display" class="doc-section" data-category="display">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Mostrar y ocultar: <code>.d-none</code> y variantes de <code>.d-*</code></h2>
+          <span class="doc-badge-class">.d-none / .d-block / .d-inline-flex / .d-md-none</span>
+        </div>
+        <p class="text-body-secondary">
+          El tipo de caja de un elemento también es posicionamiento: define si participa del flujo y cómo. Bootstrap expone todos los valores de <code>display</code> como <code>.d-{valor}</code>, y todos con versión responsiva <code>.d-{breakpoint}-{valor}</code>. Dos usos estrella en tu proyecto: cambiar de vista con <code>.d-none</code> (secciones <code>#inicio</code>, <code>#termos</code>, <code>#personas</code>) y mostrar/ocultar según el tamaño de pantalla (<code>.d-none .d-md-block</code>).
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Alternancia de vistas con <code>.d-none</code> (exactamente lo que hace tu panel al cambiar de pestaña)</span>
+          </div>
+          <div class="bd-example">
+            <div class="btn-group mb-3" role="group" aria-label="Cambiar vista de demostración">
+              <button type="button" class="btn btn-outline-primary active" data-maq-view="maq-vista-a">Vista A</button>
+              <button type="button" class="btn btn-outline-primary" data-maq-view="maq-vista-b">Vista B</button>
+            </div>
+            <section id="maq-vista-a" class="border rounded p-3 bg-body-tertiary">
+              <strong>Vista A</strong> — visible. El resto de las vistas llevan <code>class="d-none"</code> y JS agrega/quita esa clase.
+            </section>
+            <section id="maq-vista-b" class="border rounded p-3 bg-body-tertiary d-none">
+              <strong>Vista B</strong> — estaba oculta con <code>.d-none</code>; el botón de arriba le quitó la clase.
+            </section>
+          </div>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Responsivo: <code>d-none d-md-block</code> oculta en móvil y muestra desde md (y al revés)</span>
+          </div>
+          <div class="bd-example">
+            <div class="d-none d-md-block alert alert-success">
+              <code>.d-none .d-md-block</code> — No existo en pantallas <code>&lt;768px</code>, desde <code>md</code> en adelante sí. (Achicá la ventana para verme desaparecer).
+            </div>
+            <div class="d-md-none alert alert-warning mb-0">
+              <code>.d-md-none</code> — Solo visible en pantallas chicas (<code>&lt;768px</code>).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-gap" class="doc-section" data-category="display">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Separar hijos: <code>.gap-*</code> frente a los márgenes <code>.mb-*</code></h2>
+          <span class="doc-badge-class">.gap-0..5 / .gap-x / .gap-y</span>
+        </div>
+        <p class="text-body-secondary">
+          <code>.gap-{0..5}</code> separa los <strong>hijos de un contenedor flex, grid o multicol</strong> (no hace nada en bloques normales). Es la forma recomendada de separar en maquetado moderno porque <strong>no agrega espacio ni antes del primero ni después del último</strong> (no hace falta compensar con <code>:last-child</code>), y se combina limpio con <code>justify-content</code>. Para separar elementos que <em>no</em> son hijos de un flex (bloques de texto, cards en el flujo normal) seguís usando márgenes: <code>.mt-3</code>, <code>.mb-3</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Mismo resultado, dos técnicas: lista con <code>.mb-2</code> en cada hijo vs. padre con <code>.gap-2</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <p class="small text-body-secondary mb-1">Con márgenes (técnica clásica): cada hijo lleva <code>.mb-2</code></p>
+                <div class="border rounded p-2 bg-body-tertiary">
+                  <div class="p-2 bg-primary text-white rounded mb-2">Ítem 1 (mb-2)</div>
+                  <div class="p-2 bg-success text-white rounded mb-2">Ítem 2 (mb-2)</div>
+                  <div class="p-2 bg-danger text-white rounded">Ítem 3 (sin mb: si lo tuviera, quedaría espacio de más al final)</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <p class="small text-body-secondary mb-1">Con gap (técnica flex): el padre lleva <code>.gap-2</code> y los hijos no llevan nada</p>
+                <div class="d-flex flex-column gap-2 border rounded p-2 bg-body-tertiary">
+                  <div class="p-2 bg-primary text-white rounded">Ítem 1</div>
+                  <div class="p-2 bg-success text-white rounded">Ítem 2</div>
+                  <div class="p-2 bg-danger text-white rounded">Ítem 3 (idéntico, sin clase extra)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered align-middle mb-0">
+            <thead class="table-light">
+              <tr><th>Clase</th><th>Espacio</th><th>Nota</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>.gap-0</code> ... <code>.gap-5</code></td><td>0 a 3rem</td><td>Misma escala que los márgenes de Bootstrap.</td></tr>
+              <tr><td><code>.gap-x-2</code> / <code>.gap-y-2</code></td><td>Solo horizontal / solo vertical</td><td>Útil cuando los ítems hacen wrap.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="maq-spacing" class="doc-section" data-category="display">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Sintaxis de espaciado: <code>.mt-3</code>, <code>.mb-3</code> y toda la familia m/p</h2>
+          <span class="doc-badge-class">{m|p}{t|b|s|e|x|y|}-{0..5|auto}</span>
+        </div>
+        <p class="text-body-secondary">
+          Toda la utilidad de espaciado se lee con una fórmula: <code>{propiedad}{lado}-{tamaño}</code>. La propiedad es <code>m</code> (margin) o <code>p</code> (padding); el lado puede omitirse (todos los lados) o ser <code>t</code> (top), <code>b</code> (bottom), <code>s</code> (start/izquierda), <code>e</code> (end/derecha), <code>x</code> (izquierda+derecha), <code>y</code> (arriba+abajo); el tamaño va de <code>0</code> a <code>5</code> (0 a 3rem). En maquetado se usan para dar aire <em>fuera</em> del flujo flex (secciones, cards, títulos) — dentro de un flex prefiere <code>gap</code>.
+        </p>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Escala 0 a 5 de <code>.mt-*</code> y ejemplos de lados (t, b, s, e, x, y)</span>
+          </div>
+          <div class="bd-example">
+            <div class="border rounded p-2 bg-body-tertiary mb-3">
+              <div class="bg-primary bg-opacity-25 border border-primary rounded p-1 mt-0">.mt-0</div>
+              <div class="bg-primary bg-opacity-25 border border-primary rounded p-1 mt-2">.mt-2</div>
+              <div class="bg-primary bg-opacity-25 border border-primary rounded p-1 mt-4">.mt-4</div>
+              <div class="bg-primary bg-opacity-25 border border-primary rounded p-1 mt-5">.mt-5</div>
+            </div>
+            <div class="row g-2 text-center small">
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.mt-3<br><small>arriba</small></div></div>
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.mb-3<br><small>abajo</small></div></div>
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.ms-3<br><small>izquierda</small></div></div>
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.me-3<br><small>derecha</small></div></div>
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.mx-3<br><small>izq+der</small></div></div>
+              <div class="col"><div class="p-2 bg-success bg-opacity-10 border rounded">.my-3<br><small>arr+abj</small></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-info mb-0" role="alert">
+          <strong><code>margin</code> vs <code>padding</code>:</strong> el margen es espacio <em>fuera</em> de la caja (separa de otros elementos, como tu <code>main.container-fluid.mt-3.mb-3</code>); el padding es espacio <em>dentro</em> (aire entre el borde y el contenido, como el <code>.p-4</code> de tus formularios). Ambos aceptan versión responsiva: <code>.mt-md-5</code>, <code>.px-lg-3</code>.
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SECCIÓN 7: PATRONES DEL PROYECTO
+           ===================================================================== -->
+      <section id="maq-navbar" class="doc-section" data-category="patrones">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Patrón: Navbar analizada clase por clase (tu <code>panel.html</code>)</h2>
+          <span class="doc-badge-class">.navbar / .navbar-expand-lg / .collapse / .me-auto</span>
+        </div>
+        <p class="text-body-secondary">
+          La navbar de tu panel es una máquina de posicionamiento: casi todo lo que la sostiene son clases de flex. Este es el desglose de qué aporta cada una:
+        </p>
+        <div class="table-responsive mb-3">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr><th>Clase</th><th>Aporte al maquetado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>.navbar</code></td><td>Es un contenedor <code>flex-wrap</code> por defecto: marca y contenido se apoyan en línea.</td></tr>
+              <tr><td><code>.navbar-expand-lg</code></td><td>Desde <code>lg</code> (≥992px) el menú se expande en fila; por debajo, el <code>.collapse</code> se pliega en columna (oculto sin toggler).</td></tr>
+              <tr><td><code>.container-fluid</code></td><td>Contenedor al 100% de ancho que ordena: marca → menú → botón de salir.</td></tr>
+              <tr><td><code>.collapse .navbar-collapse</code></td><td>El bloque que se muestra/oculta; expandido se comporta como flex y se ubica <strong>entre</strong> la marca y lo que sigue.</td></tr>
+              <tr><td><code>.navbar-nav</code></td><td>Lista de ítems en <code>flex-column</code>; con <code>expand-lg</code> pasa a fila en escritorio.</td></tr>
+              <tr><td><code>.me-auto .ms-auto</code></td><td>Márgenes auto a ambos lados del <code>ul</code>: el espacio libre se reparte a los dos lados y <strong>el menú queda centrado</strong> entre la marca y el botón salir.</td></tr>
+              <tr><td><code>.gap-2</code></td><td>Separa los botones del menú entre sí (en flex, mejor que margenes).</td></tr>
+              <tr><td>botón fuera del <code>.collapse</code></td><td>Al estar fuera del bloque plegable, "Cerrar sesión" siempre queda visible a la derecha (no se esconde en móvil).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>Replica funcional de tu navbar (con toggler agregado para pantallas &lt; lg)</span>
+          </div>
+          <div class="bd-example">
+            <nav class="navbar navbar-expand-lg bg-primary navbar-dark rounded m-0">
+              <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-white" href="#">
+                  <h4 class="mb-0">Sistema Termos</h4>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#maqNavbarDemo" aria-controls="maqNavbarDemo" aria-expanded="false" aria-label="Alternar navegación">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="maqNavbarDemo">
+                  <ul class="navbar-nav me-auto ms-auto mb-2 mb-lg-1 gap-2">
+                    <li class="nav-item"><button type="button" class="btn btn-primary">Inicio</button></li>
+                    <li class="nav-item"><button type="button" class="btn btn-primary">Termos</button></li>
+                    <li class="nav-item"><button type="button" class="btn btn-primary">Personas</button></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm">Cerrar sesión</button>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <div class="alert alert-warning mb-0" role="alert">
+          <strong>Dato de maquetado:</strong> si la navbar no tiene <code>.navbar-toggler</code>, en pantallas <code>&lt; lg</code> el <code>.collapse</code> queda oculto y el menú desaparece (por eso en esta réplica se agregó el botón hamburguesa). El botón "Cerrar sesión" no se pierde porque está <em>fuera</em> del <code>.collapse</code>.
+        </div>
+      </section>
+
+      <section id="maq-recetas" class="doc-section" data-category="patrones">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Recetas exactas del Sistema Termos (copiar y adaptar)</h2>
+          <span class="doc-badge-class">.flex-column + .gap + .w-100 + .ms-auto/.me-auto</span>
+        </div>
+        <p class="text-body-secondary">
+          Los tres patrones que estructuran tus vistas, con explicación de cada clase:
+        </p>
+
+        <!-- Receta 1: main con espaciado -->
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>1) Contenido principal con aire: <code>main.container-fluid.mt-3.mb-3</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="bg-primary bg-opacity-10 border border-primary rounded p-3 text-center">
+              <code>&lt;main class="container-fluid mt-3 mb-3"&gt;</code><br>
+              <small class="text-body-secondary">container-fluid = 100% del ancho · mt-3/mb-3 = aire arriba y abajo contra el navbar y el footer</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Receta 2: listado dinámico -->
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>2) Listado de cards en columna: <code>d-flex flex-column gap-3 w-100 ms-auto me-auto mt-2</code></span>
+          </div>
+          <div class="bd-example">
+            <div id="maq-lista-demo" class="d-flex flex-column gap-3 w-100 ms-auto me-auto mt-2">
+              <div class="card"><div class="card-body py-2">Card de termo 1</div></div>
+              <div class="card"><div class="card-body py-2">Card de termo 2</div></div>
+              <div class="card"><div class="card-body py-2">Card de termo 3</div></div>
+            </div>
+            <ul class="small text-body-secondary mt-3 mb-0">
+              <li><code>.d-flex .flex-column</code>: convierte el listado en columna y activa el resto de superpoderes flex.</li>
+              <li><code>.gap-3</code>: separa las cards entre sí sin márgenes extra (ideal cuando JS inserta cards: no hay que limpiar <code>mb</code> del último).</li>
+              <li><code>.w-100</code>: el listado ocupa todo el ancho del main.</li>
+              <li><code>.ms-auto .me-auto</code>: centran el bloque <em>cuando el ancho es menor al 100%</em>. Con <code>w-100</code> no queda espacio libre, así que aquí son inocuos; si mañana cambiás a <code>.w-75</code> o <code>.w-50</code>, el listado queda centrado solo.</li>
+              <li><code>.mt-2</code>: aire extra respecto al header de la vista.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Receta 3: header de vista -->
+        <div class="bd-example-snippet">
+          <div class="bd-example-header">
+            <span>3) Header de vista: <code>card-body.d-flex.justify-content-between.align-items-center</code></span>
+          </div>
+          <div class="bd-example">
+            <div class="card-body d-flex justify-content-between align-items-center border rounded bg-body-tertiary">
+              <div>
+                <h1 class="card-title h4 mb-1">Título de la vista</h1>
+                <p class="card-text mb-0">Descripción de la vista</p>
+              </div>
+              <div>
+                <button type="button" class="btn btn-success btn-lg">Acción principal</button>
+              </div>
+            </div>
+            <ul class="small text-body-secondary mt-3 mb-0">
+              <li><code>.justify-content-between</code>: primer hijo contra el borde izquierdo, último contra el derecho (título ↔ botón).</li>
+              <li><code>.align-items-center</code>: en el eje cruzado centra verticalmente el botón respecto al bloque de título (que es más alto).</li>
+              <li>Cada lado va envuelto en un <code>&lt;div&gt;</code>: son los <strong>dos únicos hijos flex</strong>, así el <code>between</code> tiene exactamente dos extremos que empujar.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="maq-cheatsheet" class="doc-section" data-category="patrones">
+        <div class="doc-section-title">
+          <h2 class="h3 mb-0">Tabla resumen: técnicas de maquetado de esta guía</h2>
+          <span class="doc-badge-class">Referencia rápida</span>
+        </div>
+        <p class="text-body-secondary">
+          Chuleta de consulta rápida de todo lo visto:
+        </p>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Técnica</th>
+                <th>Clases</th>
+                <th>Para qué se usa en maquetado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Activar flex</strong></td>
+                <td><code>.d-flex</code> <code>.d-inline-flex</code> (+ <code>.d-{bp}-flex</code>)</td>
+                <td>Convertir un elemento en contenedor que organiza a sus hijos.</td>
+              </tr>
+              <tr>
+                <td><strong>Dirección</strong></td>
+                <td><code>.flex-row</code> <code>.flex-column</code> <code>.-reverse</code> (+ responsivos)</td>
+                <td>Fila o columna: la base de todo layout (forms, listados, menús).</td>
+              </tr>
+              <tr>
+                <td><strong>Reparto</strong></td>
+                <td><code>.flex-fill</code> <code>.flex-grow-1</code> <code>.flex-shrink-0</code></td>
+                <td>Ocupar el espacio libre / proteger un elemento de encogerse.</td>
+              </tr>
+              <tr>
+                <td><strong>Wrap / orden</strong></td>
+                <td><code>.flex-wrap</code> <code>.flex-nowrap</code> <code>.order-{0..5}</code></td>
+                <td>Bajar de línea cuando no entra / reordenar visualmente.</td>
+              </tr>
+              <tr>
+                <td><strong>Eje principal</strong></td>
+                <td><code>.justify-content-start|center|end|between|around|evenly</code></td>
+                <td>Distribuir el grupo: izquierda, centro, derecha, extremos.</td>
+              </tr>
+              <tr>
+                <td><strong>Eje cruzado</strong></td>
+                <td><code>.align-items-start|center|end|stretch|baseline</code> <code>.align-self-*</code></td>
+                <td>Alinear en vertical (fila) o en horizontal (columna); centrado total.</td>
+              </tr>
+              <tr>
+                <td><strong>Márgenes auto</strong></td>
+                <td><code>.me-auto</code> <code>.ms-auto</code> <code>.mx-auto</code> <code>.my-auto</code></td>
+                <td>Empujar un elemento a un extremo o centrarlo individualmente.</td>
+              </tr>
+              <tr>
+                <td><strong>Tamaños</strong></td>
+                <td><code>.w-25|50|75|100</code> <code>.mw-100</code> <code>.h-100</code> <code>.min-vh-100</code></td>
+                <td>Cuánto ocupa cada caja; habilitar el centrado vertical en pantalla.</td>
+              </tr>
+              <tr>
+                <td><strong>Mostrar / ocultar</strong></td>
+                <td><code>.d-none</code> <code>.d-block</code> <code>.d-{bp}-none</code></td>
+                <td>Cambiar de vista con JS y adaptar contenido al breakpoint.</td>
+              </tr>
+              <tr>
+                <td><strong>Sepación interna</strong></td>
+                <td><code>.gap-{0..5}</code> <code>.gap-x/y-*</code></td>
+                <td>Separar hijos de flex/grid sin margenes que se acumulan.</td>
+              </tr>
+              <tr>
+                <td><strong>Espaciado</strong></td>
+                <td><code>{m|p}{t|b|s|e|x|y}-{0..5|auto}</code></td>
+                <td>Aire fuera (margin) y dentro (padding) de las cajas.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="pt-3 mt-4 text-body-secondary border-top small d-flex flex-wrap justify-content-between">
+        <span>Guía de <strong>Maquetado con Flexbox</strong> — complemento de la Documentación Offline de <strong>Bootstrap v5.3.8</strong> · UNLPam · POW 2026</span>
+        <span>Recursos locales desde <code>bootstrap-5.3.8-dist/</code> y <code>docs-assets/</code></span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Botón flotante para volver arriba -->
+  <button type="button" id="btnBackToTop" class="btn btn-primary rounded-circle p-2 px-3" title="Volver arriba" aria-label="Volver arriba">
+    ↑
+  </button>
+
+  <!-- Bootstrap 5.3.8 JS Bundle Local (incluye Popper) -->
+  <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script de interactividad de la documentación (mismo que la guía principal) -->
+  <script src="docs-assets/docs.js"></script>
+  <!-- Script mínimo exclusivo de esta guía: demo de cambio de vistas con .d-none -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const viewButtons = document.querySelectorAll('[data-maq-view]');
+      viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Comportamiento idéntico al cambio de vistas del panel: agregar/quitar .d-none
+          document.querySelectorAll('#maq-vista-a, #maq-vista-b').forEach(v => v.classList.add('d-none'));
+          document.getElementById(btn.getAttribute('data-maq-view')).classList.remove('d-none');
+          viewButtons.forEach(b => b.classList.toggle('active', b === btn));
+        });
+      });
+    });
+  </script>
+</body>
+</html>

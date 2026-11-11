@@ -117,16 +117,7 @@ async function cargarTermos() {
         document.getElementById("modalTitulo").textContent = termo.titulo;
 
         modalImagen.src = imagen.src;
-        modalImagen.alt = termo.texto_alternativo;
         modalImagen.title = termo.titulo_imagen;
-
-        modalImagen.setAttribute("aria-description", termo.descripcion_larga);
-
-        document.getElementById("modalDescripcion").textContent =
-          termo.descripcion;
-
-        document.getElementById("modalDescripcionLarga").textContent =
-          termo.descripcion_larga;
 
         const modalElemento = document.getElementById("modalTermo");
 

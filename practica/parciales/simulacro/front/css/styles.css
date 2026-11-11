@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'shadowed_serif';
+    src: url('../recursos/shadowed_serif.ttf') format('truetype');
+}
+
+body {
+    font-family: 'shadowed_serif', serif;
+}
+
+header img{
+    width: 74px;
+    height: auto;
+}
+
+.nav-item .btn{
+    font-size: small; /* Opciones de medida: px, rem, em */
+}
