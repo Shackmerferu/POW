@@ -235,10 +235,10 @@ function Dashboard() {
                 <li><h6 className="dropdown-header">Menu</h6></li>
                 <li><a className="dropdown-item" href="/convenios">Busqueda</a></li>
                 {puedeVerPanel(usuario) && (
-                  <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
+                <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
                 )}
                 {puedeVerConfiguracion(usuario) && (
-                  <li><a className="dropdown-item" href="/config">Configuración</a></li>
+                <li><a className="dropdown-item" href="/config">Configuración</a></li>
                 )}
                 <li>
                   <button
