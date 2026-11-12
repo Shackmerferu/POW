@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrar Club - La Tania</title>
+
+    <link rel="stylesheet" href="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-dark">
+            <div class="container-fluid">
+
+                <a href="index.html"
+                    class="navbar-brand fw-bold text-white">
+                    La Tania
+                </a>
+
+                <a href="index.html" class="btn btn-outline-light">
+                    Volver al inicio
+                </a>
+
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-5">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="card shadow">
+
+                    <div class="card-body">
+
+                        <h2 class="text-center mb-4">
+                            Registrar nuevo club
+                        </h2>
+
+                        <form id="form-club">
+
+                            <div class="mb-3">
+
+                                <label for="nombre-club" class="form-label">
+                                    Nombre del equipo
+                                </label>
+
+                                <input type="text"
+                                    id="nombre-club"
+                                    name="nombre"
+                                    class="form-control"
+                                    required>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label for="logo-club" class="form-label">
+                                    Logo del equipo
+                                </label>
+
+                                <input type="file"
+                                    id="logo-club"
+                                    name="logo"
+                                    class="form-control"
+                                    accept="image/*"
+                                    required>
+
+                            </div>
+
+                            <div class="text-center mb-3">
+
+                                <img id="vista-logo"
+                                    src=""
+                                    alt="Vista previa del logo"
+                                    class="img-fluid d-none"
+                                    style="max-width: 150px;">
+
+                            </div>
+
+                            <button type="submit"
+                                class="btn btn-primary w-100">
+                                Registrar equipo
+                            </button>
+
+                        </form>
+
+                        <p id="mensaje-club" class="mt-3 mb-0"></p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/registrarclub.js"></script>
+
+</body>
+</html>

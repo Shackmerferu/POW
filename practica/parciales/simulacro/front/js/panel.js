@@ -1,73 +1,41 @@
 
 // ======================================
-// RUTAS DE LAS API
+// ELEMENTOS HTML
 // ======================================
 
-window.API = "http://localhost/facultad/POW/practica/parciales/simulacro/api/";
-
-// ======================================
-// OBTENER ELEMENTOS HTML
-// ======================================
-
-const inicio = document.getElementById("inicio");
-const canicasmasc = document.getElementById("canicasmasc");
-const canicasfem = document.getElementById("canicasfem");
+const vistaInicio = document.getElementById("inicio");
+const vistaMasc = document.getElementById("canicasmasc");
+const vistaFem = document.getElementById("canicasfem");
 
 const btnInicio = document.getElementById("btn-inicio");
-const btnCanicasmasc = document.getElementById("btn-canicasmasc");
-const btnCanicasfem = document.getElementById("btn-canicasfem");
-const btnRegistrar = document.getElementById("btn-registrarclub");
+const btnMasc = document.getElementById("btn-canicasmasc");
+const btnFem = document.getElementById("btn-canicasfem");
 
 // ======================================
-// CAMBIAR DE VISTA
+// CAMBIAR VISTA
 // ======================================
 
-window.cambiarVista = function (vista) {
+function mostrarVista(vista) {
 
-    inicio.classList.add("d-none");
-    canicasmasc.classList.add("d-none");
-    canicasfem.classList.add("d-none");
+    vistaInicio.classList.add("d-none");
+    vistaMasc.classList.add("d-none");
+    vistaFem.classList.add("d-none");
 
-    btnInicio.classList.remove("btn-outline-light");
-    btnCanicasmasc.classList.remove("btn-outline-light");
-    btnCanicasfem.classList.remove("btn-outline-light");
-
-    if (vista === "inicio") {
-
-        inicio.classList.remove("d-none");
-        btnInicio.classList.add("btn-outline-light");
-
-    } else if (vista === "canicasmasc") {
-
-        canicasmasc.classList.remove("d-none");
-        btnCanicasmasc.classList.add("btn-outline-light");
-
-    } else if (vista === "canicasfem") {
-
-        canicasfem.classList.remove("d-none");
-        btnCanicasfem.classList.add("btn-outline-light");
-
-    }
-};
+    vista.classList.remove("d-none");
+}
 
 // ======================================
-// EVENTOS DE NAVEGACIÓN
+// EVENTOS
 // ======================================
 
 btnInicio.addEventListener("click", function () {
-    window.cambiarVista("inicio");
+    mostrarVista(vistaInicio);
 });
 
-btnCanicasmasc.addEventListener("click", function () {
-    window.cambiarVista("canicasmasc");
+btnMasc.addEventListener("click", function () {
+    mostrarVista(vistaMasc);
 });
 
-btnCanicasfem.addEventListener("click", function () {
-    window.cambiarVista("canicasfem");
+btnFem.addEventListener("click", function () {
+    mostrarVista(vistaFem);
 });
-
-// ======================================
-// VISTA INICIAL
-// ======================================
-
-window.cambiarVista("inicio");
