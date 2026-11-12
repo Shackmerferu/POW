@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luciano Cayssials | Portfolio</title>
+  <link rel="icon" type="image/jpeg" href="public/gato programador.jpg" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar-custom d-flex align-items-center justify-content-between">
+    <a href="#" class="nav-logo">&lt;LCF /&gt;</a>
+
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="nav-actions d-flex align-items-center gap-3">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="icon-sun">&#9788;</span>
+        <span class="icon-moon">&#9790;</span>
+      </button>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero d-flex align-items-center justify-content-center text-center" id="hero">
+    <div class="hero-content container">
+      <p class="hero-tag">Full Stack Developer</p>
+
+      <h1 class="hero-title">Luciano<br /> <span class="accent">Cayssials Fambrini</span>
+      </h1>
+
+      <p class="hero-sub mx-auto">Creando soluciones web con pasion y codigo limpio.</p>
+
+      <div class="hero-buttons d-flex justify-content-center flex-wrap gap-3">
+        <a href="#projects" class="btn-custom btn-primary-custom">Ver Proyectos</a>
+
+        <a href="#contact" class="btn-custom btn-outline-custom">Contactame</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator"><span></span></div>
+  </header>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">Sobre <span class="accent">Mi</span></h2>
+
+      <div class="row align-items-center g-5">
+        <!-- Imagen -->
+        <div class="col-12 col-md-6 about-image d-flex justify-content-center">
+          <div class="image-wrapper">
+            <img src="public/gato programador.jpg" alt="Luciano Cayssials" />
+            <div class="image-border"></div>
+          </div>
+        </div>
+
+        <!-- Información -->
+        <div class="col-12 col-md-6 about-text">
+          <p>
+            Soy un Analista Programador terminando sus estudios enfocado en ser desarrollador Full Stack
+            (FrontEnd/Backend), apasionado por la
+            tecnologia y la creacion de experiencias web modernas.
+            Me especializo en construir aplicaciones robustas y escalables.
+          </p>
+
+          <p>
+            Actualmente me enfoco en el desarrollo web, combinando frontend y backend para crear soluciones completas.
+            Cada proyecto es una oportunidad para aprender algo nuevo.
+          </p>
+
+          <!-- Estadísticas -->
+          <div class="row g-4 about-stats">
+            <div class="col-12 col-sm-4 stat">
+              <span class="stat-number">4+</span>
+              <span class="stat-label">Repositorios</span>
+            </div>
+
+            <div class="col-12 col-sm-4 stat">
+              <span class="stat-number">7</span>
+              <span class="stat-label">Lenguajes</span>
+            </div>
+
+            <div class="col-12 col-sm-4 stat">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Dedicacion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section section-alt" id="projects">
+    <div class="container">
+      <h2 class="section-title">Mis <span class="accent">Proyectos</span></h2>
+
+      <div class="image-wrapper image-wrapper--center">
+        <img src="public/my coder.jpg" alt="Luciano Cayssials" />
+
+        <div class="image-border"></div>
+      </div>
+
+      <!-- Grilla de proyectos -->
+      <div class="row g-4 projects-grid">
+        <!-- Wallet -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="https://github.com/Shackmerferu/Wallet-react" target="_blank" rel="noopener noreferrer"
+            class="project-card h-100">
+            <div class="project-image">
+              <img src="public/wallet.png" alt="Wallet-react" />
+            </div>
+
+            <h3>Wallet-react</h3>
+
+            <p>
+              Aplicacion de wallet digital construida con React. Manejo de estado e interfaz de usuario moderna.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">JavaScript</span>
+              <span class="tag">React</span>
+            </div>
+
+            <span class="project-link">GitHub &rarr;</span>
+          </a>
+        </div>
+
+        <!-- POO -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="https://github.com/Shackmerferu/POO" target="_blank" rel="noopener noreferrer"
+            class="project-card h-100">
+            <div class="project-image">
+              <img src="public/programacionOO.jpg" alt="POO" />
+            </div>
+
+            <h3>POO</h3>
+
+            <p>
+              Programacion Orientada a Objetos en Java. Ejercicios y proyectos aplicando principios SOLID.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">Java</span>
+              <span class="tag">POO</span>
+            </div>
+
+            <span class="project-link">GitHub &rarr;</span>
+          </a>
+        </div>
+
+        <!-- POW -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="https://github.com/Shackmerferu/POW" target="_blank" rel="noopener noreferrer"
+            class="project-card h-100">
+            <div class="project-image">
+              <img src="public/programacionweb.jpg" alt="POW" />
+            </div>
+
+            <h3>POW</h3>
+
+            <p>
+              Programacion Orientada a la Web. Desarrollo de paginas web con HTML, CSS y JavaScript.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Web</span>
+            </div>
+
+            <span class="project-link">GitHub &rarr;</span>
+          </a>
+        </div>
+
+        <!-- LOAM -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="https://github.com/Shackmerferu/LOAM" target="_blank" rel="noopener noreferrer"
+            class="project-card h-100">
+            <div class="project-image">
+              <img src="public/programacionmovil.jpg" alt="LOAM" />
+            </div>
+
+            <h3>LOAM</h3>
+
+            <p>
+              Programacion Orientada a Aplicaciones Moviles con Android Studio, Kotlin y JS/HTML/CSS + Firebase como DB.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">Kotlin</span>
+              <span class="tag">Android</span>
+            </div>
+
+            <span class="project-link">GitHub &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="container">
+      <h2 class="section-title">Mis <span class="accent">Skills</span></h2>
+
+      <div class="row g-4 skills-grid">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="skill-card h-100">
+            <div class="skill-icon">&#60;/&#62;</div>
+
+            <h3>Frontend</h3>
+
+            <p>React, Angular, Material UI, HTML, CSS, JavaScript</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="skill-card h-100">
+            <div class="skill-icon">&#9881;</div>
+
+            <h3>Backend</h3>
+
+            <p>.NET 6, Java, Python, C, C++, C#, PHP</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="skill-card h-100">
+            <div class="skill-icon">&#128190;</div>
+
+            <h3>Bases de Datos</h3>
+
+            <p>Oracle, PostgreSQL, MySQL</p>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="skill-card h-100">
+            <div class="skill-icon">&#128736;</div>
+
+            <h3>Herramientas</h3>
+
+            <p>Git, GitHub, VS Code, Docker, Postman, Jira, Trello, Notion</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section-alt" id="contact">
+    <div class="container">
+      <h2 class="section-title">Contacto</h2>
+
+      <div class="row g-4 align-items-center contact-grid">
+        <!-- Contactos personales -->
+        <div class="col-12 col-md-6 contact-card">
+          <div class="contact-content">
+            <p class="contact-text">
+              Tienes un proyecto en mente o quieres colaborar? No dudes en escribirme.
+            </p>
+
+            <div class="contact-links d-flex justify-content-center flex-wrap gap-3">
+              <a href="https://github.com/Shackmerferu" target="_blank" rel="noopener noreferrer" class="contact-btn">
+                <span>&#128187;</span> GitHub
+              </a>
+
+              <a href="https://www.linkedin.com/in/lucianocayssials/" target="_blank" rel="noopener noreferrer"
+                class="contact-btn">
+                <span>&#128279;</span> LinkedIn
+              </a>
+
+              <a href="mailto:lucianocayssials@gmail.com" class="contact-btn">
+                <span>&#9993;</span> Email
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DouDev -->
+        <div class="col-12 col-md-6 douddev-card">
+          <p class="douddev-label">Tambien podes encontrarme en</p>
+
+          <a href="https://doudev.com.ar/" target="_blank" rel="noopener noreferrer" class="douddev-link">
+            <img src="public/new_icon.png" alt="DouDev S.R.L" />
+
+            <span>DouDev S.R.L</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container d-flex flex-column align-items-center gap-2">
+      <p>
+        &copy; 2026 Luciano Cayssials. Hecho con &#10084;, estudio + calidad cuestionable.
+      </p>
+
+      <p class="footer-email">lucianocayssials@gmail.com</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

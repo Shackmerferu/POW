@@ -1,0 +1,14 @@
+LOGIN Y TOKEN – PSEUDOPATRÓN
+1. Recibir usuario y clave.
+2. Buscar usuario con consulta preparada.
+3. Verificar contraseña según el mecanismo indicado por el proyecto.
+4. Generar token aleatorio.
+5. Guardar token asociado al usuario.
+6. Devolver JSON con la clave exacta que el frontend espera.
+
+VERIFICACIÓN
+1. Recibir token por el medio definido en el contrato.
+2. Consultar si existe y corresponde a un usuario.
+3. Responder status 200 si es válido; 401/403 si no lo es.
+
+No copiar este texto como endpoint: completar según el SQL y la API que entregue el docente.

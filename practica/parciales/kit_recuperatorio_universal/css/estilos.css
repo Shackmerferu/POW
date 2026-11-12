@@ -1,0 +1,5 @@
+body { background:#f7f8fa; }
+.login-card { width:min(100%,420px); }
+.vista { min-height:55vh; }
+.table td,.table th { vertical-align:middle; }
+.img-miniatura { width:56px;height:56px;object-fit:cover;border-radius:.4rem; }

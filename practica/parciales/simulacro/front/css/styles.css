@@ -1,28 +1,77 @@
+
+/* ====================================== */
+/* CONFIGURACIÓN GENERAL */
+/* ====================================== */
+
 @font-face {
-    font-family: 'shadowed_serif';
-    src: url('../recursos/shadowed_serif.ttf') format('truetype');
+    font-family: "shadowed_serif";
+    src: url("../recursos/shadowed_serif.ttf") format("truetype");
+}
+
+html,
+body {
+    min-height: 100%;
+    margin: 0;
 }
 
 body {
-    font-family: 'shadowed_serif', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "shadowed_serif", serif;
 }
 
+<<<<<<< HEAD
 header nav {
     background-color:RGB(151, 124, 91);
 }
 header img{
+=======
+/* ====================================== */
+/* HEADER Y NAVEGACIÓN */
+/* ====================================== */
+
+header nav,
+footer {
+    background-color: rgb(151, 124, 91);
+}
+
+header img {
+>>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
     width: 74px;
     height: auto;
 }
 
+<<<<<<< HEAD
 .nav-item .btn{
     font-size: small; /* Opciones de medida: px, rem, em */
+=======
+.nav-item .btn {
+    font-size: small;
+}
+
+#btn-inicio:hover,
+#btn-canicasmasc:hover,
+#btn-canicasfem:hover {
+    background-color: transparent;
+    color: white;
+    box-shadow: none;
+}
+
+/* ====================================== */
+/* CONTENIDO PRINCIPAL */
+/* ====================================== */
+
+main {
+    flex: 1;
+>>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
 }
 
 section p {
     font-size: small;
 }
 
+<<<<<<< HEAD
  #masculino .card-img-top , section #femenino .card-img-top {
      
         width: 80%;
@@ -31,3 +80,103 @@ section p {
         object-position: top;
     
 }
+=======
+/* ====================================== */
+/* IMÁGENES DE JUGADORES */
+/* ====================================== */
+
+.imagen-jugador {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+}
+
+/* ====================================== */
+/* TARJETAS MASCULINAS */
+/* ====================================== */
+
+#lista-jugadores-masc .card {
+    width: 250px;
+    height: 350px;
+}
+
+#lista-jugadores-masc .card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+#lista-jugadores-masc .card-title {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+    text-align: center;
+}
+
+/* ====================================== */
+/* TARJETAS FEMENINAS */
+/* ====================================== */
+
+#lista-jugadores-fem .card {
+    width: 250px;
+    height: 350px;
+}
+
+#lista-jugadores-fem .card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+#lista-jugadores-fem .card-title {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+    text-align: center;
+}
+
+/* ====================================== */
+/* FOOTER */
+/* ====================================== */
+
+footer {
+    margin-top: auto;
+    text-align: center;
+}
+
+/* ====================================== */
+/* WHATSAPP */
+/* ====================================== */
+
+.whatsapp-footer {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.contenedor-whatsapp {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px;
+}
+
+.contenedor-whatsapp img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ====================================== */
+/* LOGO DE EQUIPOS */
+/* ====================================== */
+
+.logo-equipo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+>>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c

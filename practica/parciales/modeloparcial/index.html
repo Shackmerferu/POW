@@ -60,10 +60,8 @@
             <!-- Botón que permite abrir o cerrar el menú en pantallas pequeñas.
                  data-bs-toggle y data-bs-target son atributos de Bootstrap.
                  aria-* mejora la accesibilidad del componente. -->
-            <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#navbarContenido"
-                aria-controls="navbarContenido" aria-expanded="false"
-                aria-label="Abrir menú">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido"
+                aria-controls="navbarContenido" aria-expanded="false" aria-label="Abrir menú">
 
                 <!-- Dibuja el icono del menú desplegable. -->
                 <span class="navbar-toggler-icon"></span>
@@ -88,17 +86,15 @@
 
                     <!-- Abre el modal de inicio de sesión.
                          Bootstrap encuentra el modal mediante su id. -->
-                    <button id="btnLogin" type="button"
-                        class="btn btn-outline-light nav-action"
-                        data-bs-toggle="modal" data-bs-target="#modalLogin">
+                    <button id="btnLogin" type="button" class="btn btn-outline-light nav-action" data-bs-toggle="modal"
+                        data-bs-target="#modalLogin">
                         Iniciar sesión
                     </button>
 
                     <!-- Botón para cerrar sesión.
                          d-none lo oculta inicialmente.
                          JavaScript puede mostrarlo cuando el usuario inicia sesión. -->
-                    <button id="btnLogout" type="button"
-                        class="btn btn-warning nav-action d-none">
+                    <button id="btnLogout" type="button" class="btn btn-warning nav-action d-none">
                         Cerrar sesión
                     </button>
 
@@ -244,8 +240,7 @@
                     </div>
 
                     <!-- Botón cuyo evento JavaScript elimina los productos del carrito. -->
-                    <button id="btnVaciarCarrito" type="button"
-                        class="btn btn-outline-danger">
+                    <button id="btnVaciarCarrito" type="button" class="btn btn-outline-danger">
                         Vaciar carrito
                     </button>
                 </div>
@@ -254,8 +249,7 @@
                 <div class="cart-checkout">
 
                     <!-- JavaScript controla la compra y envía los datos al servidor. -->
-                    <button id="btnComprar" type="button"
-                        class="btn btn-sm btn-success">
+                    <button id="btnComprar" type="button" class="btn btn-sm btn-success">
                         Comprar
                     </button>
                 </div>
@@ -312,8 +306,7 @@
                                 </label>
 
                                 <!-- Campo obligatorio para ingresar el nombre. -->
-                                <input type="text" id="nombreProducto"
-                                    name="nombre" class="form-control" required>
+                                <input type="text" id="nombreProducto" name="nombre" class="form-control" required>
                             </div>
 
                             <!-- Columna de la categoría. -->
@@ -324,8 +317,7 @@
                                 </label>
 
                                 <!-- Select obligatorio para seleccionar el tipo de producto. -->
-                                <select id="categoriaProducto" name="categoria"
-                                    class="form-select" required>
+                                <select id="categoriaProducto" name="categoria" class="form-select" required>
 
                                     <!-- Valor vacío que funciona como opción inicial. -->
                                     <option value="">Seleccionar categoría</option>
@@ -344,9 +336,8 @@
 
                                 <!-- textarea permite escribir varias líneas de texto.
                                      rows establece su altura inicial aproximada. -->
-                                <textarea id="descripcionProducto"
-                                    name="descripcion" class="form-control"
-                                    rows="3" required></textarea>
+                                <textarea id="descripcionProducto" name="descripcion" class="form-control" rows="3"
+                                    required></textarea>
                             </div>
 
                             <!-- Columna para la ruta o ubicación de la imagen. -->
@@ -358,8 +349,7 @@
 
                                 <!-- El valor ingresado se envía con el formulario.
                                      La ruta debe ser válida para que la imagen se muestre. -->
-                                <input type="text" id="imagenProducto"
-                                    name="imagen" class="form-control" required>
+                                <input type="text" id="imagenProducto" name="imagen" class="form-control" required>
                             </div>
 
                             <!-- Columna para el precio. -->
@@ -372,9 +362,8 @@
                                 <!-- type="number" acepta valores numéricos.
                                      min evita valores menores que 0.01 en la validación del navegador.
                                      step permite valores con dos decimales. -->
-                                <input type="number" id="precioProducto"
-                                    name="precio" class="form-control"
-                                    min="0.01" step="0.01" required>
+                                <input type="number" id="precioProducto" name="precio" class="form-control" min="0.01"
+                                    step="0.01" required>
                             </div>
 
                             <!-- Columna para la cantidad disponible. -->
@@ -386,9 +375,8 @@
 
                                 <!-- El stock debe ser un entero igual o mayor que cero.
                                      La validación definitiva también debe realizarse en el servidor. -->
-                                <input type="number" id="stockProducto"
-                                    name="stock" class="form-control"
-                                    min="0" step="1" required>
+                                <input type="number" id="stockProducto" name="stock" class="form-control" min="0"
+                                    step="1" required>
                             </div>
 
                         </div>
@@ -403,8 +391,7 @@
                             </button>
 
                             <!-- Cancela la edición actual mediante JavaScript. -->
-                            <button type="button" id="btnCancelarEdicion"
-                                class="btn btn-outline-secondary">
+                            <button type="button" id="btnCancelarEdicion" class="btn btn-outline-secondary">
                                 Cancelar edición
                             </button>
                         </div>
@@ -469,8 +456,7 @@
          tabindex="-1": permite gestionar el foco del modal.
          aria-labelledby identifica el título accesible del modal.
          aria-hidden indica que inicialmente está oculto. -->
-    <div class="modal fade" id="modalLogin" tabindex="-1"
-        aria-labelledby="tituloModalLogin" aria-hidden="true">
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="tituloModalLogin" aria-hidden="true">
 
         <!-- Centra verticalmente la ventana modal. -->
         <div class="modal-dialog modal-dialog-centered">
@@ -496,8 +482,7 @@
                         </div>
 
                         <!-- Botón de cierre proporcionado por Bootstrap. -->
-                        <button type="button" class="btn-close"
-                            data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
 
 
@@ -506,8 +491,7 @@
 
                         <!-- JavaScript muestra aquí los errores o mensajes
                              relacionados específicamente con la autenticación. -->
-                        <div id="alertasLogin" class="mb-3"
-                            aria-live="polite" role="status"></div>
+                        <div id="alertasLogin" class="mb-3" aria-live="polite" role="status"></div>
 
                         <!-- Texto que JavaScript puede adaptar según el modo. -->
                         <p id="descripcionAutenticacion" class="panel-description">
@@ -527,9 +511,8 @@
 
                             <!-- autocomplete="name" permite al navegador sugerir
                                  un nombre guardado, si está disponible. -->
-                            <input type="text" name="nombre" id="nombreRegistro"
-                                class="form-control mb-3" autocomplete="name"
-                                disabled>
+                            <input type="text" name="nombre" id="nombreRegistro" class="form-control mb-3"
+                                autocomplete="name" disabled>
                         </div>
 
 
@@ -541,10 +524,8 @@
                         <!-- type="email" permite al navegador validar el formato básico.
                              name="email" es el nombre del dato enviado por el formulario.
                              autocomplete="username" identifica el correo como usuario de acceso. -->
-                        <input name="email" id="emailLogin" type="email"
-                            class="form-control mb-3"
-                            placeholder="nombre@ejemplo.com"
-                            autocomplete="username" required>
+                        <input name="email" id="emailLogin" type="email" class="form-control mb-3"
+                            placeholder="nombre@ejemplo.com" autocomplete="username" required>
 
 
                         <!-- Campo de la contraseña. -->
@@ -555,11 +536,8 @@
                         <!-- type="password" oculta los caracteres introducidos.
                              minlength exige al menos ocho caracteres en la validación del navegador.
                              required impide enviar el formulario vacío. -->
-                        <input name="password" id="passwordLogin" type="password"
-                            class="form-control"
-                            placeholder="Tu contraseña"
-                            autocomplete="current-password"
-                            minlength="8" required>
+                        <input name="password" id="passwordLogin" type="password" class="form-control"
+                            placeholder="Tu contraseña" autocomplete="current-password" minlength="8" required>
 
                     </div>
 
@@ -575,8 +553,7 @@
 
                         <!-- Este botón no envía el formulario porque su tipo es button.
                              JavaScript debe cambiar el modo al pulsarlo. -->
-                        <button type="button" id="btnCambiarModo"
-                            class="btn btn-outline-primary w-100">
+                        <button type="button" id="btnCambiarModo" class="btn btn-outline-primary w-100">
                             Registrarse
                         </button>
                     </div>
@@ -586,16 +563,14 @@
                     <div class="modal-footer">
 
                         <!-- Cierra el modal sin enviar el formulario. -->
-                        <button type="button" class="btn btn-light"
-                            data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                             Cancelar
                         </button>
 
                         <!-- Envía el formulario.
                              JavaScript puede cambiar el texto entre "Entrar"
                              y una acción de registro, según el modo seleccionado. -->
-                        <button type="submit" id="btnEnviarAutenticacion"
-                            class="btn btn-success">
+                        <button type="submit" id="btnEnviarAutenticacion" class="btn btn-success">
                             Entrar
                         </button>
 
@@ -607,22 +582,20 @@
     </div>
 
 
-    <!-- =========================================================
-         CARGA DE SCRIPTS
-         El orden permite que las bibliotecas necesarias estén disponibles.
-         ========================================================= -->
-
-    <!-- Carga Bootstrap JavaScript, incluyendo Popper.
-         Se necesita para funcionalidades como el menú desplegable y el modal. -->
+    <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Carga la lógica principal:
-         sesión, catálogo, carrito, autenticación y compra. -->
-    <script src="js/app.js"></script>
-
-    <!-- Carga la lógica específica del panel administrativo.
-         Se incluye después de app.js para mantener el orden elegido en el proyecto. -->
-    <script src="js/admin-productos.js"></script>
+    <!-- Estado y funciones compartidas -->
+   <script src="js/dominio/estado.js"></script>
+<script src="js/dominio/catalogo.js"></script>
+<script src="js/dominio/sesion.js"></script>
+<script src="js/dominio/carrito.js"></script>
+<script src="js/dominio/eventos-catalogo-carrito.js"></script>
+<script src="js/dominio/eventos-interfaz.js"></script>
+<script src="js/dominio/compras.js"></script>
+<script src="js/dominio/admin-productos.js"></script>
+<script src="js/dominio/inicializacion.js"></script>
 
 </body>
+
 </html>
