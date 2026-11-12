@@ -23,13 +23,14 @@ function cargarJugadores(idCategoria, idContenedor) {
                     <div class="col-6 col-md-3 mb-4">
                         <div class="card h-100 shadow-sm text-center">
                             <!-- Inyectamos la foto y el nombre que vinieron del PHP -->
-                            <img src="../api/img/fotos_jugadores/${jugador.imagen}" class="card-img-top" alt="${jugador.nombre}">
+                            <img src="../api/img/fotos_jugadores/${jugador.imagen}" class="card-img-top" alt="${jugador.nombre}"
+                                style="height: 250px; width: 100%; object-fit: cover; object-position: top;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${jugador.nombre}</h5>
                                 <p class="card-text text-muted mb-3">Apodo: ${jugador.apodo}</p>
                                 
                                 <button class="btn btn-outline-success btn-sm mt-auto" onclick="verDetalle(${jugador.id_jugador})" data-bs-toggle="modal" data-bs-target="#modalJugador">
-                                    Ver más
+                                    Ver mas
                                 </button>
                             </div>
                         </div>

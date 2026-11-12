@@ -56,11 +56,13 @@ btnInicio.addEventListener("click", function () {
 btnmasculino.addEventListener("click", function () {
   window.cambiarVista("masculino");
   cargarJugadores(1, "contenedor-jugadores-masc");
+  cargarequipos(1, "tabla-posiciones-masc", "C1");
 });
 
 btnfemenino.addEventListener("click", function () {
   window.cambiarVista("femenino");
   cargarJugadores(3, "contenedor-jugadores-fem");
+  cargarequipos(3, "tabla-posiciones-fem", "C1");
 });
 
 
