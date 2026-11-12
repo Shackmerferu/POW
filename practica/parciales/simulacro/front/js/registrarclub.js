@@ -1,4 +1,3 @@
-
 // ======================================
 // ELEMENTOS HTML
 // ======================================
@@ -15,75 +14,73 @@ const mensajeClub = document.getElementById("mensaje-club");
 // VISTA PREVIA DEL LOGO
 // ======================================
 
-inputLogo.addEventListener("change", function () {
+if (formularioClub && inputLogo && vistaLogo && mensajeClub) {
+  let urlLogo = null;
 
+  inputLogo.addEventListener("change", function () {
     const archivo = this.files[0];
 
-    if (!archivo) {
-        vistaLogo.classList.add("d-none");
-        return;
+    if (urlLogo) {
+      URL.revokeObjectURL(urlLogo);
+
+      urlLogo = null;
     }
 
-    vistaLogo.src = URL.createObjectURL(archivo);
+    if (!archivo) {
+      vistaLogo.classList.add("d-none");
+
+      vistaLogo.src = "";
+
+      return;
+    }
+
+    urlLogo = URL.createObjectURL(archivo);
+
+    vistaLogo.src = urlLogo;
 
     vistaLogo.classList.remove("d-none");
+  });
 
-});
+  // ======================================
+  // REGISTRAR EQUIPO
+  // ======================================
 
-// ======================================
-// REGISTRAR EQUIPO
-// ======================================
-
-formularioClub.addEventListener("submit", async function (event) {
-
+  formularioClub.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     mensajeClub.textContent = "Registrando equipo...";
 
     try {
+      const datos = new FormData(formularioClub);
 
-        const datos = new FormData(formularioClub);
+      const respuesta = await consultarAPI(
+        window.API + "equipos_insertar.php",
+        {
+          method: "POST",
+          body: datos,
+        },
+      );
 
-        const response = await fetch(
-            window.API + "equipos_insertar.php",
-            {
-                method: "POST",
-                body: datos
-            }
-        );
+      mensajeClub.textContent =
+        respuesta.mensaje ||
+        respuesta.message ||
+        "Equipo registrado correctamente.";
 
-        if (!response.ok) {
-            throw new Error("Error HTTP: " + response.status);
-        }
+      formularioClub.reset();
 
-        const respuesta = await response.json();
+      vistaLogo.src = "";
 
-        if (respuesta.status !== 200 &&
-            respuesta.status !== "200") {
+      vistaLogo.classList.add("d-none");
 
-            throw new Error(
-                respuesta.mensaje ||
-                respuesta.message ||
-                "No se pudo registrar el equipo."
-            );
-        }
+      if (urlLogo) {
+        URL.revokeObjectURL(urlLogo);
 
-        mensajeClub.textContent =
-            respuesta.mensaje ||
-            respuesta.message ||
-            "Equipo registrado correctamente.";
-
-        formularioClub.reset();
-
-        vistaLogo.src = "";
-        vistaLogo.classList.add("d-none");
-
+        urlLogo = null;
+      }
     } catch (error) {
+      console.error("Error al registrar equipo:", error);
 
-        console.error("Error al registrar equipo:", error);
-
-        mensajeClub.textContent = error.message;
-
+      mensajeClub.textContent = error.message;
     }
-
-});
+  });
+}

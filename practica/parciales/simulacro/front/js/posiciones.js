@@ -1,301 +1,175 @@
-
-// ======================================
-// OBTENER LISTA DE REGISTROS
-// ======================================
-
-function obtenerRegistros(respuesta) {
-
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.equipos)) {
-        return respuesta.equipos;
-    }
-
-    if (Array.isArray(respuesta.partidos)) {
-        return respuesta.partidos;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
-    return [];
-}
-
-// ======================================
-// OBTENER UN CAMPO CON DISTINTOS NOMBRES
-// ======================================
-
-function obtenerCampo(objeto, nombres) {
-
-    for (let i = 0; i < nombres.length; i++) {
-
-        if (objeto[nombres[i]] !== undefined &&
-            objeto[nombres[i]] !== null) {
-
-            return objeto[nombres[i]];
-        }
-    }
-
-    return null;
-}
-
-// ======================================
-// CONSULTAR EQUIPOS
-// ======================================
-
-async function consultarEquipos() {
-
-    const response = await fetch(window.API + "equipos.php");
-
-    if (!response.ok) {
-        throw new Error("Error al consultar los equipos.");
-    }
-
-    const respuesta = await response.json();
-
-    const equipos = obtenerRegistros(respuesta);
-
-    if (equipos.length === 0) {
-        throw new Error("No se encontraron equipos.");
-    }
-
-    return equipos;
-}
-
-// ======================================
-// CONSULTAR PARTIDOS DE UN EQUIPO
-// ======================================
-
-async function consultarPartidos(idEquipo, idCategoria, localia) {
-
-    const url = window.API +
-        "partidos.php?localia=" + localia +
-        "&id_equipo=" + encodeURIComponent(idEquipo) +
-        "&id_categoria=" + idCategoria;
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-        throw new Error("Error al consultar los partidos.");
-    }
-
-    const respuesta = await response.json();
-
-    return obtenerRegistros(respuesta);
-}
-
 // ======================================
 // CALCULAR PUNTOS DE UN PARTIDO
 // ======================================
 
-function calcularPuntos(partido, esLocal) {
+function calcularPuntos(partido, equipoEsA) {
+  const puntosA = Number(partido.puntos_A);
+  const puntosB = Number(partido.puntos_B);
 
-    const puntosA = Number(
-        obtenerCampo(partido, ["puntos_A", "puntos_a", "puntosA"])
-    );
+  const puntosEquipo = equipoEsA ? puntosA : puntosB;
+  const puntosRival = equipoEsA ? puntosB : puntosA;
 
-    const puntosB = Number(
-        obtenerCampo(partido, ["puntos_B", "puntos_b", "puntosB"])
-    );
+  const puntosGanado = partido.modalidad === "C2" ? 5 : 3;
+  const puntosEmpate = partido.modalidad === "C2" ? 2 : 1;
 
-    const modalidad = obtenerCampo(
-        partido,
-        ["modalidad", "tipo_puntuacion", "tipo", "categoria_puntos"]
-    );
+  if (puntosEquipo > puntosRival) {
+    return puntosGanado;
+  }
 
-    if (!Number.isFinite(puntosA) || !Number.isFinite(puntosB)) {
-        throw new Error("Un partido no contiene los puntos A y B.");
+  if (puntosEquipo === puntosRival) {
+    return puntosEmpate;
+  }
+
+  return 0;
+}
+
+// ======================================
+// CONSULTAR PARTIDOS
+// ======================================
+
+
+async function consultarPartidos(idEquipo, idCategoria, localia) {
+
+    const url = window.API + "partidos.php?localia=" + localia + "&id_equipo=" + encodeURIComponent(idEquipo) + "&id_categoria=" + encodeURIComponent(idCategoria);
+
+    const response = await fetch(url);
+
+    const respuesta = await response.json();
+
+    console.log("Consulta de partidos:", {
+        equipo: idEquipo,
+        categoria: idCategoria,
+        localia: localia,
+        respuesta: respuesta
+    });
+
+    // El PHP devuelve status 500 cuando no encuentra partidos.
+    if (
+        respuesta.status === 500 ||
+        respuesta.status === "500"
+    ) {
+        return [];
     }
 
-    let puntosVictoria;
-    let puntosEmpate;
+    if (!response.ok) {
+        throw new Error("Error HTTP: " + response.status);
+    }
 
-    if (modalidad === "C1") {
-        puntosVictoria = 3;
-        puntosEmpate = 1;
-
-    } else if (modalidad === "C2") {
-        puntosVictoria = 5;
-        puntosEmpate = 2;
-
-    } else {
+    if (
+        respuesta.status !== 200 &&
+        respuesta.status !== "200"
+    ) {
         throw new Error(
-            "No se reconoce la modalidad del partido: " + modalidad
+            respuesta.menssage ||
+            respuesta.mensaje ||
+            "Error al consultar los partidos."
         );
     }
 
-    // Si el equipo es local, se compara A contra B.
-    // Si es visitante, se compara B contra A.
-
-    const puntosEquipo = esLocal ? puntosA : puntosB;
-    const puntosRival = esLocal ? puntosB : puntosA;
-
-    if (puntosEquipo > puntosRival) {
-        return puntosVictoria;
-    }
-
-    if (puntosEquipo === puntosRival) {
-        return puntosEmpate;
-    }
-
-    return 0;
+    return Array.isArray(respuesta.productos)
+        ? respuesta.productos
+        : [];
 }
+
 
 // ======================================
 // CALCULAR POSICIONES
 // ======================================
 
 async function calcularPosiciones(idCategoria) {
+  // Obtener todos los equipos
+  const equipos = await obtenerProductos(window.API + "equipos.php");
 
-    const equipos = await consultarEquipos();
+  for (let equipo of equipos) {
+    let puntos = 0;
 
-    const posiciones = [];
+    // PARTIDOS COMO EQUIPO A
+    const partidosA = await consultarPartidos( equipo.id_equipo, idCategoria, "A", );
 
-    for (let i = 0; i < equipos.length; i++) {
+    for (let partido of partidosA) { puntos += calcularPuntos(partido, true); }
 
-        const equipo = equipos[i];
+    // PARTIDOS COMO EQUIPO B
+    const partidosB = await consultarPartidos( equipo.id_equipo, idCategoria, "B", );
 
-        const idEquipo = obtenerCampo(
-            equipo,
-            ["id_equipo", "id"]
-        );
-
-        const nombre = obtenerCampo(
-            equipo,
-            ["nombre", "nombre_equipo", "equipo"]
-        );
-
-        const logo = obtenerCampo(
-            equipo,
-            ["logo", "imagen", "escudo"]
-        );
-
-        if (idEquipo === null) {
-            continue;
-        }
-
-        // Consultar partidos como local y visitante
-        const partidosLocales = await consultarPartidos(
-            idEquipo,
-            idCategoria,
-            "A"
-        );
-
-        const partidosVisitantes = await consultarPartidos(
-            idEquipo,
-            idCategoria,
-            "B"
-        );
-
-        let puntos = 0;
-
-        // Recorrer partidos locales
-        for (let j = 0; j < partidosLocales.length; j++) {
-
-            puntos += calcularPuntos(partidosLocales[j], true);
-
-        }
-
-        // Recorrer partidos visitantes
-        for (let j = 0; j < partidosVisitantes.length; j++) {
-
-            puntos += calcularPuntos(partidosVisitantes[j], false);
-
-        }
-
-        posiciones.push({
-            id: idEquipo,
-            nombre: nombre || "Equipo sin nombre",
-            logo: logo || "",
-            puntos: puntos
-        });
-
+    for (let partido of partidosB) {
+      puntos += calcularPuntos(partido, false);
     }
 
-    // Ordenar de mayor a menor puntaje
-    posiciones.sort(function (a, b) {
-        return b.puntos - a.puntos;
-    });
+    equipo.puntosTotales = puntos;
+  }
 
-    return posiciones;
+  // ORDENAR DE MAYOR A MENOR
+  equipos.sort(function (a, b) {
+    return b.puntosTotales - a.puntosTotales;
+  });
+
+  return equipos;
 }
 
 // ======================================
-// MOSTRAR TABLA DE POSICIONES
+// MOSTRAR POSICIONES
 // ======================================
 
-async function cargarPosiciones(idCategoria, tabla) {
+async function cargarPosiciones(idCategoria, idTabla) {
+  const tbody = document.getElementById(idTabla);
 
-    tabla.innerHTML = "<tr><td colspan='3'>Calculando posiciones...</td></tr>";
+  if (!tbody) {
+    console.error("No se encontró la tabla:", idTabla);
+    return;
+  }
 
-    try {
+  tbody.innerHTML = "<tr><td colspan='3'>Calculando posiciones...</td></tr>";
 
-        const posiciones = await calcularPosiciones(idCategoria);
+  try {
+    const equipos = await calcularPosiciones(idCategoria);
 
-        tabla.innerHTML = "";
+    tbody.innerHTML = "";
 
-        if (posiciones.length === 0) {
-            tabla.innerHTML =
-                "<tr><td colspan='3'>No hay equipos registrados.</td></tr>";
+    if (equipos.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='3'>No hay equipos registrados.</td></tr>";
 
-            return;
-        }
-
-        posiciones.forEach(function (equipo, indice) {
-
-            const fila = document.createElement("tr");
-
-            const celdaPosicion = document.createElement("td");
-            celdaPosicion.textContent = indice + 1;
-
-            const celdaEquipo = document.createElement("td");
-
-            if (equipo.logo) {
-
-                const imagen = document.createElement("img");
-
-                imagen.src = "../api/img/logos/" + equipo.logo;
-                imagen.alt = "Logo de " + equipo.nombre;
-                imagen.width = 40;
-                imagen.classList.add("me-2");
-
-                celdaEquipo.appendChild(imagen);
-
-            }
-
-            const nombre = document.createElement("span");
-            nombre.textContent = equipo.nombre;
-
-            celdaEquipo.appendChild(nombre);
-
-            const celdaPuntos = document.createElement("td");
-            celdaPuntos.textContent = equipo.puntos;
-
-            fila.appendChild(celdaPosicion);
-            fila.appendChild(celdaEquipo);
-            fila.appendChild(celdaPuntos);
-
-            tabla.appendChild(fila);
-
-        });
-
-    } catch (error) {
-
-        console.error("Error al calcular posiciones:", error);
-
-        tabla.innerHTML = "";
-
-        const fila = document.createElement("tr");
-        const celda = document.createElement("td");
-
-        celda.colSpan = 3;
-        celda.textContent = error.message;
-
-        fila.appendChild(celda);
-        tabla.appendChild(fila);
-
+      return;
     }
+
+    equipos.forEach(function (equipo) {
+      const fila = document.createElement("tr");
+
+      // LOGO
+      const celdaLogo = document.createElement("td");
+
+      const imagen = document.createElement("img");
+
+      imagen.src = window.API + "img/logos/" + equipo.logo;
+
+      imagen.alt = "Logo de " + equipo.nombre;
+
+      imagen.classList.add("logo-equipo" , "text-truncate");
+
+      celdaLogo.appendChild(imagen);
+
+      // NOMBRE
+      const celdaNombre = document.createElement("td");
+
+      celdaNombre.classList.add("align-middle");
+
+      celdaNombre.textContent = equipo.nombre;
+
+      // PUNTOS
+      const celdaPuntos = document.createElement("td");
+
+      celdaPuntos.classList.add("align-middle");
+
+      celdaPuntos.textContent = equipo.puntosTotales;
+
+      // AGREGAR COLUMNAS
+      fila.appendChild(celdaLogo);
+      fila.appendChild(celdaNombre);
+      fila.appendChild(celdaPuntos);
+      tbody.appendChild(fila);
+    });
+  } catch (error) {
+    console.error("Error al calcular posiciones:", error);
+
+    tbody.innerHTML = "<tr><td colspan='3'>Error al calcular las posiciones.</td></tr>";
+  }
 }

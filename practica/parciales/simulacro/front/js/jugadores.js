@@ -3,29 +3,13 @@
 // ======================================
 
 async function consultarJugadores(idCategoria) {
-  const response = await fetch(
+  return await obtenerProductos(
     window.API + "jugadores.php?id_categoria=" + idCategoria,
   );
-
-  if (!response.ok) {
-    throw new Error("Error HTTP: " + response.status);
-  }
-
-  const respuesta = await response.json();
-
-  if (respuesta.status !== 200 && respuesta.status !== "200") {
-    throw new Error(
-      respuesta.menssage ||
-        respuesta.mensaje ||
-        "No se pudieron consultar los jugadores.",
-    );
-  }
-
-  return respuesta.productos;
 }
 
 // ======================================
-// MOSTRAR TARJETAS
+// MOSTRAR JUGADORES
 // ======================================
 
 function mostrarJugadores(jugadores, contenedor) {
@@ -45,40 +29,55 @@ function mostrarJugadores(jugadores, contenedor) {
 
     columna.classList.add("col-12", "col-sm-6", "col-md-4", "col-lg-3");
 
+    // TARJETA
+
     const card = document.createElement("div");
+
     card.classList.add("card", "h-100");
 
-    // FOTO
+    // IMAGEN
+
     const imagen = document.createElement("img");
 
     imagen.src = window.API + "img/fotos_jugadores/" + jugador.imagen;
+
     imagen.alt = "Foto de " + jugador.nombre;
+
     imagen.classList.add("card-img-top", "imagen-jugador");
 
-    imagen.style.cursor = "pointer";
-
     // CUERPO
+
     const cuerpo = document.createElement("div");
+
     cuerpo.classList.add("card-body", "text-center");
 
     // NOMBRE
+
     const titulo = document.createElement("h5");
+
     titulo.classList.add("card-title", "fw-bold");
 
     titulo.textContent = jugador.apellido + ", " + jugador.nombre;
 
     // APODO
+
     const apodo = document.createElement("p");
+
     apodo.classList.add("card-text");
 
     apodo.textContent = jugador.apodo || "";
 
-    // BOTÓN VER MÁS
+    // BOTÓN
+
     const boton = document.createElement("button");
 
     boton.type = "button";
+
     boton.classList.add("btn", "btn-primary");
+
     boton.textContent = "Ver más";
+
+    // EVENTOS
 
     boton.addEventListener("click", function () {
       abrirModalJugador(jugador.id_jugador);
@@ -88,6 +87,8 @@ function mostrarJugadores(jugadores, contenedor) {
       abrirModalJugador(jugador.id_jugador);
     });
 
+    // ARMAR TARJETA
+
     cuerpo.appendChild(titulo);
     cuerpo.appendChild(apodo);
     cuerpo.appendChild(boton);
@@ -96,8 +97,29 @@ function mostrarJugadores(jugadores, contenedor) {
     card.appendChild(cuerpo);
 
     columna.appendChild(card);
+
     contenedor.appendChild(columna);
   });
+}
+
+// ======================================
+// CARGAR JUGADORES POR CATEGORÍA
+// ======================================
+
+async function cargarJugadores(idCategoria, idContenedor) {
+  const contenedor = document.getElementById(idContenedor);
+
+  contenedor.textContent = "Cargando jugadores...";
+
+  try {
+    const jugadores = await consultarJugadores(idCategoria);
+
+    mostrarJugadores(jugadores, contenedor);
+  } catch (error) {
+    console.error("Error al cargar jugadores:", error);
+
+    contenedor.textContent = error.message;
+  }
 }
 
 // ======================================
@@ -105,25 +127,15 @@ function mostrarJugadores(jugadores, contenedor) {
 // ======================================
 
 async function consultarJugador(idJugador) {
-  const response = await fetch(
+  const jugadores = await obtenerProductos(
     window.API + "jugadores.php?id_jugador=" + encodeURIComponent(idJugador),
   );
 
-  if (!response.ok) {
-    throw new Error("Error al consultar el jugador.");
-  }
-
-  const respuesta = await response.json();
-
-  if (respuesta.status !== 200 && respuesta.status !== "200") {
-    throw new Error("No se pudieron obtener los datos del jugador.");
-  }
-
-  if (!respuesta.productos || respuesta.productos.length === 0) {
+  if (jugadores.length === 0) {
     throw new Error("No se encontró el jugador.");
   }
 
-  return respuesta.productos[0];
+  return jugadores[0];
 }
 
 // ======================================
@@ -139,17 +151,24 @@ async function abrirModalJugador(idJugador) {
   const imagen = document.getElementById("modalImagen");
   const apodo = document.getElementById("modalApodo");
   const biografia = document.getElementById("modalBiografia");
+
   const tabla = document.getElementById("tabla-palmares");
+
   const formulario = document.getElementById("form-palmares");
+
   const mensaje = document.getElementById("mensaje-palmares");
 
-  // Mostrar estado de carga
+  // ESTADO INICIAL
+
   titulo.textContent = "Cargando jugador...";
+
   imagen.src = "";
+
   apodo.textContent = "";
+
   biografia.textContent = "";
 
-  tabla.innerHTML = "<tr><td>Cargando trayectoria...</td></tr>";
+  tabla.innerHTML = "<tr><td colspan='2'>Cargando trayectoria...</td></tr>";
 
   document.getElementById("nuevo-palmares").value = "";
 
@@ -160,10 +179,10 @@ async function abrirModalJugador(idJugador) {
   modal.show();
 
   try {
-    // Consultar los datos completos
     const jugador = await consultarJugador(idJugador);
 
-    // Mostrar información del jugador
+    // MOSTRAR DATOS
+
     titulo.textContent = jugador.apellido + ", " + jugador.nombre;
 
     imagen.src = window.API + "img/fotos_jugadores/" + jugador.imagen;
@@ -174,22 +193,25 @@ async function abrirModalJugador(idJugador) {
 
     biografia.textContent = jugador.biografia || "Sin biografía disponible.";
 
-    // Guardar DNI para utilizarlo al consultar y guardar palmarés
+    // GUARDAR DNI
+
     formulario.dataset.dni = jugador.dni;
 
-    // Consultar trayectoria
+    // CARGAR PALMARÉS
+
     await cargarPalmares(jugador.dni);
   } catch (error) {
     console.error(error);
 
     titulo.textContent = "Error al cargar el jugador";
 
-    tabla.innerHTML = "<tr><td>No se pudo cargar la información.</td></tr>";
+    tabla.innerHTML =
+      "<tr><td colspan='2'>No se pudo cargar la información.</td></tr>";
   }
 }
 
 // ======================================
-// CONSULTAR PALMARÉS DEL JUGADOR
+// CONSULTAR PALMARÉS
 // ======================================
 
 async function cargarPalmares(dni) {
@@ -198,46 +220,58 @@ async function cargarPalmares(dni) {
   tabla.innerHTML = "";
 
   try {
-    const response = await fetch(
-      window.API + "palmares_listar.php?dni=" + encodeURIComponent(dni),
-    );
+    const url =
+      window.API + "palmares_listar.php?dni=" + encodeURIComponent(dni);
+
+    const response = await fetch(url);
+
+    const respuesta = await response.json();
+
+    // EL PHP DEVUELVE 500 CUANDO NO HAY REGISTROS
+
+    if (
+      response.status === 500 ||
+      respuesta.status === 500 ||
+      respuesta.status === "500"
+    ) {
+      tabla.innerHTML =
+        "<tr><td colspan='2'>El jugador todavía no tiene palmarés registrado.</td></tr>";
+
+      return;
+    }
 
     if (!response.ok) {
       throw new Error("Error HTTP: " + response.status);
     }
 
-    const respuesta = await response.json();
-
-    // El PHP devuelve status 500 cuando no hay registros.
     if (respuesta.status !== 200 && respuesta.status !== "200") {
-      tabla.innerHTML =
-        "<tr><td>El jugador todavía no tiene palmarés registrado.</td></tr>";
-
-      return;
+      throw new Error("Error al consultar el palmarés.");
     }
 
     const registros = respuesta.productos;
 
-    tabla.innerHTML = "";
-
     if (!Array.isArray(registros) || registros.length === 0) {
       tabla.innerHTML =
-        "<tr><td>El jugador todavía no tiene palmarés registrado.</td></tr>";
+        "<tr><td colspan='2'>El jugador todavía no tiene palmarés registrado.</td></tr>";
 
       return;
     }
 
-    // Recorrer los registros de la trayectoria
+    // MOSTRAR REGISTROS
+
     registros.forEach(function (registro) {
       const fila = document.createElement("tr");
 
       const celdaAnio = document.createElement("td");
+
       celdaAnio.textContent = registro.anio;
 
       const celdaDetalle = document.createElement("td");
+
       celdaDetalle.textContent = registro.detalle;
 
       fila.appendChild(celdaAnio);
+
       fila.appendChild(celdaDetalle);
 
       tabla.appendChild(fila);
@@ -245,7 +279,8 @@ async function cargarPalmares(dni) {
   } catch (error) {
     console.error(error);
 
-    tabla.innerHTML = "<tr><td>Error al consultar la trayectoria.</td></tr>";
+    tabla.innerHTML =
+      "<tr><td colspan='2'>Error al consultar la trayectoria.</td></tr>";
   }
 }
 
@@ -253,9 +288,10 @@ async function cargarPalmares(dni) {
 // GUARDAR NUEVO PALMARÉS
 // ======================================
 
-document
-  .getElementById("form-palmares")
-  .addEventListener("submit", async function (event) {
+const formularioPalmares = document.getElementById("form-palmares");
+
+if (formularioPalmares) {
+  formularioPalmares.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const dni = this.dataset.dni;
@@ -266,21 +302,22 @@ document
 
     if (!dni) {
       mensaje.textContent = "No se pudo identificar al jugador.";
+
       return;
     }
 
     if (detalle === "") {
       mensaje.textContent = "Ingresá el detalle del palmarés.";
+
       return;
     }
 
     try {
       const datos = new FormData();
 
-      // El PHP espera el campo POST llamado detalle
       datos.append("detalle", detalle);
 
-      const response = await fetch(
+      const respuesta = await consultarAPI(
         window.API + "palmares_guardar.php?dni=" + encodeURIComponent(dni),
         {
           method: "POST",
@@ -288,21 +325,11 @@ document
         },
       );
 
-      if (!response.ok) {
-        throw new Error("Error HTTP: " + response.status);
-      }
-
-      const respuesta = await response.json();
-
-      if (respuesta.status !== 200 && respuesta.status !== "200") {
-        throw new Error(respuesta.message || "No se pudo guardar el palmarés.");
-      }
-
-      mensaje.textContent = "Palmarés guardado correctamente.";
+      mensaje.textContent =
+        respuesta.mensaje || "Palmarés guardado correctamente.";
 
       document.getElementById("nuevo-palmares").value = "";
 
-      // Actualizar la tabla después de guardar
       await cargarPalmares(dni);
     } catch (error) {
       console.error(error);
@@ -310,3 +337,4 @@ document
       mensaje.textContent = error.message;
     }
   });
+}

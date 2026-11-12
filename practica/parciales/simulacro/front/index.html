@@ -12,10 +12,12 @@
 </head>
 
 <body>
+
     <!-- CABECERA -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
+
                 <div class="d-flex align-items-center">
                     <img src="recursos/img/logos/tania .png" alt="Logo La Tania" />
 
@@ -26,12 +28,15 @@
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
                     aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- MENÚ -->
                 <div class="collapse navbar-collapse justify-content-center" id="menuPrincipal">
+
                     <ul class="navbar-nav w-100 justify-content-center">
+
                         <li class="nav-item text-center">
                             <button type="button" id="btn-inicio" class="btn text-white w-100">
                                 INICIO
@@ -49,29 +54,37 @@
                                 CANICAS FEMENINO
                             </button>
                         </li>
+
                     </ul>
                 </div>
 
                 <a href="registrar_club.html" class="btn text-white btn-sm">
                     Registrar Club
                 </a>
+
             </div>
         </nav>
     </header>
 
     <main>
+
         <!-- INICIO -->
         <section id="inicio">
+
             <div class="container">
+
                 <div class="position-relative border rounded-5 overflow-hidden mb-3">
+
                     <img class="w-100" src="recursos/img/logos/banner.png" alt="Banner La Tania" />
 
                     <div class="position-absolute top-50 end-0 translate-middle-y text-end p-3">
+
                         <h1 class="text-warning">EL MALEVO DEL VIDRIO</h1>
 
                         <h2>EDMUNDO DANTES</h2>
 
                         <h5>1796 - 1826 (actualidad)</h5>
+
                     </div>
                 </div>
 
@@ -99,25 +112,32 @@
                     valoran la historia, el juego y la amistad, manteniendo vivo el
                     espíritu deportivo en cada partida de canicas.
                 </p>
+
             </div>
         </section>
 
+
         <!-- CANICAS MASCULINO -->
         <section id="canicasmasc" class="d-none">
+
             <div class="container py-3">
+
                 <h2 class="mb-3">Canicas Masculino</h2>
 
-                <div id="lista-jugadores-masc" class="row g-3 justify-content-center"></div>
+                <div id="lista-jugadores-masc" class="row g-3 justify-content-center">
+                </div>
 
                 <hr class="my-4" />
 
                 <h3>Tabla de posiciones</h3>
 
                 <div class="table-responsive">
+
                     <table class="table table-striped table-hover align-middle">
+
                         <thead>
                             <tr>
-                                <th>Posición</th>
+                                <th>Logo</th>
                                 <th>Club</th>
                                 <th>Puntos</th>
                             </tr>
@@ -128,27 +148,36 @@
                                 <td colspan="3">Cargando posiciones...</td>
                             </tr>
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
         </section>
 
+
         <!-- CANICAS FEMENINO -->
         <section id="canicasfem" class="d-none">
+
             <div class="container py-3">
+
                 <h2 class="mb-3">Canicas Femenino</h2>
 
-                <div id="lista-jugadores-fem" class="row g-3 justify-content-center"></div>
+                <div id="lista-jugadores-fem" class="row g-3 justify-content-center">
+                </div>
 
                 <hr class="my-4" />
 
                 <h3>Tabla de posiciones</h3>
 
                 <div class="table-responsive">
+
                     <table class="table table-striped table-hover align-middle">
+
                         <thead>
                             <tr>
-                                <th>Posición</th>
+                                <th>Logo</th>
                                 <th>Club</th>
                                 <th>Puntos</th>
                             </tr>
@@ -159,32 +188,48 @@
                                 <td colspan="3">Cargando posiciones...</td>
                             </tr>
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
         </section>
+
     </main>
+
 
     <!-- MODAL DE JUGADORES -->
     <div class="modal fade" id="modaljugadores" tabindex="-1" aria-labelledby="modalTitulo" aria-hidden="true">
+
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+
             <div class="modal-content">
+
                 <div class="modal-header">
+
                     <h5 class="modal-title" id="modalTitulo">
                         Información del jugador
                     </h5>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
+                    </button>
+
                 </div>
 
                 <div class="modal-body">
+
                     <!-- INFORMACIÓN DEL JUGADOR -->
                     <div class="row">
+
                         <div class="col-md-4 text-center">
+
                             <img id="modalImagen" src="" class="img-fluid rounded mb-3" alt="Foto del jugador" />
+
                         </div>
 
                         <div class="col-md-8">
+
                             <p>
                                 <strong>Apodo:</strong>
                                 <span id="modalApodo"></span>
@@ -193,16 +238,20 @@
                             <h6>Biografía</h6>
 
                             <p id="modalBiografia"></p>
+
                         </div>
+
                     </div>
 
                     <hr />
 
-                    <!-- TRAYECTORIA -->
+                    <!-- PALMARÉS -->
                     <h5>Palmarés</h5>
 
                     <div class="table-responsive">
+
                         <table class="table table-bordered">
+
                             <thead>
                                 <tr>
                                     <th>Año</th>
@@ -215,13 +264,16 @@
                                     <td colspan="2">Sin información.</td>
                                 </tr>
                             </tbody>
+
                         </table>
+
                     </div>
 
                     <hr />
 
                     <!-- FORMULARIO PARA AGREGAR PALMARÉS -->
                     <form id="form-palmares">
+
                         <label for="nuevo-palmares" class="form-label">
                             Agregar nuevo palmarés
                         </label>
@@ -234,33 +286,57 @@
                         </button>
 
                         <p id="mensaje-palmares" class="mt-2"></p>
+
                     </form>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 
     <!-- FOOTER -->
     <footer class="d-flex justify-content-between text-center py-3">
-        <p class="mb-2 ms-auto me-auto">Club Deportivo La Tania</p>
 
-        <!-- WHATSAPP DENTRO DEL FOOTER -->
+        <p class="mb-2 ms-auto me-auto">
+            Club Deportivo La Tania
+        </p>
+
+        <!-- WHATSAPP -->
         <a href="https://wa.me/NUMERO_DEL_CLUB" target="_blank" rel="noopener" class="whatsapp-footer">
+
             <div class="contenedor-whatsapp">
+
                 <img src="recursos/img/logos/whatsapp.png" alt="Contactar por WhatsApp" />
+
             </div>
+
         </a>
+
     </footer>
 
+
     <!-- SCRIPTS -->
+
+    <!-- Bootstrap -->
     <script src="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Configuración y API -->
     <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Funcionalidades -->
     <script src="js/jugadores.js"></script>
     <script src="js/posiciones.js"></script>
+
+    <!-- Paneles -->
+    <script src="js/panel.js"></script>
     <script src="js/panelmasc.js"></script>
     <script src="js/panelfem.js"></script>
-    <script src="js/panel.js"></script>
+
 </body>
 
 </html>

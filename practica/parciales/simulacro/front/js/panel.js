@@ -1,41 +1,45 @@
-
 // ======================================
 // ELEMENTOS HTML
 // ======================================
 
-const vistaInicio = document.getElementById("inicio");
-const vistaMasc = document.getElementById("canicasmasc");
-const vistaFem = document.getElementById("canicasfem");
+const vistas = [
+    document.getElementById("inicio"),
+    document.getElementById("canicasmasc"),
+    document.getElementById("canicasfem")
+];
 
-const btnInicio = document.getElementById("btn-inicio");
-const btnMasc = document.getElementById("btn-canicasmasc");
-const btnFem = document.getElementById("btn-canicasfem");
+const botones = [
+    document.getElementById("btn-inicio"),
+    document.getElementById("btn-canicasmasc"),
+    document.getElementById("btn-canicasfem")
+];
 
 // ======================================
 // CAMBIAR VISTA
 // ======================================
 
-function mostrarVista(vista) {
+function mostrarVista(indice) {
 
-    vistaInicio.classList.add("d-none");
-    vistaMasc.classList.add("d-none");
-    vistaFem.classList.add("d-none");
+    vistas.forEach(function(vista) {
 
-    vista.classList.remove("d-none");
+        vista.classList.add("d-none");
+
+    });
+
+    vistas[indice].classList.remove("d-none");
+
 }
 
 // ======================================
 // EVENTOS
 // ======================================
 
-btnInicio.addEventListener("click", function () {
-    mostrarVista(vistaInicio);
-});
+botones.forEach(function(boton, indice) {
 
-btnMasc.addEventListener("click", function () {
-    mostrarVista(vistaMasc);
-});
+    boton.addEventListener("click", function() {
 
-btnFem.addEventListener("click", function () {
-    mostrarVista(vistaFem);
+        mostrarVista(indice);
+
+    });
+
 });
