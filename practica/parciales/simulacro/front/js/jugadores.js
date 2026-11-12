@@ -42,3 +42,46 @@ function cargarJugadores(idCategoria, idContenedor) {
         // 6. Por si el servidor se cae o escribiste mal la ruta
         .catch(error => console.error("Error al cargar jugadores:", error));
 }
+async function verDetalle(idJugador) {
+    try {
+        // 1. Buscamos la info específica del jugador
+        let resJugador = await fetch(`../api/jugadores.php?id_jugador=${idJugador}`);
+        let datosJugador = await resJugador.json();
+        
+        // Atajamos el objeto jugador (ajustá ".productos[0]" según cómo devuelva el JSON tu API)
+        let jugador = datosJugador.productos ? datosJugador.productos[0] : datosJugador[0];
+
+        // Rellenamos el HTML del modal
+        document.getElementById('modal-nombre').innerText = jugador.nombre;
+        document.getElementById('modal-apodo').innerText = `Apodo: ${jugador.apodo}`;
+        document.getElementById('modal-biografia').innerText = jugador.biografia || "Sin biografía disponible.";
+        document.getElementById('modal-foto').src = `../api/img/fotos_jugadores/${jugador.imagen}`;
+
+        // 2. Buscamos su trayectoria usando su DNI
+        let dniJugador = jugador.dni;
+        let resPalmares = await fetch(`../api/palmares_listar.php?dni=${dniJugador}`);
+        let datosPalmares = await resPalmares.json();
+        
+        let listaPalmares = datosPalmares.productos || datosPalmares.palmares || datosPalmares || [];
+        
+        // Rellenamos la tabla de trayectoria
+        const tbodyTrayectoria = document.getElementById('modal-trayectoria');
+        tbodyTrayectoria.innerHTML = ""; // Limpiamos por si había datos de otro jugador
+
+        if (listaPalmares.length > 0) {
+            for (let item of listaPalmares) {
+                tbodyTrayectoria.innerHTML += `
+                    <tr>
+                        <td class="fw-bold">${item.anio || 'S/F'}</td>
+                        <td>${item.detalle}</td>
+                    </tr>
+                `;
+            }
+        } else {
+            tbodyTrayectoria.innerHTML = "<tr><td colspan='2' class='text-center'>Sin trayectoria registrada</td></tr>";
+        }
+
+    } catch (error) {
+        console.error("Error al cargar detalles del jugador:", error);
+    }
+}

@@ -105,6 +105,47 @@
                 </div>
             </div>
         </section>
+
+        <!-- Modal Bootstrap para Ver Más -->
+<div class="modal fade" id="modalJugador" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title fw-bold" id="modal-nombre">Nombre del Jugador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modal-foto" src="" alt="Foto" class="img-fluid rounded mb-3" style="max-height: 200px;">
+                <h6 id="modal-apodo" class="text-muted mb-4"></h6>
+                
+                <h4 class="text-warning mb-3">Biografía</h4>
+                <p id="modal-biografia" class="text-start px-3"></p>
+
+                <hr>
+                <h4 class="text-warning mb-3">Trayectoria</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped text-start">
+                        <thead>
+                            <tr>
+                                <th>Año</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-trayectoria">
+                            <!-- JS inyectará los palmares acá -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Formulario para agregar trayectoria (Punto A del PDF) -->
+                <div class="mt-4 d-flex">
+                    <textarea id="nuevo-palmares" class="form-control me-2" placeholder="Textarea para agregar nuevo item trayectoria"></textarea>
+                    <button class="btn btn-outline-dark" id="btn-guardar-palmares">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     </main>
 
     <script src="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
