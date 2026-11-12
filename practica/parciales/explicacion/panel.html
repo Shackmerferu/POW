@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Termos</title>
+    <link rel="stylesheet" href="../../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <!-- CAJA 2: EL SISTEMA PRINCIPAL -->
+    <!-- Le sacamos el d-none porque ahora es una página nueva que arranca visible -->
+    <div id="pantalla-sistema" class="container-fluid mt-5">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Sistema Termos</h2>
+            <button id="btn-salir" class="btn btn-danger">Cerrar Sesión</button>
+        </div>
+
+        <div class="container">
+            <div class="mb-4">
+                <button id="btn-ver-termos" class="btn btn-success">Catálogo de Termos</button>
+                <button id="btn-alta" class="btn btn-outline-primary">Registrar Persona</button>
+            </div>
+
+            <div id="resultados" class="p-3 bg-white border rounded shadow-sm">
+                <!-- Acá JS va a inyectar las tarjetas de los termos -->
+            </div>
+        </div>
+    </div>
+
+<!-- Modal para ampliar la Imagen del Termo -->
+<div class="modal fade" id="modalTermo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold" id="modal-termo-titulo">Título del Termo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <img id="modal-termo-img" src="" alt="Termo ampliado" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CAJA 3: BÚSQUEDA DE PERSONAS -->
+<div id="pantalla-personas" class="container mt-5">
+    <div class="card p-4 mx-auto shadow-sm" style="max-width: 500px;">
+        <h4 class="mb-3 text-center">Consultar Persona por DNI</h4>
+        
+        <div class="d-flex mb-4">
+            <input type="number" id="input-dni" class="form-control me-2" placeholder="Ingrese DNI (ej: 24369826)">
+            <button id="btn-buscar-dni" class="btn btn-primary">Consultar</button>
+        </div>
+
+        <!-- El formulario que aparece después de buscar (Arranca oculto) -->
+        <div id="formulario-persona" class="d-none">
+            <h5 id="titulo-form-persona" class="text-success mb-3">Registrar Persona</h5>
+            
+            <input type="text" id="form-dni" class="form-control mb-2" disabled> <!-- DNI bloqueado -->
+            <input type="text" id="form-nombre" class="form-control mb-2" placeholder="Nombre">
+            <input type="text" id="form-apellido" class="form-control mb-2" placeholder="Apellido">
+            
+            <!-- PUNTO EXTRA: Select de ciudades dinámico -->
+            <select id="form-ciudad" class="form-select mb-2">
+                <option value="">Seleccione una ciudad...</option>
+            </select>
+            
+            <select id="form-provincia" class="form-select mb-3" disabled>
+                <option value="5" selected>La Pampa</option>
+            </select>
+
+            <button id="btn-guardar-persona" class="btn btn-success w-100">Guardar Datos</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Carga tu JS específico del panel -->
+     <script src="../../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/panel.js"></script>
+</body>
+</html>
