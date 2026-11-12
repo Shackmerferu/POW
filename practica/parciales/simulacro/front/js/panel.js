@@ -1,66 +1,45 @@
 // ======================================
-// RUTAS DE LAS API
+// ELEMENTOS HTML
 // ======================================
 
+const vistas = [
+    document.getElementById("inicio"),
+    document.getElementById("canicasmasc"),
+    document.getElementById("canicasfem")
+];
 
-
-
-// ======================================
-// OBTENER ELEMENTOS HTML
-// ======================================
-
-const inicio = document.getElementById("inicio");
-const masculino = document.getElementById("masculino");
-const femenino = document.getElementById("femenino");
-
-
-const btnInicio = document.getElementById("btn-inicio");
-const btnmasculino = document.getElementById("btn-masculino");
-const btnfemenino = document.getElementById("btn-femenino");
-
+const botones = [
+    document.getElementById("btn-inicio"),
+    document.getElementById("btn-canicasmasc"),
+    document.getElementById("btn-canicasfem")
+];
 
 // ======================================
-// CAMBIAR DE VISTA
+// CAMBIAR VISTA
 // ======================================
 
-window.cambiarVista = function (vista, actualizarTermos = true) {
-  inicio.classList.add("d-none");
-  masculino.classList.add("d-none");
-  femenino.classList.add("d-none");
+function mostrarVista(indice) {
 
-  btnInicio.classList.replace("btn-light", "btn-primary");
-  btnmasculino.classList.replace("btn-light", "btn-primary");
-  btnfemenino.classList.replace("btn-light", "btn-primary");
+    vistas.forEach(function(vista) {
 
-  if (vista === "inicio") {
-    inicio.classList.remove("d-none");
-    btnInicio.classList.replace("btn-primary", "btn-light");
-  } else if (vista === "masculino") {
-    masculino.classList.remove("d-none");
-    btnmasculino.classList.replace("btn-primary", "btn-light");
+        vista.classList.add("d-none");
 
-  } else if (vista === "femenino") {
-    femenino.classList.remove("d-none");
-    btnfemenino.classList.replace("btn-primary", "btn-light");
-  }
-};
+    });
+
+    vistas[indice].classList.remove("d-none");
+
+}
 
 // ======================================
-// EVENTOS DE NAVEGACIÓN
+// EVENTOS
 // ======================================
 
-btnInicio.addEventListener("click", function () {
-  window.cambiarVista("inicio");
+botones.forEach(function(boton, indice) {
+
+    boton.addEventListener("click", function() {
+
+        mostrarVista(indice);
+
+    });
+
 });
-
-btnmasculino.addEventListener("click", function () {
-  window.cambiarVista("masculino");
-  cargarJugadores(1, "contenedor-jugadores-masc");
-});
-
-btnfemenino.addEventListener("click", function () {
-  window.cambiarVista("femenino");
-  cargarJugadores(3, "contenedor-jugadores-fem");
-});
-
-

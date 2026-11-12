@@ -1,4 +1,3 @@
-
 // js/app.js
 
 // =====================================================
@@ -32,7 +31,6 @@ const alertas = document.getElementById("alertas");
 // texto: contenido del mensaje.
 // tipo: estilo de Bootstrap, por ejemplo success, danger o warning.
 function mostrarMensaje(texto, tipo = "success") {
-
   // Escapamos el texto para impedir que se interprete como HTML.
   const mensajeSeguro = escaparHTML(texto);
 
@@ -66,18 +64,16 @@ function escaparHTML(valor) {
 // Solicita al servidor los productos correspondientes
 // a la categoría seleccionada y actualiza el catálogo.
 async function cargarProductos() {
-
   // Obtiene el valor seleccionado en el filtro de categorías.
   const categoria = document.getElementById("filtroCategoria").value;
 
   try {
-
     // Envía una petición GET al endpoint de productos.
     // encodeURIComponent permite enviar la categoría en la URL
     // sin romperla si contiene espacios u otros caracteres.
     const respuesta = await fetch(
       `api/productos.php?action=listar&categoria=${encodeURIComponent(categoria)}`,
-      { credentials: "same-origin" }
+      { credentials: "same-origin" },
     );
 
     // Convierte la respuesta JSON en un objeto de JavaScript.
@@ -87,7 +83,7 @@ async function cargarProductos() {
     // y que el servidor informe el estado esperado.
     if (!respuesta.ok || resultado.status !== 200) {
       throw new Error(
-        resultado.message || "No se pudieron cargar los productos."
+        resultado.message || "No se pudieron cargar los productos.",
       );
     }
 
@@ -103,9 +99,7 @@ async function cargarProductos() {
     ) {
       await window.cargarProductosAdmin();
     }
-
   } catch (error) {
-
     // Si falla la consulta, informa el problema en el catálogo.
     productosDiv.innerHTML = `
       <div class="col-12">
@@ -120,7 +114,6 @@ async function cargarProductos() {
 
 // Genera las tarjetas HTML de todos los productos recibidos.
 function renderizarCatalogo(productos) {
-
   // Si no existen productos, muestra un mensaje y termina.
   if (productos.length === 0) {
     productosDiv.innerHTML = `
@@ -134,7 +127,6 @@ function renderizarCatalogo(productos) {
   // Recorre los productos y genera una tarjeta por cada uno.
   productosDiv.innerHTML = productos
     .map(function (producto) {
-
       // Convierte los valores recibidos a números.
       const stock = Number(producto.stock);
       const precio = Number(producto.precio);
@@ -161,8 +153,8 @@ function renderizarCatalogo(productos) {
           </button>
         `;
 
-      // Si el cliente consulta un producto sin stock,
-      // muestra un botón deshabilitado.
+        // Si el cliente consulta un producto sin stock,
+        // muestra un botón deshabilitado.
       } else if (esCliente && stock <= 0) {
         botonCompra = `
           <button
@@ -214,7 +206,7 @@ function renderizarCatalogo(productos) {
               <p class="precio">
                 $${precio.toLocaleString("es-AR", {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
+                  maximumFractionDigits: 2,
                 })}
               </p>
 
@@ -240,10 +232,8 @@ function renderizarCatalogo(productos) {
 // Actualiza los botones del catálogo según las cantidades
 // que ya están agregadas al carrito.
 function actualizarBotonesCarrito() {
-
   // Selecciona todos los botones para agregar productos.
   document.querySelectorAll(".agregar-carrito").forEach(function (boton) {
-
     // Obtiene el ID del producto asociado al botón.
     const id = Number(boton.dataset.id);
 
@@ -263,9 +253,7 @@ function actualizarBotonesCarrito() {
 
     // Cambia el texto para informar si se alcanzó el límite.
     boton.textContent =
-      cantidad >= stock
-        ? "Stock agregado al carrito"
-        : "Agregar al carrito";
+      cantidad >= stock ? "Stock agregado al carrito" : "Agregar al carrito";
   });
 }
 
@@ -276,12 +264,10 @@ function actualizarBotonesCarrito() {
 // Consulta la sesión del usuario en el servidor
 // y adapta la interfaz según su rol.
 async function cargarSesion() {
-
   try {
-
     // Solicita el estado actual de la sesión.
     const respuesta = await fetch("api/sesion.php", {
-      credentials: "same-origin"
+      credentials: "same-origin",
     });
 
     // Comprueba que el servidor haya respondido correctamente.
@@ -298,9 +284,7 @@ async function cargarSesion() {
     if (texto === "INVITADO" || texto === "") {
       rolUsuario = "INVITADO";
       document.getElementById("usuarioInfo").textContent = "Invitado";
-
     } else {
-
       // Separa el rol y el nombre utilizando el carácter |.
       const partes = texto.split("|");
 
@@ -318,35 +302,31 @@ async function cargarSesion() {
     const esCliente = rolUsuario === "cliente";
 
     // Muestra el panel administrativo únicamente a los administradores.
-    document.getElementById("adminPanel")
-      .classList.toggle("d-none", !esAdmin);
+    document.getElementById("adminPanel").classList.toggle("d-none", !esAdmin);
 
     // Muestra el botón de login únicamente a los invitados.
-    document.getElementById("btnLogin")
-      .classList.toggle("d-none", !esInvitado);
+    document.getElementById("btnLogin").classList.toggle("d-none", !esInvitado);
 
     // Muestra el botón de logout a los usuarios autenticados.
-    document.getElementById("btnLogout")
-      .classList.toggle("d-none", esInvitado);
+    document.getElementById("btnLogout").classList.toggle("d-none", esInvitado);
 
     // Mantiene visible el acceso al catálogo para todos.
-    document.getElementById("navCatalogo")
-      .classList.remove("d-none");
+    document.getElementById("navCatalogo").classList.remove("d-none");
 
     // Oculta el acceso al carrito para administradores.
-    document.getElementById("navCarrito")
-      .classList.toggle("d-none", esAdmin);
+    document.getElementById("navCarrito").classList.toggle("d-none", esAdmin);
 
     // Oculta el panel del carrito para administradores.
-    document.getElementById("carrito")
-      .classList.toggle("d-none", esAdmin);
+    document.getElementById("carrito").classList.toggle("d-none", esAdmin);
 
     // Solo los clientes pueden comprar.
     // Los botones también requieren que haya productos en el carrito.
-    document.getElementById("btnComprar")
+    document
+      .getElementById("btnComprar")
       .classList.toggle("d-none", !esCliente || carrito.length === 0);
 
-    document.getElementById("btnVaciarCarrito")
+    document
+      .getElementById("btnVaciarCarrito")
       .classList.toggle("d-none", !esCliente || carrito.length === 0);
 
     // Si el usuario no es cliente, no conserva el carrito local.
@@ -356,9 +336,7 @@ async function cargarSesion() {
 
     // Vuelve a dibujar el carrito con los permisos actualizados.
     renderizarCarrito();
-
   } catch (error) {
-
     // Registra el problema y muestra un mensaje al usuario.
     console.error("Error al consultar la sesión:", error);
     mostrarMensaje("No se pudo consultar la sesión.", "danger");
@@ -367,12 +345,10 @@ async function cargarSesion() {
 
 // Solicita al servidor el token CSRF necesario para las peticiones.
 async function obtenerToken() {
-
   try {
-
     // Consulta el endpoint que genera o devuelve el token.
     const respuesta = await fetch("api/token.php", {
-      credentials: "same-origin"
+      credentials: "same-origin",
     });
 
     // Si falla la respuesta, genera un error.
@@ -385,9 +361,7 @@ async function obtenerToken() {
 
     // Sincroniza el campo oculto del formulario, si existe.
     document.getElementById("tokenForm").value = token;
-
   } catch (error) {
-
     // Informa el problema en la consola.
     console.error("Error al obtener el token:", error);
   }
@@ -395,7 +369,6 @@ async function obtenerToken() {
 
 // Envía el formulario de login al servidor.
 async function iniciarSesion(evento) {
-
   // Evita que el navegador envíe el formulario
   // y recargue la página de manera tradicional.
   evento.preventDefault();
@@ -411,25 +384,19 @@ async function iniciarSesion(evento) {
   const datos = new FormData(formulario);
 
   try {
-
     // Envía las credenciales mediante POST.
     const respuesta = await fetch("api/login.php", {
       method: "POST",
       body: datos,
-      credentials: "same-origin"
+      credentials: "same-origin",
     });
 
     // Lee la respuesta del servidor como texto.
     const resultado = (await respuesta.text()).trim();
 
     // Comprueba el estado HTTP y la respuesta del login.
-    if (
-      !respuesta.ok ||
-      resultado.toLowerCase().includes("error")
-    ) {
-      throw new Error(
-        resultado || "Correo o contraseña incorrectos."
-      );
+    if (!respuesta.ok || resultado.toLowerCase().includes("error")) {
+      throw new Error(resultado || "Correo o contraseña incorrectos.");
     }
 
     // Limpia los campos del formulario después del login exitoso.
@@ -446,9 +413,7 @@ async function iniciarSesion(evento) {
 
     // Informa que el inicio de sesión fue exitoso.
     mostrarMensaje("Sesión iniciada correctamente.");
-
   } catch (error) {
-
     // Crea una alerta de error dentro del modal.
     const alerta = document.createElement("div");
 
@@ -463,18 +428,16 @@ async function iniciarSesion(evento) {
 
 // Cierra la sesión del usuario en el servidor.
 async function cerrarSesion() {
-
   // Prepara los datos que se enviarán al endpoint de logout.
   const datos = new FormData();
   datos.append("token", token);
 
   try {
-
     // Envía la petición POST para cerrar la sesión.
     const respuesta = await fetch("api/logout.php", {
       method: "POST",
       body: datos,
-      credentials: "same-origin"
+      credentials: "same-origin",
     });
 
     // Si la respuesta no fue exitosa, informa el error.
@@ -493,9 +456,7 @@ async function cerrarSesion() {
 
     // Confirma que la sesión se cerró.
     mostrarMensaje("Sesión cerrada correctamente.");
-
   } catch (error) {
-
     // Muestra cualquier error producido durante el logout.
     mostrarMensaje(error.message, "danger");
   }
@@ -508,12 +469,11 @@ async function cerrarSesion() {
 // Agrega una unidad de un producto al carrito.
 // Solo permite realizar esta operación a clientes.
 function agregarAlCarrito(datosProducto) {
-
   // Comprobación de permisos antes de modificar el carrito.
   if (rolUsuario !== "cliente") {
     mostrarMensaje(
       "Debés iniciar sesión con una cuenta de cliente para comprar.",
-      "warning"
+      "warning",
     );
     return;
   }
@@ -541,7 +501,6 @@ function agregarAlCarrito(datosProducto) {
 
   // Si ya existe, aumenta su cantidad en una unidad.
   if (producto) {
-
     // No permite superar el stock disponible.
     if (producto.cantidad >= producto.stock) {
       mostrarMensaje("No hay más unidades disponibles.", "warning");
@@ -549,16 +508,14 @@ function agregarAlCarrito(datosProducto) {
     }
 
     producto.cantidad++;
-
   } else {
-
     // Si no existe, lo agrega con una cantidad inicial de uno.
     carrito.push({
       id: id,
       nombre: datosProducto.nombre,
       precio: precio,
       stock: stock,
-      cantidad: 1
+      cantidad: 1,
     });
   }
 
@@ -570,7 +527,6 @@ function agregarAlCarrito(datosProducto) {
 // Dibuja el contenido del carrito, sus controles de cantidad
 // y el importe total de todos los productos.
 function renderizarCarrito() {
-
   // Comprueba si el carrito contiene al menos un producto.
   const hayProductos = carrito.length > 0;
 
@@ -579,10 +535,12 @@ function renderizarCarrito() {
 
   // Muestra los botones generales únicamente a clientes
   // cuando existe al menos un producto en el carrito.
-  document.getElementById("btnVaciarCarrito")
+  document
+    .getElementById("btnVaciarCarrito")
     .classList.toggle("d-none", !esCliente || !hayProductos);
 
-  document.getElementById("btnComprar")
+  document
+    .getElementById("btnComprar")
     .classList.toggle("d-none", !esCliente || !hayProductos);
 
   // Elimina las filas anteriores para reconstruir el carrito.
@@ -604,7 +562,6 @@ function renderizarCarrito() {
 
   // Recorre los productos para construir una fila por producto.
   carrito.forEach((item) => {
-
     // Calcula el subtotal y lo suma al total general.
     total += item.precio * item.cantidad;
 
@@ -626,11 +583,12 @@ function renderizarCarrito() {
     const importe = document.createElement("p");
 
     importe.className = "mb-0";
-    importe.textContent =
-      `Subtotal: $${(item.precio * item.cantidad).toLocaleString("es-AR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })}`;
+    importe.textContent = `Subtotal: $${(
+      item.precio * item.cantidad
+    ).toLocaleString("es-AR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
 
     // Incorpora el nombre y el subtotal al detalle.
     detalle.append(nombre, importe);
@@ -640,7 +598,6 @@ function renderizarCarrito() {
 
     // Los controles de cantidad solo aparecen para clientes.
     if (esCliente) {
-
       // Agrupa los botones y la cantidad actual.
       const controles = document.createElement("div");
 
@@ -658,10 +615,7 @@ function renderizarCarrito() {
       restar.textContent = "−";
 
       // Etiqueta accesible para lectores de pantalla.
-      restar.setAttribute(
-        "aria-label",
-        `Restar una unidad de ${item.nombre}`
-      );
+      restar.setAttribute("aria-label", `Restar una unidad de ${item.nombre}`);
 
       // No permite bajar de una unidad.
       // Para eliminar el producto se utiliza el botón Quitar.
@@ -669,7 +623,6 @@ function renderizarCarrito() {
 
       // Ejecuta la operación cuando se pulsa el botón.
       restar.addEventListener("click", () => {
-
         // Comprueba nuevamente los permisos.
         if (rolUsuario !== "cliente") return;
 
@@ -708,17 +661,13 @@ function renderizarCarrito() {
       sumar.textContent = "+";
 
       // Etiqueta accesible para lectores de pantalla.
-      sumar.setAttribute(
-        "aria-label",
-        `Agregar una unidad de ${item.nombre}`
-      );
+      sumar.setAttribute("aria-label", `Agregar una unidad de ${item.nombre}`);
 
       // Deshabilita el botón cuando se alcanza el stock.
       sumar.disabled = item.cantidad >= item.stock;
 
       // Ejecuta la operación cuando se pulsa el botón.
       sumar.addEventListener("click", () => {
-
         // Comprueba nuevamente los permisos.
         if (rolUsuario !== "cliente") return;
 
@@ -732,14 +681,9 @@ function renderizarCarrito() {
           // Actualiza el carrito y los botones del catálogo.
           renderizarCarrito();
           actualizarBotonesCarrito();
-
         } else {
-
           // Informa que no quedan más unidades disponibles.
-          mostrarMensaje(
-            "No hay más unidades disponibles.",
-            "warning"
-          );
+          mostrarMensaje("No hay más unidades disponibles.", "warning");
         }
       });
 
@@ -757,7 +701,6 @@ function renderizarCarrito() {
 
       // Elimina el producto cuando se pulsa el botón.
       quitar.addEventListener("click", () => {
-
         // Comprueba los permisos antes de modificar el carrito.
         if (rolUsuario !== "cliente") return;
 
@@ -785,7 +728,7 @@ function renderizarCarrito() {
   document.getElementById("totalCarrito").textContent =
     `Total: $${total.toLocaleString("es-AR", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
 }
 
@@ -797,7 +740,6 @@ function renderizarCarrito() {
 // Se utiliza un único listener en el contenedor,
 // aunque las tarjetas se generen dinámicamente.
 productosDiv.addEventListener("click", function (evento) {
-
   // Busca el botón de agregar al carrito que originó el clic
   // o que contiene al elemento pulsado.
   const boton = evento.target.closest(".agregar-carrito");
@@ -812,7 +754,7 @@ productosDiv.addEventListener("click", function (evento) {
     id: boton.dataset.id,
     nombre: boton.dataset.nombre,
     precio: boton.dataset.precio,
-    stock: boton.dataset.stock
+    stock: boton.dataset.stock,
   });
 });
 
@@ -821,7 +763,6 @@ productosDiv.addEventListener("click", function (evento) {
 // La función renderizarCarrito() actual ya crea sus propios
 // eventos para los botones +, − y Quitar.
 carritoDiv.addEventListener("click", function (evento) {
-
   // No permite modificar el carrito a otros roles.
   if (rolUsuario !== "cliente") {
     return;
@@ -849,16 +790,13 @@ carritoDiv.addEventListener("click", function (evento) {
 
   // Ejecuta la operación solicitada.
   if (accion === "sumar") {
-
     // Suma una unidad solo si no supera el stock.
     if (producto.cantidad < producto.stock) {
       producto.cantidad++;
     } else {
       mostrarMensaje("No hay más unidades disponibles.", "warning");
     }
-
   } else if (accion === "restar") {
-
     // Resta una unidad.
     producto.cantidad--;
 
@@ -866,9 +804,7 @@ carritoDiv.addEventListener("click", function (evento) {
     if (producto.cantidad <= 0) {
       carrito = carrito.filter((p) => p.id !== id);
     }
-
   } else if (accion === "quitar") {
-
     // Elimina el producto completo del carrito.
     carrito = carrito.filter((p) => p.id !== id);
   }
@@ -890,15 +826,11 @@ document
 
 // Cuando se envía el formulario de login,
 // ejecuta la función de inicio de sesión.
-document
-  .getElementById("formLogin")
-  .addEventListener("submit", iniciarSesion);
+document.getElementById("formLogin").addEventListener("submit", iniciarSesion);
 
 // Cuando se pulsa el botón de logout,
 // ejecuta la función de cierre de sesión.
-document
-  .getElementById("btnLogout")
-  .addEventListener("click", cerrarSesion);
+document.getElementById("btnLogout").addEventListener("click", cerrarSesion);
 
 // -----------------------------------------------------
 // EVENTO: VACIAR CARRITO
@@ -908,12 +840,11 @@ document
 document
   .getElementById("btnVaciarCarrito")
   .addEventListener("click", function () {
-
     // Comprueba que el usuario tenga permiso para comprar.
     if (rolUsuario !== "cliente") {
       mostrarMensaje(
         "Debés iniciar sesión con una cuenta de cliente.",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -935,12 +866,11 @@ document
 document
   .getElementById("btnComprar")
   .addEventListener("click", async function () {
-
     // Verifica el rol antes de iniciar la petición.
     if (rolUsuario !== "cliente") {
       mostrarMensaje(
         "Debés iniciar sesión con una cuenta de cliente para comprar.",
-        "warning"
+        "warning",
       );
       return;
     }
@@ -965,18 +895,17 @@ document
       JSON.stringify(
         carrito.map((p) => ({
           id: p.id,
-          cantidad: p.cantidad
-        }))
-      )
+          cantidad: p.cantidad,
+        })),
+      ),
     );
 
     try {
-
       // Envía la petición POST al endpoint de compra.
       const respuesta = await fetch("api/comprar.php", {
         method: "POST",
         body: datos,
-        credentials: "same-origin"
+        credentials: "same-origin",
       });
 
       // Obtiene el mensaje que devuelve el servidor.
@@ -985,9 +914,7 @@ document
       // Si el servidor devuelve un estado HTTP de error,
       // muestra el mensaje recibido.
       if (!respuesta.ok) {
-        throw new Error(
-          texto || "No se pudo completar la compra."
-        );
+        throw new Error(texto || "No se pudo completar la compra.");
       }
 
       // Vacía el carrito únicamente si la petición fue exitosa.
@@ -999,12 +926,8 @@ document
       await cargarProductos();
 
       // Informa el resultado de la operación.
-      mostrarMensaje(
-        texto || "Compra realizada correctamente."
-      );
-
+      mostrarMensaje(texto || "Compra realizada correctamente.");
     } catch (error) {
-
       // Si falla la petición, conserva el carrito para que
       // el cliente pueda revisar o volver a intentar la compra.
       mostrarMensaje(error.message, "danger");
@@ -1019,7 +942,6 @@ document
 // Se respeta el orden para conocer primero el rol del usuario,
 // obtener el token y después cargar el catálogo.
 document.addEventListener("DOMContentLoaded", async function () {
-
   // Consulta si existe una sesión autenticada.
   await cargarSesion();
 

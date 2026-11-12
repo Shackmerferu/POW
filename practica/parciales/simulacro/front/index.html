@@ -1,197 +1,342 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <title>Canicas - La Tania</title>
+
+    <link rel="stylesheet" href="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
+
+    <!-- CABECERA -->
     <header>
-        <section class="inicio">
-            <nav class="navbar navbar-expand-lg navbar-dark m-0">
-                <div class="container-fluid">
-                    <div class="d-flex align-items-center">
-                        <img src="recursos/img/logos/tania .png" alt="Logo La Tania">
-                        <a class="navbar-brand fw-bold text-white ms-3 mb-0" href="#">
-                            <h4 class="mb-0">La Tania</h4>
-                        </a>
-                    </div>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
 
-                    <div class="collapse navbar-collapse d-flex justify-content-center align-items-center" id="navbarSupportedContentDemo">
-                        <ul class="navbar-nav mb-2 mb-lg-0 w-100 justify-content-center">
-                            <li class="nav-item  text-center">
-                                <button type="button" id="btn-inicio" class="btn text-white w-100">
-                                    Inicio
-                                </button>
-                            </li>
-                            <li class="nav-item  text-center">
-                                <button type="button" id="btn-masculino" class="btn text-white w-100">
-                                    Canicas Masculino
-                                </button>
-                            </li>
-                            <li class="nav-item  text-center">
-                                <button type="button" id="btn-femenino" class="btn text-white w-100">
-                                    Canicas Femenino
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="d-flex align-items-center">
+                    <img src="recursos/img/logos/tania .png" alt="Logo La Tania" />
 
-                    <div class="d-none d-lg-block w-25"></div>
+                    <a class="navbar-brand fw-bold text-white ms-3" href="#">
+                        <h4 class="mb-0">La Tania</h4>
+                    </a>
                 </div>
-            </nav>
-        </section>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- MENÚ -->
+                <div class="collapse navbar-collapse justify-content-center" id="menuPrincipal">
+
+                    <ul class="navbar-nav w-100 justify-content-center">
+
+                        <li class="nav-item text-center">
+                            <button type="button" id="btn-inicio" class="btn text-white w-100">
+                                INICIO
+                            </button>
+                        </li>
+
+                        <li class="nav-item text-center">
+                            <button type="button" id="btn-canicasmasc" class="btn text-white w-100">
+                                CANICAS MASCULINO
+                            </button>
+                        </li>
+
+                        <li class="nav-item text-center">
+                            <button type="button" id="btn-canicasfem" class="btn text-white w-100">
+                                CANICAS FEMENINO
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <a href="registrar_club.html" class="btn text-white btn-sm">
+                    Registrar Club
+                </a>
+
+            </div>
+        </nav>
     </header>
+
     <main>
 
+        <!-- INICIO -->
         <section id="inicio">
 
             <div class="container">
-                <div class="position-relative border rounded-5 overflow-hidden mb-2">
-                    <img class="w-100" src="recursos/img/logos/banner.png" alt="Banner La Tania">
+
+                <div class="position-relative border rounded-5 overflow-hidden mb-3">
+
+                    <img class="w-100" src="recursos/img/logos/banner.png" alt="Banner La Tania" />
+
                     <div class="position-absolute top-50 end-0 translate-middle-y text-end p-3">
+
                         <h1 class="text-warning">EL MALEVO DEL VIDRIO</h1>
+
                         <h2>EDMUNDO DANTES</h2>
-                        <h5>1796 - 1826 (actualidad)</h>
+
+                        <h5>1796 - 1826 (actualidad)</h5>
+
                     </div>
                 </div>
+
                 <h4>Club Deportivo La Tania – Tradición y Pasión en Movimiento</h4>
-                <p>Fundado en el corazón de General Pico, el Club Deportivo La Tania se ha consolidado como un espacio
-                    de encuentro, comunidad y deporte para todas las edades. Desde sus inicios, el club ha promovido la
-                    práctica deportiva como una forma de integración social y bienestar, albergando disciplinas como
-                    fútbol, bochas, ajedrez y atletismo.</p>
-                <p>Sin embargo, el deporte por excelencia de La Tania son las Canicas, una tradición que ha trascendido
-                    generaciones y se ha convertido en sello de identidad del club siendo su máximo referente Edmundo
-                    Dantés. En sus canchas especialmente diseñadas, socios y visitantes disfrutan de competencias
-                    amistosas y torneos locales que combinan destreza, estrategia y compañerismo.</p>
-                <p>Más que un club, La Tania es un punto de encuentro para quienes valoran la historia, el juego y la
-                    amistad, manteniendo vivo el espíritu deportivo en cada partida de canicas.
+
+                <p>
+                    Fundado en el corazón de General Pico, el Club Deportivo La Tania se
+                    ha consolidado como un espacio de encuentro, comunidad y deporte
+                    para todas las edades. Desde sus inicios, el club ha promovido la
+                    práctica deportiva como una forma de integración social y bienestar,
+                    albergando disciplinas como fútbol, bochas, ajedrez y atletismo.
                 </p>
+
+                <p>
+                    Sin embargo, el deporte por excelencia de La Tania son las Canicas,
+                    una tradición que ha trascendido generaciones y se ha convertido en
+                    sello de identidad del club siendo su máximo referente Edmundo
+                    Dantés. En sus canchas especialmente diseñadas, socios y visitantes
+                    disfrutan de competencias amistosas y torneos locales que combinan
+                    destreza, estrategia y compañerismo.
+                </p>
+
+                <p>
+                    Más que un club, La Tania es un punto de encuentro para quienes
+                    valoran la historia, el juego y la amistad, manteniendo vivo el
+                    espíritu deportivo en cada partida de canicas.
+                </p>
+
             </div>
         </section>
+
+
+        <!-- CANICAS MASCULINO -->
+        <section id="canicasmasc" class="d-none">
+
+            <div class="container py-3">
+
+                <h2 class="mb-3">Canicas Masculino</h2>
+
+                <div id="lista-jugadores-masc" class="row g-3 justify-content-center">
+                </div>
+
+                <hr class="my-4" />
+
+                <h3>Tabla de posiciones</h3>
+
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Club</th>
+                                <th>Puntos</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabla-posiciones-masc">
+                            <tr>
+                                <td colspan="3">Cargando posiciones...</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- CANICAS FEMENINO -->
+        <section id="canicasfem" class="d-none">
+
+            <div class="container py-3">
+
+                <h2 class="mb-3">Canicas Femenino</h2>
+
+                <div id="lista-jugadores-fem" class="row g-3 justify-content-center">
+                </div>
+
+                <hr class="my-4" />
+
+                <h3>Tabla de posiciones</h3>
+
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Club</th>
+                                <th>Puntos</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabla-posiciones-fem">
+                            <tr>
+                                <td colspan="3">Cargando posiciones...</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
-<<!-- VISTA CANICAS MASCULINO -->
-<section id="masculino" class="canicas masc d-none">
-    <div class="container mt-4">
-        
-        <h2 class="text-success border-bottom pb-2 mb-4">Plantel Masculino</h2>
 
-        <!-- 1. SECCIÓN JUGADORES -->
-        <div class="row g-4 mb-5" id="contenedor-jugadores-masc">
-            
-            <!-- TARJETA DE PRUEBA (Para ver el diseño, después JS la va a generar) -->
-            <div class="col-6 col-md-3">
-                <div class="card h-100 shadow-sm text-center">
-                    <!-- Ojo: ajustá la ruta de la imagen según tus carpetas -->
-                    <img src="recursos/img/jugadores/julian.jpg" class="card-img-top" alt="Jugador">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Julián Álvarez</h5>
-                        <p class="card-text text-muted mb-3">Apodo: La Araña</p>
-                        <!-- El mt-auto empuja el botón siempre hacia abajo -->
-                        <button class="btn btn-outline-success btn-sm mt-auto" data-bs-toggle="modal" data-bs-target="#modalJugador">
-                            Ver más
-                        </button>
-                    </div>
+    <!-- MODAL DE JUGADORES -->
+    <div class="modal fade" id="modaljugadores" tabindex="-1" aria-labelledby="modalTitulo" aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="modalTitulo">
+                        Información del jugador
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
+                    </button>
+
                 </div>
+
+                <div class="modal-body">
+
+                    <!-- INFORMACIÓN DEL JUGADOR -->
+                    <div class="row">
+
+                        <div class="col-md-4 text-center">
+
+                            <img id="modalImagen" src="" class="img-fluid rounded mb-3" alt="Foto del jugador" />
+
+                        </div>
+
+                        <div class="col-md-8">
+
+                            <p>
+                                <strong>Apodo:</strong>
+                                <span id="modalApodo"></span>
+                            </p>
+
+                            <h6>Biografía</h6>
+
+                            <p id="modalBiografia"></p>
+
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <!-- PALMARÉS -->
+                    <h5>Palmarés</h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered">
+
+                            <thead>
+                                <tr>
+                                    <th>Año</th>
+                                    <th>Trayectoria</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabla-palmares">
+                                <tr>
+                                    <td colspan="2">Sin información.</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <hr />
+
+                    <!-- FORMULARIO PARA AGREGAR PALMARÉS -->
+                    <form id="form-palmares">
+
+                        <label for="nuevo-palmares" class="form-label">
+                            Agregar nuevo palmarés
+                        </label>
+
+                        <textarea id="nuevo-palmares" class="form-control mb-2" rows="3"
+                            placeholder="Ingresar detalle del palmarés" required></textarea>
+
+                        <button type="submit" class="btn btn-primary">
+                            Guardar palmarés
+                        </button>
+
+                        <p id="mensaje-palmares" class="mt-2"></p>
+
+                    </form>
+
+                </div>
+
             </div>
-            <!-- FIN TARJETA DE PRUEBA -->
 
-        </div>
-
-        <!-- 2. SECCIÓN TABLA DE POSICIONES -->
-        <h3 class="text-success mb-3">Tabla de Posiciones</h3>
-        <div class="table-responsive mb-5">
-            <table class="table table-striped table-hover align-middle text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Escudo</th>
-                        <th>Club</th>
-                        <th>Puntos</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-posiciones-masc">
-                    
-                    <!-- FILA DE PRUEBA (Para ver el diseño) -->
-                    <tr>
-                        <td><img src="recursos/img/logos/tania.png" alt="Logo" style="width: 40px;"></td>
-                        <td class="fw-bold">La Tania</td>
-                        <td>33</td>
-                    </tr>
-                    <!-- FIN FILA DE PRUEBA -->
-
-                </tbody>
-            </table>
         </div>
 
     </div>
-</section>
-<!-- VISTA CANICAS femenino -->
-<section id="femenino" class="canicas fem d-none">
-    <div class="container mt-4">
-        
-        <h2 class="text-success border-bottom pb-2 mb-4">Plantel Femenino</h2>
 
-        <!-- 1. SECCIÓN JUGADORES -->
-        <div class="row g-4 mb-5" id="contenedor-jugadores-fem">
-            
-            <!-- TARJETA DE PRUEBA (Para ver el diseño, después JS la va a generar) -->
-            <div class="col-6 col-md-3">
-                <div class="card h-100 shadow-sm text-center">
-                    <!-- Ojo: ajustá la ruta de la imagen según tus carpetas -->
-                    <img src="recursos/img/jugadores/julian.jpg" class="card-img-top" alt="Jugador">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Julián Álvarez</h5>
-                        <p class="card-text text-muted mb-3">Apodo: La Araña</p>
-                        <!-- El mt-auto empuja el botón siempre hacia abajo -->
-                        <button class="btn btn-outline-success btn-sm mt-auto" data-bs-toggle="modal" data-bs-target="#modalJugador">
-                            Ver más
-                        </button>
-                    </div>
-                </div>
+
+    <!-- FOOTER -->
+    <footer class="d-flex justify-content-between text-center py-3">
+
+        <p class="mb-2 ms-auto me-auto">
+            Club Deportivo La Tania
+        </p>
+
+        <!-- WHATSAPP -->
+        <a href="https://wa.me/NUMERO_DEL_CLUB" target="_blank" rel="noopener" class="whatsapp-footer">
+
+            <div class="contenedor-whatsapp">
+
+                <img src="recursos/img/logos/whatsapp.png" alt="Contactar por WhatsApp" />
+
             </div>
-            <!-- FIN TARJETA DE PRUEBA -->
 
-        </div>
+        </a>
 
-        <!-- 2. SECCIÓN TABLA DE POSICIONES -->
-        <h3 class="text-success mb-3">Tabla de Posiciones</h3>
-        <div class="table-responsive mb-5">
-            <table class="table table-striped table-hover align-middle text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Escudo</th>
-                        <th>Club</th>
-                        <th>Puntos</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-posiciones-masc">
-                    
-                    <!-- FILA DE PRUEBA (Para ver el diseño) -->
-                    <tr>
-                        <td><img src="recursos/img/logos/tania.png" alt="Logo" style="width: 40px;"></td>
-                        <td class="fw-bold">La Tania</td>
-                        <td>33</td>
-                    </tr>
-                    <!-- FIN FILA DE PRUEBA -->
+    </footer>
 
-                </tbody>
-            </table>
-        </div>
 
-    </div>
-</section>
+    <!-- SCRIPTS -->
 
+    <!-- Bootstrap -->
     <script src="recursos/bootstrap-5.3.8-dist/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/panel.js"></script>
+
+    <!-- Configuración y API -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Funcionalidades -->
     <script src="js/jugadores.js"></script>
+    <script src="js/posiciones.js"></script>
+
+    <!-- Paneles -->
+    <script src="js/panel.js"></script>
+    <script src="js/panelmasc.js"></script>
+    <script src="js/panelfem.js"></script>
 
 </body>
-
 
 </html>
