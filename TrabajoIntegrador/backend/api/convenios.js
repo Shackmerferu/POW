@@ -1,13 +1,13 @@
 // 1. IMPORTACIONES BÁSICAS
 const express = require('express');
 const router = express.Router(); // Creamos el "mini-semáforo" para las rutas de convenios
+const verificarToken = require('../verificarToken');
 
-// 2. EXPORTAMOS LA LÓGICA
 module.exports = (db) => {
     
-    // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS (GET /api/agreements)
-    // Usamos GET porque el frontend de tu compañero solo necesita LEER la tabla.
-    router.get('/', (req, res) => {
+    // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS 
+    
+    router.get('/', verificarToken, (req, res) => {
         
         // Escribimos la consulta SQL. 
         // Apuntamos a la tabla 'convenios' que tenés en tu base de datos[cite: 26].
@@ -31,9 +31,9 @@ module.exports = (db) => {
             });
         });
     });
-    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
-    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
-    router.post('/', (req, res) => {
+    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO 
+
+    router.post('/', verificarToken, (req, res) => {
         
         // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
         const { 
@@ -94,7 +94,7 @@ module.exports = (db) => {
             });
         });
     });// ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
-    router.post('/', (req, res) => {
+    router.post('/', verificarToken, (req, res) => {
         
         // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
         const { 

@@ -3,14 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt'); // <-- IMPORTAMOS LA LIBRERÍA DE SEGURIDAD
-
+const verificarToken = require('../verificarToken');
 // 2. EXPORTACIÓN RECIBIENDO LA CONEXIÓN DB DE MYSQL
 module.exports = (db) => {
 
-    // =========================================================================
-    // ENDPOINT 1: OBTENER TODOS LOS USUARIOS (GET /api/usuarios)
-    // =========================================================================
-    router.get('/', (req, res) => {
+    
+    // ENDPOINT 1: OBTENER TODOS LOS USUARIOS 
+    
+   router.get('/', verificarToken, (req, res) => {
         const query = 'SELECT id, dni, legajo, nombre_completo, rol, id_unidad, activo FROM usuarios';
 
         db.query(query, (error, resultados) => {
@@ -30,10 +30,10 @@ module.exports = (db) => {
         });
     });
 
-    // =========================================================================
-    // ENDPOINT 2: REGISTRAR UN NUEVO USUARIO (POST /api/usuarios)
-    // =========================================================================
-    router.post('/', (req, res) => {
+    
+    // ENDPOINT 2: REGISTRAR UN NUEVO USUARIO 
+    
+    router.post('/', verificarToken, (req, res) => {
         const { dni, legajo, contrasena, nombre_completo, id_unidad } = req.body || {};
 
         // Validar que los campos obligatorios existan
@@ -88,7 +88,7 @@ module.exports = (db) => {
 
             try {
                 // PASO INTERMEDIO: ENCRIPTAR LA CONTRASEÑA
-                // El número 10 es el "salt rounds" (nivel de complejidad del algoritmo)
+                
                 const contrasenaHasheada = await bcrypt.hash(contrasena, 10);
 
                 // PASO B: Insertar el usuario con la contraseña ya encriptada
@@ -100,7 +100,7 @@ module.exports = (db) => {
                 const rolDefault = 'consulta';
                 const unidadId = id_unidad ? parseInt(id_unidad) : null;
 
-                // ATENCIÓN ACÁ: Mandamos 'contrasenaHasheada' en vez de 'contrasena'
+               // Mandamos 'contrasenaHasheada' en vez de 'contrasena'
                 db.query(insertQuery, [dniLimpio, legajoLimpio, contrasenaHasheada, nombre_completo.trim(), rolDefault, unidadId], (error, resultados) => {
                     if (error) {
                         console.error("Error creando usuario en MySQL:", error);
@@ -129,7 +129,7 @@ module.exports = (db) => {
     });
 
     
-    router.put('/:id', (req, res) => {
+    router.put('/:id', verificarToken, (req, res) => {
         const idUsuario = req.params.id; 
         const { rol, id_unidad, activo } = req.body; 
 
