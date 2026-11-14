@@ -358,9 +358,9 @@
 
 .options {
   display: grid;
-  grid-template-columns: repeat(2, max-content);
+  grid-template-columns: repeat(1, max-content);
   gap: 10px 22px;
-  margin-top: 40px;
+  margin-top: 10px;
   padding: 0 3px;
   border: 0;
 }
@@ -622,6 +622,12 @@
 .no-contenido p {
   margin: auto;
   padding-left: 5%;
+}
+
+.aviso-consulta {
+  margin: 0;
+  color: #5a6472;
+  font-size: 0.95rem;
 }
 
 .profile-dropdown-container {

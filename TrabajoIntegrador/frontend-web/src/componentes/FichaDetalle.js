@@ -172,7 +172,49 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
         </div>
       </dl>
 
-      {/* Textos largos */}
+      {/* Vista previa del documento y sus acciones */}
+      <p className="ficha__seccion">Vista previa</p>
+      <VistaPreviaDocumento
+        documento={documentoEnVista}
+        alElegirAccion={manejarAccionDocumento}
+        aviso={avisoAccion}
+      />
+
+      {/* Documentos: alternar cuál se previsualiza */}
+      <p className="ficha__seccion ficha__seccion--documentos">Documentos cargados</p>
+      {documentos.length > 0 ? (
+        <ul className="ficha__documentos">
+          {documentos.map((documento) => (
+            <li
+              key={documento.id}
+              className={documento === documentoEnVista ? "ficha__documento--seleccionado" : undefined}
+            >
+              <span className="ficha__documento-tipo">
+                {NOMBRES_DOCUMENTO[documento.tipo_documento] ?? documento.tipo_documento}
+                { documento?.version ? ` · v${documento.version}` : ""}
+              </span>
+              <span className="ficha__documento-nombre">{documento.nombre_archivo}</span>
+              <span className="ficha__documento-fecha">{formatoFecha(documento.fecha_subida)}</span>
+              <button
+                type="button"
+                className="tabla__accion"
+                onClick={() => {
+                  setDocumentoActual(documento);
+                  setAvisoAccion(null);
+                }}
+              >
+                Vista previa
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="ficha__texto ficha__documentos-vacio">
+          Sin documentos cargados aún.
+        </p>
+      )}
+
+      {/* Textos largos (debajo de la vista previa) */}
       <p className="ficha__seccion">Objeto</p>
       <p className="ficha__texto">{convenio.objeto || "Sin objeto registrado"}</p>
 
@@ -243,46 +285,6 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
         </ul>
       ) : (
         <p className="ficha__texto">Sin partes registradas aún.</p>
-      )}
-
-      {/* Vista previa del documento y sus acciones */}
-      <p className="ficha__seccion">Vista previa</p>
-      <VistaPreviaDocumento
-        documento={documentoEnVista}
-        alElegirAccion={manejarAccionDocumento}
-        aviso={avisoAccion}
-      />
-
-      {/* Documentos: alternar cuál se previsualiza */}
-      <p className="ficha__seccion">Documentos cargados</p>
-      {documentos.length > 0 ? (
-        <ul className="ficha__documentos">
-          {documentos.map((documento) => (
-            <li
-              key={documento.id}
-              className={documento === documentoEnVista ? "ficha__documento--seleccionado" : undefined}
-            >
-              <span className="ficha__documento-tipo">
-                {NOMBRES_DOCUMENTO[documento.tipo_documento] ?? documento.tipo_documento}
-                { documento?.version ? ` · v${documento.version}` : ""}
-              </span>
-              <span className="ficha__documento-nombre">{documento.nombre_archivo}</span>
-              <span className="ficha__documento-fecha">{formatoFecha(documento.fecha_subida)}</span>
-              <button
-                type="button"
-                className="tabla__accion"
-                onClick={() => {
-                  setDocumentoActual(documento);
-                  setAvisoAccion(null);
-                }}
-              >
-                Vista previa
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="ficha__texto">Sin documentos cargados aún.</p>
       )}
     </VentanaModal>
   );

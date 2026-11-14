@@ -6,6 +6,7 @@ import "./dashboard.css";
 import logoFacultad from "../../cosas/imagenes/logo.png";
 import persona from "../../cosas/imagenes/persona.png";
 
+import menu from "../../cosas/imagenes/list.svg";
 import MenuLateral from "../../componentes/MenuLateral";
 import TarjetaDato from "../../componentes/TarjetaDato";
 import BloqueDistribucion from "../../componentes/BloqueDistribucion";

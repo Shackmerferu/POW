@@ -34,10 +34,14 @@ db.getConnection((err, connection) => {
 
 const authRoutes = require('./api/auth')(db);
 const usuariosRoutes = require('./api/usuarios')(db);
+const conveniosRoutes = require('./api/convenios')(db);
+const unidadesRoutes = require('./api/unidades')(db);
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/agreements', conveniosRoutes);
+app.use('/api/units', unidadesRoutes);
 
 
 const PORT = 8000;

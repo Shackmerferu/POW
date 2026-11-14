@@ -61,6 +61,19 @@ CREATE TABLE `convenios` (
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `convenios`
+--
+
+INSERT INTO `convenios` (`id`, `codigo_unico`, `titulo`, `tipo`, `estado`, `objeto`, `marco_legal`, `confidencialidad`, `fecha_firma`, `fecha_inicio`, `fecha_vencimiento`, `dias_preaviso`, `id_unidad_responsable`, `id_antecedente`) VALUES
+(1, 'UNLPAM-FI-2024-001', 'Marco de colaboración UNLPAM - Municipalidad de Santa Rosa', 'marco_colaboracion', 'firmado', 'Establecer el marco general de cooperación entre la Facultad de Ingeniería y la Municipalidad de Santa Rosa para proyectos conjuntos de extensión, investigación y desarrollo tecnológico.', 'Ordenanza Municipal N° 4210/24', 0, '2024-05-12', '2024-06-01', '2027-05-31', 60, 1, NULL),
+(2, 'UNLPAM-FI-2024-002', 'Convenio específico de pasantías - TecnoLáctea S.A.', 'especifico_pasantia', 'firmado', 'Regular pasantías de estudiantes de Ingeniería en Informática y Electromecánica en el área de automatización de procesos de la empresa TecnoLáctea S.A.', 'Resolución CS UNLPAM N° 118/24', 0, '2024-08-20', '2024-09-01', '2026-08-31', 30, 1, NULL),
+(3, 'UNLPAM-R-2024-003', 'Acuerdo de cooperación académica - Clínica Los Álamos', 'especifico_colaboracion', 'aprobado', 'Cooperación para prácticas supervisadas de estudiantes de Ingeniería en Sistemas de Salud y desarrollo de historias clínicas digitales.', 'Resolución Ministerial N° 512/24', 0, '2024-11-03', '2025-03-01', '2026-02-28', 45, 2, NULL),
+(4, 'UNLPAM-FI-2025-001', 'Adenda al marco de colaboración con la Municipalidad de Santa Rosa', 'adenda', 'revision', 'Ampliar el marco de colaboración N° 1 para incluir el área de energías renovables y eficiencia energética en edificios municipales.', NULL, 0, '2025-04-18', '2025-05-01', '2027-05-31', 60, 1, 1),
+(5, 'UNLPAM-R-2025-002', 'Marco de pasantías con el Ministerio de Infraestructura', 'marco_pasantia', 'firmado', 'Crear el marco reglamentario para pasantías de estudiantes en los proyectos de infraestructura pública que ejecuta el Ministerio en la provincia.', 'Resolución Ministerial N° 87/25', 0, '2025-02-14', '2025-03-01', '2028-02-29', 90, 2, NULL),
+(6, 'UNLPAM-FI-2023-004', 'Convenio específico de colaboración - BioCom del Centro', 'especifico_colaboracion', 'rescindido', 'Desarrollo conjunto de sensores IoT para monitoreo de cultivos intensivos en la región pampeana.', 'Convenio Marco UNLPAM-INTA N° 23/22', 1, '2023-09-05', '2023-10-01', '2025-09-30', 30, 1, NULL),
+(7, 'UNLPAM-FI-2026-001', 'Pasantía específica - Comisión Nacional de Energía Atómica', 'especifico_pasantia', 'borrador', 'Pasantías de estudiantes de Ingeniería Nuclear en el Centro Atómico Bariloche durante el ciclo lectivo 2026.', NULL, 0, NULL, NULL, NULL, NULL, 1, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -241,7 +254,7 @@ ALTER TABLE `auditoria_observaciones`
 -- AUTO_INCREMENT de la tabla `convenios`
 --
 ALTER TABLE `convenios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `documentos`

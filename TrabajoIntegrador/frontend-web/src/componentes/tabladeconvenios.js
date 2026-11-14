@@ -1,17 +1,21 @@
 /**
- * TABLA CONVENIOS — componente listo para usar en la página de búsqueda.
+ * LISTADO DE CONVENIOS — componente listo para usar en la página de búsqueda.
  *
  * USO (dentro de src/pages/convenios/convenios.js):
  *
  *   import TablaConvenios from "../../componentes/tabladeconvenios";
- *   import { CONVENIOS, UNIDADES } from "../../datos/datosPanel";
  *
- *   // dentro del render, reemplazando el bloque "no hay resultados":
  *   <TablaConvenios
- *     convenios={CONVENIOS}      // la lista ya filtrada que devuelve tu búsqueda
- *     conveniosCatalogo={CONVENIOS} // lista completa para resolver relaciones de la ficha
- *     unidades={UNIDADES}
+ *     convenios={resultados}        // la lista ya filtrada que devuelve tu búsqueda
+ *     conveniosCatalogo={catalogo}  // lista completa para resolver relaciones de la ficha
+ *     unidades={unidades}
  *   />
+ *
+ * Cada convenio se muestra como una "carta alargada" (estilo listado de
+ * termos): código a la izquierda como bloque destacado, título y descripción
+ * a la derecha, y clic en la tarjeta para abrir la ficha en modal.
+ * El listado scrollea verticalmente dentro del contenedor de la página,
+ * sin expandirse al resto de la pantalla.
  *
  * Estado interno: paginación propia y ficha de detalle en modal. Si la
  * página prefiere manejar el "Ver detalle" por su cuenta, puede pasar
@@ -27,7 +31,7 @@ import FichaDetalle from "./FichaDetalle";
 import { EtiquetaEstado, EtiquetaTipo } from "./Etiqueta";
 import { formatoEntero, formatoFecha, nombreUnidad, recortarTexto } from "../utils/formatos";
 
-const FILAS_POR_PAGINA = 8;
+const FILAS_POR_PAGINA = 6;
 
 export default function TablaConvenios({
   convenios = [],
@@ -50,7 +54,7 @@ export default function TablaConvenios({
 
   const totalPaginas = Math.max(1, Math.ceil(convenios.length / filasPorPagina));
 
-  const filasPagina = useMemo(() => {
+  const tarjetasPagina = useMemo(() => {
     const inicio = (pagina - 1) * filasPorPagina;
     return convenios.slice(inicio, inicio + filasPorPagina);
   }, [convenios, pagina, filasPorPagina]);
@@ -70,27 +74,58 @@ export default function TablaConvenios({
 
   return (
     <div className="tablaconvenios">
-      <Tabla mensajeVacio={mensajeVacio}>
-        {filasPagina.map((convenio) => (
-          <tr key={convenio.id ?? convenio.codigo_unico}>
-            <td className="tabla__celda-principal">{convenio.codigo_unico}</td>
-            <td className="tabla__celda">{recortarTexto(convenio.titulo, 55)}</td>
-            <td><EtiquetaTipo tipo={convenio.tipo} /></td>
-            <td><EtiquetaEstado estado={convenio.estado} /></td>
-            {mostrarUnidad && (
-              <td className="tabla__celda-neutra">
-                {nombreUnidad(unidades, convenio.id_unidad_responsable)}
-              </td>
-            )}
-            <td className="tabla__celda-neutra">{formatoFecha(convenio.fecha_firma)}</td>
-            <td>
-              <button type="button" className="tabla__accion" onClick={() => abrirDetalle(convenio)}>
-                Ficha
-              </button>
-            </td>
-          </tr>
+      <ListaConvenios mensajeVacio={mensajeVacio}>
+        {tarjetasPagina.map((convenio) => (
+          <article
+            key={convenio.id ?? convenio.codigo_unico}
+            className="convenios-tarjeta"
+            role="button"
+            tabIndex={0}
+            onClick={() => abrirDetalle(convenio)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                abrirDetalle(convenio);
+              }
+            }}
+          >
+            {/* Bloque izquierdo: ocupa el lugar de la imagen del card */}
+            <div className="convenios-tarjeta__codigo" aria-hidden="true">
+              <span className="convenios-tarjeta__codigo-etiqueta">Código</span>
+              <span className="convenios-tarjeta__codigo-valor">
+                {convenio.codigo_unico ?? "—"}
+              </span>
+            </div>
+
+            {/* Bloque derecho: título + descripción, como el card del termo */}
+            <div className="convenios-tarjeta__texto">
+              <h3 className="convenios-tarjeta__titulo">
+                {convenio.titulo ?? "Convenio sin título"}
+              </h3>
+              <p className="convenios-tarjeta__descripcion">
+                {recortarTexto(convenio.objeto, 140)}
+              </p>
+              <div className="convenios-tarjeta__meta">
+                <EtiquetaTipo tipo={convenio.tipo} />
+                <EtiquetaEstado estado={convenio.estado} />
+                {mostrarUnidad && (
+                  <span className="convenios-tarjeta__dato">
+                    {nombreUnidad(unidades, convenio.id_unidad_responsable)}
+                  </span>
+                )}
+                <span className="convenios-tarjeta__dato">
+                  Firma: {formatoFecha(convenio.fecha_firma)}
+                </span>
+              </div>
+            </div>
+
+            {/* Velo "Abrir": aparece al pasar el mouse sobre la tarjeta */}
+            <span className="convenios-tarjeta__abrir" aria-hidden="true">
+              Abrir
+            </span>
+          </article>
         ))}
-      </Tabla>
+      </ListaConvenios>
 
       <div className="tablaconvenios__pie">
         <p className="tablaconvenios__total">
@@ -112,30 +147,14 @@ export default function TablaConvenios({
 }
 
 /* ------------------------------------------------------------------
- * TABLA — cuerpo base (mismo estilo de las demás tablas del panel).
+ * LISTA — contenedor con scroll vertical propio. Ocupa el alto del
+ * panel de resultados de la página sin derramarse al resto de pantalla.
  * ------------------------------------------------------------------ */
-function Tabla({ mensajeVacio, children }) {
-  // Si no hay filas, se muestra el estado vacío (children queda vacío).
+function ListaConvenios({ mensajeVacio, children }) {
+  // Si no hay tarjetas, se muestra el estado vacío (children queda vacío).
   if (React.Children.count(children) === 0) {
     return <DatosVacios mensaje={mensajeVacio} />;
   }
 
-  return (
-    <div className="tabla-envoltura">
-      <table className="tabla">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-            <th>Unidad</th>
-            <th>Firma</th>
-            <th>Ficha</th>
-          </tr>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
-    </div>
-  );
+  return <div className="convenios-lista">{children}</div>;
 }
