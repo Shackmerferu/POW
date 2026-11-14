@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
+const verificarToken = require('../verificarToken');
 module.exports = (db) => {
     
-    // Endpoint GET /api/units
-    router.get('/', (req, res) => {
+    // Endpoint GET 
+    router.get('/', verificarToken, (req, res) => {
         const query = 'SELECT * FROM unidades_academicas'; 
         
         db.query(query, (error, resultados) => {
