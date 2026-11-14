@@ -22,11 +22,14 @@ body {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 header nav {
     background-color:RGB(151, 124, 91);
 }
 header img{
 =======
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
 /* ====================================== */
 /* HEADER Y NAVEGACIÓN */
 /* ====================================== */
@@ -37,15 +40,21 @@ footer {
 }
 
 header img {
+<<<<<<< HEAD
 >>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
     width: 74px;
     height: auto;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .nav-item .btn{
     font-size: small; /* Opciones de medida: px, rem, em */
 =======
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
 .nav-item .btn {
     font-size: small;
 }
@@ -64,7 +73,10 @@ header img {
 
 main {
     flex: 1;
+<<<<<<< HEAD
 >>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
 }
 
 section p {
@@ -179,4 +191,7 @@ footer {
     height: 40px;
     object-fit: contain;
 }
+<<<<<<< HEAD
 >>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4

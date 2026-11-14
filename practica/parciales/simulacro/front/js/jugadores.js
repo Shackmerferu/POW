@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Definimos la función que recibe el número de categoría (1 o 3) y el ID del <div> donde van las cartas
 function cargarJugadores(idCategoria, idContenedor) {
     
@@ -87,6 +88,8 @@ async function verDetalle(idJugador) {
     }
 }
 =======
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
 // ======================================
 // CONSULTAR JUGADORES
 // ======================================
@@ -427,4 +430,7 @@ if (formularioPalmares) {
     }
   });
 }
+<<<<<<< HEAD
 >>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4

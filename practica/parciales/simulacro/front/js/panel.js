@@ -1,5 +1,6 @@
 // ======================================
 <<<<<<< HEAD
+<<<<<<< HEAD
 // RUTAS DE LAS API
 // ======================================
 
@@ -68,6 +69,8 @@ btnfemenino.addEventListener("click", function () {
 
 
 =======
+=======
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4
 // ELEMENTOS HTML
 // ======================================
 
@@ -111,5 +114,9 @@ botones.forEach(function(boton, indice) {
 
     });
 
+<<<<<<< HEAD
 });
 >>>>>>> dd8d11ecf78d19fbacbfa241c6b00b16ee86217c
+=======
+});
+>>>>>>> 4296312dcb3f7a7db34e4804cb9e00a72ec6e2a4

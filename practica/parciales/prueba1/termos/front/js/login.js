@@ -72,7 +72,7 @@ formulario.addEventListener("submit", function (event) {
 
   // Consultar API
   fetch(
-    "http://localhost/facultad/POW/practica/parciales/prueba1/termos/api/login.php?" +
+    "http://localhost/Proyectos/pow/practica/parciales/prueba1/termos/api/login.php?" +
       parametros.toString(),
   )
     .then(function (response) {

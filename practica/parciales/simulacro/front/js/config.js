@@ -4,4 +4,4 @@
 // ======================================
 
 window.API =
-    "http://localhost/facultad/POW/practica/parciales/simulacro/api/";
+    "http://localhost/Proyectos/pow/practica/parciales/simulacro/api/";

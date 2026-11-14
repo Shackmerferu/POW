@@ -3,7 +3,7 @@
 // ======================================
 
 window.API =
-  "http://localhost/facultad/POW/practica/parciales/prueba1/termos/api/";
+  "http://localhost/Proyectos/pow/practica/parciales/prueba1/termos/api/";
 
 // ======================================
 // VERIFICAR SESIÓN
