@@ -34,10 +34,19 @@ db.getConnection((err, connection) => {
 
 const authRoutes = require('./api/auth')(db);
 const usuariosRoutes = require('./api/usuarios')(db);
-
+const unidadesRoutes = require('./api/unidades')(db);
+const conveniosRoutes = require('./api/convenios')(db);
+const partesRoutes = require('./api/partes')(db);
+const personasRoutes = require('./api/personas')(db);
+const documentosRoutes = require('./api/documentos')(db);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/units', unidadesRoutes);
+app.use('/api/agreements', conveniosRoutes);
+app.use('/api/parties', partesRoutes);
+app.use('/api/people', personasRoutes);
+app.use('/api/documents', documentosRoutes);
 
 
 const PORT = 8000;
