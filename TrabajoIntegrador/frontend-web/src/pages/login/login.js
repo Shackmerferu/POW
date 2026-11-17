@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import logo from "../../logo.png";
+import { API_URL } from "../../config/api";
 import { rutaInicioPorRol } from "../../utils/permisos";
 import { guardarSesion } from "../../utils/sesion";
-
-const API_URL = "http://localhost:8000/api";
 
 function Login() {
   const [dni, setDni] = useState("");

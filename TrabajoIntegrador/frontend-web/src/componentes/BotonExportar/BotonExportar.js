@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "../botones-panel.css";
 
 /**
  * BOTON EXPORTAR — par de botones CSV / PDF que usan las utilidades de

@@ -1,0 +1,34 @@
+/* --- Botones generales ------------------------------------------------------ */
+.btn-panel {
+  font: inherit;
+  font-size: 0.82rem;
+  border: 1px solid #1f4f99;
+  background-color: #1f4f99;
+  color: #fff;
+  border-radius: 3px;
+  padding: 0.42rem 0.85rem;
+  cursor: pointer;
+}
+
+.btn-panel:hover:enabled {
+  background-color: #1a4280;
+}
+
+.btn-panel--neutro {
+  background-color: #fff;
+  color: #1f4f99;
+}
+
+.btn-panel--neutro:hover:enabled {
+  background-color: #eef2f8;
+}
+
+.btn-panel:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.boton-exportar {
+  display: inline-flex;
+  gap: 0.5rem;
+}

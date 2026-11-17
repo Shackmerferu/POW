@@ -11,3 +11,111 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ==========================================================================
+   ACCESIBILIDAD (WCAG 2.1) — clases aplicadas sobre <html> por
+   src/utils/accesibilidad.js según lo configurado en /config
+   ========================================================================== */
+
+/* Foco de teclado siempre visible en cualquier control (2.4.7) */
+:focus-visible {
+  outline: 3px solid #1f4f99;
+  outline-offset: 2px;
+}
+
+/* --- Texto grande: sube la escala tipográfica base ----------------------- */
+html.accesibilidad-texto-grande {
+  font-size: 118%;
+}
+
+/* --- Alto contraste ------------------------------------------------------ */
+html.accesibilidad-contraste {
+  /* 1.4.3 Contraste: negros/blancos puros y azules con contraste >= 7:1 */
+  --color-texto: #000;
+  --color-texto-secundario: #1a1a1a;
+  --color-fondo: #fff;
+  --color-borde: #000;
+  --color-accion: #00308f;
+}
+
+html.accesibilidad-contraste body {
+  background: #fff;
+  color: #000;
+}
+
+html.accesibilidad-contraste .dashboard,
+html.accesibilidad-contraste .app-shell,
+html.accesibilidad-contraste .config-page,
+html.accesibilidad-contraste .search-section {
+  background: #fff;
+}
+
+html.accesibilidad-contraste .top-navigation,
+html.accesibilidad-contraste .menu-lateral,
+html.accesibilidad-contraste .panel-seccion,
+html.accesibilidad-contraste .config-tarjeta,
+html.accesibilidad-contraste .convenios-tarjeta,
+html.accesibilidad-contraste .ficha,
+html.accesibilidad-contraste .tablaconvenios .convenios-lista {
+  background: #fff;
+  border-color: #000;
+}
+
+html.accesibilidad-contraste .top-navigation {
+  box-shadow: none;
+}
+
+html.accesibilidad-contraste .brand__title,
+html.accesibilidad-contraste .search-header h1,
+html.accesibilidad-contraste .config-page h1,
+html.accesibilidad-contraste .config-tarjeta h3,
+html.accesibilidad-contraste .config-seccion h2,
+html.accesibilidad-contraste .results p,
+html.accesibilidad-contraste .tablaconvenios__total,
+html.accesibilidad-contraste .dashboard__contenido h1 {
+  color: #000;
+}
+
+html.accesibilidad-contraste .search-header p,
+html.accesibilidad-contraste .dashboard__alcance,
+html.accesibilidad-contraste .dashboard__aviso,
+html.accesibilidad-contraste .config-page__intro,
+html.accesibilidad-contraste .config-tarjeta ul,
+html.accesibilidad-contraste .field,
+html.accesibilidad-contraste .name-label {
+  color: #1a1a1a;
+}
+
+html.accesibilidad-contraste .vertical-line {
+  background-color: #00308f;
+}
+
+html.accesibilidad-contraste .field input,
+html.accesibilidad-contraste .field select.form-control {
+  border-color: #000;
+  color: #000;
+}
+
+html.accesibilidad-contraste .search-form button,
+html.accesibilidad-contraste .btn-primary {
+  background: #00308f;
+  border-color: #000;
+  color: #fff;
+}
+
+html.accesibilidad-contraste .convenios-tarjeta:hover {
+  background: #e8e8e8;
+}
+
+html.accesibilidad-contraste :focus-visible {
+  outline-color: #000;
+}
+
+/* --- Menos animaciones (2.3.3 Animación de interacciones) ---------------- */
+html.accesibilidad-sin-animaciones *,
+html.accesibilidad-sin-animaciones *::before,
+html.accesibilidad-sin-animaciones *::after {
+  animation-duration: 0.001s !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}

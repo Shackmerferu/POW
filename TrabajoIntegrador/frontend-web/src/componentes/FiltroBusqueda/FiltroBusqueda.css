@@ -1,0 +1,46 @@
+/* --- Filtro búsqueda ------------------------------------------------------- */
+.filtro-busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.75rem;
+  align-items: flex-end;
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.8rem 0.95rem;
+  margin-bottom: 0.9rem;
+}
+
+.filtro-busqueda__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filtro-busqueda__campo--texto {
+  flex: 1 1 240px;
+}
+
+.filtro-busqueda__campo > span {
+  font-size: 0.72rem;
+  color: #64707d;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.filtro-busqueda__campo input,
+.filtro-busqueda__campo select {
+  font: inherit;
+  font-size: 0.85rem;
+  color: #25313e;
+  border: 1px solid #ccd4dc;
+  border-radius: 3px;
+  padding: 0.36rem 0.5rem;
+  background: #fff;
+  min-width: 9.5rem;
+}
+
+.filtro-busqueda__campo input:focus,
+.filtro-busqueda__campo select:focus {
+  outline: 2px solid rgba(31, 79, 153, 0.35);
+  outline-offset: 0;
+}

@@ -2,6 +2,34 @@
 const express = require('express');
 const router = express.Router(); // Creamos el "mini-semáforo" para las rutas de convenios
 const verificarToken = require('../verificarToken');
+const multer = require('multer');
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+
+// Carpeta donde quedan los PDF subidos (no accesibles por URL directa:
+// el frontend los pide por la API, protegiendo el acceso directo).
+const CARPETA_SUBIDAS = path.join(__dirname, '..', 'uploads', 'convenios');
+fs.mkdirSync(CARPETA_SUBIDAS, { recursive: true });
+
+// Subida de PDF: máximo 20 MB (requisito del enunciado) y solo ese tipo.
+const subida = multer({
+    storage: multer.diskStorage({
+        destination: (req, archivo, cb) => cb(null, CARPETA_SUBIDAS),
+        filename: (req, archivo, cb) => {
+            const seguro = `${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
+            const limpio = archivo.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+            cb(null, `${seguro}-${limpio}`);
+        },
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 },
+    fileFilter: (req, archivo, cb) => {
+        if (archivo.mimetype !== 'application/pdf') {
+            return cb(new Error('Solo se aceptan archivos PDF'));
+        }
+        cb(null, true);
+    },
+});
 
 module.exports = (db) => {
     
@@ -32,68 +60,132 @@ module.exports = (db) => {
         });
     });
    
-    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO 
+    // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO
+    // Acepta multipart/form-data: los campos del formulario + un PDF
+    // opcional (campo "archivo") que se guarda como documento "principal"
+    // con su hash SHA-256 de integridad.
     router.post('/', verificarToken, (req, res) => {
-        
+        subida.single('archivo')(req, res, (errorSubida) => {
+            if (errorSubida) {
+                const mensaje = errorSubida.code === 'LIMIT_FILE_SIZE'
+                    ? 'El PDF supera el máximo de 20 MB.'
+                    : `Archivo inválido: ${errorSubida.message}`;
+                return res.status(400).json({ status: 400, mensaje });
+            }
+            crearConvenio(req, res);
+        });
+    });
+
+    function crearConvenio(req, res) {
         // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
-        const { 
-            codigo_unico, 
-            titulo, 
-            tipo, 
-            objeto, 
-            id_unidad_responsable, 
+        const {
+            codigo_unico,
+            titulo,
+            tipo,
+            objeto,
+            id_unidad_responsable,
             // Estos son opcionales (permiten NULL)
-            estado, marco_legal, confidencialidad, fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_antecedente 
+            estado, marco_legal, confidencialidad, fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_antecedente
         } = req.body;
 
         // 2. Control estricto: exigimos los que dicen "No" en Nulo en phpMyAdmin
-        if (!codigo_unico || !titulo || !tipo || !objeto || !id_unidad_responsable) {
-            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios (código, título, tipo, objeto o unidad)" });
+        if (!titulo || !tipo || !objeto || !id_unidad_responsable) {
+            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios (título, tipo, objeto o unidad)" });
         }
 
-        // 3. Preparamos la consulta SQL
-        const query = `
-            INSERT INTO convenios (
-                codigo_unico, titulo, tipo, estado, objeto, marco_legal, confidencialidad, 
-                fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_unidad_responsable, id_antecedente
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        
-        // Si no mandan estado, tu base usa 'borrador' por defecto. Si no mandan confidencialidad, va 0.
-        const estadoFinal = estado || 'borrador';
-        const confFinal = confidencialidad !== undefined ? confidencialidad : 0;
-
-        // 4. Mapeamos los valores (reemplazando undefined por null para que MySQL no se queje)
-        const valores = [
-            codigo_unico, 
-            titulo, 
-            tipo, 
-            estadoFinal, 
-            objeto, 
-            marco_legal || null, 
-            confFinal,
-            fecha_firma || null, 
-            fecha_inicio || null, 
-            fecha_vencimiento || null, 
-            dias_preaviso || null, 
-            id_unidad_responsable, 
-            id_antecedente || null
-        ];
-
-        // 5. Ejecutamos la inserción
-        db.query(query, valores, (error, resultados) => {
-            if (error) {
-                console.error("Error guardando convenio:", error);
-                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar en la base de datos" });
-            }
-            
-            res.json({ 
-                status: 201, 
-                mensaje: "¡Convenio creado con éxito!",
-                nuevoId: resultados.insertId 
+        // 3. Si el formulario no manda código único, lo generamos:
+        //    UNLPAM-{FI|R}-{año}-{consecutivo} según la unidad responsable.
+        if (codigo_unico) {
+            insertarConvenio(codigo_unico);
+        } else {
+            const prefijo = Number(id_unidad_responsable) === 2 ? 'R' : 'FI';
+            const anio = new Date().getFullYear();
+            db.query('SELECT COUNT(*) AS total FROM convenios', (errConteo, resConteo) => {
+                const consecutivo = String((resConteo?.[0]?.total ?? 0) + 1).padStart(3, '0');
+                insertarConvenio(`UNLPAM-${prefijo}-${anio}-${consecutivo}`);
             });
-        });
-    });
+        }
+
+        function insertarConvenio(codigoFinal) {
+            // 4. Preparamos la consulta SQL
+            const query = `
+                INSERT INTO convenios (
+                    codigo_unico, titulo, tipo, estado, objeto, marco_legal, confidencialidad,
+                    fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_unidad_responsable, id_antecedente
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+
+            // Si no mandan estado, tu base usa 'borrador' por defecto. El alta
+            // desde el panel manda 'revision' para entrar al circuito de revisión.
+            const estadoFinal = estado || 'borrador';
+            const confFinal = (confidencialidad === true || confidencialidad === 'true' || confidencialidad === '1') ? 1 : 0;
+            const preaviso = dias_preaviso ? Number(dias_preaviso) : null;
+
+            // 5. Mapeamos los valores (reemplazando undefined por null para que MySQL no se queje)
+            const valores = [
+                codigoFinal,
+                titulo,
+                tipo,
+                estadoFinal,
+                objeto,
+                marco_legal || null,
+                confFinal,
+                fecha_firma || null,
+                fecha_inicio || null,
+                fecha_vencimiento || null,
+                preaviso,
+                id_unidad_responsable,
+                id_antecedente || null
+            ];
+
+            // 6. Ejecutamos la inserción
+            db.query(query, valores, (error, resultados) => {
+                if (error) {
+                    console.error("Error guardando convenio:", error);
+                    if (error.code === 'ER_DUP_ENTRY') {
+                        return res.status(400).json({ status: 400, mensaje: "El código único ya existe en la base" });
+                    }
+                    return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar en la base de datos" });
+                }
+
+                const nuevoId = resultados.insertId;
+
+                // 7. Si el formulario incluyó un PDF, se registra como documento
+                //    principal con su SHA-256 de integridad.
+                if (req.file) {
+                    const hash = crypto.createHash('sha256').update(fs.readFileSync(req.file.path)).digest('hex');
+                    db.query(
+                        'INSERT INTO documentos (id_convenio, tipo_documento, ruta_archivo, hash_sha256) VALUES (?, ?, ?, ?)',
+                        [nuevoId, 'principal', `uploads/convenios/${req.file.filename}`, hash],
+                        (errDoc) => {
+                            if (errDoc) console.error("Error registrando documento:", errDoc);
+                            registrarAuditoria(nuevoId, estadoFinal);
+                        }
+                    );
+                } else {
+                    registrarAuditoria(nuevoId, estadoFinal);
+                }
+            });
+        }
+
+        // 8. Auditoría del alta: quién creó el instrumento y a qué estado entró.
+        function registrarAuditoria(nuevoId, estadoFinal) {
+            const observacionAlta = req.file
+                ? 'Alta del instrumento con documento principal adjunto (formulario web).'
+                : 'Alta del instrumento mediante el formulario web.';
+            db.query(
+                'INSERT INTO auditoria_observaciones (id_convenio, id_usuario, observacion, estado_previo, estado_nuevo) VALUES (?, ?, ?, NULL, ?)',
+                [nuevoId, req.usuario.id, observacionAlta, estadoFinal],
+                () => {
+                    res.json({
+                        status: 201,
+                        mensaje: "¡Convenio creado con éxito!",
+                        nuevoId: nuevoId
+                    });
+                }
+            );
+        }
+    }
 
     //CAMBIAR ESTADO Y AGREGAR OBSERVACIÓN
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./Etiqueta.css";
 
 /**
  * ETIQUETAS — pastillas neutras (sin colores semafóricos) para estado y tipo.

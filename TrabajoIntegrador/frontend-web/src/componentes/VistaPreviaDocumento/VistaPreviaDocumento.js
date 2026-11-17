@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import MenuAcciones from "./MenuAcciones";
-import "./componentes.css";
+import MenuAcciones from "../MenuAcciones/MenuAcciones";
+import "./VistaPreviaDocumento.css";
 
 const ETIQUETAS_ACCION = {
   editar: "Editar en Office / web",

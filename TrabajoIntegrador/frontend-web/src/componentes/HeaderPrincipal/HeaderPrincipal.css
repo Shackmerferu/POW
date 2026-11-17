@@ -1,0 +1,260 @@
+/* ==========================================================================
+   HEADER PRINCIPAL — barra superior compartida (convenios, configuración, …)
+   Estilos movidos desde convenios.css para poder reutilizarlos en cualquier
+   página. El menú desplegable usa Bootstrap (dropdown) + estas sobrecargas.
+   ========================================================================== */
+
+.top-navigation {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 80px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 130px 0 52px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+}
+
+.brand,
+.navigation,
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.brand__content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.brand__logo {
+  display: block;
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.brand__title {
+  margin: 0;
+  font-family: "Montserrat:Bold", Montserrat, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+  color: #1f4f99;
+}
+
+.navigation {
+  gap: 60px;
+  font-family: "Open Sans:Regular", "Open Sans", sans-serif;
+  font-size: 20px;
+  font-variation-settings: "wdth" 100;
+}
+
+.navigation a {
+  transition: color 160ms ease;
+}
+
+.navigation a:hover,
+.navigation a:focus-visible {
+  color: #1f4f99;
+}
+
+/* Botón "Mi Perfil" del menú de navegación */
+.navigation .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #374151;
+  font-family: "Open Sans:SemiBold", "Open Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.navigation .dropdown-toggle:hover,
+.navigation .dropdown-toggle:focus,
+.navigation .dropdown-toggle:focus-visible,
+.navigation .dropdown-toggle.show {
+  border-color: transparent;
+  background: #f3f4f6;
+  box-shadow: none;
+  color: #1f4f99;
+  outline: none;
+}
+
+.navigation .dropdown-toggle::after {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Menú desplegable */
+.navigation .dropdown-menu {
+  min-width: 220px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgb(15 23 42 / 12%);
+}
+
+.navigation .dropdown-header {
+  padding: 4px 12px 8px;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.navigation .dropdown-menu .dropdown-item {
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: #4b5563;
+  font-family: "Open Sans:Regular", "Open Sans", sans-serif;
+  font-size: 15px;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.navigation .dropdown-menu .dropdown-item:hover,
+.navigation .dropdown-menu .dropdown-item:focus {
+  background: #f3f4f6;
+  color: #111827;
+  outline: none;
+}
+
+.navigation .dropdown-menu .dropdown-item.active,
+.navigation .dropdown-menu .dropdown-item:active {
+  background: #eef2f7;
+  color: #1f4f99;
+  font-weight: 600;
+}
+
+/* Separador sutil antes de cerrar sesión */
+.navigation .dropdown-divider {
+  margin: 8px 4px;
+  border-top: 1px solid #eceff3;
+}
+
+/* Cerrar sesión: detalle rojo minimalista */
+.navigation .dropdown-menu .dropdown-item.logout-button {
+  width: 100%;
+  background: transparent;
+  color: #dc3545;
+  text-align: left;
+}
+
+.navigation .dropdown-menu .dropdown-item.logout-button:hover,
+.navigation .dropdown-menu .dropdown-item.logout-button:focus-visible {
+  background: #fef2f2;
+  color: #b91c1c;
+  outline: none;
+}
+
+.profile {
+  gap: 12px;
+  margin-left: 12px;
+  color: #374151;
+  font-family: "Open Sans:SemiBold", "Open Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+}
+
+.top-navigation .navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* --- Responsivo ---------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .top-navigation {
+    height: 64px;
+    padding: 0 5vw 0 3vw;
+  }
+
+  .brand {
+    gap: 12px;
+  }
+
+  .brand__logo {
+    width: 150px;
+    height: auto;
+  }
+
+  .brand__title {
+    font-size: 15px;
+  }
+
+  .brand__pill {
+    padding: 3px 9px;
+    font-size: 9px;
+  }
+
+  .navigation {
+    gap: 32px;
+    font-size: 15px;
+  }
+
+  .profile {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .profile img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .top-navigation {
+    height: auto;
+    min-height: 70px;
+    padding: 12px 20px;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brand__title {
+    max-width: 190px;
+    white-space: normal;
+  }
+
+  .brand__pill,
+  .navigation > a:not(.profile),
+  .profile span {
+    display: none;
+  }
+}

@@ -1,23 +1,29 @@
 // Toda la lógica del panel vive en un único componente React.
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import "./dashboard.css";
 
 import logoFacultad from "../../cosas/imagenes/logo.png";
-import persona from "../../cosas/imagenes/persona.png";
 
 import menu from "../../cosas/imagenes/list.svg";
-import MenuLateral from "../../componentes/MenuLateral";
-import TarjetaDato from "../../componentes/TarjetaDato";
-import BloqueDistribucion from "../../componentes/BloqueDistribucion";
-import Tabla from "../../componentes/Tabla";
-import Paginacion from "../../componentes/Paginacion";
-import FiltroBusqueda from "../../componentes/FiltroBusqueda";
-import BotonExportar from "../../componentes/BotonExportar";
-import FichaDetalle from "../../componentes/FichaDetalle";
-import { EtiquetaEstado, EtiquetaTipo, EtiquetaRol } from "../../componentes/Etiqueta";
+import MenuLateral from "../../componentes/MenuLateral/MenuLateral";
+import TarjetaDato from "../../componentes/TarjetaDato/TarjetaDato";
+import BloqueDistribucion from "../../componentes/BloqueDistribucion/BloqueDistribucion";
+import Tabla from "../../componentes/Tabla/Tabla";
+import Paginacion from "../../componentes/Paginacion/Paginacion";
+import FiltroBusqueda from "../../componentes/FiltroBusqueda/FiltroBusqueda";
+import BotonExportar from "../../componentes/BotonExportar/BotonExportar";
+import FichaDetalle from "../../componentes/FichaDetalle/FichaDetalle";
+import {
+  EtiquetaEstado,
+  EtiquetaTipo,
+  EtiquetaRol,
+} from "../../componentes/Etiqueta/Etiqueta";
 
-import { CONVENIOS, UNIDADES, USUARIOS, PERSONAS, MATRIZ_PERMISOS, contarPersonasUnicas } from "../../datos/datosPanel";
+import {
+  MATRIZ_PERMISOS,
+} from "../../datos/datosPanel";
+import { API_URL } from "../../config/api";
 import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
 import {
   puedeTenerAlcanceGlobal,
@@ -34,7 +40,9 @@ import {
   nombreUnidad,
   recortarTexto,
   textoVigencia,
+  ETIQUETAS_TIPO,
 } from "../../utils/formatos";
+import VentanaModal from "../../componentes/VentanaModal/VentanaModal";
 
 const FILAS_POR_PAGINA = 8;
 
@@ -55,8 +63,159 @@ function Dashboard() {
 
   const alcanceGlobal = puedeTenerAlcanceGlobal(usuario);
 
+  // DATOS REALES DE LA API (antes: mock de datosPanel).
+  // Convenios, unidades y usuarios se traen del backend; solo PERSONAS
+  // y MATRIZ_PERMISOS siguen de demo (no hay endpoint de /people todavía).
+  const [convenios, setConvenios] = useState([]);
+  const [unidades, setUnidades] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [errorApi, setErrorApi] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+    Promise.allSettled([
+      fetch(`${API_URL}/agreements`, { headers }).then((res) => res.json()),
+      fetch(`${API_URL}/units`, { headers }).then((res) => res.json()),
+      fetch(`${API_URL}/usuarios`, { headers }).then((res) => res.json()),
+    ])
+      .then(([conveniosRes, unidadesRes, usuariosRes]) => {
+        if (conveniosRes.status === "fulfilled" && Array.isArray(conveniosRes.value?.data)) {
+          setConvenios(conveniosRes.value.data);
+        }
+        if (unidadesRes.status === "fulfilled" && Array.isArray(unidadesRes.value?.data)) {
+          setUnidades(unidadesRes.value.data);
+        }
+        if (usuariosRes.status === "fulfilled" && Array.isArray(usuariosRes.value?.data)) {
+          setUsuarios(usuariosRes.value.data);
+        }
+        const falloAlguno =
+          conveniosRes.status === "rejected" ||
+          unidadesRes.status === "rejected" ||
+          usuariosRes.status === "rejected";
+        if (falloAlguno) {
+          setErrorApi("No se pudieron traer todos los datos desde la API.");
+        }
+      })
+      .finally(() => setCargando(false));
+  }, []);
+
+  // Recarga solo los convenios (se llama después de dar de alta uno nuevo
+  // para que el panel y las métricas reflejen la base al instante).
+  const recargarConvenios = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/agreements`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
+      .then((res) => res.json())
+      .then((datos) => {
+        if (Array.isArray(datos?.data)) setConvenios(datos.data);
+      })
+      .catch(() => setErrorApi("No se pudo actualizar el listado de convenios."));
+  };
+
   const [pestaña, setPestaña] = useState("metricas");
   const [convenioFicha, setConvenioFicha] = useState(null);
+
+  // --- Alta de convenio (botón "Agregar" + modal con formulario y PDF) ----
+  const [modalAltaAbierto, setModalAltaAbierto] = useState(false);
+  const [enviandoAlta, setEnviandoAlta] = useState(false);
+  const [errorAlta, setErrorAlta] = useState("");
+  const [avisoAlta, setAvisoAlta] = useState("");
+  const VACIO_ALTA = {
+    titulo: "",
+    tipo: "",
+    id_unidad: "",
+    objeto: "",
+    marco_legal: "",
+    confidencialidad: false,
+    fecha_inicio: "",
+    fecha_vencimiento: "",
+    dias_preaviso: "",
+  };
+  const [formAlta, setFormAlta] = useState(VACIO_ALTA);
+  const [archivoAlta, setArchivoAlta] = useState(null);
+
+  const cambiarCampoAlta = (campo, valor) =>
+    setFormAlta((anterior) => ({ ...anterior, [campo]: valor }));
+
+  const abrirModalAlta = () => {
+    setFormAlta(VACIO_ALTA);
+    setArchivoAlta(null);
+    setErrorAlta("");
+    setModalAltaAbierto(true);
+  };
+
+  const tomarArchivoAlta = (evento) => {
+    const archivo = evento.target.files?.[0] ?? null;
+    setErrorAlta("");
+    if (!archivo) {
+      setArchivoAlta(null);
+      return;
+    }
+    if (archivo.type !== "application/pdf") {
+      setErrorAlta("El documento debe ser un archivo PDF.");
+      evento.target.value = "";
+      setArchivoAlta(null);
+      return;
+    }
+    if (archivo.size > 20 * 1024 * 1024) {
+      setErrorAlta("El PDF supera el máximo de 20 MB.");
+      evento.target.value = "";
+      setArchivoAlta(null);
+      return;
+    }
+    setArchivoAlta(archivo);
+  };
+
+  const enviarAlta = (evento) => {
+    evento.preventDefault();
+    setErrorAlta("");
+
+    if (!formAlta.titulo.trim() || !formAlta.tipo || !formAlta.id_unidad || !formAlta.objeto.trim()) {
+      setErrorAlta("Completá título, tipo, unidad responsable y objeto (obligatorios).");
+      return;
+    }
+
+    const datos = new FormData();
+    datos.append("titulo", formAlta.titulo.trim());
+    datos.append("tipo", formAlta.tipo);
+    datos.append("id_unidad_responsable", formAlta.id_unidad);
+    datos.append("objeto", formAlta.objeto.trim());
+    datos.append("estado", "revision"); // el alta entra directo al circuito de revisión
+    datos.append("confidencialidad", formAlta.confidencialidad ? "true" : "false");
+    if (formAlta.marco_legal.trim()) datos.append("marco_legal", formAlta.marco_legal.trim());
+    if (formAlta.fecha_inicio) datos.append("fecha_inicio", formAlta.fecha_inicio);
+    if (formAlta.fecha_vencimiento) datos.append("fecha_vencimiento", formAlta.fecha_vencimiento);
+    if (formAlta.dias_preaviso) datos.append("dias_preaviso", formAlta.dias_preaviso);
+    if (archivoAlta) datos.append("archivo", archivoAlta);
+
+    const token = localStorage.getItem("token");
+    setEnviandoAlta(true);
+    fetch(`${API_URL}/agreements`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: datos,
+    })
+      .then(async (res) => {
+        const cuerpo = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(cuerpo?.mensaje || `La API respondió con estado ${res.status}`);
+        }
+        return cuerpo;
+      })
+      .then(() => {
+        setModalAltaAbierto(false);
+        setFormAlta(VACIO_ALTA);
+        setArchivoAlta(null);
+        setAvisoAlta(`Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`);
+        recargarConvenios();
+      })
+      .catch((err) => setErrorAlta(err.message))
+      .finally(() => setEnviandoAlta(false));
+  };
 
   const [filtros, setFiltros] = useState({
     texto: "",
@@ -71,25 +230,33 @@ function Dashboard() {
 
   const cambiarFiltro = (campo, valor) => {
     setFiltros((anterior) => ({ ...anterior, [campo]: valor }));
-    setPagina(1); 
+    setPagina(1);
   };
 
   const conveniosAlcance = useMemo(() => {
-    if (alcanceGlobal) return CONVENIOS;
-    return CONVENIOS.filter(
-      (c) => Number(c.id_unidad_responsable) === Number(usuario?.id_unidad)
+    if (alcanceGlobal) return convenios;
+    return convenios.filter(
+      (c) => Number(c.id_unidad_responsable) === Number(usuario?.id_unidad),
     );
-  }, [alcanceGlobal, usuario]);
+  }, [alcanceGlobal, usuario, convenios]);
 
   const conveniosFiltrados = useMemo(() => {
     const texto = filtros.texto.trim().toLowerCase();
     return conveniosAlcance.filter((c) => {
-      if (texto && !(c.titulo || "").toLowerCase().includes(texto) && !(c.codigo_unico || "").toLowerCase().includes(texto)) return false;
+      if (
+        texto &&
+        !(c.titulo || "").toLowerCase().includes(texto) &&
+        !(c.codigo_unico || "").toLowerCase().includes(texto)
+      )
+        return false;
       if (filtros.tipo && c.tipo !== filtros.tipo) return false;
       if (filtros.estado && c.estado !== filtros.estado) return false;
-      if (filtros.unidad && String(c.id_unidad_responsable) !== filtros.unidad) return false;
-      if (filtros.desde && (!c.fecha_firma || c.fecha_firma < filtros.desde)) return false;
-      if (filtros.hasta && (!c.fecha_firma || c.fecha_firma > filtros.hasta)) return false;
+      if (filtros.unidad && String(c.id_unidad_responsable) !== filtros.unidad)
+        return false;
+      if (filtros.desde && (!c.fecha_firma || c.fecha_firma < filtros.desde))
+        return false;
+      if (filtros.hasta && (!c.fecha_firma || c.fecha_firma > filtros.hasta))
+        return false;
       return true;
     });
   }, [conveniosAlcance, filtros]);
@@ -99,13 +266,16 @@ function Dashboard() {
     return conveniosFiltrados.slice(inicio, inicio + FILAS_POR_PAGINA);
   }, [conveniosFiltrados, pagina]);
 
-  const totalPaginas = Math.max(1, Math.ceil(conveniosFiltrados.length / FILAS_POR_PAGINA));
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(conveniosFiltrados.length / FILAS_POR_PAGINA),
+  );
 
   const metricas = useMemo(() => {
     const hoy = hoyIso();
     const firmados = conveniosAlcance.filter((c) => c.estado === "firmado");
     const vigentes = firmados.filter(
-      (c) => !c.fecha_vencimiento || c.fecha_vencimiento >= hoy
+      (c) => !c.fecha_vencimiento || c.fecha_vencimiento >= hoy,
     );
     const porEstado = {};
     const porTipo = {};
@@ -115,7 +285,7 @@ function Dashboard() {
     conveniosAlcance.forEach((c) => {
       porEstado[c.estado] = (porEstado[c.estado] ?? 0) + 1;
       porTipo[c.tipo] = (porTipo[c.tipo] ?? 0) + 1;
-      const unidad = nombreUnidad(UNIDADES, c.id_unidad_responsable);
+      const unidad = nombreUnidad(unidades, c.id_unidad_responsable);
       porUnidad[unidad] = (porUnidad[unidad] ?? 0) + 1;
       if (c.fecha_firma) {
         const año = c.fecha_firma.slice(0, 4);
@@ -127,13 +297,15 @@ function Dashboard() {
       total: conveniosAlcance.length,
       firmados: firmados.length,
       vigentes: vigentes.length,
-      personasUnicas: contarPersonasUnicas(new Set(conveniosAlcance.map((c) => c.id))),
+      // Personas únicas: queda pendiente el endpoint /people de la API.
+      // Mientras no exista, se informa "—" en lugar de un dato ficticio.
+      personasUnicas: null,
       porEstado,
       porTipo,
       porUnidad,
       porAño,
     };
-  }, [conveniosAlcance]);
+  }, [conveniosAlcance, unidades]);
 
   const vencimientos = useMemo(() => {
     const agrupado = {
@@ -150,8 +322,12 @@ function Dashboard() {
       else agrupado.sinVencimiento.push(fila);
     });
 
-    agrupado.proximos.sort((a, b) => a.vigencia.diasRestantes - b.vigencia.diasRestantes);
-    agrupado.vencidos.sort((a, b) => a.vigencia.diasRestantes - b.vigencia.diasRestantes);
+    agrupado.proximos.sort(
+      (a, b) => a.vigencia.diasRestantes - b.vigencia.diasRestantes,
+    );
+    agrupado.vencidos.sort(
+      (a, b) => a.vigencia.diasRestantes - b.vigencia.diasRestantes,
+    );
     return agrupado;
   }, [conveniosAlcance]);
 
@@ -172,32 +348,34 @@ function Dashboard() {
         titulo: c.titulo,
         tipo_etiqueta: c.tipo,
         estado: c.estado,
-        unidad_nombre: nombreUnidad(UNIDADES, c.id_unidad_responsable),
+        unidad_nombre: nombreUnidad(unidades, c.id_unidad_responsable),
         fecha_firma_texto: formatoFecha(c.fecha_firma),
         fecha_vencimiento_texto: c.fecha_vencimiento
           ? formatoFecha(c.fecha_vencimiento)
           : "Sin vencimiento registrado",
       })),
-    [conveniosFiltrados]
+    [conveniosFiltrados, unidades],
   );
 
   const exportarCsvFiltrado = () => {
     const alcanceTexto = alcanceGlobal
       ? "Alcance: global (todas las unidades)"
-      : `Alcance: ${nombreUnidad(UNIDADES, usuario.id_unidad)}`;
+      : `Alcance: ${nombreUnidad(unidades, usuario.id_unidad)}`;
     exportarCsv("convenios_filtrados", COLUMNAS_EXPORTAR, filasParaExportar);
-    console.info(`Exportación CSV · ${alcanceTexto} · ${filasParaExportar.length} filas`);
+    console.info(
+      `Exportación CSV · ${alcanceTexto} · ${filasParaExportar.length} filas`,
+    );
   };
 
   const exportarPdfFiltrado = () => {
     const alcanceTexto = alcanceGlobal
       ? "Alcance: global (todas las unidades)"
-      : `Alcance: ${nombreUnidad(UNIDADES, usuario.id_unidad)}`;
+      : `Alcance: ${nombreUnidad(unidades, usuario.id_unidad)}`;
     exportarPdf(
       "Convenios filtrados",
       `${alcanceTexto} · Estado: ${filtros.estado || "todos"} · Tipo: ${filtros.tipo || "todos"}`,
       COLUMNAS_EXPORTAR,
-      filasParaExportar
+      filasParaExportar,
     );
   };
 
@@ -228,18 +406,42 @@ function Dashboard() {
           <p className="brand__title">SISTEMA CONVENIOS</p>
 
           <nav className="navigation" aria-label="Navegación principal">
-            <div className="dropdown flex-direction-row">
-              <button className="btn dropdown-toggle m-auto" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src={persona} className="pe-2" alt="Flecha indicativa Label" /> Mi Perfil
+            <div className="dropdown flex-direction-row ">
+              <button
+                className="btn dropdown-toggle m-auto"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src={menu}
+                  className="pe-2"
+                  alt="Flecha indicativa Label"
+                />
+                {""}Menu
               </button>
               <ul className="dropdown-menu">
-                <li><h6 className="dropdown-header">Menu</h6></li>
-                <li><a className="dropdown-item" href="/convenios">Busqueda</a></li>
+                <li>
+                  <h6 className="dropdown-header">Menu</h6>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="/convenios">
+                    Busqueda
+                  </a>
+                </li>
                 {puedeVerPanel(usuario) && (
-                <li><a className="dropdown-item" href="/dashboard">Panel Administrativo</a></li>
+                  <li>
+                    <a className="dropdown-item" href="/dashboard">
+                      Panel Administrativo
+                    </a>
+                  </li>
                 )}
                 {puedeVerConfiguracion(usuario) && (
-                <li><a className="dropdown-item" href="/config">Configuración</a></li>
+                  <li>
+                    <a className="dropdown-item" href="/config">
+                      Configuración
+                    </a>
+                  </li>
                 )}
                 <li>
                   <button
@@ -270,13 +472,23 @@ function Dashboard() {
             <p className="dashboard__alcance">
               {alcanceGlobal
                 ? "Alcance: global (todas las unidades)"
-                : `Alcance: ${nombreUnidad(UNIDADES, usuario?.id_unidad)}`}
+                : `Alcance: ${nombreUnidad(unidades, usuario?.id_unidad)}`}
             </p>
           </header>
 
-          {pestaña === "metricas" && (
-            <Metricas metricas={metricas} />
+          {pestaña === "administracion" && avisoAlta && (
+            <p className="dashboard__aviso" role="status" aria-live="polite">
+              {avisoAlta}
+            </p>
           )}
+
+          {cargando ? (
+            <p className="dashboard__aviso">Cargando datos desde la API…</p>
+          ) : errorApi ? (
+            <p className="dashboard__aviso dashboard__aviso--error">{errorApi}</p>
+          ) : (
+            <>
+          {pestaña === "metricas" && <Metricas metricas={metricas} />}
           {pestaña === "administracion" && (
             <Administracion
               filas={filasPagina}
@@ -287,18 +499,31 @@ function Dashboard() {
               filtros={filtros}
               cambiarFiltro={cambiarFiltro}
               limpiarFiltros={() => {
-                setFiltros({ texto: "", tipo: "", estado: "", unidad: "", desde: "", hasta: "" });
+                setFiltros({
+                  texto: "",
+                  tipo: "",
+                  estado: "",
+                  unidad: "",
+                  desde: "",
+                  hasta: "",
+                });
                 setPagina(1);
               }}
               abrirFicha={setConvenioFicha}
-              unidades={UNIDADES}
+              agregarAlta={abrirModalAlta}
+              unidades={unidades}
               exportarCsv={exportarCsvFiltrado}
               exportarPdf={exportarPdfFiltrado}
               deshabilitado={filasParaExportar.length === 0}
             />
           )}
           {pestaña === "roles" && (
-            <Roles usuario={usuario} alcances={{ usoAlcance: alcanceGlobal }} />
+            <Roles
+              usuario={usuario}
+              alcances={{ usoAlcance: alcanceGlobal }}
+              unidades={unidades}
+              usuarios={usuarios}
+            />
           )}
           {pestaña === "vencimientos" && (
             <Vencimientos
@@ -306,15 +531,187 @@ function Dashboard() {
               abrirFicha={setConvenioFicha}
             />
           )}
+            </>
+          )}
         </main>
       </div>
 
       <FichaDetalle
         convenio={convenioFicha}
-        convenios={CONVENIOS}
-        unidades={UNIDADES}
+        convenios={convenios}
+        unidades={unidades}
         onCerrar={() => setConvenioFicha(null)}
       />
+
+      {/* Modal de alta: formulario con toda la info del instrumento + PDF.
+          El convenio se crea en estado "revision" para entrar al circuito. */}
+      <VentanaModal
+        abierto={modalAltaAbierto}
+        titulo="Agregar convenio"
+        onCerrar={() => setModalAltaAbierto(false)}
+      >
+        <form className="form-alta" onSubmit={enviarAlta} noValidate>
+          <p className="form-alta__nota">
+            Los campos marcados con * son obligatorios. El convenio se crea en
+            estado <strong>Revisión</strong> y el código único se genera solo.
+          </p>
+
+          <div className="form-alta__campo">
+            <label htmlFor="alta-titulo">Título *</label>
+            <input
+              id="alta-titulo"
+              type="text"
+              value={formAlta.titulo}
+              onChange={(evento) => cambiarCampoAlta("titulo", evento.target.value)}
+              placeholder="Ej.: Convenio específico de pasantías — Ejemplo S.R.L."
+              required
+            />
+          </div>
+
+          <div className="form-alta__campos-dobles">
+            <div className="form-alta__campo">
+              <label htmlFor="alta-tipo">Tipo de instrumento *</label>
+              <select
+                id="alta-tipo"
+                value={formAlta.tipo}
+                onChange={(evento) => cambiarCampoAlta("tipo", evento.target.value)}
+                required
+              >
+                <option value="">Seleccioná un tipo</option>
+                {Object.entries(ETIQUETAS_TIPO).map(([valor, etiqueta]) => (
+                  <option key={valor} value={valor}>
+                    {etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-alta__campo">
+              <label htmlFor="alta-unidad">Unidad responsable *</label>
+              <select
+                id="alta-unidad"
+                value={formAlta.id_unidad}
+                onChange={(evento) => cambiarCampoAlta("id_unidad", evento.target.value)}
+                required
+              >
+                <option value="">Seleccioná una unidad</option>
+                {unidades.map((unidad) => (
+                  <option key={unidad.id} value={unidad.id}>
+                    {unidad.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="form-alta__campo">
+            <label htmlFor="alta-objeto">Objeto *</label>
+            <textarea
+              id="alta-objeto"
+              rows="4"
+              value={formAlta.objeto}
+              onChange={(evento) => cambiarCampoAlta("objeto", evento.target.value)}
+              placeholder="Qué establece el instrumento, alcance y obligaciones principales."
+              required
+            />
+          </div>
+
+          <div className="form-alta__campo">
+            <label htmlFor="alta-marco">Marco legal / resolución / expediente</label>
+            <input
+              id="alta-marco"
+              type="text"
+              value={formAlta.marco_legal}
+              onChange={(evento) => cambiarCampoAlta("marco_legal", evento.target.value)}
+              placeholder="Ej.: Resolución CD FI N° 000/26 (opcional)"
+            />
+          </div>
+
+          <div className="form-alta__campos-dobles">
+            <div className="form-alta__campo">
+              <label htmlFor="alta-inicio">Fecha de inicio</label>
+              <input
+                id="alta-inicio"
+                type="date"
+                value={formAlta.fecha_inicio}
+                onChange={(evento) => cambiarCampoAlta("fecha_inicio", evento.target.value)}
+              />
+            </div>
+            <div className="form-alta__campo">
+              <label htmlFor="alta-vencimiento">Fecha de vencimiento</label>
+              <input
+                id="alta-vencimiento"
+                type="date"
+                value={formAlta.fecha_vencimiento}
+                onChange={(evento) => cambiarCampoAlta("fecha_vencimiento", evento.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-alta__campos-dobles">
+            <div className="form-alta__campo">
+              <label htmlFor="alta-preaviso">Días de preaviso</label>
+              <input
+                id="alta-preaviso"
+                type="number"
+                min="0"
+                max="365"
+                value={formAlta.dias_preaviso}
+                onChange={(evento) => cambiarCampoAlta("dias_preaviso", evento.target.value)}
+                placeholder="Ej.: 60"
+              />
+            </div>
+            <div className="form-alta__campo form-alta__campo--checkbox">
+              <label htmlFor="alta-confidencialidad">
+                <input
+                  id="alta-confidencialidad"
+                  type="checkbox"
+                  checked={formAlta.confidencialidad}
+                  onChange={(evento) =>
+                    cambiarCampoAlta("confidencialidad", evento.target.checked)
+                  }
+                />
+                Documento con confidencialidad
+              </label>
+            </div>
+          </div>
+
+          <div className="form-alta__campo">
+            <label htmlFor="alta-archivo">Documento principal (PDF, hasta 20 MB)</label>
+            <input
+              id="alta-archivo"
+              type="file"
+              accept=".pdf,application/pdf"
+              onChange={tomarArchivoAlta}
+            />
+            {archivoAlta && (
+              <p className="form-alta__archivo-nombre">
+                Adjunto: {archivoAlta.name} (
+                {Math.round(archivoAlta.size / 1024)} KB)
+              </p>
+            )}
+          </div>
+
+          {errorAlta && (
+            <p className="dashboard__aviso dashboard__aviso--error" role="alert">
+              {errorAlta}
+            </p>
+          )}
+
+          <div className="form-alta__acciones">
+            <button
+              type="button"
+              className="boton-secundario"
+              onClick={() => setModalAltaAbierto(false)}
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn-panel" disabled={enviandoAlta}>
+              {enviandoAlta ? "Guardando…" : "Crear convenio en revisión"}
+            </button>
+          </div>
+        </form>
+      </VentanaModal>
     </div>
   );
 }
@@ -323,8 +720,12 @@ function Metricas({ metricas }) {
   const franjasDe = (mapa) =>
     Object.entries(mapa).map(([item, cantidad]) => ({ item, cantidad }));
 
-  const distribucionUnidad = franjasDe(metricas.porUnidad).sort((a, b) => b.cantidad - a.cantidad);
-  const distribucionAño = franjasDe(metricas.porAño).sort((a, b) => a.item.localeCompare(b.item));
+  const distribucionUnidad = franjasDe(metricas.porUnidad).sort(
+    (a, b) => b.cantidad - a.cantidad,
+  );
+  const distribucionAño = franjasDe(metricas.porAño).sort((a, b) =>
+    a.item.localeCompare(b.item),
+  );
 
   return (
     <div className="metricas">
@@ -334,16 +735,48 @@ function Metricas({ metricas }) {
           ayuda="Cantidades por estado y tipo, firmados y vigentes, y personas únicas dentro del alcance."
         />
         <div className="panel-fichas panel-fichas--fila">
-          <TarjetaDato titulo="Convenios en el alcance" cantidad={formatoEntero(metricas.total)} detalle="instrumentos visibles" />
-          <TarjetaDato titulo="Firmados" cantidad={formatoEntero(metricas.firmados)} detalle="con firma efectiva" />
-          <TarjetaDato titulo="Vigentes" cantidad={formatoEntero(metricas.vigentes)} detalle="firmados y en vigencia" />
-          <TarjetaDato titulo="Personas únicas" cantidad={formatoEntero(metricas.personasUnicas)} detalle="dentro del alcance autorizado" />
+          <TarjetaDato
+            titulo="Convenios en el alcance"
+            cantidad={formatoEntero(metricas.total)}
+            detalle="instrumentos visibles"
+          />
+          <TarjetaDato
+            titulo="Firmados"
+            cantidad={formatoEntero(metricas.firmados)}
+            detalle="con firma efectiva"
+          />
+          <TarjetaDato
+            titulo="Vigentes"
+            cantidad={formatoEntero(metricas.vigentes)}
+            detalle="firmados y en vigencia"
+          />
+          <TarjetaDato
+            titulo="Personas únicas"
+            cantidad={
+              metricas.personasUnicas === null
+                ? "—"
+                : formatoEntero(metricas.personasUnicas)
+            }
+            detalle="requiere el módulo de personas de la API"
+          />
         </div>
         <div className="panel-fichas panel-fichas--distribucion">
-          <BloqueDistribucion titulo="Por estado" franjas={franjasDe(metricas.porEstado)} />
-          <BloqueDistribucion titulo="Por tipo" franjas={franjasDe(metricas.porTipo)} />
-          <BloqueDistribucion titulo="Distribución por unidad" franjas={distribucionUnidad} />
-          <BloqueDistribucion titulo="Distribución por año de firma" franjas={distribucionAño} />
+          <BloqueDistribucion
+            titulo="Por estado"
+            franjas={franjasDe(metricas.porEstado)}
+          />
+          <BloqueDistribucion
+            titulo="Por tipo"
+            franjas={franjasDe(metricas.porTipo)}
+          />
+          <BloqueDistribucion
+            titulo="Distribución por unidad"
+            franjas={distribucionUnidad}
+          />
+          <BloqueDistribucion
+            titulo="Distribución por año de firma"
+            franjas={distribucionAño}
+          />
         </div>
       </section>
     </div>
@@ -360,6 +793,7 @@ function Administracion({
   cambiarFiltro,
   limpiarFiltros,
   abrirFicha,
+  agregarAlta,
   unidades,
   exportarCsv,
   exportarPdf,
@@ -373,7 +807,20 @@ function Administracion({
             titulo="Registro de convenios"
             ayuda="Búsqueda por texto, filtros y acceso a la ficha de detalle de cada instrumento."
           />
-          <BotonExportar onCsv={exportarCsv} onPdf={exportarPdf} deshabilitado={deshabilitado} />
+          <div className="panel-seccion__acciones">
+            <button
+              type="button"
+              className="btn-panel"
+              onClick={agregarAlta}
+            >
+              + Agregar convenio
+            </button>
+            <BotonExportar
+              onCsv={exportarCsv}
+              onPdf={exportarPdf}
+              deshabilitado={deshabilitado}
+            />
+          </div>
         </div>
 
         <FiltroBusqueda
@@ -399,12 +846,24 @@ function Administracion({
             <tr key={c.id}>
               <td className="tabla__celda-principal">{c.codigo_unico}</td>
               <td className="tabla__celda">{recortarTexto(c.titulo, 55)}</td>
-              <td><EtiquetaTipo tipo={c.tipo} /></td>
-              <td><EtiquetaEstado estado={c.estado} /></td>
-              <td className="tabla__celda-neutra">{nombreUnidad(unidades, c.id_unidad_responsable)}</td>
-              <td className="tabla__celda-neutra">{formatoFecha(c.fecha_firma)}</td>
               <td>
-                <button type="button" className="tabla__accion" onClick={() => abrirFicha(c)}>
+                <EtiquetaTipo tipo={c.tipo} />
+              </td>
+              <td>
+                <EtiquetaEstado estado={c.estado} />
+              </td>
+              <td className="tabla__celda-neutra">
+                {nombreUnidad(unidades, c.id_unidad_responsable)}
+              </td>
+              <td className="tabla__celda-neutra">
+                {formatoFecha(c.fecha_firma)}
+              </td>
+              <td>
+                <button
+                  type="button"
+                  className="tabla__accion"
+                  onClick={() => abrirFicha(c)}
+                >
                   Ficha
                 </button>
               </td>
@@ -413,19 +872,21 @@ function Administracion({
         />
 
         <div className="administracion__pie">
-          <p className="administracion__total">{formatoEntero(total)} convenio(s) listo(s) en el alcance</p>
-          <Paginacion pagina={pagina} totalPaginas={totalPaginas} onChange={cambiarPagina} />
+          <p className="administracion__total">
+            {formatoEntero(total)} convenio(s) listo(s) en el alcance
+          </p>
+          <Paginacion
+            pagina={pagina}
+            totalPaginas={totalPaginas}
+            onChange={cambiarPagina}
+          />
         </div>
       </section>
     </div>
   );
 }
 
-function Roles({ usuario, alcances: { usoAlcance } }) {
-  const codigoPorId = Object.fromEntries(
-    CONVENIOS.map((c) => [c.id, c.codigo_unico])
-  );
-
+function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
   return (
     <div className="roles">
       <section className="panel-seccion">
@@ -439,9 +900,13 @@ function Roles({ usuario, alcances: { usoAlcance } }) {
             <article className="panel-permiso" key={permiso.rol}>
               <header className="panel-permiso__encabezado">
                 <EtiquetaRol rol={permiso.rol} />
-                <span className="panel-permiso__alcance">{permiso.alcance}</span>
+                <span className="panel-permiso__alcance">
+                  {permiso.alcance}
+                </span>
               </header>
-              <p className="panel-permiso__descripcion">{permiso.descripcion}</p>
+              <p className="panel-permiso__descripcion">
+                {permiso.descripcion}
+              </p>
               <ul className="panel-permiso__permisos">
                 {permiso.permisos.map((texto) => (
                   <li key={texto}>{texto}</li>
@@ -461,7 +926,10 @@ function Roles({ usuario, alcances: { usoAlcance } }) {
       </section>
 
       <section className="panel-seccion">
-        <VistaSeccion titulo="Usuarios y alcance" ayuda="Listado ficticio asociado a cada rol y su unidad." />
+        <VistaSeccion
+          titulo="Usuarios y alcance"
+          ayuda="Listado de usuarios registrado en la base, asociado a cada rol y su unidad."
+        />
         <Tabla
           columnas={[
             { titulo: "Legajo" },
@@ -469,18 +937,25 @@ function Roles({ usuario, alcances: { usoAlcance } }) {
             { titulo: "Rol" },
             { titulo: "Alcance" },
           ]}
-          filas={USUARIOS.filter((u) => {
+          filas={usuarios.filter((u) => {
             if (usoAlcance) return true;
-            return u.legajo === usuario.legajo || u.id_unidad === usuario.id_unidad;
+            return (
+              String(u.legajo) === String(usuario.legajo) ||
+              u.id_unidad === usuario.id_unidad
+            );
           })}
           mensajeVacio="Sin usuarios visibles dentro de tu alcance."
           filaRender={(u) => (
             <tr key={u.id}>
               <td className="tabla__celda-principal">{u.legajo}</td>
               <td>{u.nombre_completo}</td>
-              <td><EtiquetaRol rol={u.rol} /></td>
+              <td>
+                <EtiquetaRol rol={u.rol} />
+              </td>
               <td className="tabla__celda-neutra">
-                {u.id_unidad === null ? "Global (todas las unidades)" : nombreUnidad(UNIDADES, u.id_unidad)}
+                {u.id_unidad === null
+                  ? "Global (todas las unidades)"
+                  : nombreUnidad(unidades, u.id_unidad)}
               </td>
             </tr>
           )}
@@ -490,7 +965,7 @@ function Roles({ usuario, alcances: { usoAlcance } }) {
       <section className="panel-seccion">
         <VistaSeccion
           titulo="Personas y pasantías"
-          ayuda="Personas vinculadas a los instrumentos del alcance, con rol, periodo y datos complementarios de las pasantías."
+          ayuda="Personas vinculadas a los instrumentos del alcance, con rol, periodo y datos complementarios de las pasantías. El listado se completa cuando la API exponga el módulo de personas."
         />
         <Tabla
           columnas={[
@@ -504,27 +979,10 @@ function Roles({ usuario, alcances: { usoAlcance } }) {
             { titulo: "Asignación" },
             { titulo: "Seguro" },
           ]}
-          filas={PERSONAS}
-          mensajeVacio="Sin personas vinculadas en tu alcance."
-          filaRender={(persona) => (
-            <tr key={persona.id}>
-              <td className="tabla__celda-principal">{persona.nombre_completo}</td>
-              <td><span className="etiqueta">{persona.rol}</span></td>
-              <td className="tabla__celda-neutra">
-                {codigoPorId[persona.id_convenio] ?? "—"}
-              </td>
-              <td className="tabla__celda-neutra">{persona.carrera}</td>
-              <td className="tabla__celda-neutra">{persona.carga_horaria ? `${persona.carga_horaria} h` : "—"}</td>
-              <td className="tabla__celda-neutra">{persona.periodo}</td>
-              <td>{recortarTexto(persona.tutoria, 46)}</td>
-              <td className="tabla__celda-neutra">{persona.asignacion}</td>
-              <td className="tabla__celda-neutra">{persona.seguro}</td>
-            </tr>
-          )}
+          filas={[]}
+          mensajeVacio="Sin personas vinculadas en tu alcance todavía."
+          filaRender={() => null}
         />
-        <p className="roles__nota roles__nota--pie">
-          Datos ficticios para mostrar los campos complementarios de las pasantías.
-        </p>
       </section>
     </div>
   );
@@ -540,15 +998,42 @@ function Vencimientos({ agrupado, abrirFicha }) {
         />
 
         <div className="panel-fichas panel-fichas--fila">
-          <TarjetaDato titulo="Vencidos" cantidad={agrupado.vencidos.length} detalle="fecha ya pasada" />
-          <TarjetaDato titulo="Próximos a vencer" cantidad={agrupado.proximos.length} detalle="dentro de 45 días" />
-          <TarjetaDato titulo="Vigentes" cantidad={agrupado.sinVencimiento.filter((f) => f.vigencia.estado === "vigente").length} detalle="mas allá de 45 días" />
-          <TarjetaDato titulo="Sin vencimiento" cantidad={agrupado.sinVencimiento.filter((f) => f.vigencia.estado === "sin_vencimiento").length} detalle="sin fecha final registrada" />
+          <TarjetaDato
+            titulo="Vencidos"
+            cantidad={agrupado.vencidos.length}
+            detalle="fecha ya pasada"
+          />
+          <TarjetaDato
+            titulo="Próximos a vencer"
+            cantidad={agrupado.proximos.length}
+            detalle="dentro de 45 días"
+          />
+          <TarjetaDato
+            titulo="Vigentes"
+            cantidad={
+              agrupado.sinVencimiento.filter(
+                (f) => f.vigencia.estado === "vigente",
+              ).length
+            }
+            detalle="mas allá de 45 días"
+          />
+          <TarjetaDato
+            titulo="Sin vencimiento"
+            cantidad={
+              agrupado.sinVencimiento.filter(
+                (f) => f.vigencia.estado === "sin_vencimiento",
+              ).length
+            }
+            detalle="sin fecha final registrada"
+          />
         </div>
       </section>
 
       <section className="panel-seccion">
-        <VistaSeccion titulo="Próximos a vencer" ayuda="Preaviso calculado a partir de la fecha final y los días registrados." />
+        <VistaSeccion
+          titulo="Próximos a vencer"
+          ayuda="Preaviso calculado a partir de la fecha final y los días registrados."
+        />
         <Tabla
           columnas={[
             { titulo: "Código" },
@@ -572,7 +1057,11 @@ function Vencimientos({ agrupado, abrirFicha }) {
                   : "—"}
               </td>
               <td>
-                <button type="button" className="tabla__accion" onClick={() => abrirFicha(c)}>
+                <button
+                  type="button"
+                  className="tabla__accion"
+                  onClick={() => abrirFicha(c)}
+                >
                   Ficha
                 </button>
               </td>
@@ -582,7 +1071,10 @@ function Vencimientos({ agrupado, abrirFicha }) {
       </section>
 
       <section className="panel-seccion">
-        <VistaSeccion titulo="Vencidos" ayuda="Instrumentos cuya fecha final ya pasó." />
+        <VistaSeccion
+          titulo="Vencidos"
+          ayuda="Instrumentos cuya fecha final ya pasó."
+        />
         <Tabla
           columnas={[
             { titulo: "Código" },
@@ -600,7 +1092,11 @@ function Vencimientos({ agrupado, abrirFicha }) {
                 {formatoFecha(c.fecha_vencimiento)} · {textoVigencia(vigencia)}
               </td>
               <td>
-                <button type="button" className="tabla__accion" onClick={() => abrirFicha(c)}>
+                <button
+                  type="button"
+                  className="tabla__accion"
+                  onClick={() => abrirFicha(c)}
+                >
                   Ficha
                 </button>
               </td>
@@ -627,9 +1123,15 @@ function Vencimientos({ agrupado, abrirFicha }) {
             <tr key={c.id}>
               <td className="tabla__celda-principal">{c.codigo_unico}</td>
               <td className="tabla__celda">{recortarTexto(c.titulo, 55)}</td>
-              <td className="tabla__celda-neutra">Sin vencimiento registrado</td>
+              <td className="tabla__celda-neutra">
+                Sin vencimiento registrado
+              </td>
               <td>
-                <button type="button" className="tabla__accion" onClick={() => abrirFicha(c)}>
+                <button
+                  type="button"
+                  className="tabla__accion"
+                  onClick={() => abrirFicha(c)}
+                >
                   Ficha
                 </button>
               </td>

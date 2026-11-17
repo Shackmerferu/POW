@@ -1,6 +1,6 @@
 import React from "react";
-import { puedeAdministrarUsuarios } from "../utils/permisos";
-import "./componentes.css";
+import { puedeAdministrarUsuarios } from "../../utils/permisos";
+import "./MenuLateral.css";
 
 /**
  * MENU LATERAL — navegación izquierda con 4 incisos. Cambia el contenido

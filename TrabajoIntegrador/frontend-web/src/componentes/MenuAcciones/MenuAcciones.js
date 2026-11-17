@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import "./componentes.css";
+import "./MenuAcciones.css";
 
 export default function MenuAcciones({ etiqueta = "Acciones", opciones = [], alElegir, deshabilitado = false }) {
   const [abierto, setAbierto] = useState(false);

@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./BloqueDistribucion.css";
 
 /**
  * BLOQUE DISTRIBUCION — mini gráfico de barras (divs, sin librerías) para

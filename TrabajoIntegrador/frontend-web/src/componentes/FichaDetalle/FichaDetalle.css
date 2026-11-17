@@ -1,0 +1,133 @@
+/* Fila del documento actualmente en vista previa */
+.ficha__documento--seleccionado {
+  background-color: #eef2f8;
+}
+.ficha__encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.ficha__codigo {
+  color: #64707d;
+  font-size: 0.78rem;
+  margin-left: auto;
+}
+
+.ficha__datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 1rem;
+  margin: 0 0 0.85rem;
+}
+
+.ficha__datos > div {
+  border: 1px solid #eef1f4;
+  background-color: #fafbfc;
+  padding: 0.4rem 0.6rem;
+}
+
+.ficha__datos dt {
+  color: #7a838f;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ficha__datos dd {
+  color: #25313e;
+  font-size: 0.82rem;
+  margin: 0.15rem 0 0;
+  line-height: 1.45;
+}
+
+.ficha__seccion {
+  color: #1f4f99;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0.8rem 0 0.35rem;
+}
+
+.ficha__texto {
+  color: #33404e;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ficha__partes,
+.ficha__documentos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+/* El título "Documentos cargados" se separa más de la vista previa */
+.ficha__seccion--documentos {
+  margin-top: 1.8rem;
+}
+
+/* Aire entre la vista previa / documentos y las secciones de detalle */
+.ficha__documentos {
+  margin-bottom: 1.4rem;
+}
+
+.ficha__documentos-vacio {
+  margin-bottom: 1.4rem;
+}
+
+.ficha__partes li {
+  border: 1px solid #eef1f4;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.82rem;
+  color: #25313e;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  align-items: baseline;
+}
+
+.ficha__partes span {
+  color: #64707d;
+  font-size: 0.78rem;
+}
+
+.ficha__documentos li {
+  display: flex;
+  gap: 0.65rem;
+  align-items: baseline;
+  border-bottom: 1px solid #f0f2f5;
+  padding: 0.35rem 0.1rem;
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.ficha__documentos li:last-child {
+  border-bottom: none;
+}
+
+.ficha__documento-tipo {
+  color: #1f4f99;
+  font-weight: 600;
+  min-width: 6.5rem;
+}
+
+.ficha__documento-nombre {
+  color: #25313e;
+  flex: 1;
+}
+
+.ficha__documento-fecha {
+  color: #7a838f;
+  white-space: nowrap;
+}
+@media (max-width: 860px) {
+  .ficha__datos {
+    grid-template-columns: 1fr;
+  }
+}

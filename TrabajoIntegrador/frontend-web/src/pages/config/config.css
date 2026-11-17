@@ -1,14 +1,104 @@
 .config-page {
   min-height: 100vh;
   background: #f4f6fa;
+  color: #25313e;
 }
 
 .config-page__contenido {
-  max-width: 960px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2rem 1.5rem 3rem;
 }
 
 .config-page__contenido h1 {
   color: #1f4f99;
+  margin: 0 0 0.5rem;
+}
+
+.config-page__intro {
+  color: #5a6472;
+  font-size: 0.95rem;
+  max-width: 42rem;
+  margin: 0 0 1.5rem;
+}
+
+.config-page__contenido h2 {
+  color: #25313e;
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+.config-page__contenido section {
+  margin-bottom: 2rem;
+}
+
+/* --- Grupos de opciones -------------------------------------------------- */
+.config-grupo {
+  border: 1px solid #e0e5ea;
+  border-radius: 8px;
+  background: #fff;
+  padding: 1rem 1.2rem 1.2rem;
+  margin: 0 0 1rem;
+}
+
+.config-grupo legend {
+  color: #1f4f99;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0 0.4rem;
+}
+
+.config-opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.config-opciones--columna {
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* Cada opción: label completo clicable + foco visible por teclado (2.4.7). */
+.config-opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.config-opcion input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  accent-color: #1f4f99;
+  cursor: pointer;
+}
+
+.config-opcion input:focus-visible {
+  outline: 3px solid #1f4f99;
+  outline-offset: 2px;
+}
+
+.config-opcion span {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.config-opcion small {
+  display: block;
+  color: #5a6472;
+  font-size: 0.82rem;
+  margin-top: 0.15rem;
+}
+
+/* --- Región viva de avisos (4.1.3) --------------------------------------- */
+.config-aviso {
+  min-height: 1.4em;
+  color: #1f4f99;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0;
 }

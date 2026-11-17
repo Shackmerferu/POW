@@ -3,7 +3,7 @@
  *
  * USO (dentro de src/pages/convenios/convenios.js):
  *
- *   import TablaConvenios from "../../componentes/tabladeconvenios";
+ *   import TablaConvenios from "../../componentes/TablaConvenios/TablaConvenios";
  *
  *   <TablaConvenios
  *     convenios={resultados}        // la lista ya filtrada que devuelve tu búsqueda
@@ -23,13 +23,13 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
-import "./componentes.css";
+import "./TablaConvenios.css";
 
-import DatosVacios from "./DatosVacios";
-import Paginacion from "./Paginacion";
-import FichaDetalle from "./FichaDetalle";
-import { EtiquetaEstado, EtiquetaTipo } from "./Etiqueta";
-import { formatoEntero, formatoFecha, nombreUnidad, recortarTexto } from "../utils/formatos";
+import DatosVacios from "../DatosVacios/DatosVacios";
+import Paginacion from "../Paginacion/Paginacion";
+import FichaDetalle from "../FichaDetalle/FichaDetalle";
+import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
+import { formatoEntero, formatoFecha, nombreUnidad, recortarTexto } from "../../utils/formatos";
 
 const FILAS_POR_PAGINA = 6;
 

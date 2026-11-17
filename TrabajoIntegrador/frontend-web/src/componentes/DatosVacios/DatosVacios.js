@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./DatosVacios.css";
 
 /**
  * DATOS VACIOS — estado neutro cuando la búsqueda, los filtros o la

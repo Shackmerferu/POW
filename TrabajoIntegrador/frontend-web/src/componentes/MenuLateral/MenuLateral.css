@@ -1,0 +1,133 @@
+/* --- Menu lateral ------------------------------------------------------------ */
+.menu-lateral {
+  width: 224px;
+  /* Ocupa todo el alto del cuerpo del dashboard (que ya no scrollea):
+     queda fijo junto al header, solo el main se desplaza. */
+  height: 100%;
+  background-color: #fff;
+  border-right: 1px solid #e0e5ea;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.menu-lateral__sup {
+  padding: 1rem 1rem 0.9rem;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.menu-lateral__marca {
+  color: #1f4f99;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.menu-lateral__marca-sub {
+  color: #7a838f;
+  font-size: 0.75rem;
+  margin: 0.15rem 0 0;
+}
+
+.menu-lateral__nav ul {
+  list-style: none;
+  margin: 0.6rem 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.menu-lateral__inciso {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: #33404e;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.menu-lateral__inciso:hover {
+  background-color: #f4f6f9;
+}
+
+/* RESALTADO ACTIVO: tono sutil y claro derivado del #1f4f99,
+   mas evidente que el hover pero sin contrastar la lectura. */
+.menu-lateral__inciso--activo {
+  background-color: rgba(31, 79, 153, 0.1);
+  color: #1f4f99;
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #1f4f99;
+}
+
+.menu-lateral__icono {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: inline-flex;
+  flex: none;
+}
+
+.menu-lateral__icono svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  opacity: 0.85;
+}
+
+.menu-lateral__pie {
+  margin-top: auto;
+  border-top: 1px solid #eef1f4;
+  padding: 0.9rem 1rem 1.1rem;
+}
+
+.menu-lateral__usuario-nombre {
+  color: #25313e;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.menu-lateral__usuario-dato {
+  color: #7a838f;
+  font-size: 0.74rem;
+  margin: 0.1rem 0 0.6rem;
+}
+
+.menu-lateral__salir {
+  width: 100%;
+  font: inherit;
+  font-size: 0.8rem;
+  border: 1px solid #d6dde7;
+  background: #fff;
+  color: #33404e;
+  border-radius: 3px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.menu-lateral__salir:hover {
+  border-color: #1f4f99;
+  color: #1f4f99;
+}
+@media (max-width: 720px) {
+  .menu-lateral {
+    width: 64px;
+  }
+
+  .menu-lateral__sup,
+  .menu-lateral__pie,
+  .menu-lateral__inciso span:last-child {
+    display: none;
+  }
+
+  .menu-lateral__inciso {
+    justify-content: center;
+    padding: 0.65rem 0;
+  }
+}

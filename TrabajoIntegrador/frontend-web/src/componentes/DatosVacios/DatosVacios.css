@@ -1,0 +1,9 @@
+/* --- Datos vacíos --------------------------------------------------------- */
+.datos-vacios {
+  border: 1px dashed #ccd4dc;
+  background-color: #f7f8fa;
+  color: #77818c;
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 1.4rem 1rem;
+}

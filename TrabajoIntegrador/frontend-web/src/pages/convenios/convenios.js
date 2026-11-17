@@ -1,18 +1,15 @@
 import "./convenios.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import logoFacultad from "../../cosas/imagenes/logo.png";
 import flechalabel from "../../cosas/imagenes/flecha label.png";
-import menu from "../../cosas/imagenes/list.svg";
-import { API_URL } from "../config/config";
+import { API_URL } from "../../config/api";
 import {
-  puedeVerConfiguracion,
   puedeVerConvenios,
-  puedeVerPanel,
   rutaInicioPorRol,
 } from "../../utils/permisos";
 import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
-import TablaConvenios from "../../componentes/tabladeconvenios";
+import TablaConvenios from "../../componentes/TablaConvenios/TablaConvenios";
+import HeaderPrincipal from "../../componentes/HeaderPrincipal/HeaderPrincipal";
 import { ETIQUETAS_TIPO } from "../../utils/formatos";
 
 const filters = [
@@ -62,13 +59,11 @@ function anioCumple(convenio, anio) {
   return anioConvenio === anio;
 }
 
-/** El tipo admite la clave de la base ("marco_pasantia") o su etiqueta ("Pasantía..."). */
-function tipoCumple(convenio, texto) {
-  const valor = normalizarTexto(texto);
-  if (!valor) return true;
-  const clave = normalizarTexto(convenio.tipo);
-  const etiqueta = normalizarTexto(ETIQUETAS_TIPO[convenio.tipo] ?? "");
-  return clave.includes(valor) || etiqueta.includes(valor);
+/** El tipo llega del selector, con el valor exacto del ENUM de la base.
+ * Si no se eligió tipo, no filtra. */
+function tipoCumple(convenio, tipoElegido) {
+  if (!tipoElegido) return true;
+  return convenio.tipo === tipoElegido;
 }
 
 export default function App() {
@@ -83,10 +78,17 @@ export default function App() {
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState(null);
 
-  function handleLogout() {
-    limpiarSesion();
-    navigate("/login", { replace: true });
-  }
+  // Los tipos no se hardcodean: se reúnen de los datos que trae la tabla
+  // de convenios (los valores del ENUM que devuelve la consulta).
+  // Si la API no respondió aún o falló, queda vacío y el selector muestra
+  // solo "Todos los tipos" (no filtra por tipo, que es lo esperable).
+  const tiposReunidos = useMemo(() => {
+    const unicos = new Set();
+    catalogo.forEach((convenio) => {
+      if (convenio?.tipo) unicos.add(convenio.tipo);
+    });
+    return [...unicos].sort();
+  }, [catalogo]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -133,6 +135,21 @@ export default function App() {
       .catch(() => setUnidades([]));
   }, []);
 
+  // Carga inicial silenciosa del catálogo: alimenta el selector de tipos
+  // (reunidos desde los datos) antes de la primera búsqueda. Si falla,
+  // el selector queda con "Todos los tipos" y no pasa nada raro.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/agreements`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
+      .then((res) => res.json())
+      .then((respuesta) => {
+        if (Array.isArray(respuesta?.data)) setCatalogo(respuesta.data);
+      })
+      .catch(() => {});
+  }, []);
+
   // Consulta dinámica: al enviar el formulario pedimos los convenios
   // a la API y filtramos según el formulario de búsqueda.
   async function handleSubmit(event) {
@@ -166,7 +183,6 @@ export default function App() {
 
       const numero = normalizarTexto(filtros.numero);
       const anio = filtros.anio.trim();
-      const tipo = normalizarTexto(filtros.tipo);
 
       const filtrados = convenios.filter((convenio) => {
         if (numero && !normalizarTexto(convenio.codigo_unico).includes(numero)) {
@@ -175,7 +191,7 @@ export default function App() {
         if (anio && !anioCumple(convenio, anio)) {
           return false;
         }
-        if (!tipoCumple(convenio, tipo)) {
+        if (!tipoCumple(convenio, filtros.tipo)) {
           return false;
         }
         return tituloCumple(convenio.titulo, filtros.nombre, filtros.modo);
@@ -197,67 +213,7 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <header className="top-navigation">
-        <div className="brand">
-          <img
-            className="brand__logo"
-            src={logoFacultad}
-            alt="Facultad de Ingeniería"
-          />
-          <p className="brand__title">SISTEMA CONVENIOS</p>
-
-          <nav className="navigation" aria-label="Navegación principal">
-            <div className="dropdown flex-direction-row ">
-              <button
-                className="btn dropdown-toggle m-auto"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src={menu}
-                  className="pe-2"
-                  alt="Flecha indicativa Label"
-                />{" "}
-                Menu
-              </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <h6 className="dropdown-header">Menu</h6>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/convenios">
-                    Busqueda
-                  </a>
-                </li>
-                {puedeVerPanel(usuario) && (
-                  <li>
-                    <a className="dropdown-item" href="/dashboard">
-                      Panel Administrativo
-                    </a>
-                  </li>
-                )}
-                {puedeVerConfiguracion(usuario) && (
-                  <li>
-                    <a className="dropdown-item" href="/config">
-                      Configuración
-                    </a>
-                  </li>
-                )}
-                <li>
-                  <button
-                    className="dropdown-item logout-button"
-                    type="button"
-                    onClick={handleLogout}
-                  >
-                    Cerrar sesión
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <HeaderPrincipal usuario={usuario} />
 
       <section className="search-section" id="inicio">
         <div className="search-header">
@@ -272,6 +228,31 @@ export default function App() {
           <form className="search-form" onSubmit={handleSubmit}>
             <div className="fields">
               {filters.map((filter) => {
+                if (filter.id === "tipo") {
+                  return (
+                    <label className="field" key={filter.id}>
+                      <span className="name-label">{filter.label}</span>
+                      <select
+                        id={filter.id}
+                        name={filter.id}
+                        className="form-control"
+                      >
+                        <option value="">Todos los tipos</option>
+                        {tiposReunidos.length === 0 && (
+                          <option value="" disabled>
+                            Sin tipos cargados todavía…
+                          </option>
+                        )}
+                        {tiposReunidos.map((tipo) => (
+                          <option key={tipo} value={tipo}>
+                            {ETIQUETAS_TIPO[tipo] ?? tipo}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  );
+                }
+
                 if (filter.id !== "tipo de busqueda") {
                   return (
                     <label className="field" key={filter.id}>

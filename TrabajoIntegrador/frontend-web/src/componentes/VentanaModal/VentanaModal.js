@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./VentanaModal.css";
 
 /**
  * VENTANA MODAL — sobre de la ficha de detalle. Cierra con la cruz o con

@@ -1,5 +1,6 @@
 import React from "react";
-import "./componentes.css";
+import "../botones-panel.css";
+import "./FiltroBusqueda.css";
 
 /**
  * FILTRO BUSQUEDA — controles de filtro usados por Administración:

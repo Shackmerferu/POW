@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./Paginacion.css";
 
 /**
  * PAGINACION — barra simple: anterior, páginas numeradas, siguiente.

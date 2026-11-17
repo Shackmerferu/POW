@@ -1,5 +1,5 @@
 import React from "react";
-import "./componentes.css";
+import "./TarjetaDato.css";
 
 /**
  * TARJETA DATO — ficha chica de estadística para el panel de métricas.

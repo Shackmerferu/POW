@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import VentanaModal from "./VentanaModal";
-import { EtiquetaEstado, EtiquetaTipo } from "./Etiqueta";
-import VistaPreviaDocumento from "./VistaPreviaDocumento";
-import "./componentes.css";
+import VentanaModal from "../VentanaModal/VentanaModal";
+import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
+import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
+import "./FichaDetalle.css";
 import {
   formatoBoolean,
   formatoEntero,
@@ -10,7 +10,7 @@ import {
   nombreUnidad,
   textoVigencia,
   calcularVigencia,
-} from "../utils/formatos";
+} from "../../utils/formatos";
 
 const NOMBRES_DOCUMENTO = {
   principal: "Principal",

@@ -1,6 +1,6 @@
 import React from "react";
-import DatosVacios from "./DatosVacios";
-import "./componentes.css";
+import DatosVacios from "../DatosVacios/DatosVacios";
+import "./Tabla.css";
 
 /**
  * TABLA — grilla genérica de grilla rectangular sin rayas de colores.
