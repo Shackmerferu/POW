@@ -156,5 +156,65 @@ module.exports = (db) => {
         });
     });
 
+    //CAMBIAR ESTADO Y AGREGAR OBSERVACIÓN
+   // =========================================================================
+    // CAMBIAR ESTADO Y AGREGAR OBSERVACIÓN (PUT /api/agreements/:id/estado)
+    // =========================================================================
+    router.put('/:id/estado', verificarToken, (req, res) => {
+        const idConvenio = req.params.id;
+        const { estado_nuevo, observacion, fecha_actualizacion_cliente } = req.body;
+        const idResponsable = req.usuario.id; 
+
+        if (!estado_nuevo || !observacion) {
+            return res.status(400).json({ status: 400, mensaje: "El nuevo estado y el fundamento son obligatorios." });
+        }
+
+        db.query('SELECT estado FROM convenios WHERE id = ?', [idConvenio], (err, resConv) => {
+            if (err || resConv.length === 0) {
+                return res.status(404).json({ status: 404, mensaje: "Convenio no encontrado." });
+            }
+
+            const estadoPrevio = resConv[0].estado;
+
+            if (estado_nuevo === 'aprobado') {
+                db.query('SELECT COUNT(*) as cantidad FROM convenio_partes WHERE id_convenio = ?', [idConvenio], (errCount, resCount) => {
+                    if (resCount[0].cantidad < 2) {
+                        return res.status(400).json({ status: 400, mensaje: "Bloqueado: Debe tener al menos 2 partes." });
+                    }
+                    ejecutarActualizacion(); 
+                });
+            } else {
+                ejecutarActualizacion(); 
+            }
+
+            function ejecutarActualizacion() {
+                // Si el front manda la fecha, exigimos que coincida (Concurrencia Optimista). Si no, actualizamos igual.
+                let updateQuery = 'UPDATE convenios SET estado = ? WHERE id = ?';
+                let valoresUpd = [estado_nuevo, idConvenio];
+
+                if (fecha_actualizacion_cliente) {
+                    updateQuery = 'UPDATE convenios SET estado = ? WHERE id = ? AND fecha_actualizacion = ?';
+                    valoresUpd.push(fecha_actualizacion_cliente);
+                }
+                
+                db.query(updateQuery, valoresUpd, (errUpd, resultados) => {
+                    if (errUpd) return res.status(500).json({ status: 500, mensaje: "Error actualizando estado." });
+
+                    if (resultados.affectedRows === 0 && fecha_actualizacion_cliente) {
+                        return res.status(409).json({ status: 409, mensaje: "Conflicto: Otro usuario modificó este convenio." });
+                    }
+
+                    const auditQuery = `
+                        INSERT INTO auditoria_observaciones (id_convenio, id_usuario, observacion, estado_previo, estado_nuevo) 
+                        VALUES (?, ?, ?, ?, ?)
+                    `;
+                    db.query(auditQuery, [idConvenio, idResponsable, observacion, estadoPrevio, estado_nuevo], (errAud) => {
+                        res.json({ status: 200, mensaje: "¡Estado actualizado y auditoría guardada!" });
+                    });
+                });
+            }
+        });
+    });
+
     return router; // Devolvemos el router configurado
 };
