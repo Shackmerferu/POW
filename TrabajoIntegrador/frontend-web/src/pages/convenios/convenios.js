@@ -1,7 +1,7 @@
 import "./convenios.css";
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import flechalabel from "../../cosas/imagenes/flecha label.png";
+import flechalabel from "../../utils/imagenes/flecha label.png";
 import { API_URL } from "../../config/api";
 import {
   puedeVerConvenios,

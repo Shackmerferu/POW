@@ -3,9 +3,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import "./dashboard.css";
 
-import logoFacultad from "../../cosas/imagenes/logo.png";
+import logoFacultad from "../../utils/imagenes/logo.png";
 
-import menu from "../../cosas/imagenes/list.svg";
+import menu from "../../utils/imagenes/list.svg";
 import MenuLateral from "../../componentes/MenuLateral/MenuLateral";
 import TarjetaDato from "../../componentes/TarjetaDato/TarjetaDato";
 import BloqueDistribucion from "../../componentes/BloqueDistribucion/BloqueDistribucion";

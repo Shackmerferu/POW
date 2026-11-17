@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import "./HeaderPrincipal.css";
 import { limpiarSesion } from "../../utils/sesion";
 import { puedeVerConfiguracion, puedeVerPanel } from "../../utils/permisos";
-import logoFacultad from "../../cosas/imagenes/logo.png";
-import menu from "../../cosas/imagenes/list.svg";
+import logoFacultad from "../../utils/imagenes/logo.png";
+import menu from "../../utils/imagenes/list.svg";
 
 function HeaderPrincipal({ usuario }) {
   const navigate = useNavigate();

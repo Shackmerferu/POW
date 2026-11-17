@@ -23,6 +23,10 @@
   margin: 0 0 0.85rem;
 }
 
+.vista-previa {
+  margin-bottom: 0.65rem;
+}
+
 .ficha__datos > div {
   border: 1px solid #eef1f4;
   background-color: #fafbfc;
@@ -55,7 +59,7 @@
   color: #33404e;
   font-size: 0.84rem;
   line-height: 1.5;
-  margin: 0;
+  margin: 0 0 0.6rem;
 }
 
 .ficha__partes,
@@ -67,10 +71,6 @@
   gap: 0.35rem;
 }
 
-/* El título "Documentos cargados" se separa más de la vista previa */
-.ficha__seccion--documentos {
-  margin-top: 1.8rem;
-}
 
 /* Aire entre la vista previa / documentos y las secciones de detalle */
 .ficha__documentos {
@@ -130,4 +130,8 @@
   .ficha__datos {
     grid-template-columns: 1fr;
   }
+}
+
+.ficha__partes + .ficha__seccion {
+  margin-top: 1rem;
 }
