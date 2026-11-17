@@ -31,69 +31,8 @@ module.exports = (db) => {
             });
         });
     });
+   
     // ENDPOINT PARA GUARDAR UN CONVENIO NUEVO 
-
-    router.post('/', verificarToken, (req, res) => {
-        
-        // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
-        const { 
-            codigo_unico, 
-            titulo, 
-            tipo, 
-            objeto, 
-            id_unidad_responsable, 
-            // Estos son opcionales (permiten NULL)
-            estado, marco_legal, confidencialidad, fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_antecedente 
-        } = req.body;
-
-        // 2. Control estricto: exigimos los que dicen "No" en Nulo en phpMyAdmin
-        if (!codigo_unico || !titulo || !tipo || !objeto || !id_unidad_responsable) {
-            return res.status(400).json({ status: 400, mensaje: "Faltan datos obligatorios (código, título, tipo, objeto o unidad)" });
-        }
-
-        // 3. Preparamos la consulta SQL
-        const query = `
-            INSERT INTO convenios (
-                codigo_unico, titulo, tipo, estado, objeto, marco_legal, confidencialidad, 
-                fecha_firma, fecha_inicio, fecha_vencimiento, dias_preaviso, id_unidad_responsable, id_antecedente
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        
-        // Si no mandan estado, tu base usa 'borrador' por defecto. Si no mandan confidencialidad, va 0.
-        const estadoFinal = estado || 'borrador';
-        const confFinal = confidencialidad !== undefined ? confidencialidad : 0;
-
-        // 4. Mapeamos los valores (reemplazando undefined por null para que MySQL no se queje)
-        const valores = [
-            codigo_unico, 
-            titulo, 
-            tipo, 
-            estadoFinal, 
-            objeto, 
-            marco_legal || null, 
-            confFinal,
-            fecha_firma || null, 
-            fecha_inicio || null, 
-            fecha_vencimiento || null, 
-            dias_preaviso || null, 
-            id_unidad_responsable, 
-            id_antecedente || null
-        ];
-
-        // 5. Ejecutamos la inserción
-        db.query(query, valores, (error, resultados) => {
-            if (error) {
-                console.error("Error guardando convenio:", error);
-                return res.status(500).json({ status: 500, mensaje: "Error interno al intentar guardar en la base de datos" });
-            }
-            
-            res.json({ 
-                status: 201, 
-                mensaje: "¡Convenio creado con éxito!",
-                nuevoId: resultados.insertId 
-            });
-        });
-    });// ENDPOINT PARA GUARDAR UN CONVENIO NUEVO (POST /api/agreements)
     router.post('/', verificarToken, (req, res) => {
         
         // 1. Atrapamos los datos con los nombres EXACTOS de tu base de datos
@@ -157,9 +96,7 @@ module.exports = (db) => {
     });
 
     //CAMBIAR ESTADO Y AGREGAR OBSERVACIÓN
-   // =========================================================================
-    // CAMBIAR ESTADO Y AGREGAR OBSERVACIÓN (PUT /api/agreements/:id/estado)
-    // =========================================================================
+
     router.put('/:id/estado', verificarToken, (req, res) => {
         const idConvenio = req.params.id;
         const { estado_nuevo, observacion, fecha_actualizacion_cliente } = req.body;
@@ -213,6 +150,25 @@ module.exports = (db) => {
                     });
                 });
             }
+        });
+    });
+
+    
+    // VER INSTRUMENTOS VINCULADOS 
+    // Trae las adendas o convenios específicos que nacieron de este convenio
+  
+    router.get('/:id/links', verificarToken, (req, res) => {
+        const idConvenio = req.params.id;
+        
+        // Busca convenios cuyo "padre" sea el ID actual
+        const query = 'SELECT id, codigo_unico, titulo, tipo, estado FROM convenios WHERE id_antecedente = ?';
+        
+        db.query(query, [idConvenio], (error, resultados) => {
+            if (error) {
+                console.error("Error consultando links:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error en el servidor." });
+            }
+            res.json({ status: 200, total: resultados.length, data: resultados });
         });
     });
 
