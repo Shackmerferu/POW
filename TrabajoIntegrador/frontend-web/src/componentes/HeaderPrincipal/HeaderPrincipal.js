@@ -35,11 +35,7 @@ function HeaderPrincipal({ usuario }) {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <img
-                src={menu}
-                className="pe-2"
-                alt="Flecha indicativa Label"
-              />{" "}
+              <img src={menu} className="pe-2" alt="Flecha indicativa Label" />{" "}
               Menu
             </button>
             <ul className="dropdown-menu">
