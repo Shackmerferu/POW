@@ -22,15 +22,13 @@ import {
 
 import {
   MATRIZ_PERMISOS,
-} from "../../datos/datosPanel";
-import { API_URL } from "../../config/api";
-import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
-import {
   puedeTenerAlcanceGlobal,
   puedeVerConfiguracion,
   puedeVerPanel,
   rutaInicioPorRol,
 } from "../../utils/permisos";
+import { API_URL } from "../../config/api";
+import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
 import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
 import {
   calcularVigencia,
@@ -63,7 +61,7 @@ function Dashboard() {
 
   const alcanceGlobal = puedeTenerAlcanceGlobal(usuario);
 
-  // DATOS REALES DE LA API (antes: mock de datosPanel).
+  // DATOS REALES DE LA API 
   // Convenios, unidades y usuarios se traen del backend; solo PERSONAS
   // y MATRIZ_PERMISOS siguen de demo (no hay endpoint de /people todavía).
   const [convenios, setConvenios] = useState([]);
@@ -82,13 +80,22 @@ function Dashboard() {
       fetch(`${API_URL}/usuarios`, { headers }).then((res) => res.json()),
     ])
       .then(([conveniosRes, unidadesRes, usuariosRes]) => {
-        if (conveniosRes.status === "fulfilled" && Array.isArray(conveniosRes.value?.data)) {
+        if (
+          conveniosRes.status === "fulfilled" &&
+          Array.isArray(conveniosRes.value?.data)
+        ) {
           setConvenios(conveniosRes.value.data);
         }
-        if (unidadesRes.status === "fulfilled" && Array.isArray(unidadesRes.value?.data)) {
+        if (
+          unidadesRes.status === "fulfilled" &&
+          Array.isArray(unidadesRes.value?.data)
+        ) {
           setUnidades(unidadesRes.value.data);
         }
-        if (usuariosRes.status === "fulfilled" && Array.isArray(usuariosRes.value?.data)) {
+        if (
+          usuariosRes.status === "fulfilled" &&
+          Array.isArray(usuariosRes.value?.data)
+        ) {
           setUsuarios(usuariosRes.value.data);
         }
         const falloAlguno =
@@ -113,7 +120,9 @@ function Dashboard() {
       .then((datos) => {
         if (Array.isArray(datos?.data)) setConvenios(datos.data);
       })
-      .catch(() => setErrorApi("No se pudo actualizar el listado de convenios."));
+      .catch(() =>
+        setErrorApi("No se pudo actualizar el listado de convenios."),
+      );
   };
 
   const [pestaña, setPestaña] = useState("metricas");
@@ -174,8 +183,15 @@ function Dashboard() {
     evento.preventDefault();
     setErrorAlta("");
 
-    if (!formAlta.titulo.trim() || !formAlta.tipo || !formAlta.id_unidad || !formAlta.objeto.trim()) {
-      setErrorAlta("Completá título, tipo, unidad responsable y objeto (obligatorios).");
+    if (
+      !formAlta.titulo.trim() ||
+      !formAlta.tipo ||
+      !formAlta.id_unidad ||
+      !formAlta.objeto.trim()
+    ) {
+      setErrorAlta(
+        "Completá título, tipo, unidad responsable y objeto (obligatorios).",
+      );
       return;
     }
 
@@ -185,11 +201,18 @@ function Dashboard() {
     datos.append("id_unidad_responsable", formAlta.id_unidad);
     datos.append("objeto", formAlta.objeto.trim());
     datos.append("estado", "revision"); // el alta entra directo al circuito de revisión
-    datos.append("confidencialidad", formAlta.confidencialidad ? "true" : "false");
-    if (formAlta.marco_legal.trim()) datos.append("marco_legal", formAlta.marco_legal.trim());
-    if (formAlta.fecha_inicio) datos.append("fecha_inicio", formAlta.fecha_inicio);
-    if (formAlta.fecha_vencimiento) datos.append("fecha_vencimiento", formAlta.fecha_vencimiento);
-    if (formAlta.dias_preaviso) datos.append("dias_preaviso", formAlta.dias_preaviso);
+    datos.append(
+      "confidencialidad",
+      formAlta.confidencialidad ? "true" : "false",
+    );
+    if (formAlta.marco_legal.trim())
+      datos.append("marco_legal", formAlta.marco_legal.trim());
+    if (formAlta.fecha_inicio)
+      datos.append("fecha_inicio", formAlta.fecha_inicio);
+    if (formAlta.fecha_vencimiento)
+      datos.append("fecha_vencimiento", formAlta.fecha_vencimiento);
+    if (formAlta.dias_preaviso)
+      datos.append("dias_preaviso", formAlta.dias_preaviso);
     if (archivoAlta) datos.append("archivo", archivoAlta);
 
     const token = localStorage.getItem("token");
@@ -202,7 +225,9 @@ function Dashboard() {
       .then(async (res) => {
         const cuerpo = await res.json().catch(() => ({}));
         if (!res.ok) {
-          throw new Error(cuerpo?.mensaje || `La API respondió con estado ${res.status}`);
+          throw new Error(
+            cuerpo?.mensaje || `La API respondió con estado ${res.status}`,
+          );
         }
         return cuerpo;
       })
@@ -210,7 +235,9 @@ function Dashboard() {
         setModalAltaAbierto(false);
         setFormAlta(VACIO_ALTA);
         setArchivoAlta(null);
-        setAvisoAlta(`Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`);
+        setAvisoAlta(
+          `Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`,
+        );
         recargarConvenios();
       })
       .catch((err) => setErrorAlta(err.message))
@@ -485,52 +512,54 @@ function Dashboard() {
           {cargando ? (
             <p className="dashboard__aviso">Cargando datos desde la API…</p>
           ) : errorApi ? (
-            <p className="dashboard__aviso dashboard__aviso--error">{errorApi}</p>
+            <p className="dashboard__aviso dashboard__aviso--error">
+              {errorApi}
+            </p>
           ) : (
             <>
-          {pestaña === "metricas" && <Metricas metricas={metricas} />}
-          {pestaña === "administracion" && (
-            <Administracion
-              filas={filasPagina}
-              total={conveniosFiltrados.length}
-              pagina={pagina}
-              totalPaginas={totalPaginas}
-              cambiarPagina={setPagina}
-              filtros={filtros}
-              cambiarFiltro={cambiarFiltro}
-              limpiarFiltros={() => {
-                setFiltros({
-                  texto: "",
-                  tipo: "",
-                  estado: "",
-                  unidad: "",
-                  desde: "",
-                  hasta: "",
-                });
-                setPagina(1);
-              }}
-              abrirFicha={setConvenioFicha}
-              agregarAlta={abrirModalAlta}
-              unidades={unidades}
-              exportarCsv={exportarCsvFiltrado}
-              exportarPdf={exportarPdfFiltrado}
-              deshabilitado={filasParaExportar.length === 0}
-            />
-          )}
-          {pestaña === "roles" && (
-            <Roles
-              usuario={usuario}
-              alcances={{ usoAlcance: alcanceGlobal }}
-              unidades={unidades}
-              usuarios={usuarios}
-            />
-          )}
-          {pestaña === "vencimientos" && (
-            <Vencimientos
-              agrupado={vencimientos}
-              abrirFicha={setConvenioFicha}
-            />
-          )}
+              {pestaña === "metricas" && <Metricas metricas={metricas} />}
+              {pestaña === "administracion" && (
+                <Administracion
+                  filas={filasPagina}
+                  total={conveniosFiltrados.length}
+                  pagina={pagina}
+                  totalPaginas={totalPaginas}
+                  cambiarPagina={setPagina}
+                  filtros={filtros}
+                  cambiarFiltro={cambiarFiltro}
+                  limpiarFiltros={() => {
+                    setFiltros({
+                      texto: "",
+                      tipo: "",
+                      estado: "",
+                      unidad: "",
+                      desde: "",
+                      hasta: "",
+                    });
+                    setPagina(1);
+                  }}
+                  abrirFicha={setConvenioFicha}
+                  agregarAlta={abrirModalAlta}
+                  unidades={unidades}
+                  exportarCsv={exportarCsvFiltrado}
+                  exportarPdf={exportarPdfFiltrado}
+                  deshabilitado={filasParaExportar.length === 0}
+                />
+              )}
+              {pestaña === "roles" && (
+                <Roles
+                  usuario={usuario}
+                  alcances={{ usoAlcance: alcanceGlobal }}
+                  unidades={unidades}
+                  usuarios={usuarios}
+                />
+              )}
+              {pestaña === "vencimientos" && (
+                <Vencimientos
+                  agrupado={vencimientos}
+                  abrirFicha={setConvenioFicha}
+                />
+              )}
             </>
           )}
         </main>
@@ -562,7 +591,9 @@ function Dashboard() {
               id="alta-titulo"
               type="text"
               value={formAlta.titulo}
-              onChange={(evento) => cambiarCampoAlta("titulo", evento.target.value)}
+              onChange={(evento) =>
+                cambiarCampoAlta("titulo", evento.target.value)
+              }
               placeholder="Ej.: Convenio específico de pasantías — Ejemplo S.R.L."
               required
             />
@@ -574,7 +605,9 @@ function Dashboard() {
               <select
                 id="alta-tipo"
                 value={formAlta.tipo}
-                onChange={(evento) => cambiarCampoAlta("tipo", evento.target.value)}
+                onChange={(evento) =>
+                  cambiarCampoAlta("tipo", evento.target.value)
+                }
                 required
               >
                 <option value="">Seleccioná un tipo</option>
@@ -591,7 +624,9 @@ function Dashboard() {
               <select
                 id="alta-unidad"
                 value={formAlta.id_unidad}
-                onChange={(evento) => cambiarCampoAlta("id_unidad", evento.target.value)}
+                onChange={(evento) =>
+                  cambiarCampoAlta("id_unidad", evento.target.value)
+                }
                 required
               >
                 <option value="">Seleccioná una unidad</option>
@@ -610,19 +645,25 @@ function Dashboard() {
               id="alta-objeto"
               rows="4"
               value={formAlta.objeto}
-              onChange={(evento) => cambiarCampoAlta("objeto", evento.target.value)}
+              onChange={(evento) =>
+                cambiarCampoAlta("objeto", evento.target.value)
+              }
               placeholder="Qué establece el instrumento, alcance y obligaciones principales."
               required
             />
           </div>
 
           <div className="form-alta__campo">
-            <label htmlFor="alta-marco">Marco legal / resolución / expediente</label>
+            <label htmlFor="alta-marco">
+              Marco legal / resolución / expediente
+            </label>
             <input
               id="alta-marco"
               type="text"
               value={formAlta.marco_legal}
-              onChange={(evento) => cambiarCampoAlta("marco_legal", evento.target.value)}
+              onChange={(evento) =>
+                cambiarCampoAlta("marco_legal", evento.target.value)
+              }
               placeholder="Ej.: Resolución CD FI N° 000/26 (opcional)"
             />
           </div>
@@ -634,7 +675,9 @@ function Dashboard() {
                 id="alta-inicio"
                 type="date"
                 value={formAlta.fecha_inicio}
-                onChange={(evento) => cambiarCampoAlta("fecha_inicio", evento.target.value)}
+                onChange={(evento) =>
+                  cambiarCampoAlta("fecha_inicio", evento.target.value)
+                }
               />
             </div>
             <div className="form-alta__campo">
@@ -643,7 +686,9 @@ function Dashboard() {
                 id="alta-vencimiento"
                 type="date"
                 value={formAlta.fecha_vencimiento}
-                onChange={(evento) => cambiarCampoAlta("fecha_vencimiento", evento.target.value)}
+                onChange={(evento) =>
+                  cambiarCampoAlta("fecha_vencimiento", evento.target.value)
+                }
               />
             </div>
           </div>
@@ -657,7 +702,9 @@ function Dashboard() {
                 min="0"
                 max="365"
                 value={formAlta.dias_preaviso}
-                onChange={(evento) => cambiarCampoAlta("dias_preaviso", evento.target.value)}
+                onChange={(evento) =>
+                  cambiarCampoAlta("dias_preaviso", evento.target.value)
+                }
                 placeholder="Ej.: 60"
               />
             </div>
@@ -677,7 +724,9 @@ function Dashboard() {
           </div>
 
           <div className="form-alta__campo">
-            <label htmlFor="alta-archivo">Documento principal (PDF, hasta 20 MB)</label>
+            <label htmlFor="alta-archivo">
+              Documento principal (PDF, hasta 20 MB)
+            </label>
             <input
               id="alta-archivo"
               type="file"
@@ -693,7 +742,10 @@ function Dashboard() {
           </div>
 
           {errorAlta && (
-            <p className="dashboard__aviso dashboard__aviso--error" role="alert">
+            <p
+              className="dashboard__aviso dashboard__aviso--error"
+              role="alert"
+            >
               {errorAlta}
             </p>
           )}
@@ -808,11 +860,7 @@ function Administracion({
             ayuda="Búsqueda por texto, filtros y acceso a la ficha de detalle de cada instrumento."
           />
           <div className="panel-seccion__acciones">
-            <button
-              type="button"
-              className="btn-panel"
-              onClick={agregarAlta}
-            >
+            <button type="button" className="btn-panel" onClick={agregarAlta}>
               + Agregar convenio
             </button>
             <BotonExportar

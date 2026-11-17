@@ -63,6 +63,33 @@ const PERMISOS_POR_ROL = Object.freeze({
   }),
 });
 
+export const MATRIZ_PERMISOS = Object.freeze([
+  {
+    rol: "administracion",
+    descripcion: "Administración total del sistema: alta, cierre y gestión de usuarios.",
+    alcance: "Global (todas las unidades)",
+    permisos: ["Alta, edición y cierre de convenios", "Gestión de usuarios y roles", "Exportación completa"],
+  },
+  {
+    rol: "gestion",
+    descripcion: "Gestión de instrumentos dentro de su unidad asignada.",
+    alcance: "Unidad asignada",
+    permisos: ["Alta y edición de convenios de su unidad", "Carga de documentos", "Exportación dentro del alcance"],
+  },
+  {
+    rol: "revision",
+    descripcion: "Revisa y dictamina instrumentos antes de su aprobación.",
+    alcance: "Unidad asignada",
+    permisos: ["Lectura completa", "Dictámenes y observaciones", "Exportación de lectura"],
+  },
+  {
+    rol: "consulta",
+    descripcion: "Consulta información dentro de la unidad asignada, sin modificarla.",
+    alcance: "Unidad asignada",
+    permisos: ["Solo lectura", "Exportación de lo visible"],
+  },
+]);
+
 // Normaliza el rol para tolerar mayúsculas o espacios que puedan venir de la API.
 export function rolNormalizado(usuario) {
   if (!usuario || !usuario.rol) return null;
