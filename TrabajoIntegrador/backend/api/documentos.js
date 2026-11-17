@@ -115,6 +115,25 @@ module.exports = (db) => {
             }
         });
     });
+        //VISTA PREVIA DE DOCUMENTO
+    router.get('/:id/view', verificarToken, (req, res) => {
+        const idDoc = req.params.id;
+        
+        db.query('SELECT ruta_archivo FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+            if (error || resultados.length === 0) {
+                return res.status(404).json({ status: 404, mensaje: "Documento no encontrado." });
+            }
+
+            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', resultados[0].ruta_archivo);
+
+            if (fs.existsSync(rutaCompleta)) {
+                // sendFile le dice al navegador "mostralo si podés", ideal para PDFs
+                res.sendFile(rutaCompleta); 
+            } else {
+                res.status(404).json({ status: 404, mensaje: "El archivo físico no existe en el disco." });
+            }
+        });
+    });
 
     return router;
 };

@@ -33,29 +33,47 @@ const subida = multer({
 
 module.exports = (db) => {
     
-    // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS 
-    
+   // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS (CON SUS DOCUMENTOS)
     router.get('/', verificarToken, (req, res) => {
+        const query = `
+            SELECT c.*, d.id as doc_id, d.tipo_documento, d.ruta_archivo 
+            FROM convenios c
+            LEFT JOIN documentos d ON c.id = d.id_convenio
+        `; 
         
-        // Escribimos la consulta SQL. 
-        // Apuntamos a la tabla 'convenios' que tenés en tu base de datos[cite: 26].
-        const query = 'SELECT * FROM convenios'; 
-        
-        // 4. EJECUTAMOS LA CONSULTA
         db.query(query, (error, resultados) => {
+            if (error) return res.status(500).json({ status: 500, mensaje: "Error en el servidor" });
             
-            // Si hay un error (por ejemplo, si escribimos mal el nombre de la tabla)
-            if (error) {
-                console.error("Error consultando convenios:", error);
-                // Le mandamos al frontend un código 500 (Error interno del servidor)
-                return res.status(500).json({ status: 500, mensaje: "Error en el servidor al traer los convenios" });
-            }
+            // Magia de JavaScript para agrupar las filas de SQL en un objeto prolijo
+            const conveniosAgrupados = {};
             
-            // Si todo salió perfecto, armamos el paquete JSON de respuesta
+            resultados.forEach(row => {
+                if (!conveniosAgrupados[row.id]) {
+                    // Si el convenio no existe en nuestro objeto, lo creamos
+                    conveniosAgrupados[row.id] = {
+                        id: row.id, codigo_unico: row.codigo_unico, titulo: row.titulo, 
+                        tipo: row.tipo, estado: row.estado, objeto: row.objeto, 
+                        marco_legal: row.marco_legal, confidencialidad: row.confidencialidad, 
+                        fecha_firma: row.fecha_firma, fecha_inicio: row.fecha_inicio, 
+                        fecha_vencimiento: row.fecha_vencimiento, dias_preaviso: row.dias_preaviso, 
+                        id_unidad_responsable: row.id_unidad_responsable, id_antecedente: row.id_antecedente,
+                        documentos: [] // Array vacío listo para llenarse
+                    };
+                }
+                // Si esta fila trajo un documento asociado, lo metemos en el array
+                if (row.doc_id) {
+                    conveniosAgrupados[row.id].documentos.push({
+                        id: row.doc_id,
+                        tipo_documento: row.tipo_documento,
+                        ruta_archivo: row.ruta_archivo
+                    });
+                }
+            });
+            
             res.json({ 
-                status: 200, // 200 significa "OK / Éxito"
-                total: resultados.length, // Le decimos al frontend cuántos convenios hay en total
-                data: resultados // Mandamos todas las filas de la tabla
+                status: 200, 
+                total: Object.keys(conveniosAgrupados).length, 
+                data: Object.values(conveniosAgrupados) 
             });
         });
     });
