@@ -119,3 +119,47 @@ html.accesibilidad-sin-animaciones *::after {
   transition-duration: 0.001s !important;
   scroll-behavior: auto !important;
 }
+
+html.accesibilidad-contraste .dashboard {
+  background: #fff;
+  color: #000;
+}
+
+html.accesibilidad-contraste .dashboard,
+html.accesibilidad-contraste .dashboard p,
+html.accesibilidad-contraste .dashboard label,
+html.accesibilidad-contraste .dashboard td,
+html.accesibilidad-contraste .dashboard li,
+html.accesibilidad-contraste .dashboard input,
+html.accesibilidad-contraste .dashboard select,
+html.accesibilidad-contraste .dashboard textarea,
+html.accesibilidad-contraste .dashboard__alcance,
+html.accesibilidad-contraste .vista-seccion p,
+html.accesibilidad-contraste .panel-permiso__alcance,
+html.accesibilidad-contraste .panel-permiso__descripcion,
+html.accesibilidad-contraste .panel-permiso__permisos li,
+html.accesibilidad-contraste .roles__nota,
+html.accesibilidad-contraste .administracion__total,
+html.accesibilidad-contraste .form-alta__nota,
+html.accesibilidad-contraste .form-alta__campo label {
+  color: #1a1a1a;
+}
+
+html.accesibilidad-contraste .dashboard h1,
+html.accesibilidad-contraste .dashboard h2,
+html.accesibilidad-contraste .dashboard h3,
+html.accesibilidad-contraste .brand__title,
+html.accesibilidad-contraste .vista-seccion h2 {
+  color: #000;
+}
+
+html.accesibilidad-contraste .dashboard .panel-seccion,
+html.accesibilidad-contraste .dashboard .panel-permiso,
+html.accesibilidad-contraste .dashboard .panel-fichas,
+html.accesibilidad-contraste .dashboard input,
+html.accesibilidad-contraste .dashboard select,
+html.accesibilidad-contraste .dashboard textarea,
+html.accesibilidad-contraste .dashboard table {
+  background: #fff;
+  border-color: #000;
+}
