@@ -490,7 +490,7 @@ function Dashboard() {
           pestañaActiva={pestaña}
           alSeleccionar={setPestaña}
           usuario={usuario}
-          onCerrar={cerrarSesion}
+          
         />
 
         <main className="dashboard__contenido">

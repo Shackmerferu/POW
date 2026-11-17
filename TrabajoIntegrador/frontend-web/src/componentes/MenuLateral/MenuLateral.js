@@ -81,9 +81,7 @@ export default function MenuLateral({ pestañaActiva, alSeleccionar, usuario, on
         <p className="menu-lateral__usuario-dato">
           {usuario?.legajo ?? "invitado"}{usuario?.rol ? ` · ${usuario.rol}` : ""}
         </p>
-        <button type="button" className="menu-lateral__salir" onClick={onCerrar}>
-          Cerrar sesión
-        </button>
+        
       </div>
     </aside>
   );
