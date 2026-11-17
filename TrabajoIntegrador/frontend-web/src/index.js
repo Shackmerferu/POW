@@ -5,8 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { inicializarAccesibilidad } from './utils/accesibilidad';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Aplica tamaño de texto, contraste y animaciones antes del primer render,
+// para que la configuración se respete en todas las rutas desde el inicio.
+inicializarAccesibilidad();
+
 root.render(
   <React.StrictMode>
     <App />
