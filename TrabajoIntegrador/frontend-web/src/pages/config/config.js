@@ -5,6 +5,7 @@ import {
   leerPreferencias,
   guardarPreferencias,
   PREFS_POR_DEFECTO,
+  TAMANOS_TEXTO,
 } from "../../utils/accesibilidad";
 import { obtenerUsuario } from "../../utils/sesion";
 
@@ -28,10 +29,10 @@ function Config() {
     setAviso(texto);
   };
 
-  const cambiarTexto = (textoGrande) =>
+  const cambiarTexto = (tamanoTexto) =>
     cambiar(
-      { ...prefs, textoGrande },
-      textoGrande ? "Texto grande activado." : "Texto normal activado.",
+      { ...prefs, tamanoTexto },
+      `Tamaño de texto: ${TAMANOS_TEXTO[tamanoTexto].etiqueta}.`,
     );
 
   const cambiarContraste = (contrasteAlto) =>
@@ -70,26 +71,22 @@ function Config() {
           <fieldset className="config-grupo">
             <legend>Tamaño del texto</legend>
             <div className="config-opciones">
-              <label className="config-opcion" htmlFor="texto-normal">
-                <input
-                  type="radio"
-                  id="texto-normal"
-                  name="tamaño-texto"
-                  checked={!prefs.textoGrande}
-                  onChange={() => cambiarTexto(false)}
-                />
-                <span>Normal</span>
-              </label>
-              <label className="config-opcion" htmlFor="texto-grande">
-                <input
-                  type="radio"
-                  id="texto-grande"
-                  name="tamaño-texto"
-                  checked={prefs.textoGrande}
-                  onChange={() => cambiarTexto(true)}
-                />
-                <span>Grande (118%)</span>
-              </label>
+              {Object.entries(TAMANOS_TEXTO).map(([clave, opcion]) => (
+                <label
+                  className="config-opcion"
+                  htmlFor={`texto-${clave}`}
+                  key={clave}
+                >
+                  <input
+                    type="radio"
+                    id={`texto-${clave}`}
+                    name="tamaño-texto"
+                    checked={prefs.tamanoTexto === clave}
+                    onChange={() => cambiarTexto(clave)}
+                  />
+                  <span>{opcion.etiqueta}</span>
+                </label>
+              ))}
             </div>
           </fieldset>
 

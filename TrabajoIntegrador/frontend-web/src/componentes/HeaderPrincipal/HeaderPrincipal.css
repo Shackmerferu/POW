@@ -53,7 +53,7 @@
 .brand__title {
   margin: 0;
   font-family: "Montserrat:Bold", Montserrat, sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: normal;
   text-align: center;
@@ -64,7 +64,7 @@
 .navigation {
   gap: 60px;
   font-family: "Open Sans:Regular", "Open Sans", sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-variation-settings: "wdth" 100;
 }
 
@@ -87,7 +87,7 @@
   background: transparent;
   color: #374151;
   font-family: "Open Sans:SemiBold", "Open Sans", sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   transition:
     background-color 160ms ease,
@@ -122,7 +122,7 @@
 .navigation .dropdown-header {
   padding: 4px 12px 8px;
   color: #9ca3af;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -134,7 +134,7 @@
   background: transparent;
   color: #4b5563;
   font-family: "Open Sans:Regular", "Open Sans", sans-serif;
-  font-size: 15px;
+  font-size: 0.9375rem;
   transition:
     background-color 140ms ease,
     color 140ms ease;
@@ -180,7 +180,7 @@
   margin-left: 12px;
   color: #374151;
   font-family: "Open Sans:SemiBold", "Open Sans", sans-serif;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
@@ -212,22 +212,22 @@
   }
 
   .brand__title {
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .brand__pill {
     padding: 3px 9px;
-    font-size: 9px;
+    font-size: 0.5625rem;
   }
 
   .navigation {
     gap: 32px;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .profile {
     gap: 8px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .profile img {
