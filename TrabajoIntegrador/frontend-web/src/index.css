@@ -19,9 +19,17 @@ code {
   outline-offset: 2px;
 }
 
-/* --- Texto grande: sube la escala tipográfica base ----------------------- */
+/* --- Tamaño del texto: escala tipográfica base --------------------------- */
+html.accesibilidad-texto-pequeno {
+  font-size: 100%;
+}
+
+html.accesibilidad-texto-normal {
+  font-size: 110%;
+}
+
 html.accesibilidad-texto-grande {
-  font-size: 118%;
+  font-size: 125%;
 }
 
 /* --- Alto contraste ------------------------------------------------------ */

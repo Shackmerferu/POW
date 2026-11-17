@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { puedeAccederA, rutaInicioPorRol, RUTAS } from "./utils/permisos";
 import { obtenerUsuario } from "./utils/sesion";
-import { inicializarAccesibilidad } from "./utils/accesibilidad";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Dashboard from "./pages/dashboard/dashboard";
@@ -25,12 +24,6 @@ const RutaProtegida = ({ ruta }) => {
 };
 
 function App() {
-  // Restablece las preferencias de accesibilidad guardadas (tamaño de
-  // texto, contraste, animaciones) antes del primer render.
-  useEffect(() => {
-    inicializarAccesibilidad();
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>

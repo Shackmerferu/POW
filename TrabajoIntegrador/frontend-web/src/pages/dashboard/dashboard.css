@@ -11,7 +11,7 @@
   overflow: hidden;
   background-color: #f4f6f9;
   color: #25313e;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 /* --- Layout del cuerpo (Menú + Contenido) ------------------------------- */
@@ -72,7 +72,7 @@
 .brand__title {
   margin: 0;
   font-family: "Montserrat:Bold", Montserrat, sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: normal;
   text-align: center;
@@ -83,7 +83,7 @@
 .navigation {
   gap: 60px;
   font-family: "Open Sans:Regular", "Open Sans", sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-variation-settings: "wdth" 100;
 }
 
@@ -398,11 +398,11 @@
     height: auto;
   }
   .brand__title {
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
   .navigation {
     gap: 32px;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 }
 
