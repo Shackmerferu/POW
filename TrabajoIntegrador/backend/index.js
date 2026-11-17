@@ -39,6 +39,7 @@ const conveniosRoutes = require('./api/convenios')(db);
 const partesRoutes = require('./api/partes')(db);
 const personasRoutes = require('./api/personas')(db);
 const documentosRoutes = require('./api/documentos')(db);
+const dashboardRoutes = require('./api/dashboard')(db);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
@@ -47,6 +48,7 @@ app.use('/api/agreements', conveniosRoutes);
 app.use('/api/parties', partesRoutes);
 app.use('/api/people', personasRoutes);
 app.use('/api/documents', documentosRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 const PORT = 8000;

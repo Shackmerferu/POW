@@ -6,9 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const verificarToken = require('../verificarToken');
 
-// =========================================================================
-// 1. CONFIGURACIÓN DE MULTER
-// =========================================================================
+//  CONFIGURACIÓN DE MULTER
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const dir = path.join(__dirname, '../../uploads/documentos');
@@ -37,9 +36,9 @@ const upload = multer({
 
 module.exports = (db) => {
 
-    // =========================================================================
-    // 2. SUBIR DOCUMENTO Y CALCULAR SHA-256 (POST /api/documents)
-    // =========================================================================
+   
+    //  SUBIR DOCUMENTO Y CALCULAR SHA-256 
+    
     router.post('/', verificarToken, upload.single('archivo'), (req, res) => {
         
         const { id_convenio, tipo_documento } = req.body;
@@ -91,6 +90,30 @@ module.exports = (db) => {
             console.error("Error procesando:", error);
             res.status(500).json({ status: 500, mensaje: "Error interno con el archivo." });
         }
+    });
+
+   
+    //  DESCARGAR DOCUMENTO SEGURO 
+    
+    router.get('/:id/download', verificarToken, (req, res) => {
+        const idDoc = req.params.id;
+        
+        db.query('SELECT ruta_archivo, tipo_documento FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+            if (error || resultados.length === 0) {
+                return res.status(404).json({ status: 404, mensaje: "Documento no encontrado en la base de datos." });
+            }
+
+            // Buscamos el archivo físico en la carpeta protegida
+            const archivoFisico = resultados[0].ruta_archivo;
+            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', archivoFisico);
+
+            if (fs.existsSync(rutaCompleta)) {
+                // Express fuerza la descarga con el nombre encriptado
+                res.download(rutaCompleta); 
+            } else {
+                res.status(404).json({ status: 404, mensaje: "El archivo físico no existe en el disco." });
+            }
+        });
     });
 
     return router;
