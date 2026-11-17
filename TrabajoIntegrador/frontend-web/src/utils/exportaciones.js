@@ -1,17 +1,3 @@
-/**
- * EXPORTACIONES — Descarga de listados desde el panel.
- *
- * csv  → arXivo plano con separador UTF-8 y BOM para Excel.
- *        Neutraliza cualquier celda que pueda interpretarse como fórmula
- *        (=, +, -, @, Tab, CR) anteponiendo un apóstrofo.
- * pdf  → no usamos librerías extra: abrimos una ventana de impresión con
- *        la tabla lista para guardar como PDF del navegador.
- */
-
-/**
- * Antepone un apóstrofo a los valores que Excel/LibreOffice podrían leer
- * como fórmula e "incrustar" contenido ejecutable.
- */
 export function neutralizarCelda(valor) {
   if (valor === null || valor === undefined) return "";
   const texto = String(valor);

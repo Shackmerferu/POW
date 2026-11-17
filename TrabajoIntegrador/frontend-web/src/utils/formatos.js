@@ -1,8 +1,3 @@
-/**
- * FORMATOS — Funciones de formato y cálculo compartidas en todo el panel.
- * Trabajamos con fechas ISO ("aaaa-mm-dd") porque así las guarda MySQL.
- */
-
 // Etiquetas legibles para los valores de los ENUM de la base de datos.
 export const ETIQUETAS_TIPO = {
   marco_colaboracion: "Marco de colaboración",

@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-/* ==========================================================================
-   ACCESIBILIDAD (WCAG 2.1) — clases aplicadas sobre <html> por
-   src/utils/accesibilidad.js según lo configurado en /config
-   ========================================================================== */
 
 /* Foco de teclado siempre visible en cualquier control (2.4.7) */
 :focus-visible {

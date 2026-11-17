@@ -111,6 +111,46 @@ CREATE TABLE `documentos` (
   `fecha_subida` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+--
+-- Volcado de datos para la tabla `convenios`
+--
+
+-- DATOS FICTICIOS (TPI): todas las instituciones, personas y expedientes son
+-- inventados para la demo. Las renovaciones y sustituciones se modelan como
+-- instrumentos NUEVOS (código y ficha propios) vinculados por id_antecedente,
+-- sin alterar el registro anterior (regla del enunciado).
+INSERT INTO `documentos`
+  (`id_convenio`, `tipo_documento`, `ruta_archivo`, `hash_sha256`)
+VALUES
+(1, 'principal', 'convenios/Convenio 01 - UNLPAM-FI-2024-001 (Marco Municipalidad de Santa Rosa).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 01 - UNLPAM-FI-2024-001 (Marco Municipalidad de Santa Rosa).pdf'), 256)),
+(2, 'principal', 'convenios/Convenio 02 - UNLPAM-FI-2024-002 (Específico Pasantías TecnoLáctea).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 02 - UNLPAM-FI-2024-002 (Específico Pasantías TecnoLáctea).pdf'), 256)),
+(3, 'principal', 'convenios/Convenio 03 - UNLPAM-R-2024-003 (Específico Colaboración Clínica Los Álamos).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 03 - UNLPAM-R-2024-003 (Específico Colaboración Clínica Los Álamos).pdf'), 256)),
+(4, 'principal', 'convenios/Convenio 04 - UNLPAM-FI-2025-001 (Adenda Municipalidad de Santa Rosa).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 04 - UNLPAM-FI-2025-001 (Adenda Municipalidad de Santa Rosa).pdf'), 256)),
+(5, 'principal', 'convenios/Convenio 05 - UNLPAM-R-2025-002 (Marco Pasantías Ministerio de Infraestructura).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 05 - UNLPAM-R-2025-002 (Marco Pasantías Ministerio de Infraestructura).pdf'), 256)),
+(6, 'principal', 'convenios/Convenio 06 - UNLPAM-FI-2023-004 (Específico Colaboración BioCom del Centro).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 06 - UNLPAM-FI-2023-004 (Específico Colaboración BioCom del Centro).pdf'), 256)),
+(7, 'principal', 'convenios/Convenio 07 - UNLPAM-FI-2026-001 (Específico Pasantías CNEA).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 07 - UNLPAM-FI-2026-001 (Específico Pasantías CNEA).pdf'), 256)),
+(8, 'principal', 'convenios/Convenio 08 - UNLPAM-FI-2026-002 (Marco Colaboración InnovaAgro).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 08 - UNLPAM-FI-2026-002 (Marco Colaboración InnovaAgro).pdf'), 256)),
+(9, 'principal', 'convenios/Convenio 09 - UNLPAM-FI-2026-003 (Específico Investigación InnovaAgro).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 09 - UNLPAM-FI-2026-003 (Específico Investigación InnovaAgro).pdf'), 256)),
+(10, 'principal', 'convenios/Convenio 10 - UNLPAM-FI-2026-004 (Renovación Pasantías TecnoLáctea).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 10 - UNLPAM-FI-2026-004 (Renovación Pasantías TecnoLáctea).pdf'), 256)),
+(11, 'principal', 'convenios/Convenio 11 - UNLPAM-R-2026-002 (Adenda Ministerio de Infraestructura).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 11 - UNLPAM-R-2026-002 (Adenda Ministerio de Infraestructura).pdf'), 256)),
+(12, 'principal', 'convenios/Convenio 12 - UNLPAM-FI-2026-005 (Específico Pasantías Software del Sur).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 12 - UNLPAM-FI-2026-005 (Específico Pasantías Software del Sur).pdf'), 256)),
+(13, 'principal', 'convenios/Convenio 13 - UNLPAM-FI-2025-003 (Sustitución Colaboración BioCom).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 13 - UNLPAM-FI-2025-003 (Sustitución Colaboración BioCom).pdf'), 256)),
+(14, 'principal', 'convenios/Convenio 14 - UNLPAM-FI-2022-002 (Marco Cámara Empresaria del Este).pdf',
+ SHA2(LOAD_FILE('C:/xampp/htdocs/facultad/POW/TrabajoIntegrador/backend/uploads/convenios/Convenio 14 - UNLPAM-FI-2022-002 (Marco Cámara Empresaria del Este).pdf'), 256));
 -- --------------------------------------------------------
 
 --
