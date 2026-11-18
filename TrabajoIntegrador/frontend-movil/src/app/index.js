@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // <-- AGREGAMOS ESTO
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SostenibilidadScreen from '../screens/SostenibilidadScreen';
 import InputTexto from '../components/molecules/InputTexto';
@@ -23,44 +23,45 @@ export default function App() {
         })();
     }, []);
 
-    // --- ACÁ EMPIEZA LA CONEXIÓN REAL AL BACKEND ---
-    const IP_BACKEND = '192.168.0.15'; // REEMPLAZÁ ESTO POR LA IP DE TU COMPU (ipconfig)
-    const PUERTO = '3000'; // ASEGURATE DE QUE SEA EL PUERTO DE TU NODE.JS
+    // --- CONEXIÓN REAL AL BACKEND ---
+    const IP_BACKEND = '192.168.1.11';
+    const PUERTO = '8000';
 
     const loginClasico = async () => {
         if (!dni || !password) return Alert.alert("Error", "Completá los datos");
 
         try {
-            const respuesta = await fetch(`http://${IP_BACKEND}:${PUERTO}/api/login`, {
+            const respuesta = await fetch(`http://${IP_BACKEND}:${PUERTO}/api/auth`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ dni, password })
+                body: JSON.stringify({ 
+                    dni: dni, 
+                    contrasena: password
+                })
             });
 
             const data = await respuesta.json();
 
             if (respuesta.ok) {
-                // Guardamos el JWT en el celular para el trabajo offline / sesión
                 await AsyncStorage.setItem('@token_jwt', data.token);
-                setPantallaActual('home'); // Avanzamos si el backend da el OK
+                setPantallaActual('home'); // <--- Ahora entra directo al Home
             } else {
                 Alert.alert("Acceso denegado", data.mensaje || "Credenciales incorrectas");
             }
         } catch (error) {
             console.log(error);
-            Alert.alert("Error de conexión", "No se pudo conectar al servidor Node.js. Revisá la IP y que tu compu/celular estén en el mismo WiFi.");
+            Alert.alert("Error de conexión", "No se pudo conectar al servidor Node.js.");
         }
     };
-    // --- ACÁ TERMINA LA CONEXIÓN REAL ---
 
     const loginBiometrico = async () => {
         const auth = await LocalAuthentication.authenticateAsync({
             promptMessage: 'Acceso a Gestión de Convenios',
             fallbackLabel: 'Usar contraseña'
         });
-        if (auth.success) setPantallaActual('qr');
+        if (auth.success) setPantallaActual('home'); // <--- Directo al Home también con huella
     };
 
     // Navegación condicional
@@ -69,7 +70,12 @@ export default function App() {
     }
 
     if (pantallaActual === 'home') {
-        return <HomeScreen irASostenibilidad={() => setPantallaActual('sostenibilidad')} />;
+        return (
+            <HomeScreen 
+                irASostenibilidad={() => setPantallaActual('sostenibilidad')} 
+                irAQR={() => setPantallaActual('qr')} // <--- Le pasamos la función para ir al QR
+            />
+        );
     }
 
     if (pantallaActual === 'sostenibilidad') {
