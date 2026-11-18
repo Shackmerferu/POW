@@ -200,6 +200,25 @@ html.accesibilidad-contraste .tabla__accion {
   background: #fff;
 }
 
+/* Botones de cambio de rol */
+html.accesibilidad-contraste .roles__boton-rol,
+html.accesibilidad-contraste .roles__accion-rol,
+html.accesibilidad-contraste .roles__accion-rol--guardar,
+html.accesibilidad-contraste .roles__editor-rol select {
+  border-color: #000;
+  background: #fff;
+  color: #000;
+}
+
+html.accesibilidad-contraste .roles__boton-rol:hover,
+html.accesibilidad-contraste .roles__accion-rol:hover:not(:disabled) {
+  background: #e8e8e8;
+}
+
+html.accesibilidad-contraste .roles__confirmacion {
+  color: #000;
+}
+
 /* Tabla/listado de convenios */
 html.accesibilidad-contraste .tablaconvenios,
 html.accesibilidad-contraste .convenios-lista,
