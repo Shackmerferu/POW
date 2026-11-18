@@ -139,8 +139,6 @@ function Dashboard() {
       });
   };
 
-  const [avisoCambioRol, setAvisoCambioRol] = useState("");
-
   // Llama al endpoint propio de cambio de rol. Si el afectado es el usuario
   // actual, el JWT y el localStorage quedaron viejos: cerramos sesión.
   const cambiarRolUsuario = async (id, rolNuevo) => {
@@ -165,10 +163,7 @@ function Dashboard() {
     if (Number(id) === Number(usuario.id)) {
       limpiarSesion();
       navigate("/login", { replace: true });
-      return;
     }
-
-    setAvisoCambioRol("Rol actualizado correctamente.");
   };
 
   const [pestaña, setPestaña] = useState("metricas");
@@ -552,12 +547,6 @@ function Dashboard() {
           {pestaña === "administracion" && avisoAlta && (
             <p className="dashboard__aviso" role="status" aria-live="polite">
               {avisoAlta}
-            </p>
-          )}
-
-          {pestaña === "roles" && avisoCambioRol && (
-            <p className="dashboard__aviso" role="status" aria-live="polite">
-              {avisoCambioRol}
             </p>
           )}
 
@@ -988,6 +977,120 @@ function Administracion({
   );
 }
 
+// Selector por fila: el botón abre el select de roles y confirma el cambio.
+function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
+  const [abierto, setAbierto] = useState(false);
+  const [rolNuevo, setRolNuevo] = useState(usuarioFila.rol);
+  const [guardando, setGuardando] = useState(false);
+  const [confirmado, setConfirmado] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!confirmado) return undefined;
+    const temporizador = setTimeout(() => setConfirmado(false), 4000);
+    return () => clearTimeout(temporizador);
+  }, [confirmado]);
+
+  if (!puedeCambiarRoles) return null;
+
+  const abrir = () => {
+    setRolNuevo(usuarioFila.rol);
+    setError("");
+    setConfirmado(false);
+    setAbierto(true);
+  };
+
+  const cancelar = () => {
+    setAbierto(false);
+    setError("");
+  };
+
+  const confirmar = async () => {
+    if (rolNuevo === usuarioFila.rol) {
+      cancelar();
+      return;
+    }
+
+    setGuardando(true);
+    setError("");
+    try {
+      await onCambiar(usuarioFila.id, rolNuevo);
+      setAbierto(false);
+      setConfirmado(true);
+    } catch (fallo) {
+      setError(fallo.message);
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  if (confirmado) {
+    return (
+      <span className="roles__confirmacion" role="status" aria-live="polite">
+        ✓ Rol actualizado
+      </span>
+    );
+  }
+
+  if (!abierto) {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-primary btn-sm roles__boton-rol"
+        onClick={abrir}
+      >
+        Cambiar
+      </button>
+    );
+  }
+
+  return (
+    <span className="roles__editor-rol">
+      <select
+        aria-label={`Nuevo rol para ${usuarioFila.nombre_completo}`}
+        value={rolNuevo}
+        onChange={(e) => setRolNuevo(e.target.value)}
+        disabled={guardando}
+      >
+        {Object.values(ROLES).map((rol) => (
+          <option key={rol} value={rol}>
+            {
+              {
+                administracion: "Administración",
+                gestion: "Gestión",
+                revision: "Revisión",
+                consulta: "Consulta",
+              }[rol]
+            }
+          </option>
+        ))}
+      </select>
+      <button
+        type="button"
+        className="btn btn-primary btn-sm"
+        onClick={confirmar}
+        disabled={guardando}
+      >
+        {guardando ? "…" : "Guardar"}
+      </button>
+      <button
+        type="button"
+        className="btn btn-outline-secondary btn-sm"
+        onClick={cancelar}
+        disabled={guardando}
+        aria-label="Cancelar"
+      >
+        ✕
+      </button>
+      {error && (
+        <span className="roles__error-rol" role="alert">
+          {error}
+        </span>
+      )}
+    </span>
+  );
+}
+
 function Roles({
   usuario,
   alcances: { usoAlcance },
@@ -996,11 +1099,6 @@ function Roles({
   puedeCambiarRoles,
   cambiarRolUsuario,
 }) {
-  const [idSeleccionado, setIdSeleccionado] = useState("");
-  const [rolNuevo, setRolNuevo] = useState(ROLES.CONSULTA);
-  const [guardando, setGuardando] = useState(false);
-  const [errorRol, setErrorRol] = useState("");
-
   const usuariosVisibles = usuarios.filter((u) => {
     if (usoAlcance) return true;
     return (
@@ -1008,21 +1106,6 @@ function Roles({
       u.id_unidad === usuario.id_unidad
     );
   });
-
-  const manejarCambioRol = async (evento) => {
-    evento.preventDefault();
-    if (!idSeleccionado) return;
-
-    setGuardando(true);
-    setErrorRol("");
-    try {
-      await cambiarRolUsuario(idSeleccionado, rolNuevo);
-    } catch (error) {
-      setErrorRol(error.message);
-    } finally {
-      setGuardando(false);
-    }
-  };
 
   return (
     <div className="roles">
@@ -1081,7 +1164,14 @@ function Roles({
               <td className="tabla__celda-principal">{u.legajo}</td>
               <td>{u.nombre_completo}</td>
               <td>
-                <EtiquetaRol rol={u.rol} />
+                <div className="roles__celda-rol">
+                  <EtiquetaRol rol={u.rol} />
+                  <SelectorRol
+                    usuarioFila={u}
+                    puedeCambiarRoles={puedeCambiarRoles}
+                    onCambiar={cambiarRolUsuario}
+                  />
+                </div>
               </td>
               <td className="tabla__celda-neutra">
                 {u.id_unidad === null
@@ -1092,63 +1182,6 @@ function Roles({
           )}
         />
       </section>
-
-      {puedeCambiarRoles && (
-        <section className="panel-seccion">
-          <VistaSeccion
-            titulo="Cambiar rol de usuario"
-            ayuda="Elegí un usuario y el rol que va a pasar a tener."
-          />
-
-          <form className="roles__cambio-rol" onSubmit={manejarCambioRol}>
-            <select
-              aria-label="Usuario"
-              value={idSeleccionado}
-              onChange={(e) => setIdSeleccionado(e.target.value)}
-            >
-              <option value="">Seleccionar usuario…</option>
-              {usuariosVisibles.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.legajo} — {u.nombre_completo}
-                </option>
-              ))}
-            </select>
-
-            <select
-              aria-label="Nuevo rol"
-              value={rolNuevo}
-              onChange={(e) => setRolNuevo(e.target.value)}
-            >
-              {Object.values(ROLES).map((rol) => (
-                <option key={rol} value={rol}>
-                  {
-                    {
-                      administracion: "Administración",
-                      gestion: "Gestión",
-                      revision: "Revisión",
-                      consulta: "Consulta",
-                    }[rol]
-                  }
-                </option>
-              ))}
-            </select>
-
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={!idSeleccionado || guardando}
-            >
-              {guardando ? "Guardando…" : "Cambiar rol"}
-            </button>
-          </form>
-
-          {errorRol && (
-            <p className="dashboard__aviso dashboard__aviso--error">
-              {errorRol}
-            </p>
-          )}
-        </section>
-      )}
 
       <section className="panel-seccion">
         <VistaSeccion
