@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
+import "./EditarFichaConvenio.css";
 
 const CAMPOS_INICIALES = {
   titulo: "",
@@ -95,156 +96,198 @@ export default function EditarFichaConvenio({
       titulo={`Editar ficha · ${convenio?.codigo_unico ?? ""}`}
       onCerrar={onCerrar}
     >
-      <form className="form-alta" onSubmit={enviar}>
-        <label className="form-alta__campo">
-          <span>Título *</span>
-          <input
-            name="titulo"
-            value={formulario.titulo}
-            onChange={cambiarCampo}
-            required
-          />
-        </label>
+      <form className="form-alta editar-ficha" onSubmit={enviar}>
+        <p className="form-alta__nota">
+          Actualizá los datos del convenio. Los campos con * son obligatorios.
+        </p>
 
-        <label className="form-alta__campo">
-          <span>Objeto *</span>
-          <textarea
-            name="objeto"
-            value={formulario.objeto}
-            onChange={cambiarCampo}
-            rows="3"
-            required
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Obligaciones</span>
-          <textarea
-            name="obligaciones"
-            value={formulario.obligaciones}
-            onChange={cambiarCampo}
-            rows="3"
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Condiciones de rescisión</span>
-          <textarea
-            name="condiciones_rescision"
-            value={formulario.condiciones_rescision}
-            onChange={cambiarCampo}
-            rows="3"
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Condiciones de renovación</span>
-          <textarea
-            name="condiciones_renovacion"
-            value={formulario.condiciones_renovacion}
-            onChange={cambiarCampo}
-            rows="3"
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Marco legal</span>
-          <input
-            name="marco_legal"
-            value={formulario.marco_legal}
-            onChange={cambiarCampo}
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Resolución</span>
-          <input
-            name="resolucion"
-            value={formulario.resolucion}
-            onChange={cambiarCampo}
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Expediente o referencia</span>
-          <input
-            name="expediente"
-            value={formulario.expediente}
-            onChange={cambiarCampo}
-          />
-        </label>
-
-        <label className="form-alta__campo">
-          <span>Notas</span>
-          <textarea
-            name="notas"
-            value={formulario.notas}
-            onChange={cambiarCampo}
-            rows="3"
-          />
-        </label>
-
-        <div className="form-alta__campos-dobles">
-          <label className="form-alta__campo">
-            <span>Fecha de inicio</span>
+        <div className="editar-ficha__seccion">
+          <h3>Datos del convenio</h3>
+          <div className="form-alta__campo">
+            <label className="form-label" htmlFor="editar-titulo">Título *</label>
             <input
-              type="date"
-              name="fecha_inicio"
-              value={formulario.fecha_inicio}
+              id="editar-titulo"
+              className="form-control"
+              name="titulo"
+              value={formulario.titulo}
               onChange={cambiarCampo}
+              required
             />
-          </label>
+          </div>
 
-          <label className="form-alta__campo">
-            <span>Fecha de firma</span>
-            <input
-              type="date"
-              name="fecha_firma"
-              value={formulario.fecha_firma}
+          <div className="form-alta__campo">
+            <label className="form-label" htmlFor="editar-objeto">Objeto *</label>
+            <textarea
+              id="editar-objeto"
+              className="form-control"
+              name="objeto"
+              value={formulario.objeto}
               onChange={cambiarCampo}
+              rows="3"
+              required
             />
-          </label>
+          </div>
 
-          <label className="form-alta__campo">
-            <span>Fecha de vencimiento</span>
-            <input
-              type="date"
-              name="fecha_vencimiento"
-              value={formulario.fecha_vencimiento}
+          <div className="form-alta__campo">
+            <label className="form-label" htmlFor="editar-obligaciones">Obligaciones</label>
+            <textarea
+              id="editar-obligaciones"
+              className="form-control"
+              name="obligaciones"
+              value={formulario.obligaciones}
               onChange={cambiarCampo}
+              rows="3"
             />
-          </label>
+          </div>
 
-          <label className="form-alta__campo">
-            <span>Días de preaviso</span>
-            <input
-              type="number"
-              min="0"
-              name="dias_preaviso"
-              value={formulario.dias_preaviso}
-              onChange={cambiarCampo}
-            />
-          </label>
+          <div className="form-alta__campos-dobles">
+            <div className="form-alta__campo">
+              <label className="form-label" htmlFor="editar-rescision">Condiciones de rescisión</label>
+              <textarea
+                id="editar-rescision"
+                className="form-control"
+                name="condiciones_rescision"
+                value={formulario.condiciones_rescision}
+                onChange={cambiarCampo}
+                rows="3"
+              />
+            </div>
+            <div className="form-alta__campo">
+              <label className="form-label" htmlFor="editar-renovacion">Condiciones de renovación</label>
+              <textarea
+                id="editar-renovacion"
+                className="form-control"
+                name="condiciones_renovacion"
+                value={formulario.condiciones_renovacion}
+                onChange={cambiarCampo}
+                rows="3"
+              />
+            </div>
+          </div>
         </div>
 
-        <label className="form-alta__campo">
+        <div className="editar-ficha__seccion">
+          <h3>Marco y referencias</h3>
+          <div className="form-alta__campos-dobles">
+            <div className="form-alta__campo">
+              <label className="form-label" htmlFor="editar-marco">Marco legal</label>
+              <input
+                id="editar-marco"
+                className="form-control"
+                name="marco_legal"
+                value={formulario.marco_legal}
+                onChange={cambiarCampo}
+              />
+            </div>
+            <div className="form-alta__campo">
+              <label className="form-label" htmlFor="editar-resolucion">Resolución</label>
+              <input
+                id="editar-resolucion"
+                className="form-control"
+                name="resolucion"
+                value={formulario.resolucion}
+                onChange={cambiarCampo}
+              />
+            </div>
+          </div>
+          <div className="form-alta__campo">
+            <label className="form-label" htmlFor="editar-expediente">Expediente o referencia</label>
+            <input
+              id="editar-expediente"
+              className="form-control"
+              name="expediente"
+              value={formulario.expediente}
+              onChange={cambiarCampo}
+            />
+          </div>
+          <div className="form-alta__campo">
+            <label className="form-label" htmlFor="editar-notas">Notas</label>
+            <textarea
+              id="editar-notas"
+              className="form-control"
+              name="notas"
+              value={formulario.notas}
+              onChange={cambiarCampo}
+              rows="3"
+            />
+          </div>
+        </div>
+
+        <div className="editar-ficha__seccion">
+          <h3>Fechas y vencimiento</h3>
+          <div className="row g-3">
+            <div className="col-md-6 form-alta__campo">
+              <label className="form-label" htmlFor="editar-fecha-inicio">Fecha de inicio</label>
+              <input
+                id="editar-fecha-inicio"
+                className="form-control"
+                type="date"
+                name="fecha_inicio"
+                value={formulario.fecha_inicio}
+                onChange={cambiarCampo}
+              />
+            </div>
+            <div className="col-md-6 form-alta__campo">
+              <label className="form-label" htmlFor="editar-fecha-firma">Fecha de firma</label>
+              <input
+                id="editar-fecha-firma"
+                className="form-control"
+                type="date"
+                name="fecha_firma"
+                value={formulario.fecha_firma}
+                onChange={cambiarCampo}
+              />
+            </div>
+            <div className="col-md-6 form-alta__campo">
+              <label className="form-label" htmlFor="editar-fecha-vencimiento">Fecha de vencimiento</label>
+              <input
+                id="editar-fecha-vencimiento"
+                className="form-control"
+                type="date"
+                name="fecha_vencimiento"
+                value={formulario.fecha_vencimiento}
+                onChange={cambiarCampo}
+              />
+            </div>
+            <div className="col-md-6 form-alta__campo">
+              <label className="form-label" htmlFor="editar-preaviso">Días de preaviso</label>
+              <input
+                id="editar-preaviso"
+                className="form-control"
+                type="number"
+                min="0"
+                name="dias_preaviso"
+                value={formulario.dias_preaviso}
+                onChange={cambiarCampo}
+              />
+            </div>
+          </div>
+        </div>
+
+        <label className="form-check editar-ficha__confidencialidad">
           <input
+            className="form-check-input"
             type="checkbox"
             name="confidencialidad"
             checked={formulario.confidencialidad}
             onChange={cambiarCampo}
           />
-          Información confidencial
+          <span className="form-check-label">Información confidencial</span>
         </label>
 
-        {error && <p role="alert">{error}</p>}
+        {error && <div className="alert alert-danger py-2 mb-0" role="alert">{error}</div>}
 
-        <div className="ficha__cambio-estado__acciones">
-          <button type="button" onClick={onCerrar} disabled={guardando}>
+        <div className="form-alta__acciones editar-ficha__acciones">
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={onCerrar}
+            disabled={guardando}
+          >
             Cancelar
           </button>
-          <button type="submit" disabled={guardando}>
-            {guardando ? "Guardando…" : "Guardar ficha"}
+          <button type="submit" className="btn btn-primary" disabled={guardando}>
+            {guardando ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>
       </form>

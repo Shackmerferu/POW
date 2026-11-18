@@ -894,7 +894,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       {puedeEditarFicha && (
         <button
           type="button"
-          className="tabla__accion"
+          className="btn btn-primary btn-sm ficha__boton-editar"
           onClick={() => setEditarFichaAbierta(true)}
         >
           Editar ficha
