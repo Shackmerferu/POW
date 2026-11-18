@@ -14,6 +14,7 @@ export default function App() {
     const [dni, setDni] = useState('');
     const [password, setPassword] = useState('');
     const [soportaBiometria, setSoportaBiometria] = useState(false);
+    const [codigoEscaneado, setCodigoEscaneado] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -23,7 +24,6 @@ export default function App() {
         })();
     }, []);
 
-    // --- CONEXIÓN REAL AL BACKEND ---
     const IP_BACKEND = '192.168.1.11';
     const PUERTO = '8000';
 
@@ -33,20 +33,17 @@ export default function App() {
         try {
             const respuesta = await fetch(`http://${IP_BACKEND}:${PUERTO}/api/auth`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    dni: dni, 
-                    contrasena: password
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dni: dni, contrasena: password })
             });
 
             const data = await respuesta.json();
 
             if (respuesta.ok) {
+                // Guardamos el token y el objeto del usuario (rol e id_unidad) para validar permisos en el QR
                 await AsyncStorage.setItem('@token_jwt', data.token);
-                setPantallaActual('home'); // <--- Ahora entra directo al Home
+                await AsyncStorage.setItem('@usuario_actual', JSON.stringify(data.usuario || {}));
+                setPantallaActual('home');
             } else {
                 Alert.alert("Acceso denegado", data.mensaje || "Credenciales incorrectas");
             }
@@ -61,19 +58,28 @@ export default function App() {
             promptMessage: 'Acceso a Gestión de Convenios',
             fallbackLabel: 'Usar contraseña'
         });
-        if (auth.success) setPantallaActual('home'); // <--- Directo al Home también con huella
+        if (auth.success) setPantallaActual('home');
     };
 
-    // Navegación condicional
     if (pantallaActual === 'qr') {
-        return <LectorQRScreen alCerrar={() => setPantallaActual('home')} />;
+        return (
+            <LectorQRScreen 
+                alCerrar={() => setPantallaActual('home')} 
+                alEscanear={(datoQR) => {
+                    setCodigoEscaneado(datoQR);
+                    setPantallaActual('home');
+                }}
+            />
+        );
     }
 
     if (pantallaActual === 'home') {
         return (
             <HomeScreen 
                 irASostenibilidad={() => setPantallaActual('sostenibilidad')} 
-                irAQR={() => setPantallaActual('qr')} // <--- Le pasamos la función para ir al QR
+                irAQR={() => setPantallaActual('qr')}
+                codigoQR={codigoEscaneado}
+                limpiarQR={() => setCodigoEscaneado(null)}
             />
         );
     }
@@ -85,12 +91,9 @@ export default function App() {
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>Convenios UNLPam</Text>
-            
             <InputTexto placeholder="DNI o Legajo" valor={dni} onChangeText={setDni} />
             <InputTexto placeholder="Contraseña" valor={password} onChangeText={setPassword} oculto={true} />
-            
             <Boton titulo="Ingresar" onPress={loginClasico} />
-            
             {soportaBiometria && (
                 <Boton titulo="Ingresar con Huella / FaceID" onPress={loginBiometrico} secundario={true} />
             )}

@@ -54,11 +54,25 @@ module.exports = (db) => {
         });
     }
 
+    // ==========================================
+    // 1. RUTA ESPECÍFICA DE CONVENIO (SIEMPRE ARRIBA)
+    // ==========================================
+    router.get('/convenio/:id_convenio', verificarToken, (req, res) => {
+        const idConvenio = req.params.id_convenio;
+        db.query('SELECT id, tipo_documento, ruta_archivo, hash_sha256 FROM documentos WHERE id_convenio = ?', [idConvenio], (error, resultados) => {
+            if (error) {
+                console.error("Error buscando documentos del convenio:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error al buscar documentos." });
+            }
+            res.json({ status: 200, documentos: resultados });
+        });
+    });
 
-    //  SUBIR DOCUMENTO Y CALCULAR SHA-256 
-    
+
+    // ==========================================
+    // 2. SUBIR DOCUMENTO Y CALCULAR SHA-256 
+    // ==========================================
     router.post('/', verificarToken, upload.single('archivo'), (req, res) => {
-        
         const { id_convenio, tipo_documento } = req.body;
         const file = req.file;
 
@@ -76,7 +90,6 @@ module.exports = (db) => {
             const fileBuffer = fs.readFileSync(file.path);
             const hashSha256 = crypto.createHash('sha256').update(fileBuffer).digest('hex');
 
-            // Adaptado EXACTAMENTE a las columnas de tu imagen
             const query = `
                 INSERT INTO documentos (id_convenio, tipo_documento, ruta_archivo, hash_sha256) 
                 VALUES (?, ?, ?, ?)
@@ -111,8 +124,9 @@ module.exports = (db) => {
     });
 
    
-    //  DESCARGAR DOCUMENTO SEGURO 
-    
+    // ==========================================
+    // 3. DESCARGAR DOCUMENTO SEGURO (/:id/download)
+    // ==========================================
     router.get('/:id/download', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
@@ -121,26 +135,27 @@ module.exports = (db) => {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado en la base de datos." });
             }
 
-            // Buscamos el archivo físico en la carpeta protegida
             const documento = resultados[0];
             const archivoFisico = documento.ruta_archivo;
             const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', archivoFisico);
 
             if (fs.existsSync(rutaCompleta)) {
-                // Trazabilidad: quién descargó qué documento y cuándo.
                 registrarAcceso(
                     documento.id_convenio,
                     req.usuario.id,
                     `Descarga del documento "${documento.tipo_documento}" (ID #${idDoc}).`
                 );
-                // Express fuerza la descarga con el nombre encriptado
                 res.download(rutaCompleta); 
             } else {
                 res.status(404).json({ status: 404, mensaje: "El archivo físico no existe en el disco." });
             }
         });
     });
-        //VISTA PREVIA DE DOCUMENTO
+
+
+    // ==========================================
+    // 4. VISTA PREVIA DE DOCUMENTO (/:id/view)
+    // ==========================================
     router.get('/:id/view', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
@@ -152,13 +167,11 @@ module.exports = (db) => {
             const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', resultados[0].ruta_archivo);
 
             if (fs.existsSync(rutaCompleta)) {
-                // Trazabilidad: quién consultó la vista previa y cuándo.
                 registrarAcceso(
                     resultados[0].id_convenio,
                     req.usuario.id,
                     `Vista previa del documento (ID #${idDoc}).`
                 );
-                // sendFile le dice al navegador "mostralo si podés", ideal para PDFs
                 res.sendFile(rutaCompleta); 
             } else {
                 res.status(404).json({ status: 404, mensaje: "El archivo físico no existe en el disco." });
