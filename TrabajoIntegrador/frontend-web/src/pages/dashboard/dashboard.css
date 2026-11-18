@@ -252,6 +252,54 @@
   font-style: italic;
 }
 
+/* --- Cambio de rol por fila --------------------------------------------- */
+.roles__celda-rol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.roles__boton-rol {
+  padding: 0.15rem 0.45rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.roles__editor-rol {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.roles__editor-rol select {
+  padding: 0.15rem 0.3rem;
+  border: 1px solid #cdd5dd;
+  background-color: #fff;
+  color: #33404e;
+  font-size: 0.75rem;
+}
+
+.roles__editor-rol .btn {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.roles__confirmacion {
+  color: #1b7a3d;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.roles__error-rol {
+  color: #b3261e;
+  font-size: 0.7rem;
+  width: 100%;
+}
+
 /* --- Pie de Administración --------------------------------------------- */
 .administracion__pie {
   display: flex;

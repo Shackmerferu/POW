@@ -22,6 +22,8 @@ import {
 
 import {
   MATRIZ_PERMISOS,
+  ROLES,
+  puedeCambiarRoles,
   puedeTenerAlcanceGlobal,
   puedeVerConfiguracion,
   puedeVerPanel,
@@ -123,6 +125,45 @@ function Dashboard() {
       .catch(() =>
         setErrorApi("No se pudo actualizar el listado de convenios."),
       );
+  };
+
+  // Recarga solo los usuarios para reflejar al instante un cambio de rol.
+  const recargarUsuarios = () => {
+    const token = localStorage.getItem("token");
+    return fetch(`${API_URL}/usuarios`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
+      .then((res) => res.json())
+      .then((datos) => {
+        if (Array.isArray(datos?.data)) setUsuarios(datos.data);
+      });
+  };
+
+  // Llama al endpoint propio de cambio de rol. Si el afectado es el usuario
+  // actual, el JWT y el localStorage quedaron viejos: cerramos sesión.
+  const cambiarRolUsuario = async (id, rolNuevo) => {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/usuarios/${id}/rol`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ rol: rolNuevo }),
+    });
+
+    const datos = await res.json();
+    if (!res.ok) {
+      throw new Error(datos.mensaje || "No se pudo cambiar el rol.");
+    }
+
+    await recargarUsuarios();
+
+    if (Number(id) === Number(usuario.id)) {
+      limpiarSesion();
+      navigate("/login", { replace: true });
+    }
   };
 
   const [pestaña, setPestaña] = useState("metricas");
@@ -552,6 +593,8 @@ function Dashboard() {
                   alcances={{ usoAlcance: alcanceGlobal }}
                   unidades={unidades}
                   usuarios={usuarios}
+                  puedeCambiarRoles={puedeCambiarRoles(usuario)}
+                  cambiarRolUsuario={cambiarRolUsuario}
                 />
               )}
               {pestaña === "vencimientos" && (
@@ -934,7 +977,136 @@ function Administracion({
   );
 }
 
-function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
+// Selector por fila: el botón abre el select de roles y confirma el cambio.
+function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
+  const [abierto, setAbierto] = useState(false);
+  const [rolNuevo, setRolNuevo] = useState(usuarioFila.rol);
+  const [guardando, setGuardando] = useState(false);
+  const [confirmado, setConfirmado] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!confirmado) return undefined;
+    const temporizador = setTimeout(() => setConfirmado(false), 4000);
+    return () => clearTimeout(temporizador);
+  }, [confirmado]);
+
+  if (!puedeCambiarRoles) return null;
+
+  const abrir = () => {
+    setRolNuevo(usuarioFila.rol);
+    setError("");
+    setConfirmado(false);
+    setAbierto(true);
+  };
+
+  const cancelar = () => {
+    setAbierto(false);
+    setError("");
+  };
+
+  const confirmar = async () => {
+    if (rolNuevo === usuarioFila.rol) {
+      cancelar();
+      return;
+    }
+
+    setGuardando(true);
+    setError("");
+    try {
+      await onCambiar(usuarioFila.id, rolNuevo);
+      setAbierto(false);
+      setConfirmado(true);
+    } catch (fallo) {
+      setError(fallo.message);
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  if (confirmado) {
+    return (
+      <span className="roles__confirmacion" role="status" aria-live="polite">
+        ✓ Rol actualizado
+      </span>
+    );
+  }
+
+  if (!abierto) {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-primary btn-sm roles__boton-rol"
+        onClick={abrir}
+      >
+        Cambiar
+      </button>
+    );
+  }
+
+  return (
+    <span className="roles__editor-rol">
+      <select
+        aria-label={`Nuevo rol para ${usuarioFila.nombre_completo}`}
+        value={rolNuevo}
+        onChange={(e) => setRolNuevo(e.target.value)}
+        disabled={guardando}
+      >
+        {Object.values(ROLES).map((rol) => (
+          <option key={rol} value={rol}>
+            {
+              {
+                administracion: "Administración",
+                gestion: "Gestión",
+                revision: "Revisión",
+                consulta: "Consulta",
+              }[rol]
+            }
+          </option>
+        ))}
+      </select>
+      <button
+        type="button"
+        className="btn btn-primary btn-sm"
+        onClick={confirmar}
+        disabled={guardando}
+      >
+        {guardando ? "…" : "Guardar"}
+      </button>
+      <button
+        type="button"
+        className="btn btn-outline-secondary btn-sm"
+        onClick={cancelar}
+        disabled={guardando}
+        aria-label="Cancelar"
+      >
+        ✕
+      </button>
+      {error && (
+        <span className="roles__error-rol" role="alert">
+          {error}
+        </span>
+      )}
+    </span>
+  );
+}
+
+function Roles({
+  usuario,
+  alcances: { usoAlcance },
+  unidades,
+  usuarios,
+  puedeCambiarRoles,
+  cambiarRolUsuario,
+}) {
+  const usuariosVisibles = usuarios.filter((u) => {
+    if (usoAlcance) return true;
+    return (
+      String(u.legajo) === String(usuario.legajo) ||
+      u.id_unidad === usuario.id_unidad
+    );
+  });
+
   return (
     <div className="roles">
       <section className="panel-seccion">
@@ -985,20 +1157,21 @@ function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
             { titulo: "Rol" },
             { titulo: "Alcance" },
           ]}
-          filas={usuarios.filter((u) => {
-            if (usoAlcance) return true;
-            return (
-              String(u.legajo) === String(usuario.legajo) ||
-              u.id_unidad === usuario.id_unidad
-            );
-          })}
+          filas={usuariosVisibles}
           mensajeVacio="Sin usuarios visibles dentro de tu alcance."
           filaRender={(u) => (
             <tr key={u.id}>
               <td className="tabla__celda-principal">{u.legajo}</td>
               <td>{u.nombre_completo}</td>
               <td>
-                <EtiquetaRol rol={u.rol} />
+                <div className="roles__celda-rol">
+                  <EtiquetaRol rol={u.rol} />
+                  <SelectorRol
+                    usuarioFila={u}
+                    puedeCambiarRoles={puedeCambiarRoles}
+                    onCambiar={cambiarRolUsuario}
+                  />
+                </div>
               </td>
               <td className="tabla__celda-neutra">
                 {u.id_unidad === null
