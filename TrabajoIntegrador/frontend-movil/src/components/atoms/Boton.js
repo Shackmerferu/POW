@@ -1,13 +1,17 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useAppColorScheme } from '../../contexts/ColorSchemeContext';
 
 export default function Boton({ titulo, onPress, secundario }) {
+    const { colors } = useAppColorScheme();
     return (
         <TouchableOpacity 
-            style={[styles.boton, secundario ? styles.botonSecundario : styles.botonPrimario]} 
+            style={[styles.boton, { borderColor: colors.accent }, secundario
+                ? { backgroundColor: colors.backgroundSelected }
+                : { backgroundColor: '#003366' }]} 
             onPress={onPress}
         >
-            <Text style={[styles.texto, secundario ? styles.textoSecundario : styles.textoPrimario]}>
+            <Text style={[styles.texto, { color: secundario ? colors.accent : '#ffffff' }]}>
                 {titulo}
             </Text>
         </TouchableOpacity>
@@ -15,7 +19,7 @@ export default function Boton({ titulo, onPress, secundario }) {
 }
 
 const styles = StyleSheet.create({
-    boton: { 
+    boton: {
         padding: 15, 
         borderRadius: 8, 
         alignItems: 'center', 
@@ -23,9 +27,5 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: '#003366' 
     },
-    botonPrimario: { backgroundColor: '#003366' },
-    botonSecundario: { backgroundColor: '#e6f0fa' },
     texto: { fontWeight: 'bold', fontSize: 16 },
-    textoPrimario: { color: '#ffffff' },
-    textoSecundario: { color: '#003366' }
 });

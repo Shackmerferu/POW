@@ -8,8 +8,10 @@ import InputTexto from '../components/molecules/InputTexto';
 import Boton from '../components/atoms/Boton';
 import LectorQRScreen from '../screens/LectorQRScreen';
 import HomeScreen from '../screens/HomeScreen';
+import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
 export default function App() {
+    const { colors } = useAppColorScheme();
     const [pantallaActual, setPantallaActual] = useState('login'); 
     const [dni, setDni] = useState('');
     const [password, setPassword] = useState('');
@@ -89,8 +91,8 @@ export default function App() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Convenios UNLPam</Text>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <Text style={[styles.titulo, { color: colors.accent }]}>Convenios UNLPam</Text>
             <InputTexto placeholder="DNI o Legajo" valor={dni} onChangeText={setDni} />
             <InputTexto placeholder="Contraseña" valor={password} onChangeText={setPassword} oculto={true} />
             <Boton titulo="Ingresar" onPress={loginClasico} />

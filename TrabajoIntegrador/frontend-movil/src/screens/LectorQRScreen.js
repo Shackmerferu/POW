@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import Boton from '../components/atoms/Boton';
+import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
 export default function LectorQRScreen({ alCerrar }) {
+    const { colors } = useAppColorScheme();
+    const styles = createStyles(colors);
     const [permiso, pedirPermiso] = useCameraPermissions();
     const [escaneado, setEscaneado] = useState(false);
     const [tiempo, setTiempo] = useState(60);
@@ -28,7 +31,7 @@ export default function LectorQRScreen({ alCerrar }) {
     if (!permiso) return <View />;
     if (!permiso.granted) {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
                 <Text style={styles.texto}>Necesitamos acceso a la cámara para leer el expediente</Text>
                 <Boton titulo="Otorgar Permiso" onPress={pedirPermiso} />
                 <Boton titulo="Cancelar" onPress={alCerrar} secundario={true} />
@@ -46,7 +49,7 @@ export default function LectorQRScreen({ alCerrar }) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Text style={styles.titulo}>Escáner de Expedientes</Text>
             <Text style={styles.temporizador}>Cierre automático en: {tiempo}s</Text>
             
@@ -64,10 +67,10 @@ export default function LectorQRScreen({ alCerrar }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f4f4f4' },
-    titulo: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: '#003366' },
-    temporizador: { fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: '#d32f2f' },
-    texto: { fontSize: 16, textAlign: 'center', marginBottom: 20, color: '#333' },
-    marcoCamara: { height: 350, width: '100%', borderRadius: 12, overflow: 'hidden', marginBottom: 20, borderWidth: 2, borderColor: '#003366' }
+const createStyles = (colors) => StyleSheet.create({
+    container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: colors.background },
+    titulo: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: colors.accent },
+    temporizador: { fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: colors.warning },
+    texto: { fontSize: 16, textAlign: 'center', marginBottom: 20, color: colors.text },
+    marcoCamara: { height: 350, width: '100%', borderRadius: 12, overflow: 'hidden', marginBottom: 20, borderWidth: 2, borderColor: colors.accent }
 });

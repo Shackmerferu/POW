@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Linking } 
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Boton from '../components/atoms/Boton';
+import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as IntentLauncher from 'expo-intent-launcher';
 export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiarQR }) {
+    const { colors } = useAppColorScheme();
+    const styles = createStyles(colors);
     const [mensajeSede, setMensajeSede] = useState('Buscando tu ubicación...');
     const [sedeDetectada, setSedeDetectada] = useState(false);
     const [convenios, setConvenios] = useState([]);
@@ -357,25 +360,25 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flexGrow: 1, padding: 20, backgroundColor: '#f4f4f4', justifyContent: 'center' },
-    titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: '#003366' },
-    tarjetaSede: { backgroundColor: '#fff', padding: 20, borderRadius: 12, marginBottom: 20, borderWidth: 1, borderColor: '#ccc', elevation: 3 },
-    textoUbicacion: { fontSize: 16, textAlign: 'center', marginBottom: 20, color: '#333', fontWeight: '500' },
-    selectorManual: { borderTopWidth: 1, borderTopColor: '#eee', paddingTop: 15 },
-    textoManual: { textAlign: 'center', marginBottom: 15, color: '#666' },
+const createStyles = (colors) => StyleSheet.create({
+    container: { flexGrow: 1, padding: 20, backgroundColor: colors.background, justifyContent: 'center' },
+    titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: colors.accent },
+    tarjetaSede: { backgroundColor: colors.backgroundElement, padding: 20, borderRadius: 12, marginBottom: 20, borderWidth: 1, borderColor: colors.border, elevation: 3 },
+    textoUbicacion: { fontSize: 16, textAlign: 'center', marginBottom: 20, color: colors.text, fontWeight: '500' },
+    selectorManual: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 15 },
+    textoManual: { textAlign: 'center', marginBottom: 15, color: colors.textSecondary },
     contenedorLista: { marginBottom: 20 },
-    subtituloLista: { fontSize: 16, fontWeight: 'bold', color: '#003366', marginBottom: 10 },
-    itemConvenio: { backgroundColor: '#fff', padding: 14, borderRadius: 8, marginBottom: 10, borderLeftWidth: 4, borderLeftColor: '#003366', elevation: 2 },
+    subtituloLista: { fontSize: 16, fontWeight: 'bold', color: colors.accent, marginBottom: 10 },
+    itemConvenio: { backgroundColor: colors.backgroundElement, padding: 14, borderRadius: 8, marginBottom: 10, borderLeftWidth: 4, borderLeftColor: colors.accent, elevation: 2 },
     filaSuperior: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    codigo: { fontSize: 12, fontWeight: 'bold', color: '#666' },
-    estado: { fontSize: 11, fontWeight: 'bold', color: '#006633', backgroundColor: '#e6f4ea', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 },
-    tituloConvenio: { fontSize: 15, fontWeight: '600', color: '#222', marginBottom: 4 },
-    tipo: { fontSize: 12, color: '#003366' },
-    detalleTexto: { fontSize: 14, color: '#333', marginBottom: 8, lineHeight: 20 },
+    codigo: { fontSize: 12, fontWeight: 'bold', color: colors.textSecondary },
+    estado: { fontSize: 11, fontWeight: 'bold', color: colors.positive, backgroundColor: colors.positiveBackground, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 },
+    tituloConvenio: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 4 },
+    tipo: { fontSize: 12, color: colors.accent },
+    detalleTexto: { fontSize: 14, color: colors.text, marginBottom: 8, lineHeight: 20 },
     paginador: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingVertical: 6 },
-    botonPag: { backgroundColor: '#003366', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 6 },
+    botonPag: { backgroundColor: colors.accent, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 6 },
     botonPagDeshabilitado: { backgroundColor: '#99aab5' },
     textoBotonPag: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
-    textoPagina: { fontWeight: 'bold', color: '#333' }
+    textoPagina: { fontWeight: 'bold', color: colors.text }
 });

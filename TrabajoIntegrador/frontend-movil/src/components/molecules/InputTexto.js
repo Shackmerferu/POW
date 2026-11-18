@@ -1,16 +1,18 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
+import { useAppColorScheme } from '../../contexts/ColorSchemeContext';
 
 export default function InputTexto({ placeholder, valor, onChangeText, oculto }) {
+    const { colors } = useAppColorScheme();
     return (
         <View style={styles.contenedor}>
             <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.backgroundElement, borderColor: colors.border, color: colors.text }]}
                 placeholder={placeholder}
                 value={valor}
                 onChangeText={onChangeText}
                 secureTextEntry={oculto}
-                placeholderTextColor="#888"
+                placeholderTextColor={colors.textSecondary}
             />
         </View>
     );
