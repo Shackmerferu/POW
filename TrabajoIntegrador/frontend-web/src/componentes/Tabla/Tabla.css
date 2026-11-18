@@ -24,6 +24,16 @@
   white-space: nowrap;
 }
 
+.tabla__encabezado-centrado {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tabla__celda-centrada {
+  text-align: center;
+}
+
 .tabla tbody td {
   border-bottom: 1px solid #eef1f4;
   padding: 0.55rem 0.75rem;

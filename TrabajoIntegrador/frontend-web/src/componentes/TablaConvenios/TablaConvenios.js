@@ -29,7 +29,13 @@ import DatosVacios from "../DatosVacios/DatosVacios";
 import Paginacion from "../Paginacion/Paginacion";
 import FichaDetalle from "../FichaDetalle/FichaDetalle";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
-import { formatoEntero, formatoFecha, nombreUnidad, recortarTexto } from "../../utils/formatos";
+import {
+  formatoEntero,
+  formatoFecha,
+  nombreUnidad,
+  recortarTexto,
+} from "../../utils/formatos";
+import { obtenerUsuario } from "../../utils/sesion";
 
 const FILAS_POR_PAGINA = 6;
 
@@ -52,7 +58,10 @@ export default function TablaConvenios({
     setPagina(1);
   }, [convenios]);
 
-  const totalPaginas = Math.max(1, Math.ceil(convenios.length / filasPorPagina));
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(convenios.length / filasPorPagina),
+  );
 
   const tarjetasPagina = useMemo(() => {
     const inicio = (pagina - 1) * filasPorPagina;
@@ -63,6 +72,8 @@ export default function TablaConvenios({
   // Ficha de detalle: interna por defecto; delegada si llega onVerDetalle.
   // ------------------------------------------------------------------
   const [detalleActual, setDetalleActual] = useState(null);
+  const usuario = obtenerUsuario();
+  const rolUsuario = usuario?.rol ?? null;
 
   const abrirDetalle = (convenio) => {
     if (typeof onVerDetalle === "function") {
@@ -131,7 +142,11 @@ export default function TablaConvenios({
         <p className="tablaconvenios__total">
           {formatoEntero(convenios.length)} convenio(s) en el listado
         </p>
-        <Paginacion pagina={pagina} totalPaginas={totalPaginas} onChange={setPagina} />
+        <Paginacion
+          pagina={pagina}
+          totalPaginas={totalPaginas}
+          onChange={setPagina}
+        />
       </div>
 
       {!onVerDetalle && (
@@ -140,6 +155,7 @@ export default function TablaConvenios({
           convenios={conveniosCatalogo ?? convenios}
           unidades={unidades}
           onCerrar={() => setDetalleActual(null)}
+          rolUsuario={rolUsuario}
         />
       )}
     </div>

@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-/* ==========================================================================
-   ACCESIBILIDAD (WCAG 2.1) — clases aplicadas sobre <html> por
-   src/utils/accesibilidad.js según lo configurado en /config
-   ========================================================================== */
 
 /* Foco de teclado siempre visible en cualquier control (2.4.7) */
 :focus-visible {
@@ -202,6 +198,25 @@ html.accesibilidad-contraste .tabla__accion {
 html.accesibilidad-contraste .tabla__accion {
   border-color: #000;
   background: #fff;
+}
+
+/* Botones de cambio de rol */
+html.accesibilidad-contraste .roles__boton-rol,
+html.accesibilidad-contraste .roles__accion-rol,
+html.accesibilidad-contraste .roles__accion-rol--guardar,
+html.accesibilidad-contraste .roles__editor-rol select {
+  border-color: #000;
+  background: #fff;
+  color: #000;
+}
+
+html.accesibilidad-contraste .roles__boton-rol:hover,
+html.accesibilidad-contraste .roles__accion-rol:hover:not(:disabled) {
+  background: #e8e8e8;
+}
+
+html.accesibilidad-contraste .roles__confirmacion {
+  color: #000;
 }
 
 /* Tabla/listado de convenios */

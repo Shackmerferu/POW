@@ -18,8 +18,11 @@ export default function Tabla({ columnas, filas, filaRender, mensajeVacio }) {
           <thead>
             <tr>
               {columnas.map((columna) => (
-                <th key={columna.titulo} style={columna.ancho ? { width: columna.ancho } : undefined}>
-                  {columna.titulo}
+                <th
+                  key={columna.titulo}
+                  style={columna.ancho ? { width: columna.ancho } : undefined}
+                >
+                  {columna.contenido ?? columna.titulo}
                 </th>
               ))}
             </tr>

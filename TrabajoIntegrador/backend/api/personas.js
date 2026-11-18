@@ -4,12 +4,45 @@ const verificarToken = require('../verificarToken'); // El patovica
 
 module.exports = (db) => {
 
+    // 0. LISTADO GLOBAL DE PERSONAS Y PASANTÍAS
+    // Une cada persona con su convenio (código y título) para alimentar la
+    // tabla "Personas y pasantías" del panel y la métrica de personas únicas.
+    // Respeta el alcance: si el usuario tiene unidad asignada (id_unidad),
+    // solo ve personas de convenios de ESA unidad; si no, ve todo.
+
+    router.get('/', verificarToken, (req, res) => {
+        let query = `
+            SELECT p.id, p.id_convenio, p.nombre_completo, p.rol, p.carrera,
+                   p.carga_horaria, p.periodo, p.tutoria, p.asignacion, p.seguro,
+                   c.codigo_unico, c.titulo AS convenio_titulo,
+                   c.id_unidad_responsable
+            FROM personas_pasantias p
+            INNER JOIN convenios c ON c.id = p.id_convenio
+        `;
+        const valores = [];
+
+        if (req.usuario.id_unidad !== null && req.usuario.id_unidad !== undefined) {
+            query += " WHERE c.id_unidad_responsable = ?";
+            valores.push(req.usuario.id_unidad);
+        }
+
+        query += " ORDER BY p.nombre_completo ASC, c.codigo_unico ASC";
+
+        db.query(query, valores, (error, resultados) => {
+            if (error) {
+                console.error("Error consultando personas:", error);
+                return res.status(500).json({ status: 500, mensaje: "Error en el servidor." });
+            }
+            res.json({ status: 200, total: resultados.length, data: resultados });
+        });
+    });
+
     // 1. VER PERSONAS/PASANTES DE UN CONVENIO 
    
     router.get('/convenio/:id', verificarToken, (req, res) => {
         const idConvenio = req.params.id;
         
-        const query = 'SELECT id, id_convenio, nombre_completo, rol, carrera, carga_horaria FROM personas_pasantias WHERE id_convenio = ?';
+        const query = 'SELECT id, id_convenio, nombre_completo, rol, carrera, carga_horaria, periodo, tutoria, asignacion, seguro FROM personas_pasantias WHERE id_convenio = ?';
         
         db.query(query, [idConvenio], (error, resultados) => {
             if (error) {
@@ -24,7 +57,8 @@ module.exports = (db) => {
     // 2. VINCULAR UNA PERSONA/PASANTE A UN CONVENIO 
     
     router.post('/', verificarToken, (req, res) => {
-        const { id_convenio, nombre_completo, rol, carrera, carga_horaria } = req.body;
+        const { id_convenio, nombre_completo, rol, carrera, carga_horaria,
+                periodo, tutoria, asignacion, seguro } = req.body;
 
         // Validación estricta de los datos mínimos
         if (!id_convenio || !nombre_completo || !rol) {
@@ -35,11 +69,21 @@ module.exports = (db) => {
         }
 
         const query = `
-            INSERT INTO personas_pasantias (id_convenio, nombre_completo, rol, carrera, carga_horaria) 
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO personas_pasantias (id_convenio, nombre_completo, rol, carrera, carga_horaria, periodo, tutoria, asignacion, seguro) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        db.query(query, [id_convenio, nombre_completo, rol, carrera || null, carga_horaria || null], (error, resultados) => {
+        db.query(query, [
+            id_convenio,
+            nombre_completo,
+            rol,
+            carrera || null,
+            carga_horaria ? Number(carga_horaria) : null,
+            periodo || null,
+            tutoria || null,
+            asignacion || null,
+            seguro || null,
+        ], (error, resultados) => {
             if (error) {
                 console.error("Error guardando persona:", error);
                 return res.status(500).json({ status: 500, mensaje: "Error al guardar en la base de datos." });

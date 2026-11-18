@@ -12,12 +12,13 @@
  * hoja simulada con los datos del archivo, para no depender del backend.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { API_URL } from "../../config/api";
 import MenuAcciones from "../MenuAcciones/MenuAcciones";
 import "./VistaPreviaDocumento.css";
 
 const ETIQUETAS_ACCION = {
-  editar: "Editar en Office / web",
+  editar: "Ver en Office / web",
   comparar: "Comparar cambios",
   descargar: "Descargar",
   subir: "Subir nueva versión",
@@ -32,9 +33,73 @@ const NOMBRES_DOCUMENTO = {
   otro: "Otro",
 };
 
-export default function VistaPreviaDocumento({ documento, alElegirAccion, aviso }) {
-  const esUrlReal =
-    documento?.ruta_archivo && /^(https?:|blob:|data:)/.test(documento.ruta_archivo);
+export default function VistaPreviaDocumento({
+  documento,
+  alElegirAccion,
+  aviso,
+  rolUsuario,
+}) {
+  const [urlPdf, setUrlPdf] = useState(null);
+  const [cargandoPdf, setCargandoPdf] = useState(false);
+  const [errorPdf, setErrorPdf] = useState("");
+
+  const documentoId = documento?.id ?? null;
+
+  useEffect(() => {
+    const controlador = new AbortController();
+    let urlTemporal = null;
+
+    setUrlPdf(null);
+    setErrorPdf("");
+
+    if (documentoId === null) {
+      setCargandoPdf(false);
+      return () => controlador.abort();
+    }
+
+    async function cargarPdf() {
+      setCargandoPdf(true);
+
+      try {
+        const token = localStorage.getItem("token");
+        const respuesta = await fetch(
+          `${API_URL}/documents/${documentoId}/view`,
+          {
+            headers: token
+              ? { Authorization: `Bearer ${token}` }
+              : {},
+            signal: controlador.signal,
+          },
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(`La API respondió con estado ${respuesta.status}.`);
+        }
+
+        const archivo = await respuesta.blob();
+        urlTemporal = URL.createObjectURL(archivo);
+        setUrlPdf(urlTemporal);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("No se pudo cargar la vista previa:", error);
+          setErrorPdf("No se pudo cargar la vista previa del documento.");
+        }
+      } finally {
+        if (!controlador.signal.aborted) {
+          setCargandoPdf(false);
+        }
+      }
+    }
+
+    cargarPdf();
+
+    return () => {
+      controlador.abort();
+      if (urlTemporal) {
+        URL.revokeObjectURL(urlTemporal);
+      }
+    };
+  }, [documentoId]);
 
   return (
     <section className="vista-previa">
@@ -44,31 +109,47 @@ export default function VistaPreviaDocumento({ documento, alElegirAccion, aviso 
             {NOMBRES_DOCUMENTO[documento?.tipo_documento] ?? "Documento"}
             {documento?.version ? ` · versión ${documento.version}` : ""}
           </p>
-          <p className="vista-previa__nombre">{documento?.nombre_archivo ?? "—"}</p>
+          <p className="vista-previa__nombre">
+            {documento?.nombre_archivo ?? "—"}
+          </p>
           <p className="vista-previa__meta">
             {documento
               ? `${formatoTamano(documento.tamano_kb)} · subido el ${documento.fecha_subida} · ${documento.subido_por ?? "—"}`
               : "Sin documento seleccionado"}
           </p>
         </div>
+
         <MenuAcciones
-          etiqueta="Acciones"
-          opciones={Object.entries(ETIQUETAS_ACCION).map(([id, texto]) => ({
-            id,
-            texto,
-            separadorAntes: id === "aprobar", // línea antes de aprobar/rechazar
-          }))}
-          alElegir={(id) => alElegirAccion(id, documento)}
-          deshabilitado={!documento}
-        />
+  etiqueta="Acciones"
+  opciones={Object.entries(ETIQUETAS_ACCION).map(([id, texto]) => {
+    const esConsulta =
+      String(rolUsuario ?? "").trim().toLowerCase() === "consulta";
+
+    return {
+      id,
+      texto,
+      separadorAntes: id === "aprobar",
+
+      // Consulta no puede aprobar/rechazar ni subir versiones.
+      deshabilitada:
+        esConsulta && (id === "aprobar" || id === "subir"),
+    };
+  })}
+  alElegir={(id) => alElegirAccion(id, documento)}
+  deshabilitado={!documento}
+/>
       </header>
 
       <div className="vista-previa__marco">
-        {esUrlReal ? (
+        {cargandoPdf ? (
+          <p className="vista-previa__vacio">Cargando documento…</p>
+        ) : errorPdf ? (
+          <p className="vista-previa__vacio" role="alert">{errorPdf}</p>
+        ) : urlPdf ? (
           <iframe
             className="vista-previa__iframe"
-            src={documento.ruta_archivo}
-            title={`Vista previa de ${documento.nombre_archivo}`}
+            src={urlPdf}
+            title={`Vista previa de ${documento?.nombre_archivo ?? "documento"}`}
           />
         ) : documento ? (
           <HojaSimulada />
@@ -79,7 +160,6 @@ export default function VistaPreviaDocumento({ documento, alElegirAccion, aviso 
 
       {aviso && <p className="vista-previa__aviso">{aviso}</p>}
 
-      {/* Nota de integridad, igual que exige el registro de documentos */}
       {documento?.hash_sha256 && (
         <p className="vista-previa__nota">
           Integridad SHA-256: {documento.hash_sha256}

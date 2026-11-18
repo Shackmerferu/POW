@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken'); // Importamos la librería de JWT
 const bcrypt = require('bcrypt'); // <-- Importamos la librería de seguridad
+const { JWT_SECRETO } = require('../config');
 
 module.exports = (db) => {
     // Verifica que el token enviado por el frontend siga siendo válido.
@@ -16,7 +17,7 @@ module.exports = (db) => {
         }
 
         try {
-            const datos = jwt.verify(token, 'EL_VIP');
+            const datos = jwt.verify(token, JWT_SECRETO);
             return res.json({ status: 200, usuario: datos });
         } catch (error) {
             return res.status(401).json({ status: 401, mensaje: "Token inválido o vencido." });
@@ -68,7 +69,7 @@ module.exports = (db) => {
                     rol: usuario.rol, 
                     id_unidad: usuario.id_unidad 
                 },
-                'EL_VIP', 
+                JWT_SECRETO,
                     { expiresIn: '2h' } // El token vence en 2 horas por seguridad
             );
 

@@ -252,6 +252,173 @@
   font-style: italic;
 }
 
+/* --- Cambio de rol por fila --------------------------------------------- */
+/* Buscador de usuarios, a la derecha del título "Usuarios y alcance".
+   Mismo estilo de campo que FiltroBusqueda, pero en un solo input. */
+.roles__buscador {
+  box-sizing: border-box;
+  flex: 0 1 16rem;
+  min-width: 12rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: #25313e;
+  border: 1px solid #ccd4dc;
+  border-radius: 3px;
+  padding: 0.36rem 0.5rem;
+  background: #fff;
+}
+
+.roles__buscador:focus {
+  outline: 2px solid rgba(31, 79, 153, 0.35);
+  outline-offset: 0;
+}
+
+.roles__celda-rol {
+  display: grid;
+  /* Pistas fijas: ancho total constante en los 3 estados (cerrado, editor
+     abierto y confirmado), así la columna de la tabla nunca se corre.
+     El sobrante de la celda se reparte entre ambas pistas: la etiqueta
+     queda a la izquierda y los controles pegados al borde derecho. */
+  grid-template-columns: 7rem 11.6rem;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Ancho fijo de la etiqueta: así el botón Cambiar arranca en la misma
+   posición en todas las filas, sin importar el largo del rol. */
+.roles__celda-rol .etiqueta--rol {
+  box-sizing: border-box;
+  grid-column: 1;
+  text-align: center;
+}
+
+/* El título "Rol" se centra sobre la lista de etiquetas, no sobre el botón. */
+.roles__columna-rol {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 7rem;
+  text-align: center;
+}
+
+/* La columna Rol respira un poco más respecto de "Alcance": mismo aire
+   extra en el encabezado y en las filas, así todas mantienen el mismo gap. */
+
+
+/* Botón y confirmación comparten el mismo recuadro para que ninguna fila
+   cambie de ancho al editar o al guardar. */
+.roles__boton-rol,
+.roles__confirmacion {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 5.75rem;
+  height: 1.75rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  grid-column: 2;      /* siempre en la pista de la derecha, al fondo */
+  justify-self: end;
+}
+
+.roles__boton-rol {
+  
+  border-color: #d7dce3;
+  background-color: #fff;
+  color: #1f4f99;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.roles__boton-rol:hover {
+  background-color: #eef2f8;
+  border-color: #cdd8e9;
+}
+
+.roles__boton-rol svg {
+  flex: none;
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.roles__confirmacion {
+  color: #1b7a3d;
+  font-weight: 600;
+}
+
+.roles__editor-rol {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  grid-column: 2;      /* igual que el botón: misma pista, mismo borde derecho */
+  justify-self: end;
+}
+
+.roles__editor-rol select {
+  box-sizing: border-box;
+  width: 7.5rem;
+  height: 1.75rem;
+  padding: 0 0.4rem;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #33404e;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.roles__accion-rol {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #64707d;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.roles__accion-rol--guardar {
+  border-color: #cdd8e9;
+  background-color: #eef2f8;
+  color: #1f4f99;
+}
+
+.roles__accion-rol:hover:not(:disabled) {
+  background-color: #e4ebf5;
+  border-color: #b9c9e2;
+}
+
+.roles__accion-rol:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.roles__accion-rol svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.roles__error-rol {
+  color: #b3261e;
+  font-size: 0.7rem;
+  grid-column: 1 / -1;
+}
+
 /* --- Pie de Administración --------------------------------------------- */
 .administracion__pie {
   display: flex;

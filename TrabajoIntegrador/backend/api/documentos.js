@@ -10,7 +10,7 @@ const verificarToken = require('../verificarToken');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = path.join(__dirname, '../../uploads/documentos');
+        const dir = path.join(__dirname, '../../backend/uploads/documentos');
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
@@ -36,7 +36,25 @@ const upload = multer({
 
 module.exports = (db) => {
 
-   
+    // AUDITORÍA DE ACCESOS
+    // Registra en la trazabilidad del convenio cada descarga o vista previa
+    // de un documento (requisito: registrar acciones relevantes y descargas).
+    // Los errores de auditoría no interrumpen la descarga: solo se loguean.
+
+    function registrarAcceso(idConvenio, idUsuario, texto) {
+        const query = `
+            INSERT INTO auditoria_observaciones
+                (id_convenio, id_usuario, observacion, estado_previo, estado_nuevo)
+            VALUES (?, ?, ?, NULL, NULL)
+        `;
+        db.query(query, [idConvenio, idUsuario, texto], (error) => {
+            if (error) {
+                console.error("Error registrando el acceso en auditoría:", error);
+            }
+        });
+    }
+
+
     //  SUBIR DOCUMENTO Y CALCULAR SHA-256 
     
     router.post('/', verificarToken, upload.single('archivo'), (req, res) => {
@@ -98,16 +116,23 @@ module.exports = (db) => {
     router.get('/:id/download', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
-        db.query('SELECT ruta_archivo, tipo_documento FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+        db.query('SELECT id_convenio, ruta_archivo, tipo_documento FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
             if (error || resultados.length === 0) {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado en la base de datos." });
             }
 
             // Buscamos el archivo físico en la carpeta protegida
-            const archivoFisico = resultados[0].ruta_archivo;
-            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', archivoFisico);
+            const documento = resultados[0];
+            const archivoFisico = documento.ruta_archivo;
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', archivoFisico);
 
             if (fs.existsSync(rutaCompleta)) {
+                // Trazabilidad: quién descargó qué documento y cuándo.
+                registrarAcceso(
+                    documento.id_convenio,
+                    req.usuario.id,
+                    `Descarga del documento "${documento.tipo_documento}" (ID #${idDoc}).`
+                );
                 // Express fuerza la descarga con el nombre encriptado
                 res.download(rutaCompleta); 
             } else {
@@ -119,14 +144,20 @@ module.exports = (db) => {
     router.get('/:id/view', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
-        db.query('SELECT ruta_archivo FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+        db.query('SELECT id_convenio, ruta_archivo FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
             if (error || resultados.length === 0) {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado." });
             }
 
-            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', resultados[0].ruta_archivo);
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', resultados[0].ruta_archivo);
 
             if (fs.existsSync(rutaCompleta)) {
+                // Trazabilidad: quién consultó la vista previa y cuándo.
+                registrarAcceso(
+                    resultados[0].id_convenio,
+                    req.usuario.id,
+                    `Vista previa del documento (ID #${idDoc}).`
+                );
                 // sendFile le dice al navegador "mostralo si podés", ideal para PDFs
                 res.sendFile(rutaCompleta); 
             } else {
