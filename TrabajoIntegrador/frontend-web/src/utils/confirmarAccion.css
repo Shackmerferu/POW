@@ -1,0 +1,89 @@
+.confirmacion-accion__fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(15 23 34 / 48%);
+}
+
+.confirmacion-accion {
+  width: min(440px, 100%);
+  border: 1px solid #d6dde7;
+  border-top: 4px solid #1f4f99;
+  background: #fff;
+  color: #25313e;
+  box-shadow: 0 12px 36px rgb(15 23 34 / 22%);
+}
+
+.confirmacion-accion__encabezado {
+  padding: 1rem 1.15rem 0.65rem;
+  border-bottom: 1px solid #e6eaee;
+}
+
+.confirmacion-accion__encabezado h2 {
+  margin: 0;
+  color: #1f4f99;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.confirmacion-accion__cuerpo {
+  padding: 1rem 1.15rem;
+}
+
+.confirmacion-accion__cuerpo p {
+  margin: 0;
+  color: #33404e;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.confirmacion-accion__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0 1.15rem 1rem;
+}
+
+.confirmacion-accion__boton {
+  min-height: 31px;
+  border: 1px solid #1f4f99;
+  border-radius: 3px;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.confirmacion-accion__boton--cancelar {
+  background: #fff;
+  color: #1f4f99;
+}
+
+.confirmacion-accion__boton--cancelar:hover {
+  background: #eef2f8;
+}
+
+.confirmacion-accion__boton--continuar {
+  background: #1f4f99;
+  color: #fff;
+}
+
+.confirmacion-accion__boton--continuar:hover {
+  border-color: #1a4280;
+  background: #1a4280;
+}
+
+.confirmacion-accion__boton:focus-visible {
+  outline: 2px solid #1f4f99;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confirmacion-accion__boton {
+    scroll-behavior: auto;
+  }
+}

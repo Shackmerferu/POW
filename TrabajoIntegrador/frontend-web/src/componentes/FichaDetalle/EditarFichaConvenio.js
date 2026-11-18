@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 import "./EditarFichaConvenio.css";
 
 const CAMPOS_INICIALES = {
@@ -39,6 +40,15 @@ export default function EditarFichaConvenio({
     setFormulario({
       ...CAMPOS_INICIALES,
       ...convenio,
+      titulo: convenio.titulo ?? "",
+      objeto: convenio.objeto ?? "",
+      obligaciones: convenio.obligaciones ?? "",
+      condiciones_rescision: convenio.condiciones_rescision ?? "",
+      condiciones_renovacion: convenio.condiciones_renovacion ?? "",
+      marco_legal: convenio.marco_legal ?? "",
+      resolucion: convenio.resolucion ?? "",
+      expediente: convenio.expediente ?? "",
+      notas: convenio.notas ?? "",
       fecha_inicio: fechaInput(convenio.fecha_inicio),
       fecha_firma: fechaInput(convenio.fecha_firma),
       fecha_vencimiento: fechaInput(convenio.fecha_vencimiento),
@@ -58,20 +68,21 @@ export default function EditarFichaConvenio({
 
   const enviar = async (evento) => {
     evento.preventDefault();
+    if (!(await confirmarAccion(`¿Querés guardar los cambios de ${convenio?.codigo_unico ?? "este convenio"}?`))) return;
     setGuardando(true);
     setError("");
 
     try {
       await onGuardar({
-        titulo: formulario.titulo.trim(),
-        objeto: formulario.objeto.trim(),
-        obligaciones: formulario.obligaciones.trim(),
-        condiciones_rescision: formulario.condiciones_rescision.trim(),
-        condiciones_renovacion: formulario.condiciones_renovacion.trim(),
-        marco_legal: formulario.marco_legal.trim(),
-        resolucion: formulario.resolucion.trim(),
-        expediente: formulario.expediente.trim(),
-        notas: formulario.notas.trim(),
+        titulo: String(formulario.titulo ?? "").trim(),
+        objeto: String(formulario.objeto ?? "").trim(),
+        obligaciones: String(formulario.obligaciones ?? "").trim(),
+        condiciones_rescision: String(formulario.condiciones_rescision ?? "").trim(),
+        condiciones_renovacion: String(formulario.condiciones_renovacion ?? "").trim(),
+        marco_legal: String(formulario.marco_legal ?? "").trim(),
+        resolucion: String(formulario.resolucion ?? "").trim(),
+        expediente: String(formulario.expediente ?? "").trim(),
+        notas: String(formulario.notas ?? "").trim(),
         fecha_inicio: formulario.fecha_inicio || null,
         fecha_firma: formulario.fecha_firma || null,
         fecha_vencimiento: formulario.fecha_vencimiento || null,
@@ -280,13 +291,13 @@ export default function EditarFichaConvenio({
         <div className="form-alta__acciones editar-ficha__acciones">
           <button
             type="button"
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-secondary btn-sm"
             onClick={onCerrar}
             disabled={guardando}
           >
             Cancelar
           </button>
-          <button type="submit" className="btn btn-primary" disabled={guardando}>
+          <button type="submit" className="btn btn-primary btn-sm" disabled={guardando}>
             {guardando ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>

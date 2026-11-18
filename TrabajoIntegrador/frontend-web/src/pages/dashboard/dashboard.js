@@ -30,6 +30,7 @@ import {
   rutaInicioPorRol,
 } from "../../utils/permisos";
 import { API_URL } from "../../config/api";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
 import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
 import {
@@ -379,7 +380,7 @@ function Dashboard() {
       ruta: `/agreements/${id}`,
       datos: {
         ...cambios,
-        fecha_actualizacion_cliente: convenio?.fecha_actualizacion ?? null,
+        fecha_actualizacion_cliente: convenio?.fecha_actualizacion_version ?? convenio?.fecha_actualizacion ?? null,
       },
     };
 
@@ -398,6 +399,8 @@ function Dashboard() {
   // Llama al endpoint propio de cambio de rol. Si el afectado es el usuario
   // actual, el JWT y el localStorage quedaron viejos: cerramos sesión.
   const cambiarRolUsuario = async (id, rolNuevo) => {
+    if (!(await confirmarAccion(`¿Querés cambiar el rol del usuario #${id} a ${rolNuevo}?`))) return;
+
     const token = localStorage.getItem("token");
 
     const res = await fetch(`${API_URL}/usuarios/${id}/rol`, {
@@ -440,6 +443,9 @@ function Dashboard() {
     convenio,
     fechaFirma,
   ) => {
+    const etiquetaEstadoNuevo = ETIQUETAS_ESTADO[estadoNuevo] ?? estadoNuevo;
+    if (!(await confirmarAccion(`¿Querés continuar con el cambio de ${convenio?.codigo_unico ?? `#${id}`} a "${etiquetaEstadoNuevo}"?`))) return;
+
     const operacion = {
       method: "PUT",
       ruta: `/agreements/${id}/estado`,
@@ -447,7 +453,7 @@ function Dashboard() {
         estado_nuevo: estadoNuevo,
         observacion,
         fecha_firma: fechaFirma || null,
-        fecha_actualizacion_cliente: convenio?.fecha_actualizacion ?? null,
+        fecha_actualizacion_cliente: convenio?.fecha_actualizacion_version ?? convenio?.fecha_actualizacion ?? null,
       },
     };
 
@@ -526,7 +532,7 @@ function Dashboard() {
     setArchivoAlta(archivo);
   };
 
-  const enviarAlta = (evento) => {
+  const enviarAlta = async (evento) => {
     evento.preventDefault();
     setErrorAlta("");
 
@@ -542,12 +548,13 @@ function Dashboard() {
       return;
     }
 
+    if (!(await confirmarAccion(`¿Querés guardar "${formAlta.titulo.trim()}" como borrador?`))) return;
+
     const datos = new FormData();
     datos.append("titulo", formAlta.titulo.trim());
     datos.append("tipo", formAlta.tipo);
     datos.append("id_unidad_responsable", formAlta.id_unidad);
     datos.append("objeto", formAlta.objeto.trim());
-    datos.append("estado", "revision"); // el alta entra directo al circuito de revisión
     datos.append(
       "confidencialidad",
       formAlta.confidencialidad ? "true" : "false",
@@ -583,11 +590,11 @@ function Dashboard() {
         setFormAlta(VACIO_ALTA);
         setArchivoAlta(null);
         setAvisoAlta(
-          `Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`,
+          `Borrador "${formAlta.titulo.trim()}" creado. Completá la ficha y cargá un PDF para enviarlo a revisión.`,
         );
         lanzarAviso(
-          "Alta registrada",
-          `"${formAlta.titulo.trim()}" se creó en estado Revisión y entró al circuito del trámite.`,
+          "Borrador guardado",
+          `"${formAlta.titulo.trim()}" se creó como borrador. Cargá el PDF y completá los datos antes de enviarlo a revisión.`,
           "exito",
         );
         recargarConvenios();
@@ -947,8 +954,8 @@ function Dashboard() {
         onRefrescar={recargarConvenios}
       />
 
-      {/* Modal de alta: formulario con toda la info del instrumento + PDF.
-          El convenio se crea en estado "revision" para entrar al circuito. */}
+      {/* El alta guarda un borrador; el envío a revisión requiere la ficha
+          completa y, al menos, un PDF registrado. */}
       <VentanaModal
         abierto={modalAltaAbierto}
         titulo="Agregar convenio"
@@ -956,8 +963,9 @@ function Dashboard() {
       >
         <form className="form-alta" onSubmit={enviarAlta} noValidate>
           <p className="form-alta__nota">
-            Los campos marcados con * son obligatorios. El convenio se crea en
-            estado <strong>Revisión</strong> y el código único se genera solo.
+            Completá los datos disponibles y guardá el convenio como borrador.
+            Para enviarlo a revisión, la ficha debe tener título, tipo, unidad
+            objeto y al menos un PDF. El código único se genera automáticamente.
           </p>
 
           <div className="form-alta__campo">
@@ -1134,7 +1142,7 @@ function Dashboard() {
               Cancelar
             </button>
             <button type="submit" className="btn-panel" disabled={enviandoAlta}>
-              {enviandoAlta ? "Guardando…" : "Crear convenio en revisión"}
+              {enviandoAlta ? "Guardando…" : "Guardar borrador"}
             </button>
           </div>
         </form>

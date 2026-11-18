@@ -20,11 +20,16 @@ module.exports = (db) => {
             INNER JOIN convenios c ON c.id = p.id_convenio
         `;
         const valores = [];
+        const filtros = [];
 
+        if (req.usuario.rol === "consulta") {
+            filtros.push("c.estado IN ('aprobado', 'firmado')");
+        }
         if (req.usuario.id_unidad !== null && req.usuario.id_unidad !== undefined) {
-            query += " WHERE c.id_unidad_responsable = ?";
+            filtros.push("c.id_unidad_responsable = ?");
             valores.push(req.usuario.id_unidad);
         }
+        if (filtros.length > 0) query += ` WHERE ${filtros.join(" AND ")}`;
 
         query += " ORDER BY p.nombre_completo ASC, c.codigo_unico ASC";
 
@@ -42,9 +47,18 @@ module.exports = (db) => {
     router.get('/convenio/:id', verificarToken, (req, res) => {
         const idConvenio = req.params.id;
         
-        const query = 'SELECT id, id_convenio, nombre_completo, rol, carrera, carga_horaria, periodo, tutoria, asignacion, seguro FROM personas_pasantias WHERE id_convenio = ?';
-        
-        db.query(query, [idConvenio], (error, resultados) => {
+        let query = `SELECT p.id, p.id_convenio, p.nombre_completo, p.rol, p.carrera,
+            p.carga_horaria, p.periodo, p.tutoria, p.asignacion, p.seguro
+            FROM personas_pasantias p INNER JOIN convenios c ON c.id = p.id_convenio
+            WHERE p.id_convenio = ?`;
+        const valores = [idConvenio];
+        if (req.usuario.rol === "consulta") query += " AND c.estado IN ('aprobado', 'firmado')";
+        if (req.usuario.id_unidad != null) {
+            query += " AND c.id_unidad_responsable = ?";
+            valores.push(req.usuario.id_unidad);
+        }
+
+        db.query(query, valores, (error, resultados) => {
             if (error) {
                 console.error("Error consultando personas:", error);
                 return res.status(500).json({ status: 500, mensaje: "Error en el servidor." });
@@ -57,6 +71,7 @@ module.exports = (db) => {
     // 2. VINCULAR UNA PERSONA/PASANTE A UN CONVENIO 
     
     router.post('/', verificarToken, (req, res) => {
+        if (req.usuario?.rol === 'consulta') return res.status(403).json({ status: 403, mensaje: 'El rol consulta solo tiene permiso de lectura.' });
         const { id_convenio, nombre_completo, rol, carrera, carga_horaria,
                 periodo, tutoria, asignacion, seguro } = req.body;
 
@@ -100,6 +115,7 @@ module.exports = (db) => {
     // 3. ELIMINAR O DAR DE BAJA UNA PERSONA 
    
     router.delete('/:id', verificarToken, (req, res) => {
+        if (req.usuario?.rol === 'consulta') return res.status(403).json({ status: 403, mensaje: 'El rol consulta solo tiene permiso de lectura.' });
         const idPersona = req.params.id;
         
         const query = 'DELETE FROM personas_pasantias WHERE id = ?';

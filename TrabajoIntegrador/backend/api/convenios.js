@@ -36,18 +36,24 @@ module.exports = (db) => {
   router.get("/", verificarToken, (req, res) => {
   let query = `
     SELECT c.*, d.id AS doc_id, d.tipo_documento,
-           d.ruta_archivo, d.fecha_subida
+           d.ruta_archivo, d.fecha_subida,
+           DATE_FORMAT(c.fecha_actualizacion, '%Y-%m-%d %H:%i:%s') AS fecha_actualizacion_version
     FROM convenios c
     LEFT JOIN documentos d ON c.id = d.id_convenio
   `;
 
   const valores = [];
+  const filtros = [];
 
-  if (req.usuario.id_unidad !== null &&
-      req.usuario.id_unidad !== undefined) {
-    query += " WHERE c.id_unidad_responsable = ?";
+  // El rol consulta solo puede recibir convenios aprobados o firmados.
+  if (req.usuario.rol === "consulta") {
+    filtros.push("c.estado IN ('aprobado', 'firmado')");
+  }
+  if (req.usuario.id_unidad !== null && req.usuario.id_unidad !== undefined) {
+    filtros.push("c.id_unidad_responsable = ?");
     valores.push(req.usuario.id_unidad);
   }
+  if (filtros.length > 0) query += ` WHERE ${filtros.join(" AND ")}`;
 
   db.query(query, valores, (error, resultados) => {
     if (error) {
@@ -82,6 +88,7 @@ module.exports = (db) => {
           fecha_vencimiento: row.fecha_vencimiento,
           dias_preaviso: row.dias_preaviso,
           fecha_actualizacion: row.fecha_actualizacion,
+          fecha_actualizacion_version: row.fecha_actualizacion_version,
           id_unidad_responsable: row.id_unidad_responsable,
           id_antecedente: row.id_antecedente,
           documentos: [],
@@ -108,6 +115,9 @@ module.exports = (db) => {
 
   // Alta de convenio con PDF opcional.
   router.post("/", verificarToken, (req, res) => {
+    if (req.usuario?.rol === "consulta") {
+      return res.status(403).json({ status: 403, mensaje: "El rol consulta solo tiene permiso de lectura." });
+    }
     subida.single("archivo")(req, res, (errorSubida) => {
       if (errorSubida) {
         const mensaje =
@@ -128,8 +138,7 @@ function crearConvenio(req, res) {
     tipo,
     objeto,
     id_unidad_responsable,
-    // Estos son opcionales (permiten NULL)
-    estado,
+    // Estos son opcionales (permiten NULL). El estado inicial siempre es borrador.
     marco_legal,
     confidencialidad,
     fecha_firma,
@@ -177,9 +186,8 @@ function crearConvenio(req, res) {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
-    // Si no mandan estado, tu base usa 'borrador' por defecto. El alta
-    // desde el panel manda 'revision' para entrar al circuito de revisión.
-    const estadoFinal = estado || "borrador";
+    // El estado inicial es borrador. El envío a revisión requiere los datos obligatorios y un PDF.
+    const estadoFinal = "borrador";
     const confFinal =
       confidencialidad === true ||
         confidencialidad === "true" ||
@@ -282,6 +290,9 @@ router.get('/alerts', verificarToken, (req, res) => {
       AND estado NOT IN ('rescindido', 'archivado')
       AND fecha_vencimiento <= DATE_ADD(CURDATE(), INTERVAL COALESCE(dias_preaviso, 0) DAY)
   `;
+  if (req.usuario.rol === "consulta") {
+    query += " AND estado IN ('aprobado', 'firmado')";
+  }
   const valores = [];
   if (req.usuario.id_unidad !== null && req.usuario.id_unidad !== undefined) {
     query += ' AND id_unidad_responsable = ?';
@@ -345,7 +356,7 @@ router.put('/:id', verificarToken, (req, res) => {
     valores.push(id_unidad);
   }
   if (fechaCliente) {
-    query += ' AND fecha_actualizacion = ?';
+    query += " AND DATE_FORMAT(fecha_actualizacion, '%Y-%m-%d %H:%i:%s') = ?";
     valores.push(fechaCliente);
   }
 
@@ -355,14 +366,22 @@ router.put('/:id', verificarToken, (req, res) => {
       return res.status(500).json({ status: 500, mensaje: 'Error actualizando la ficha.' });
     }
     if (resultado.affectedRows === 0) {
-      return db.query('SELECT id FROM convenios WHERE id = ?', [idConvenio], (errExiste, filas) => {
+      const consultaActual = `SELECT id, id_unidad_responsable,
+        DATE_FORMAT(fecha_actualizacion, '%Y-%m-%d %H:%i:%s') AS fecha_actualizacion_version
+        FROM convenios WHERE id = ?`;
+      return db.query(consultaActual, [idConvenio], (errExiste, filas) => {
         if (errExiste || !filas.length) {
           return res.status(404).json({ status: 404, mensaje: 'Convenio no encontrado.' });
         }
-        if (fechaCliente) {
-          return res.status(409).json({ status: 409, mensaje: 'El convenio cambi? en el servidor. Actualiz? la ficha e intent? nuevamente.' });
+        if (id_unidad !== null && id_unidad !== undefined && Number(filas[0].id_unidad_responsable) !== Number(id_unidad)) {
+          return res.status(403).json({ status: 403, mensaje: 'El convenio está fuera del alcance de tu unidad.' });
         }
-        return res.status(403).json({ status: 403, mensaje: 'El convenio est? fuera del alcance de tu unidad.' });
+        const versionActual = filas[0].fecha_actualizacion_version;
+        if (fechaCliente && String(fechaCliente) !== String(versionActual)) {
+          return res.status(409).json({ status: 409, mensaje: 'El convenio cambió en el servidor. Actualizá la ficha e intentá nuevamente.' });
+        }
+        // MySQL informa affectedRows=0 también cuando el formulario se guardó sin cambios.
+        return res.json({ status: 200, sin_cambios: true, mensaje: 'La ficha ya tenía esos datos; no se realizaron cambios.' });
       });
     }
 
@@ -393,9 +412,21 @@ router.put("/:id/estado", verificarToken, (req, res) => {
       });
   }
 
+  let consultaConvenio = `
+    SELECT c.estado, c.titulo, c.tipo, c.objeto, c.id_unidad_responsable,
+           (SELECT COUNT(*) FROM documentos d WHERE d.id_convenio = c.id) AS cantidad_documentos
+    FROM convenios c
+    WHERE c.id = ?
+  `;
+  const valoresConvenio = [idConvenio];
+  if (req.usuario.id_unidad != null) {
+    consultaConvenio += " AND c.id_unidad_responsable = ?";
+    valoresConvenio.push(req.usuario.id_unidad);
+  }
+
   db.query(
-    "SELECT estado FROM convenios WHERE id = ?",
-    [idConvenio],
+    consultaConvenio,
+    valoresConvenio,
     (err, resConv) => {
       if (err || resConv.length === 0) {
         return res
@@ -437,6 +468,22 @@ router.put("/:id/estado", verificarToken, (req, res) => {
         });
       }
 
+      if (estado_nuevo === "revision") {
+        const convenioActual = resConv[0];
+        const faltanDatos =
+          !String(convenioActual.titulo ?? "").trim() ||
+          !String(convenioActual.tipo ?? "").trim() ||
+          !String(convenioActual.objeto ?? "").trim() ||
+          !convenioActual.id_unidad_responsable;
+        const tienePdf = Number(convenioActual.cantidad_documentos) > 0;
+        if (faltanDatos || !tienePdf) {
+          return res.status(400).json({
+            status: 400,
+            mensaje: "Para enviar el convenio a revisión, completá título, tipo, unidad responsable y objeto, y cargá al menos un PDF.",
+          });
+        }
+      }
+
       if (estado_nuevo === "aprobado") {
         db.query(
           "SELECT COUNT(*) as cantidad FROM convenio_partes WHERE id_convenio = ?",
@@ -471,7 +518,7 @@ router.put("/:id/estado", verificarToken, (req, res) => {
           : [estado_nuevo, idConvenio];
 
         if (fecha_actualizacion_cliente) {
-          updateQuery += ' AND fecha_actualizacion = ?';
+          updateQuery += " AND DATE_FORMAT(fecha_actualizacion, '%Y-%m-%d %H:%i:%s') = ?";
           valoresUpd.push(fecha_actualizacion_cliente);
         }
 
@@ -528,11 +575,17 @@ router.get("/:id/auditoria", verificarToken, (req, res) => {
              a.estado_previo, a.estado_nuevo, a.fecha_registro
       FROM auditoria_observaciones a
       LEFT JOIN usuarios u ON u.id = a.id_usuario
+      INNER JOIN convenios c ON c.id = a.id_convenio
       WHERE a.id_convenio = ?
+      ${req.usuario.rol === "consulta" ? "AND c.estado IN ('aprobado', 'firmado')" : ""}
+      ${req.usuario.id_unidad != null ? "AND c.id_unidad_responsable = ?" : ""}
       ORDER BY a.fecha_registro ASC, a.id ASC
     `;
 
-  db.query(query, [idConvenio], (error, resultados) => {
+  const valoresAuditoria = [idConvenio];
+  if (req.usuario.id_unidad != null) valoresAuditoria.push(req.usuario.id_unidad);
+
+  db.query(query, valoresAuditoria, (error, resultados) => {
     if (error) {
       console.error("Error consultando auditoría:", error);
       return res
@@ -550,10 +603,22 @@ router.get("/:id/links", verificarToken, (req, res) => {
   const idConvenio = req.params.id;
 
   // Busca convenios cuyo "padre" sea el ID actual
-  const query =
-    "SELECT id, codigo_unico, titulo, tipo, estado FROM convenios WHERE id_antecedente = ?";
+  let query = `
+    SELECT hijo.id, hijo.codigo_unico, hijo.titulo, hijo.tipo, hijo.estado
+    FROM convenios hijo
+    INNER JOIN convenios padre ON padre.id = ?
+    WHERE hijo.id_antecedente = padre.id
+  `;
+  const valoresLinks = [idConvenio];
+  if (req.usuario.rol === "consulta") {
+    query += " AND padre.estado IN ('aprobado', 'firmado') AND hijo.estado IN ('aprobado', 'firmado')";
+  }
+  if (req.usuario.id_unidad != null) {
+    query += " AND hijo.id_unidad_responsable = ? AND padre.id_unidad_responsable = ?";
+    valoresLinks.push(req.usuario.id_unidad, req.usuario.id_unidad);
+  }
 
-  db.query(query, [idConvenio], (error, resultados) => {
+  db.query(query, valoresLinks, (error, resultados) => {
     if (error) {
       console.error("Error consultando links:", error);
       return res
@@ -571,6 +636,9 @@ router.get("/:id/links", verificarToken, (req, res) => {
 // Enviar id_antecedente = null desvincula.
 
 router.put("/:id/links", verificarToken, (req, res) => {
+  if (req.usuario?.rol === "consulta") {
+    return res.status(403).json({ status: 403, mensaje: "El rol consulta solo tiene permiso de lectura." });
+  }
   const idConvenio = req.params.id;
   const { id_antecedente } = req.body;
 

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
 import { API_URL } from "../../config/api";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
 import EditarFichaConvenio from "./EditarFichaConvenio";
 import "./FichaDetalle.css";
@@ -172,8 +173,8 @@ export default function FichaDetalle({
     [convenios, convenio],
   );
 
-console.log("Rol en FichaDetalle:", rolUsuario);
-console.log("Rol en VistaPreviaDocumento:", rolUsuario);
+  console.log("Rol en FichaDetalle:", rolUsuario);
+  console.log("Rol en VistaPreviaDocumento:", rolUsuario);
   // Catálogo de instituciones registradas (para asociarlas al convenio).
 
   /** Recarga el catálogo de instituciones registradas. */
@@ -201,6 +202,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       setErrorFormParte("Elegí una institución del listado.");
       return;
     }
+    if (!(await confirmarAccion(`¿Querés asociar ${partesCatalogo.find((item) => String(item.id) === String(parteElegida))?.nombre ?? "esta institución"} al convenio ${convenio.codigo_unico}?`))) return;
     setEnviandoParte(true);
     setErrorFormParte("");
     try {
@@ -245,6 +247,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       );
       return;
     }
+    if (!(await confirmarAccion(`¿Querés registrar "${formParte.nombre.trim()}" y asociarla al convenio ${convenio.codigo_unico}?`))) return;
     setEnviandoParte(true);
     setErrorFormParte("");
     try {
@@ -305,6 +308,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       setErrorFormPersona("El nombre de la persona y su rol son obligatorios.");
       return;
     }
+    if (!(await confirmarAccion(`¿Querés vincular a ${formPersona.nombre_completo.trim()} al convenio ${convenio.codigo_unico} como ${formPersona.rol}?`))) return;
     setEnviandoPersona(true);
     setErrorFormPersona("");
     try {
@@ -348,6 +352,10 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
 
   /** Guarda (o desvincula) el antecedente del instrumento. */
   const guardarRelacion = async () => {
+    const destino = antecedenteElegido
+      ? convenios.find((item) => String(item.id) === String(antecedenteElegido))?.codigo_unico ?? `#${antecedenteElegido}`
+      : "sin antecedente (desvincular)";
+    if (!(await confirmarAccion(`¿Querés actualizar la relación del convenio ${convenio.codigo_unico} con ${destino}?`))) return;
     setGuardandoRelacion(true);
     setErrorRelacion("");
     try {
@@ -720,6 +728,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       return;
     }
 
+    if (!(await confirmarAccion(`¿Querés agregar "${archivo.name}" como nueva versión del documento ${documentoEnVista.tipo_documento} del convenio ${convenio.codigo_unico}?`))) return;
     setEjecutando(true);
     try {
       const token = localStorage.getItem("token");
@@ -767,6 +776,18 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
     if (!estadoNuevo) {
       setErrorEstado("Elegí la transición a registrar.");
       return;
+    }
+    if (estadoNuevo === "revision") {
+      const datosCompletos =
+        String(convenio?.titulo ?? "").trim() &&
+        String(convenio?.tipo ?? "").trim() &&
+        String(convenio?.objeto ?? "").trim() &&
+        convenio?.id_unidad_responsable;
+      const pdfCargado = documentos.some((documento) => documento?.id);
+      if (!datosCompletos || !pdfCargado) {
+        setErrorEstado("Antes de enviar a revisión, completá título, tipo, unidad responsable y objeto, y cargá al menos un PDF.");
+        return;
+      }
     }
     if (!observacionEstado.trim()) {
       setErrorEstado(
@@ -892,13 +913,15 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       </div>
 
       {puedeEditarFicha && (
-        <button
-          type="button"
-          className="btn btn-primary btn-sm ficha__boton-editar"
-          onClick={() => setEditarFichaAbierta(true)}
-        >
-          Editar ficha
-        </button>
+        <div className="ficha__acciones-edicion">
+          <button
+            type="button"
+            className="menu-acciones__toggle ficha__boton-editar"
+            onClick={() => setEditarFichaAbierta(true)}
+          >
+            Editar ficha
+          </button>
+        </div>
       )}
 
       <EditarFichaConvenio

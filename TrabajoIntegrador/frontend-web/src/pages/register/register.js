@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./register.css";
 import logo from "../../logo.png";
 import { API_URL } from "../../config/api";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 
 function Register() {
   const navigate = useNavigate();
@@ -66,11 +67,12 @@ function Register() {
       return;
     }
 
+    const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
+    if (!(await confirmarAccion(`¿Querés crear la cuenta de ${nombreCompleto}?`))) return;
+
     setLoading(true);
 
     try {
-      
-      const nombreCompleto = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
 
      
       const response = await fetch(`${API_URL}/usuarios`, {

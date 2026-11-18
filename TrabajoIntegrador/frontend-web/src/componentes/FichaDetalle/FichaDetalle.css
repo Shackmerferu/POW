@@ -343,3 +343,15 @@
 .ficha__partes + .ficha__seccion {
   margin-top: 1rem;
 }
+
+/* El acceso a edici?n se alinea a la derecha y conserva el estilo de acciones de tabla. */
+.ficha__acciones-edicion {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 0.85rem;
+}
+
+.ficha__boton-editar {
+  margin: 0;
+}
