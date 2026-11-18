@@ -75,10 +75,10 @@ module.exports = (db) => {
         });
     });
 
-    // =========================================================================
+ 
     // 4. VER LAS PARTES DE UN CONVENIO (GET /api/parties/convenio/:id)
     // Trae quiénes firmaron el convenio X
-    // =========================================================================
+  
     router.get('/convenio/:id', verificarToken, (req, res) => {
         const idConvenio = req.params.id;
         
