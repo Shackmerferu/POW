@@ -1138,11 +1138,23 @@ function Roles({
   puedeCambiarRoles,
   cambiarRolUsuario,
 }) {
+  // Búsqueda de usuarios por texto (nombre, legajo o DNI), igual que en
+  // Administración pero con un solo campo.
+  const [busquedaUsuario, setBusquedaUsuario] = useState("");
+  const textoBusqueda = busquedaUsuario.trim().toLowerCase();
+
   const usuariosVisibles = usuarios.filter((u) => {
-    if (usoAlcance) return true;
+    const enAlcance = usoAlcance
+      ? true
+      : String(u.legajo) === String(usuario.legajo) ||
+        u.id_unidad === usuario.id_unidad;
+    if (!enAlcance) return false;
+
+    if (!textoBusqueda) return true;
     return (
-      String(u.legajo) === String(usuario.legajo) ||
-      u.id_unidad === usuario.id_unidad
+      u.nombre_completo.toLowerCase().includes(textoBusqueda) ||
+      String(u.legajo).includes(textoBusqueda) ||
+      String(u.dni ?? "").includes(textoBusqueda)
     );
   });
 
@@ -1185,10 +1197,20 @@ function Roles({
       </section>
 
       <section className="panel-seccion">
-        <VistaSeccion
-          titulo="Usuarios y alcance"
-          ayuda="Listado de usuarios registrado en la base, asociado a cada rol y su unidad."
-        />
+        <div className="panel-seccion__fila">
+          <VistaSeccion
+            titulo="Usuarios y alcance"
+            ayuda="Listado de usuarios registrado en la base, asociado a cada rol y su unidad."
+          />
+          <input
+            type="search"
+            className="roles__buscador"
+            value={busquedaUsuario}
+            placeholder="Usuario"
+            aria-label="Buscar usuario por nombre, legajo o DNI"
+            onChange={(evento) => setBusquedaUsuario(evento.target.value)}
+          />
+        </div>
         <Tabla
           columnas={[
             { titulo: "Legajo", contenido: <span className="tabla__encabezado-centrado">Legajo</span> },
@@ -1207,7 +1229,11 @@ function Roles({
             },
           ]}
           filas={usuariosVisibles}
-          mensajeVacio="Sin usuarios visibles dentro de tu alcance."
+          mensajeVacio={
+            textoBusqueda
+              ? "Ningún usuario coincide con la búsqueda."
+              : "Sin usuarios visibles dentro de tu alcance."
+          }
           filaRender={(u) => (
             <tr key={u.id}>
               <td className="tabla__celda-principal tabla__celda-centrada">

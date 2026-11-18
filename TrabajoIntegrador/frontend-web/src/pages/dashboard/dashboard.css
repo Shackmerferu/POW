@@ -253,20 +253,43 @@
 }
 
 /* --- Cambio de rol por fila --------------------------------------------- */
-.roles__celda-rol {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+/* Buscador de usuarios, a la derecha del título "Usuarios y alcance".
+   Mismo estilo de campo que FiltroBusqueda, pero en un solo input. */
+.roles__buscador {
+  box-sizing: border-box;
+  flex: 0 1 16rem;
   min-width: 12rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: #25313e;
+  border: 1px solid #ccd4dc;
+  border-radius: 3px;
+  padding: 0.36rem 0.5rem;
+  background: #fff;
+}
+
+.roles__buscador:focus {
+  outline: 2px solid rgba(31, 79, 153, 0.35);
+  outline-offset: 0;
+}
+
+.roles__celda-rol {
+  display: grid;
+  /* Pistas fijas: ancho total constante en los 3 estados (cerrado, editor
+     abierto y confirmado), así la columna de la tabla nunca se corre.
+     El sobrante de la celda se reparte entre ambas pistas: la etiqueta
+     queda a la izquierda y los controles pegados al borde derecho. */
+  grid-template-columns: 7rem 11.6rem;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 /* Ancho fijo de la etiqueta: así el botón Cambiar arranca en la misma
    posición en todas las filas, sin importar el largo del rol. */
 .roles__celda-rol .etiqueta--rol {
   box-sizing: border-box;
-  flex: 0 0 7rem;
+  grid-column: 1;
   text-align: center;
 }
 
@@ -278,13 +301,17 @@
   text-align: center;
 }
 
+/* La columna Rol respira un poco más respecto de "Alcance": mismo aire
+   extra en el encabezado y en las filas, así todas mantienen el mismo gap. */
+
+
 /* Botón y confirmación comparten el mismo recuadro para que ninguna fila
    cambie de ancho al editar o al guardar. */
 .roles__boton-rol,
 .roles__confirmacion {
   box-sizing: border-box;
   display: inline-flex;
-  flex: 0 0 5.75rem;
+  flex: none;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
@@ -298,9 +325,12 @@
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
+  grid-column: 2;      /* siempre en la pista de la derecha, al fondo */
+  justify-self: end;
 }
 
 .roles__boton-rol {
+  
   border-color: #d7dce3;
   background-color: #fff;
   color: #1f4f99;
@@ -328,6 +358,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  grid-column: 2;      /* igual que el botón: misma pista, mismo borde derecho */
+  justify-self: end;
 }
 
 .roles__editor-rol select {
@@ -384,7 +416,7 @@
 .roles__error-rol {
   color: #b3261e;
   font-size: 0.7rem;
-  width: 100%;
+  grid-column: 1 / -1;
 }
 
 /* --- Pie de Administración --------------------------------------------- */
