@@ -1,5 +1,8 @@
 import React from "react";
-import { puedeAdministrarUsuarios } from "../../utils/permisos";
+import {
+  puedeAdministrarUsuarios,
+  puedeCambiarRoles,
+} from "../../utils/permisos";
 import "./MenuLateral.css";
 
 /**
@@ -44,7 +47,7 @@ export default function MenuLateral({ pestañaActiva, alSeleccionar, usuario, on
   const incisos = [
     { id: "metricas", texto: "Métricas" },
     { id: "administracion", texto: "Administración" },
-    ...(puedeAdministrarUsuarios(usuario)
+    ...(puedeAdministrarUsuarios(usuario) || puedeCambiarRoles(usuario)
       ? [{ id: "roles", texto: "Roles" }]
       : []),
     { id: "vencimientos", texto: "Vencimientos" },

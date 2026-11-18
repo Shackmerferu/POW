@@ -7,6 +7,48 @@ const verificarToken = require('../verificarToken');
 // 2. EXPORTACIÓN RECIBIENDO LA CONEXIÓN DB DE MYSQL
 module.exports = (db) => {
 
+    // Roles que pueden cambiar roles (coinciden con los del JWT y del ENUM).
+    const ROLES_CON_PERMISO = ['administracion', 'gestion'];
+    const ROLES_VALIDOS = ['administracion', 'gestion', 'revision', 'consulta'];
+
+    // Autorización: verificarToken ya puso req.usuario con el rol del token.
+    function soloGestionOAdministracion(req, res, next) {
+        const rolActor = String(req.usuario?.rol || '').trim().toLowerCase();
+
+        if (!ROLES_CON_PERMISO.includes(rolActor)) {
+            return res.status(403).json({
+                status: 403,
+                mensaje: "No tenés permiso para cambiar roles."
+            });
+        }
+        next();
+    }
+
+    // Normaliza y valida el rol pedido. Lo deja en req.rolNormalizado.
+    function rolValido(req, res, next) {
+        const rolNuevo = String(req.body?.rol || '').trim().toLowerCase();
+
+        if (!ROLES_VALIDOS.includes(rolNuevo)) {
+            return res.status(400).json({
+                status: 400,
+                mensaje: "Rol inválido."
+            });
+        }
+
+        // Regla extra: Gestión no puede otorgar el rol de Administración.
+        const rolActor = String(req.usuario?.rol || '').trim().toLowerCase();
+        if (rolActor === 'gestion' && rolNuevo === 'administracion') {
+            return res.status(403).json({
+                status: 403,
+                mensaje: "Gestión no puede otorgar el rol Administración."
+            });
+        }
+
+        req.rolNormalizado = rolNuevo;
+        next();
+    }
+
+
     
     // ENDPOINT 1: OBTENER TODOS LOS USUARIOS 
     
@@ -129,13 +171,10 @@ module.exports = (db) => {
     });
 
     
-    router.put('/:id', verificarToken, (req, res) => {
+    router.put('/:id', verificarToken, soloGestionOAdministracion, rolValido, (req, res) => {
         const idUsuario = req.params.id; 
-        const { rol, id_unidad, activo } = req.body; 
-
-        if (!rol) {
-            return res.status(400).json({ status: 400, mensaje: "El campo 'rol' es obligatorio para la actualización." });
-        }
+        const { id_unidad, activo } = req.body; 
+        const rol = req.rolNormalizado; 
 
         const estadoActivo = activo !== undefined ? activo : 1;
         const unidadId = id_unidad ? parseInt(id_unidad) : null;
@@ -162,6 +201,39 @@ module.exports = (db) => {
                 datosActualizados: { id: idUsuario, rol: rol, id_unidad: unidadId, activo: estadoActivo }
             });
         });
+    });
+
+    // ENDPOINT NUEVO: cambia SOLO el rol (no toca id_unidad ni activo).
+    router.put('/:id/rol', verificarToken, soloGestionOAdministracion, rolValido, (req, res) => {
+        const idUsuario = req.params.id;
+        const rolNuevo = req.rolNormalizado;
+
+        db.query(
+            'UPDATE usuarios SET rol = ? WHERE id = ?',
+            [rolNuevo, idUsuario],
+            (error, resultados) => {
+                if (error) {
+                    console.error("Error actualizando rol en MySQL:", error);
+                    return res.status(500).json({
+                        status: 500,
+                        mensaje: "Error interno al actualizar el rol."
+                    });
+                }
+
+                if (resultados.affectedRows === 0) {
+                    return res.status(404).json({
+                        status: 404,
+                        mensaje: "No se encontró ningún usuario con ese ID."
+                    });
+                }
+
+                res.json({
+                    status: 200,
+                    mensaje: "Rol actualizado correctamente.",
+                    datosActualizados: { id: idUsuario, rol: rolNuevo }
+                });
+            }
+        );
     });
 
     return router;

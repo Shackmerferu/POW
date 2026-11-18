@@ -19,6 +19,7 @@ const PERMISOS_POR_ROL = Object.freeze({
     gestionarConvenios: true,
     firmarConvenios: true,
     administrarUsuarios: true,
+    cambiarRoles: true,
     verConfiguracion: true,
     descargarDocumentos: true,
     alcanceGlobal: true,
@@ -31,6 +32,7 @@ const PERMISOS_POR_ROL = Object.freeze({
     gestionarConvenios: true,
     firmarConvenios: true,
     administrarUsuarios: false,
+    cambiarRoles: true,
     verConfiguracion: false,
     descargarDocumentos: true,
     alcanceGlobal: false,
@@ -44,6 +46,7 @@ const PERMISOS_POR_ROL = Object.freeze({
     gestionarConvenios: true,
     firmarConvenios: true,
     administrarUsuarios: false,
+    cambiarRoles: false,
     verConfiguracion: false,
     descargarDocumentos: true,
     alcanceGlobal: false,
@@ -56,6 +59,7 @@ const PERMISOS_POR_ROL = Object.freeze({
     gestionarConvenios: false,
     firmarConvenios: false,
     administrarUsuarios: false,
+    cambiarRoles: false,
     verConfiguracion: false,
     descargarDocumentos: true,
     alcanceGlobal: false,
@@ -74,7 +78,7 @@ export const MATRIZ_PERMISOS = Object.freeze([
     rol: "gestion",
     descripcion: "Gestión de instrumentos dentro de su unidad asignada.",
     alcance: "Unidad asignada",
-    permisos: ["Alta y edición de convenios de su unidad", "Carga de documentos", "Exportación dentro del alcance"],
+    permisos: ["Alta y edición de convenios de su unidad", "Carga de documentos", "Cambio de roles de usuarios de su unidad", "Exportación dentro del alcance"],
   },
   {
     rol: "revision",
@@ -119,6 +123,9 @@ export const puedeFirmarConvenios = (usuario) =>
 
 export const puedeAdministrarUsuarios = (usuario) =>
   tienePermiso(usuario, "administrarUsuarios");
+
+export const puedeCambiarRoles = (usuario) =>
+  tienePermiso(usuario, "cambiarRoles");
 
 export const puedeVerConfiguracion = (usuario) =>
   tienePermiso(usuario, "verConfiguracion");

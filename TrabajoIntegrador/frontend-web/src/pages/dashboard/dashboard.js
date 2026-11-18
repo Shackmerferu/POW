@@ -22,6 +22,8 @@ import {
 
 import {
   MATRIZ_PERMISOS,
+  ROLES,
+  puedeCambiarRoles,
   puedeTenerAlcanceGlobal,
   puedeVerConfiguracion,
   puedeVerPanel,
@@ -123,6 +125,50 @@ function Dashboard() {
       .catch(() =>
         setErrorApi("No se pudo actualizar el listado de convenios."),
       );
+  };
+
+  // Recarga solo los usuarios para reflejar al instante un cambio de rol.
+  const recargarUsuarios = () => {
+    const token = localStorage.getItem("token");
+    return fetch(`${API_URL}/usuarios`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
+      .then((res) => res.json())
+      .then((datos) => {
+        if (Array.isArray(datos?.data)) setUsuarios(datos.data);
+      });
+  };
+
+  const [avisoCambioRol, setAvisoCambioRol] = useState("");
+
+  // Llama al endpoint propio de cambio de rol. Si el afectado es el usuario
+  // actual, el JWT y el localStorage quedaron viejos: cerramos sesión.
+  const cambiarRolUsuario = async (id, rolNuevo) => {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/usuarios/${id}/rol`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ rol: rolNuevo }),
+    });
+
+    const datos = await res.json();
+    if (!res.ok) {
+      throw new Error(datos.mensaje || "No se pudo cambiar el rol.");
+    }
+
+    await recargarUsuarios();
+
+    if (Number(id) === Number(usuario.id)) {
+      limpiarSesion();
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    setAvisoCambioRol("Rol actualizado correctamente.");
   };
 
   const [pestaña, setPestaña] = useState("metricas");
@@ -509,6 +555,12 @@ function Dashboard() {
             </p>
           )}
 
+          {pestaña === "roles" && avisoCambioRol && (
+            <p className="dashboard__aviso" role="status" aria-live="polite">
+              {avisoCambioRol}
+            </p>
+          )}
+
           {cargando ? (
             <p className="dashboard__aviso">Cargando datos desde la API…</p>
           ) : errorApi ? (
@@ -552,6 +604,8 @@ function Dashboard() {
                   alcances={{ usoAlcance: alcanceGlobal }}
                   unidades={unidades}
                   usuarios={usuarios}
+                  puedeCambiarRoles={puedeCambiarRoles(usuario)}
+                  cambiarRolUsuario={cambiarRolUsuario}
                 />
               )}
               {pestaña === "vencimientos" && (
@@ -934,7 +988,42 @@ function Administracion({
   );
 }
 
-function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
+function Roles({
+  usuario,
+  alcances: { usoAlcance },
+  unidades,
+  usuarios,
+  puedeCambiarRoles,
+  cambiarRolUsuario,
+}) {
+  const [idSeleccionado, setIdSeleccionado] = useState("");
+  const [rolNuevo, setRolNuevo] = useState(ROLES.CONSULTA);
+  const [guardando, setGuardando] = useState(false);
+  const [errorRol, setErrorRol] = useState("");
+
+  const usuariosVisibles = usuarios.filter((u) => {
+    if (usoAlcance) return true;
+    return (
+      String(u.legajo) === String(usuario.legajo) ||
+      u.id_unidad === usuario.id_unidad
+    );
+  });
+
+  const manejarCambioRol = async (evento) => {
+    evento.preventDefault();
+    if (!idSeleccionado) return;
+
+    setGuardando(true);
+    setErrorRol("");
+    try {
+      await cambiarRolUsuario(idSeleccionado, rolNuevo);
+    } catch (error) {
+      setErrorRol(error.message);
+    } finally {
+      setGuardando(false);
+    }
+  };
+
   return (
     <div className="roles">
       <section className="panel-seccion">
@@ -985,13 +1074,7 @@ function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
             { titulo: "Rol" },
             { titulo: "Alcance" },
           ]}
-          filas={usuarios.filter((u) => {
-            if (usoAlcance) return true;
-            return (
-              String(u.legajo) === String(usuario.legajo) ||
-              u.id_unidad === usuario.id_unidad
-            );
-          })}
+          filas={usuariosVisibles}
           mensajeVacio="Sin usuarios visibles dentro de tu alcance."
           filaRender={(u) => (
             <tr key={u.id}>
@@ -1009,6 +1092,63 @@ function Roles({ usuario, alcances: { usoAlcance }, unidades, usuarios }) {
           )}
         />
       </section>
+
+      {puedeCambiarRoles && (
+        <section className="panel-seccion">
+          <VistaSeccion
+            titulo="Cambiar rol de usuario"
+            ayuda="Elegí un usuario y el rol que va a pasar a tener."
+          />
+
+          <form className="roles__cambio-rol" onSubmit={manejarCambioRol}>
+            <select
+              aria-label="Usuario"
+              value={idSeleccionado}
+              onChange={(e) => setIdSeleccionado(e.target.value)}
+            >
+              <option value="">Seleccionar usuario…</option>
+              {usuariosVisibles.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.legajo} — {u.nombre_completo}
+                </option>
+              ))}
+            </select>
+
+            <select
+              aria-label="Nuevo rol"
+              value={rolNuevo}
+              onChange={(e) => setRolNuevo(e.target.value)}
+            >
+              {Object.values(ROLES).map((rol) => (
+                <option key={rol} value={rol}>
+                  {
+                    {
+                      administracion: "Administración",
+                      gestion: "Gestión",
+                      revision: "Revisión",
+                      consulta: "Consulta",
+                    }[rol]
+                  }
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={!idSeleccionado || guardando}
+            >
+              {guardando ? "Guardando…" : "Cambiar rol"}
+            </button>
+          </form>
+
+          {errorRol && (
+            <p className="dashboard__aviso dashboard__aviso--error">
+              {errorRol}
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="panel-seccion">
         <VistaSeccion
