@@ -352,6 +352,33 @@ module.exports = (db) => {
     );
   });
 
+  // TRAZABILIDAD DEL TRÁMITE (AUDITORÍA)
+  // Devuelve el historial completo del convenio: altas, cambios de estado,
+  // observaciones y accesos a documentos, con el responsable de cada acción.
+
+  router.get("/:id/auditoria", verificarToken, (req, res) => {
+    const idConvenio = req.params.id;
+
+    const query = `
+      SELECT a.id, a.id_usuario, u.nombre_completo, a.observacion,
+             a.estado_previo, a.estado_nuevo, a.fecha_registro
+      FROM auditoria_observaciones a
+      LEFT JOIN usuarios u ON u.id = a.id_usuario
+      WHERE a.id_convenio = ?
+      ORDER BY a.fecha_registro ASC, a.id ASC
+    `;
+
+    db.query(query, [idConvenio], (error, resultados) => {
+      if (error) {
+        console.error("Error consultando auditoría:", error);
+        return res
+          .status(500)
+          .json({ status: 500, mensaje: "Error en el servidor." });
+      }
+      res.json({ status: 200, total: resultados.length, data: resultados });
+    });
+  });
+
   // VER INSTRUMENTOS VINCULADOS
   // Trae las adendas o convenios específicos que nacieron de este convenio
 

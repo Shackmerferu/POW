@@ -5,6 +5,7 @@ import { API_URL } from "../../config/api";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
 import "./FichaDetalle.css";
 import {
+  ETIQUETAS_ESTADO,
   formatoBoolean,
   formatoEntero,
   formatoFecha,
@@ -68,6 +69,10 @@ export default function FichaDetalle({
   const [cargandoPartes, setCargandoPartes] = useState(false);
   const [errorPartes, setErrorPartes] = useState("");
 
+  const [auditoria, setAuditoria] = useState([]);
+  const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
+  const [errorAuditoria, setErrorAuditoria] = useState("");
+
   useEffect(() => {
     if (!convenio?.id) {
       setPartes([]);
@@ -123,6 +128,58 @@ export default function FichaDetalle({
     }
 
     cargarPartes();
+
+    return () => controlador.abort();
+  }, [convenio?.id]);
+
+  // Trazabilidad del trámite: historial de auditoría del convenio (altas,
+  // cambios de estado, observaciones y accesos a documentos).
+  useEffect(() => {
+    if (!convenio?.id) {
+      setAuditoria([]);
+      return undefined;
+    }
+
+    const controlador = new AbortController();
+
+    async function cargarAuditoria() {
+      setCargandoAuditoria(true);
+      setErrorAuditoria("");
+
+      try {
+        const token = localStorage.getItem("token");
+        const respuesta = await fetch(
+          `${API_URL}/agreements/${convenio.id}/auditoria`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            signal: controlador.signal,
+          },
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(`La API respondió con estado ${respuesta.status}.`);
+        }
+
+        const datos = await respuesta.json();
+
+        if (!Array.isArray(datos.data)) {
+          throw new Error("La respuesta de auditoría no contiene una lista.");
+        }
+
+        setAuditoria(datos.data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("No se pudo cargar la trazabilidad:", error);
+          setErrorAuditoria("No se pudo cargar la trazabilidad del trámite.");
+        }
+      } finally {
+        if (!controlador.signal.aborted) {
+          setCargandoAuditoria(false);
+        }
+      }
+    }
+
+    cargarAuditoria();
 
     return () => controlador.abort();
   }, [convenio?.id]);
@@ -385,6 +442,68 @@ export default function FichaDetalle({
       ) : (
         <p className="ficha__texto">Sin partes registradas aún.</p>
       )}
+
+      {/* Trazabilidad del trámite: historial de auditoría */}
+      <p className="ficha__seccion">Trazabilidad del trámite</p>
+      {cargandoAuditoria ? (
+        <p className="ficha__texto">Cargando trazabilidad…</p>
+      ) : errorAuditoria ? (
+        <p className="ficha__texto" role="alert">
+          {errorAuditoria}
+        </p>
+      ) : auditoria.length > 0 ? (
+        <ol className="ficha__historial">
+          {auditoria.map((registro) => (
+            <li key={registro.id}>
+              <span className="ficha__historial-fecha">
+                {formatoFechaHora(registro.fecha_registro)}
+              </span>
+              <span className="ficha__historial-transicion">
+                {etiquetaTransicion(registro)}
+              </span>
+              <span className="ficha__historial-responsable">
+                {registro.nombre_completo ?? `Usuario #${registro.id_usuario}`}
+              </span>
+              {registro.observacion && (
+                <span className="ficha__historial-detalle">
+                  {registro.observacion}
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="ficha__texto">Sin registros de auditoría todavía.</p>
+      )}
     </VentanaModal>
   );
+}
+
+/** Formatea la fecha y hora de un registro de auditoría (dd/mm/aaaa hh:mm). */
+function formatoFechaHora(valor) {
+  if (!valor) return "—";
+  // mysql2 puede entregar Date ya parseado o el texto "aaaa-mm-dd hh:mm:ss".
+  const fecha =
+    valor instanceof Date
+      ? valor
+      : new Date(String(valor).replace(" ", "T"));
+  if (Number.isNaN(fecha.getTime())) return "—";
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const hora = String(fecha.getHours()).padStart(2, "0");
+  const minutos = String(fecha.getMinutes()).padStart(2, "0");
+  return `${dia}/${mes}/${fecha.getFullYear()} ${hora}:${minutos}`;
+}
+
+/** Texto de la transición de estado de un registro de auditoría. */
+function etiquetaTransicion(registro) {
+  const previo = registro.estado_previo ?? "—";
+  const nuevo = registro.estado_nuevo ?? "—";
+
+  // Accesos (descargas, vistas previas): no tienen transición de estado.
+  if (previo === "—" && nuevo === "—") return "Acción registrada";
+
+  const nombreEstado = (clave) =>
+    ETIQUETAS_ESTADO[clave] ?? clave ?? "—";
+  return `${nombreEstado(previo)} → ${nombreEstado(nuevo)}`;
 }

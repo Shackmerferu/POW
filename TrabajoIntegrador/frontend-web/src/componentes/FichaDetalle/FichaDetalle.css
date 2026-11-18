@@ -126,6 +126,63 @@
   color: #7a838f;
   white-space: nowrap;
 }
+/* --- Trazabilidad del trámite (historial de auditoría) ------------------- */
+.ficha__historial {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  border-left: 2px solid #dfe4ea;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ficha__historial li {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* Punto de la línea de tiempo */
+.ficha__historial li::before {
+  content: "";
+  position: absolute;
+  left: -1.31rem;
+  top: 0.42em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #1f4f99;
+}
+
+.ficha__historial-fecha {
+  color: #7a838f;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.ficha__historial-transicion {
+  color: #1f4f99;
+  font-weight: 600;
+}
+
+.ficha__historial-responsable {
+  color: #33404e;
+}
+
+.ficha__historial-responsable::before {
+  content: "·";
+  color: #c3cad2;
+}
+
+.ficha__historial-detalle {
+  color: #64707d;
+  width: 100%;
+}
+
 @media (max-width: 860px) {
   .ficha__datos {
     grid-template-columns: 1fr;
