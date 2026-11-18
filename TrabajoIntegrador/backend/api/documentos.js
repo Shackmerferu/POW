@@ -10,7 +10,7 @@ const verificarToken = require('../verificarToken');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = path.join(__dirname, '../../uploads/documentos');
+        const dir = path.join(__dirname, '../../backend/uploads/documentos');
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
@@ -105,7 +105,7 @@ module.exports = (db) => {
 
             // Buscamos el archivo físico en la carpeta protegida
             const archivoFisico = resultados[0].ruta_archivo;
-            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', archivoFisico);
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', archivoFisico);
 
             if (fs.existsSync(rutaCompleta)) {
                 // Express fuerza la descarga con el nombre encriptado
@@ -124,7 +124,7 @@ module.exports = (db) => {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado." });
             }
 
-            const rutaCompleta = path.join(__dirname, '../../uploads/documentos', resultados[0].ruta_archivo);
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', resultados[0].ruta_archivo);
 
             if (fs.existsSync(rutaCompleta)) {
                 // sendFile le dice al navegador "mostralo si podés", ideal para PDFs

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
+import { API_URL } from "../../config/api";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
 import "./FichaDetalle.css";
 import {
@@ -41,7 +42,13 @@ const ETIQUETAS_ACCION = {
  * @param {Array} unidades lista de unidades
  * @param {Function} onCerrar callback para cerrar la ficha
  */
-export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, onAccionDocumento }) {
+export default function FichaDetalle({
+  convenio,
+  convenios,
+  unidades,
+  onCerrar,
+  onAccionDocumento,
+}) {
   // ------------------------------------------------------------------
   // Vista previa del documento asociado: por defecto se muestra el
   // primero de la lista; el usuario puede alternar entre los cargados.
@@ -49,10 +56,7 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
   const [documentoActual, setDocumentoActual] = useState(null);
   const [avisoAccion, setAvisoAccion] = useState(null);
 
-  const documentos = useMemo(
-    () => convenio?.documentos ?? [],
-    [convenio]
-  );
+  const documentos = useMemo(() => convenio?.documentos ?? [], [convenio]);
 
   // Al cambiar de convenio se resetea la vista previa y el aviso.
   useEffect(() => {
@@ -60,10 +64,73 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
     setAvisoAccion(null);
   }, [convenio?.id]);
 
+  const [partes, setPartes] = useState([]);
+  const [cargandoPartes, setCargandoPartes] = useState(false);
+  const [errorPartes, setErrorPartes] = useState("");
+
+  useEffect(() => {
+    if (!convenio?.id) {
+      setPartes([]);
+      return undefined;
+    }
+
+    const controlador = new AbortController();
+
+    async function cargarPartes() {
+      setCargandoPartes(true);
+      setErrorPartes("");
+
+      try {
+        const token = localStorage.getItem("token");
+        const respuesta = await fetch(
+          `${API_URL}/parties/convenio/${convenio.id}`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            signal: controlador.signal,
+          },
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(`La API respondió con estado ${respuesta.status}.`);
+        }
+
+        const datos = await respuesta.json();
+
+        if (!Array.isArray(datos.data)) {
+          throw new Error("La respuesta de partes no contiene una lista.");
+        }
+
+        setPartes(
+          datos.data.map((parte) => ({
+            id: parte.id,
+            nombre_institucion:
+              parte.nombre_institucion ?? parte.nombre ?? "Institución",
+            representante_nombre:
+              parte.representante_nombre ?? parte.representante ?? "",
+            representante_cargo: parte.representante_cargo ?? "",
+          })),
+        );
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("No se pudieron cargar las partes:", error);
+          setErrorPartes("No se pudieron cargar las partes firmantes.");
+        }
+      } finally {
+        if (!controlador.signal.aborted) {
+          setCargandoPartes(false);
+        }
+      }
+    }
+
+    cargarPartes();
+
+    return () => controlador.abort();
+  }, [convenio?.id]);
+
   const documentoEnVista =
     documentoActual && documentos.includes(documentoActual)
       ? documentoActual
-      : documentos[0] ?? null;
+      : (documentos[0] ?? null);
 
   /** Acciones del dropdown sobre la vista previa. */
   const manejarAccionDocumento = (id, documento) => {
@@ -91,7 +158,7 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
     setAvisoAccion(
       `Acción «${ETIQUETAS_ACCION[id] ?? id}» registrada sobre ${
         documento?.nombre_archivo ?? "el documento"
-      } (demo sin backend).`
+      } (demo sin backend).`,
     );
   };
 
@@ -103,7 +170,8 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
       ? convenios.find((otro) => otro.id === convenio.id_antecedente)
       : null;
   const marca_original =
-    convenio.id_instrumento_modificado !== null && convenio.id_instrumento_modificado !== undefined
+    convenio.id_instrumento_modificado !== null &&
+    convenio.id_instrumento_modificado !== undefined
       ? convenios.find((otro) => otro.id === convenio.id_instrumento_modificado)
       : null;
   const marcosCompatibles = (convenio.id_marcos_compatibles || [])
@@ -111,7 +179,11 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
     .filter(Boolean);
 
   return (
-    <VentanaModal abierto={Boolean(convenio)} titulo={convenio.titulo} onCerrar={onCerrar}>
+    <VentanaModal
+      abierto={Boolean(convenio)}
+      titulo={convenio.titulo}
+      onCerrar={onCerrar}
+    >
       {/* Encabezado: identidad del instrumento */}
       <div className="ficha__encabezado">
         <EtiquetaTipo tipo={convenio.tipo} />
@@ -133,13 +205,16 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
           <dt>Vigencia</dt>
           <dd>
             {textoVigencia(vigencia)}
-            {vigencia.estado !== "sin_vencimiento" && <> · vence el {formatoFecha(convenio.fecha_vencimiento)}</>}
+            {vigencia.estado !== "sin_vencimiento" && (
+              <> · vence el {formatoFecha(convenio.fecha_vencimiento)}</>
+            )}
           </dd>
         </div>
         <div>
           <dt>Firma / inicio</dt>
           <dd>
-            {formatoFecha(convenio.fecha_firma)} → {formatoFecha(convenio.fecha_inicio)}
+            {formatoFecha(convenio.fecha_firma)} →{" "}
+            {formatoFecha(convenio.fecha_inicio)}
           </dd>
         </div>
         <div>
@@ -181,20 +256,31 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
       />
 
       {/* Documentos: alternar cuál se previsualiza */}
-      <p className="ficha__seccion ficha__seccion--documentos">Documentos cargados</p>
+      <p className="ficha__seccion ficha__seccion--documentos">
+        Documentos cargados
+      </p>
       {documentos.length > 0 ? (
         <ul className="ficha__documentos">
           {documentos.map((documento) => (
             <li
               key={documento.id}
-              className={documento === documentoEnVista ? "ficha__documento--seleccionado" : undefined}
+              className={
+                documento === documentoEnVista
+                  ? "ficha__documento--seleccionado"
+                  : undefined
+              }
             >
               <span className="ficha__documento-tipo">
-                {NOMBRES_DOCUMENTO[documento.tipo_documento] ?? documento.tipo_documento}
-                { documento?.version ? ` · v${documento.version}` : ""}
+                {NOMBRES_DOCUMENTO[documento.tipo_documento] ??
+                  documento.tipo_documento}
+                {documento?.version ? ` · v${documento.version}` : ""}
               </span>
-              <span className="ficha__documento-nombre">{documento.nombre_archivo}</span>
-              <span className="ficha__documento-fecha">{formatoFecha(documento.fecha_subida)}</span>
+              <span className="ficha__documento-nombre">
+                {documento.nombre_archivo}
+              </span>
+              <span className="ficha__documento-fecha">
+                {formatoFecha(documento.fecha_subida)}
+              </span>
               <button
                 type="button"
                 className="tabla__accion"
@@ -216,7 +302,9 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
 
       {/* Textos largos (debajo de la vista previa) */}
       <p className="ficha__seccion">Objeto</p>
-      <p className="ficha__texto">{convenio.objeto || "Sin objeto registrado"}</p>
+      <p className="ficha__texto">
+        {convenio.objeto || "Sin objeto registrado"}
+      </p>
 
       <p className="ficha__seccion">Alcance</p>
       <p className="ficha__texto">{convenio.alcance || "—"}</p>
@@ -247,7 +335,9 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
         {marcosCompatibles.length > 0 && (
           <li>
             <strong>Marcos compatibles</strong>
-            <span>{marcosCompatibles.map((marco) => marco.codigo_unico).join(" · ")}</span>
+            <span>
+              {marcosCompatibles.map((marco) => marco.codigo_unico).join(" · ")}
+            </span>
           </li>
         )}
         {antecedente && (
@@ -261,23 +351,32 @@ export default function FichaDetalle({ convenio, convenios, unidades, onCerrar, 
         {!marca_original && marcosCompatibles.length === 0 && !antecedente && (
           <li>
             <strong>Sin relaciones</strong>
-            <span>Instrumento raíz, sin instrumento modificado ni antecedentes.</span>
+            <span>
+              Instrumento raíz, sin instrumento modificado ni antecedentes.
+            </span>
           </li>
         )}
       </ul>
 
       {/* Partes firmantes */}
       <p className="ficha__seccion">Partes firmantes y representantes</p>
-      {(convenio.partes || []).length > 0 ? (
+      {cargandoPartes ? (
+        <p className="ficha__texto">Cargando partes firmantes…</p>
+      ) : errorPartes ? (
+        <p className="ficha__texto" role="alert">
+          {errorPartes}
+        </p>
+      ) : partes.length > 0 ? (
         <ul className="ficha__partes">
-          {convenio.partes.map((parte, indice) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <li key={indice}>
+          {partes.map((parte) => (
+            <li key={parte.id}>
               <strong>{parte.nombre_institucion}</strong>
               {parte.representante_nombre && (
                 <span>
                   {parte.representante_nombre}
-                  {parte.representante_cargo ? ` · ${parte.representante_cargo}` : ""}
+                  {parte.representante_cargo
+                    ? ` · ${parte.representante_cargo}`
+                    : ""}
                 </span>
               )}
             </li>
