@@ -12,7 +12,7 @@ const path = require("path");
 const CARPETA_SUBIDAS = path.join(__dirname, "..", "uploads", "documentos");
 fs.mkdirSync(CARPETA_SUBIDAS, { recursive: true });
 
-// Subida de PDF: máximo 20 MB (requisito del enunciado) y solo ese tipo.
+// Subida de PDF: máximo 20 MB y solo ese tipo.
 const subida = multer({
   storage: multer.diskStorage({
     destination: (req, archivo, cb) => cb(null, CARPETA_SUBIDAS),
@@ -34,13 +34,24 @@ const subida = multer({
 module.exports = (db) => {
   // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS (CON SUS DOCUMENTOS)
   router.get("/", verificarToken, (req, res) => {
-    const query = `
+    let query = `
             SELECT c.*, d.id as doc_id, d.tipo_documento, d.ruta_archivo, d.fecha_subida
             FROM convenios c
             LEFT JOIN documentos d ON c.id = d.id_convenio
         `;
 
-    db.query(query, (error, resultados) => {
+    // Autorización por unidad: si el usuario tiene unidad asignada, solo ve
+    // los convenios de ESA unidad. Sin unidad asignada (administración), ve todo.
+    const valores = [];
+    if (
+      req.usuario.id_unidad !== null &&
+      req.usuario.id_unidad !== undefined
+    ) {
+      query += " WHERE c.id_unidad_responsable = ?";
+      valores.push(req.usuario.id_unidad);
+    }
+
+    db.query(query, valores, (error, resultados) => {
       if (error)
         return res
           .status(500)
@@ -281,6 +292,39 @@ module.exports = (db) => {
 
         const estadoPrevio = resConv[0].estado;
 
+        // Transiciones válidas por rol, validadas EN EL SERVIDOR (no se
+        // confía en el front): consulta no puede mover estados; revisión
+        // aprueba o devuelve; gestión envía a revisión y firma; administración
+        // todas. Cualquier otra transición se rechaza con 403.
+        const TRANSICIONES_SERVIDOR = {
+          administracion: {
+            borrador: ["revision", "archivado"],
+            revision: ["aprobado", "borrador"],
+            aprobado: ["firmado"],
+            firmado: ["rescindido", "archivado"],
+          },
+          gestion: {
+            borrador: ["revision"],
+            aprobado: ["firmado"],
+            firmado: ["rescindido", "archivado"],
+          },
+          revision: {
+            revision: ["aprobado", "borrador"],
+          },
+        };
+
+        const permitidas =
+          (TRANSICIONES_SERVIDOR[req.usuario.rol] ?? {})[estadoPrevio] ?? [];
+
+        if (!permitidas.includes(estado_nuevo)) {
+          return res.status(403).json({
+            status: 403,
+            mensaje: `Tu rol (${
+              req.usuario.rol ?? "desconocido"
+            }) no permite mover el instrumento de "${estadoPrevio}" a "${estado_nuevo}".`,
+          });
+        }
+
         if (estado_nuevo === "aprobado") {
           db.query(
             "SELECT COUNT(*) as cantidad FROM convenio_partes WHERE id_convenio = ?",
@@ -403,6 +447,122 @@ module.exports = (db) => {
       }
       res.json({ status: 200, total: resultados.length, data: resultados });
     });
+  });
+
+  // REGISTRAR LA RELACIÓN ENTRE INSTRUMENTOS
+  // Define el antecedente de un instrumento (renovación, sustitución o
+  // adenda). Validaciones: el antecedente debe existir, no puede apuntar a
+  // sí mismo y, si el usuario opera por unidad, debe ser de la misma unidad.
+  // Enviar id_antecedente = null desvincula.
+
+  router.put("/:id/links", verificarToken, (req, res) => {
+    const idConvenio = req.params.id;
+    const { id_antecedente } = req.body;
+
+    function auditarRelacion(antecedenteFinal, callback) {
+      const texto = antecedenteFinal
+        ? `Vinculación de antecedente: instrumento #${antecedenteFinal}.`
+        : "Desvinculación del antecedente.";
+      db.query(
+        "INSERT INTO auditoria_observaciones (id_convenio, id_usuario, observacion, estado_previo, estado_nuevo) VALUES (?, ?, ?, NULL, NULL)",
+        [idConvenio, req.usuario.id, texto],
+        () => callback(),
+      );
+    }
+
+    // Desvincular: id_antecedente null/""/0 borra la relación.
+    if (!id_antecedente || id_antecedente === "null") {
+      db.query(
+        "UPDATE convenios SET id_antecedente = NULL WHERE id = ?",
+        [idConvenio],
+        (error) => {
+          if (error) {
+            console.error("Error desvinculando antecedente:", error);
+            return res
+              .status(500)
+              .json({ status: 500, mensaje: "Error en el servidor." });
+          }
+          auditarRelacion(null, () =>
+            res.json({
+              status: 200,
+              mensaje: "Relación desvinculada.",
+            }),
+          );
+        },
+      );
+      return;
+    }
+
+    const antecedenteId = Number(id_antecedente);
+
+    db.query(
+      "SELECT id, id_unidad_responsable FROM convenios WHERE id IN (?, ?)",
+      [idConvenio, antecedenteId],
+      (error, resultados) => {
+        if (error) {
+          console.error("Error validando la relación:", error);
+          return res
+            .status(500)
+            .json({ status: 500, mensaje: "Error en el servidor." });
+        }
+
+        if (resultados.length < 2) {
+          return res.status(404).json({
+            status: 404,
+            mensaje: "No se encontró el instrumento antecedente.",
+          });
+        }
+
+        if (antecedenteId === Number(idConvenio)) {
+          return res.status(400).json({
+            status: 400,
+            mensaje: "Un instrumento no puede ser su propio antecedente.",
+          });
+        }
+
+        // Alcance: si el usuario tiene unidad asignada, el antecedente debe
+        // pertenecer a la misma unidad que el instrumento a vincular.
+        if (req.usuario.id_unidad !== null && req.usuario.id_unidad !== undefined) {
+          const propio = resultados.find(
+            (c) => Number(c.id) === Number(idConvenio),
+          );
+          const antecedente = resultados.find(
+            (c) => Number(c.id) === antecedenteId,
+          );
+          if (
+            propio &&
+            antecedente &&
+            Number(propio.id_unidad_responsable) !==
+              Number(antecedente.id_unidad_responsable)
+          ) {
+            return res.status(403).json({
+              status: 403,
+              mensaje:
+                "Solo podés vincular antecedentes de tu misma unidad responsable.",
+            });
+          }
+        }
+
+        db.query(
+          "UPDATE convenios SET id_antecedente = ? WHERE id = ?",
+          [antecedenteId, idConvenio],
+          (errorUpd) => {
+            if (errorUpd) {
+              console.error("Error vinculando antecedente:", errorUpd);
+              return res
+                .status(500)
+                .json({ status: 500, mensaje: "Error en el servidor." });
+            }
+            auditarRelacion(antecedenteId, () =>
+              res.json({
+                status: 200,
+                mensaje: "Antecedente vinculado con éxito.",
+              }),
+            );
+          },
+        );
+      },
+    );
   });
 
   return router; // Devolvemos el router configurado

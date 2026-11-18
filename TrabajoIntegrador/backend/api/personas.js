@@ -57,7 +57,8 @@ module.exports = (db) => {
     // 2. VINCULAR UNA PERSONA/PASANTE A UN CONVENIO 
     
     router.post('/', verificarToken, (req, res) => {
-        const { id_convenio, nombre_completo, rol, carrera, carga_horaria } = req.body;
+        const { id_convenio, nombre_completo, rol, carrera, carga_horaria,
+                periodo, tutoria, asignacion, seguro } = req.body;
 
         // Validación estricta de los datos mínimos
         if (!id_convenio || !nombre_completo || !rol) {
@@ -68,11 +69,21 @@ module.exports = (db) => {
         }
 
         const query = `
-            INSERT INTO personas_pasantias (id_convenio, nombre_completo, rol, carrera, carga_horaria) 
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO personas_pasantias (id_convenio, nombre_completo, rol, carrera, carga_horaria, periodo, tutoria, asignacion, seguro) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        db.query(query, [id_convenio, nombre_completo, rol, carrera || null, carga_horaria || null], (error, resultados) => {
+        db.query(query, [
+            id_convenio,
+            nombre_completo,
+            rol,
+            carrera || null,
+            carga_horaria ? Number(carga_horaria) : null,
+            periodo || null,
+            tutoria || null,
+            asignacion || null,
+            seguro || null,
+        ], (error, resultados) => {
             if (error) {
                 console.error("Error guardando persona:", error);
                 return res.status(500).json({ status: 500, mensaje: "Error al guardar en la base de datos." });

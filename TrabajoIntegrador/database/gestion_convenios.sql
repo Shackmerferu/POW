@@ -68,7 +68,7 @@ CREATE TABLE `convenios` (
 -- DATOS FICTICIOS (TPI): todas las instituciones, personas y expedientes son
 -- inventados para la demo. Las renovaciones y sustituciones se modelan como
 -- instrumentos NUEVOS (código y ficha propios) vinculados por id_antecedente,
--- sin alterar el registro anterior (regla del enunciado).
+-- sin alterar el registro anterior.
 INSERT INTO `convenios` (`id`, `codigo_unico`, `titulo`, `tipo`, `estado`, `objeto`, `marco_legal`, `confidencialidad`, `fecha_firma`, `fecha_inicio`, `fecha_vencimiento`, `dias_preaviso`, `id_unidad_responsable`, `id_antecedente`) VALUES
 (1, 'UNLPAM-FI-2024-001', 'Marco de colaboración UNLPAM - Municipalidad de Santa Rosa', 'marco_colaboracion', 'firmado', 'Establecer el marco general de cooperación entre la Facultad de Ingeniería y la Municipalidad de Santa Rosa para proyectos conjuntos de extensión, investigación y desarrollo tecnológico.', 'Ordenanza Municipal N° 4210/24', 0, '2024-05-12', '2024-06-01', '2027-05-31', 60, 1, NULL),
 (2, 'UNLPAM-FI-2024-002', 'Convenio específico de pasantías - TecnoLáctea S.A.', 'especifico_pasantia', 'firmado', 'Regular pasantías de estudiantes de Ingeniería en Informática y Electromecánica en el área de automatización de procesos de la empresa TecnoLáctea S.A.', 'Resolución CS UNLPAM N° 118/24', 0, '2024-08-20', '2024-09-01', '2026-08-31', 30, 1, NULL),
@@ -119,7 +119,7 @@ CREATE TABLE `documentos` (
 -- DATOS FICTICIOS (TPI): todas las instituciones, personas y expedientes son
 -- inventados para la demo. Las renovaciones y sustituciones se modelan como
 -- instrumentos NUEVOS (código y ficha propios) vinculados por id_antecedente,
--- sin alterar el registro anterior (regla del enunciado).
+-- sin alterar el registro anterior.
 INSERT INTO `documentos`
   (`id_convenio`, `tipo_documento`, `ruta_archivo`, `hash_sha256`)
 VALUES
@@ -298,9 +298,9 @@ ALTER TABLE `convenio_partes`
 
 --
 -- Volcado de datos para la tabla `convenio_partes`
--- Regla del enunciado: todo convenio aprobado o firmado necesita al menos
--- dos partes. Los borradores 7 y 12 están incompletos a propósito, para
--- validar ese caso en el circuito.
+-- Todo convenio aprobado o firmado necesita al menos dos partes. Los
+-- borradores 7 y 12 están incompletos a propósito, para validar ese caso
+-- en el circuito.
 --
 
 INSERT INTO `convenio_partes` (`id_convenio`, `id_parte`) VALUES

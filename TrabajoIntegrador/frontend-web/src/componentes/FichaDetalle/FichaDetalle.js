@@ -10,6 +10,7 @@ import {
   formatoEntero,
   formatoFecha,
   nombreUnidad,
+  recortarTexto,
   textoVigencia,
   calcularVigencia,
 } from "../../utils/formatos";
@@ -22,7 +23,7 @@ const NOMBRES_DOCUMENTO = {
   otro: "Otro",
 };
 
-// Transiciones de estado válidas por rol (circuito del enunciado):
+// Transiciones de estado válidas por rol (circuito del trámite):
 //   · gestión: envía a revisión, registra la firma y cierra el trámite.
 //   · revisión: aprueba o devuelve con observación.
 //   · administración: todas las transiciones.
@@ -44,7 +45,7 @@ const TRANSICIONES_POR_ROL = {
   },
 };
 
-// Etiqueta de cada transición con el lenguaje del enunciado: el equipo
+// Etiqueta de cada transición: el equipo revisor "aprueba o devuelve
 // revisor "aprueba o devuelve para corrección"; gestión envía a revisión
 // y registra la firma; los estados finales cierran el trámite.
 const ETIQUETA_TRANSICION = {
@@ -54,6 +55,27 @@ const ETIQUETA_TRANSICION = {
   firmado: "Registrar firma",
   rescindido: "Rescindir",
   archivado: "Archivar",
+};
+
+// Alta de partes y personas: los roles con permiso de gestión de convenios.
+const ROLES_QUE_REGISTRAN = ["administracion", "gestion"];
+
+const VACIO_PARTE = {
+  nombre: "",
+  representante: "",
+  cuit: "",
+  tipo_institucion: "Otra",
+};
+
+const VACIO_PERSONA = {
+  nombre_completo: "",
+  rol: "",
+  carrera: "",
+  carga_horaria: "",
+  periodo: "",
+  tutoria: "",
+  asignacion: "",
+  seguro: "",
 };
 
 /**
@@ -87,8 +109,15 @@ export default function FichaDetalle({
   const [documentoActual, setDocumentoActual] = useState(null);
   const [avisoAccion, setAvisoAccion] = useState(null);
 
-  const documentos = useMemo(() => convenio?.documentos ?? [], [convenio]);
-
+  const documentos = useMemo(
+    () =>
+      Array.isArray(convenio?.documentos)
+        ? convenio.documentos.filter(
+          (documento) => documento && typeof documento === "object",
+        )
+        : [],
+    [convenio],
+  );
   // Al cambiar de convenio se resetea la vista previa y el aviso.
   useEffect(() => {
     setDocumentoActual(null);
@@ -99,123 +128,326 @@ export default function FichaDetalle({
   const [cargandoPartes, setCargandoPartes] = useState(false);
   const [errorPartes, setErrorPartes] = useState("");
 
+  // Catálogo de instituciones registradas (para asociarlas al convenio).
+  const [partesCatalogo, setPartesCatalogo] = useState([]);
+  const [nuevaParteAbierta, setNuevaParteAbierta] = useState(false);
+  const [formParte, setFormParte] = useState(VACIO_PARTE);
+  const [parteElegida, setParteElegida] = useState("");
+  const [enviandoParte, setEnviandoParte] = useState(false);
+  const [errorFormParte, setErrorFormParte] = useState("");
+
   // Personas y pasantías del convenio (endpoint GET /people/convenio/:id).
   const [personasConvenio, setPersonasConvenio] = useState([]);
   const [cargandoPersonas, setCargandoPersonas] = useState(false);
   const [errorPersonas, setErrorPersonas] = useState("");
+  const [formPersonaAbierto, setFormPersonaAbierto] = useState(false);
+  const [formPersona, setFormPersona] = useState(VACIO_PERSONA);
+  const [enviandoPersona, setEnviandoPersona] = useState(false);
+  const [errorFormPersona, setErrorFormPersona] = useState("");
 
   const [auditoria, setAuditoria] = useState([]);
   const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
   const [errorAuditoria, setErrorAuditoria] = useState("");
 
+  // Roles con permiso de registrar partes, personas y relaciones.
+  const puedeRegistrar = ROLES_QUE_REGISTRAN.includes(rolUsuario);
+
+  // --- Relaciones entre instrumentos ----------------------------------------
+  const [antecedenteElegido, setAntecedenteElegido] = useState("");
+  const [guardandoRelacion, setGuardandoRelacion] = useState(false);
+  const [errorRelacion, setErrorRelacion] = useState("");
+
+  // Instrumentos derivados: los que declaran este como antecedente.
+  const instrumentosDerivados = useMemo(
+    () =>
+      convenio
+        ? convenios.filter(
+          (otro) =>
+            Number(otro.id_antecedente) === Number(convenio.id) &&
+            Number(otro.id) !== Number(convenio.id),
+        )
+        : [],
+    [convenios, convenio],
+  );
+
+  // Catálogo de instituciones registradas (para asociarlas al convenio).
+
+  /** Recarga el catálogo de instituciones registradas. */
+  async function cargarPartesCatalogo() {
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(`${API_URL}/parties`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!respuesta.ok) return;
+      const datos = await respuesta.json();
+      if (Array.isArray(datos.data)) setPartesCatalogo(datos.data);
+    } catch (error) {
+      console.error("No se pudo cargar el catálogo de partes:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (puedeRegistrar && convenio?.id) cargarPartesCatalogo();
+  }, [puedeRegistrar, convenio?.id]);
+
+  /** Asocia una institución existente a este convenio. */
+  const asociarParte = async () => {
+    if (!parteElegida) {
+      setErrorFormParte("Elegí una institución del listado.");
+      return;
+    }
+    setEnviandoParte(true);
+    setErrorFormParte("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(`${API_URL}/parties/asociar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          id_convenio: convenio.id,
+          id_parte: Number(parteElegida),
+        }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        throw new Error(cuerpo?.mensaje || "No se pudo asociar la parte.");
+      }
+      const elegida = partesCatalogo.find(
+        (p) => String(p.id) === String(parteElegida),
+      );
+      notificar(
+        "Parte asociada",
+        `${elegida?.nombre ?? "La institución"} quedó como parte firmante del convenio.`,
+        "exito",
+      );
+      setParteElegida("");
+      await recargarPartes();
+    } catch (error) {
+      setErrorFormParte(error.message);
+    } finally {
+      setEnviandoParte(false);
+    }
+  };
+
+  /** Registra una institución nueva y la asocia al convenio. */
+  const crearParte = async () => {
+    if (!formParte.nombre.trim() || !formParte.representante.trim()) {
+      setErrorFormParte(
+        "El nombre de la institución y su representante son obligatorios.",
+      );
+      return;
+    }
+    setEnviandoParte(true);
+    setErrorFormParte("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(`${API_URL}/parties`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          nombre: formParte.nombre.trim(),
+          representante: formParte.representante.trim(),
+          cuit: formParte.cuit.trim() || null,
+          tipo_institucion: formParte.tipo_institucion,
+        }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        throw new Error(cuerpo?.mensaje || "No se pudo registrar la parte.");
+      }
+
+      // Queda asociada directamente al convenio que se está editando.
+      const respuestaAsociar = await fetch(`${API_URL}/parties/asociar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          id_convenio: convenio.id,
+          id_parte: cuerpo.nuevoId,
+        }),
+      });
+      if (!respuestaAsociar.ok) {
+        throw new Error("La institución se creó pero no se pudo asociar.");
+      }
+
+      notificar(
+        "Alta registrada",
+        `${formParte.nombre.trim()} se registró como institución y quedó asociada al convenio.`,
+        "exito",
+      );
+      setFormParte(VACIO_PARTE);
+      setNuevaParteAbierta(false);
+      await Promise.all([recargarPartes(), cargarPartesCatalogo()]);
+    } catch (error) {
+      setErrorFormParte(error.message);
+    } finally {
+      setEnviandoParte(false);
+    }
+  };
+
+  /** Vincula una persona/pasante nueva al convenio. */
+  const vincularPersona = async (evento) => {
+    evento.preventDefault();
+    if (!formPersona.nombre_completo.trim() || !formPersona.rol) {
+      setErrorFormPersona(
+        "El nombre de la persona y su rol son obligatorios.",
+      );
+      return;
+    }
+    setEnviandoPersona(true);
+    setErrorFormPersona("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(`${API_URL}/people`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          id_convenio: convenio.id,
+          nombre_completo: formPersona.nombre_completo.trim(),
+          rol: formPersona.rol,
+          carrera: formPersona.carrera.trim() || null,
+          carga_horaria: formPersona.carga_horaria || null,
+          periodo: formPersona.periodo.trim() || null,
+          tutoria: formPersona.tutoria.trim() || null,
+          asignacion: formPersona.asignacion.trim() || null,
+          seguro: formPersona.seguro.trim() || null,
+        }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        throw new Error(cuerpo?.mensaje || "No se pudo vincular la persona.");
+      }
+      notificar(
+        "Alta registrada",
+        `${formPersona.nombre_completo.trim()} quedó vinculada al convenio como ${formPersona.rol}.`,
+        "exito",
+      );
+      setFormPersona(VACIO_PERSONA);
+      setFormPersonaAbierto(false);
+      await recargarPersonas();
+    } catch (error) {
+      setErrorFormPersona(error.message);
+    } finally {
+      setEnviandoPersona(false);
+    }
+  };
+
+  /** Guarda (o desvincula) el antecedente del instrumento. */
+  const guardarRelacion = async () => {
+    setGuardandoRelacion(true);
+    setErrorRelacion("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(`${API_URL}/agreements/${convenio.id}/links`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          id_antecedente: antecedenteElegido ? Number(antecedenteElegido) : null,
+        }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        throw new Error(cuerpo?.mensaje || "No se pudo guardar la relación.");
+      }
+      notificar(
+        "Relación registrada",
+        cuerpo?.mensaje || "La vinculación quedó guardada y registrada en la auditoría.",
+        "exito",
+      );
+      if (typeof onRefrescar === "function") onRefrescar();
+    } catch (error) {
+      setErrorRelacion(error.message);
+    } finally {
+      setGuardandoRelacion(false);
+    }
+  };
+
+  /** Recarga las partes firmantes del convenio. */
+  async function recargarPartes() {
+    setCargandoPartes(true);
+    setErrorPartes("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(
+        `${API_URL}/parties/convenio/${convenio.id}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} },
+      );
+      if (!respuesta.ok) {
+        throw new Error(`La API respondió con estado ${respuesta.status}.`);
+      }
+      const datos = await respuesta.json();
+      if (!Array.isArray(datos.data)) {
+        throw new Error("La respuesta de partes no contiene una lista.");
+      }
+      setPartes(
+        datos.data.map((parte) => ({
+          id: parte.id,
+          nombre_institucion:
+            parte.nombre_institucion ?? parte.nombre ?? "Institución",
+          representante_nombre:
+            parte.representante_nombre ?? parte.representante ?? "",
+          representante_cargo: parte.representante_cargo ?? "",
+        })),
+      );
+    } catch (error) {
+      console.error("No se pudieron cargar las partes:", error);
+      setErrorPartes("No se pudieron cargar las partes firmantes.");
+    } finally {
+      setCargandoPartes(false);
+    }
+  }
+
+  /** Recarga las personas y pasantías del convenio. */
+  async function recargarPersonas() {
+    setCargandoPersonas(true);
+    setErrorPersonas("");
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(
+        `${API_URL}/people/convenio/${convenio.id}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} },
+      );
+      if (!respuesta.ok) {
+        throw new Error(`La API respondió con estado ${respuesta.status}.`);
+      }
+      const datos = await respuesta.json();
+      if (!Array.isArray(datos.data)) {
+        throw new Error("La respuesta de personas no contiene una lista.");
+      }
+      setPersonasConvenio(datos.data);
+    } catch (error) {
+      console.error("No se pudieron cargar las personas:", error);
+      setErrorPersonas("No se pudieron cargar las personas y pasantías.");
+    } finally {
+      setCargandoPersonas(false);
+    }
+  }
+
   useEffect(() => {
     if (!convenio?.id) {
       setPartes([]);
-      return undefined;
-    }
-
-    const controlador = new AbortController();
-
-    async function cargarPartes() {
-      setCargandoPartes(true);
-      setErrorPartes("");
-
-      try {
-        const token = localStorage.getItem("token");
-        const respuesta = await fetch(
-          `${API_URL}/parties/convenio/${convenio.id}`,
-          {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-            signal: controlador.signal,
-          },
-        );
-
-        if (!respuesta.ok) {
-          throw new Error(`La API respondió con estado ${respuesta.status}.`);
-        }
-
-        const datos = await respuesta.json();
-
-        if (!Array.isArray(datos.data)) {
-          throw new Error("La respuesta de partes no contiene una lista.");
-        }
-
-        setPartes(
-          datos.data.map((parte) => ({
-            id: parte.id,
-            nombre_institucion:
-              parte.nombre_institucion ?? parte.nombre ?? "Institución",
-            representante_nombre:
-              parte.representante_nombre ?? parte.representante ?? "",
-            representante_cargo: parte.representante_cargo ?? "",
-          })),
-        );
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("No se pudieron cargar las partes:", error);
-          setErrorPartes("No se pudieron cargar las partes firmantes.");
-        }
-      } finally {
-        if (!controlador.signal.aborted) {
-          setCargandoPartes(false);
-        }
-      }
-    }
-
-    cargarPartes();
-
-    return () => controlador.abort();
-  }, [convenio?.id]);
-
-  // Personas y pasantías vinculadas a este convenio.
-  useEffect(() => {
-    if (!convenio?.id) {
       setPersonasConvenio([]);
       return undefined;
     }
-
-    const controlador = new AbortController();
-
-    async function cargarPersonas() {
-      setCargandoPersonas(true);
-      setErrorPersonas("");
-
-      try {
-        const token = localStorage.getItem("token");
-        const respuesta = await fetch(
-          `${API_URL}/people/convenio/${convenio.id}`,
-          {
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-            signal: controlador.signal,
-          },
-        );
-
-        if (!respuesta.ok) {
-          throw new Error(`La API respondió con estado ${respuesta.status}.`);
-        }
-
-        const datos = await respuesta.json();
-
-        if (!Array.isArray(datos.data)) {
-          throw new Error("La respuesta de personas no contiene una lista.");
-        }
-
-        setPersonasConvenio(datos.data);
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("No se pudieron cargar las personas:", error);
-          setErrorPersonas("No se pudieron cargar las personas y pasantías.");
-        }
-      } finally {
-        if (!controlador.signal.aborted) {
-          setCargandoPersonas(false);
-        }
-      }
-    }
-
-    cargarPersonas();
-
-    return () => controlador.abort();
+    recargarPartes();
+    recargarPersonas();
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [convenio?.id]);
 
   // Trazabilidad del trámite: historial de auditoría del convenio (altas,
@@ -279,7 +511,7 @@ export default function FichaDetalle({
   const [ejecutando, setEjecutando] = useState(false);
   const inputArchivoRef = useRef(null);
 
-  // --- Circuito del trámite (panel de revisión del enunciado) ---------------
+  // --- Panel de revisión del trámite ----------------------------------------
   const [modalEstadoAbierto, setModalEstadoAbierto] = useState(false);
   const [estadoNuevo, setEstadoNuevo] = useState("");
   const [observacionEstado, setObservacionEstado] = useState("");
@@ -296,7 +528,7 @@ export default function FichaDetalle({
   const [modalCompararAbierto, setModalCompararAbierto] = useState(false);
 
   // Versiones del mismo tipo de documento (ordenadas por carga): la actual
-  // primero y las anteriores después (el enunciado exige mantenerlas).
+  // primero y las anteriores después.
   const versionesDocumento = useMemo(() => {
     if (!documentoEnVista) return [];
     return documentos
@@ -304,14 +536,26 @@ export default function FichaDetalle({
       .sort((a, b) => Number(a.id) - Number(b.id));
   }, [documentos, documentoEnVista]);
 
-  // Resetea el panel de revisión y el de comparación al cambiar de convenio.
+  // Resetea el panel de revisión, comparación y formularios de alta al
+  // cambiar de convenio; el antecedente parte del valor registrado.
   useEffect(() => {
     setModalEstadoAbierto(false);
     setModalCompararAbierto(false);
     setEstadoNuevo("");
     setObservacionEstado("");
     setErrorEstado("");
-  }, [convenio?.id]);
+    setAntecedenteElegido(
+      convenio?.id_antecedente ? String(convenio.id_antecedente) : "",
+    );
+    setFormParte(VACIO_PARTE);
+    setNuevaParteAbierta(false);
+    setParteElegida("");
+    setErrorFormParte("");
+    setFormPersona(VACIO_PERSONA);
+    setFormPersonaAbierto(false);
+    setErrorFormPersona("");
+    setErrorRelacion("");
+  }, [convenio?.id, convenio?.id_antecedente]);
 
   const notificar = (titulo, texto, tipo) => {
     if (typeof alNotificar === "function") alNotificar(titulo, texto, tipo);
@@ -335,9 +579,8 @@ export default function FichaDetalle({
 
   /** Nombre de archivo para guardar el PDF descargado. */
   function nombreDescarga(documento) {
-    return `${convenio?.codigo_unico ?? "convenio"}-${
-      documento?.tipo_documento ?? "documento"
-    }.pdf`;
+    return `${convenio?.codigo_unico ?? "convenio"}-${documento?.tipo_documento ?? "documento"
+      }.pdf`;
   }
 
   function descargarEnlace(blob, documento) {
@@ -409,8 +652,8 @@ export default function FichaDetalle({
           "info",
         );
       } else if (id === "comparar") {
-        // El enunciado exige mantener las cargas anteriores: se comparan
-        // las versiones del mismo tipo desde el panel de versiones.
+        // Se comparan las versiones del mismo tipo desde el panel de
+        // versiones (las cargas anteriores se conservan).
         setModalCompararAbierto(true);
       } else if (typeof onAccionDocumento === "function") {
         onAccionDocumento({ accion: id, convenio, documento });
@@ -497,8 +740,8 @@ export default function FichaDetalle({
       );
       return;
     }
-    // Regla del enunciado: antes de aprobar un convenio deben existir
-    // al menos dos partes firmantes registradas.
+    // Antes de aprobar un convenio deben existir al menos dos partes
+    // firmantes registradas.
     if (estadoNuevo === "aprobado" && partes.length < 2) {
       setErrorEstado(
         "No se puede aprobar: el convenio necesita al menos dos partes firmantes registradas.",
@@ -587,7 +830,7 @@ export default function FichaDetalle({
       : null;
   const marca_original =
     convenio.id_instrumento_modificado !== null &&
-    convenio.id_instrumento_modificado !== undefined
+      convenio.id_instrumento_modificado !== undefined
       ? convenios.find((otro) => otro.id === convenio.id_instrumento_modificado)
       : null;
   const marcosCompatibles = (convenio.id_marcos_compatibles || [])
@@ -682,8 +925,8 @@ export default function FichaDetalle({
         aria-hidden="true"
       />
 
-      {/* Panel de revisión del trámite (enunciado: aprobar o devolver para
-          corrección, con validación de partes y fundamento obligatorio). */}
+      {/* Panel de revisión del trámite: aprobar o devolver para
+          corrección, con validación de partes y fundamento obligatorio. */}
       <VentanaModal
         abierto={modalEstadoAbierto}
         titulo={`Panel de revisión — ${convenio.codigo_unico}`}
@@ -693,9 +936,8 @@ export default function FichaDetalle({
           <p className="ficha__cambio-estado__titulo">
             {convenio.estado === "revision"
               ? "¿Querés aprobar este convenio?"
-              : `El instrumento está en estado ${
-                  ETIQUETAS_ESTADO[convenio.estado] ?? convenio.estado
-                }. ¿Qué transición querés registrar?`}
+              : `El instrumento está en estado ${ETIQUETAS_ESTADO[convenio.estado] ?? convenio.estado
+              }. ¿Qué transición querés registrar?`}
           </p>
           <p className="ficha__cambio-estado__sub">
             {convenio.titulo} · Estado actual:{" "}
@@ -709,9 +951,8 @@ export default function FichaDetalle({
               <button
                 key={estado}
                 type="button"
-                className={`tabla__accion${
-                  estadoNuevo === estado ? " tabla__accion--activa" : ""
-                }`}
+                className={`tabla__accion${estadoNuevo === estado ? " tabla__accion--activa" : ""
+                  }`}
                 onClick={() => setEstadoNuevo(estado)}
                 disabled={enviandoEstado}
               >
@@ -777,8 +1018,10 @@ export default function FichaDetalle({
           <p className="ficha__texto">
             Documento:{" "}
             <strong>
-              {NOMBRES_DOCUMENTO[documentoEnVista.tipo_documento] ??
-                documentoEnVista.tipo_documento}
+              {documentoEnVista
+                ? NOMBRES_DOCUMENTO[documentoEnVista.tipo_documento] ??
+                documentoEnVista.tipo_documento
+                : "Sin documento seleccionado"}
             </strong>{" "}
             · {versionesDocumento.length}{" "}
             {versionesDocumento.length === 1
@@ -795,8 +1038,8 @@ export default function FichaDetalle({
                 <span>
                   {version.fecha_subida
                     ? `Cargada el ${formatoFecha(
-                        String(version.fecha_subida).slice(0, 10),
-                      )}`
+                      String(version.fecha_subida).slice(0, 10),
+                    )}`
                     : "Fecha de carga no registrada"}{" "}
                   · documento #{version.id}
                 </span>
@@ -927,15 +1170,66 @@ export default function FichaDetalle({
             </span>
           </li>
         )}
-        {!marca_original && marcosCompatibles.length === 0 && !antecedente && (
+        {instrumentosDerivados.length > 0 && (
           <li>
-            <strong>Sin relaciones</strong>
+            <strong>Instrumentos derivados</strong>
             <span>
-              Instrumento raíz, sin instrumento modificado ni antecedentes.
+              {instrumentosDerivados
+                .map((d) => `${d.codigo_unico} (${d.tipo})`)
+                .join(" · ")}
             </span>
           </li>
         )}
+        {!marca_original &&
+          marcosCompatibles.length === 0 &&
+          !antecedente &&
+          instrumentosDerivados.length === 0 && (
+            <li>
+              <strong>Sin relaciones</strong>
+              <span>
+                Instrumento raíz, sin instrumento modificado ni antecedentes.
+              </span>
+            </li>
+          )}
       </ul>
+
+      {/* Registrar la relación: definir o cambiar el antecedente */}
+      {puedeRegistrar && (
+        <div className="ficha__alta">
+          <div className="ficha__alta__fila">
+            <label className="ficha__alta__campo ficha__alta__campo--larga">
+              <span>Antecedente (renovación, sustitución o adenda)</span>
+              <select
+                value={antecedenteElegido}
+                onChange={(evento) => setAntecedenteElegido(evento.target.value)}
+                disabled={guardandoRelacion}
+              >
+                <option value="">— Sin antecedente —</option>
+                {convenios
+                  .filter((otro) => Number(otro.id) !== Number(convenio.id))
+                  .map((otro) => (
+                    <option key={otro.id} value={otro.id}>
+                      {otro.codigo_unico} — {recortarTexto(otro.titulo, 46)}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={guardarRelacion}
+              disabled={guardandoRelacion}
+            >
+              {guardandoRelacion ? "Guardando…" : "Guardar relación"}
+            </button>
+          </div>
+          {errorRelacion && (
+            <p className="ficha__cambio-estado__error" role="alert">
+              {errorRelacion}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Partes firmantes */}
       <p className="ficha__seccion">Partes firmantes y representantes</p>
@@ -965,6 +1259,111 @@ export default function FichaDetalle({
         <p className="ficha__texto">Sin partes registradas aún.</p>
       )}
 
+      {/* Registrar partes firmantes (alta de institución o asociación) */}
+      {puedeRegistrar && (
+        <div className="ficha__alta">
+          <div className="ficha__alta__fila">
+            <label className="ficha__alta__campo">
+              <span>Institución registrada</span>
+              <select
+                value={parteElegida}
+                onChange={(evento) => setParteElegida(evento.target.value)}
+                disabled={enviandoParte}
+              >
+                <option value="">Seleccionar institución…</option>
+                {partesCatalogo
+                  .filter(
+                    (p) => !partes.some((asociada) => asociada.id === p.id),
+                  )
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.nombre}
+                      {p.representante ? ` — ${p.representante}` : ""}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={asociarParte}
+              disabled={enviandoParte || !parteElegida}
+            >
+              Asociar al convenio
+            </button>
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={() => setNuevaParteAbierta((v) => !v)}
+            >
+              {nuevaParteAbierta ? "Cancelar nueva" : "Nueva institución"}
+            </button>
+          </div>
+
+          {nuevaParteAbierta && (
+            <form
+              className="ficha__alta__fila ficha__alta__fila--form"
+              onSubmit={(evento) => {
+                evento.preventDefault();
+                crearParte();
+              }}
+            >
+              <label className="ficha__alta__campo">
+                <span>Institución *</span>
+                <input
+                  type="text"
+                  value={formParte.nombre}
+                  onChange={(evento) =>
+                    setFormParte((a) => ({ ...a, nombre: evento.target.value }))
+                  }
+                  placeholder="Ej.: Ministerio de Energía y Minería"
+                  required
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Representante *</span>
+                <input
+                  type="text"
+                  value={formParte.representante}
+                  onChange={(evento) =>
+                    setFormParte((a) => ({
+                      ...a,
+                      representante: evento.target.value,
+                    }))
+                  }
+                  placeholder="Nombre y apellido"
+                  required
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>CUIT (opcional)</span>
+                <input
+                  type="text"
+                  value={formParte.cuit}
+                  onChange={(evento) =>
+                    setFormParte((a) => ({ ...a, cuit: evento.target.value }))
+                  }
+                  placeholder="30-00000000-0"
+                />
+              </label>
+              <button
+                type="submit"
+                className="tabla__accion"
+                disabled={enviandoParte}
+              >
+                {enviandoParte ? "Guardando…" : "Registrar y asociar"}
+              </button>
+            </form>
+          )}
+
+          {errorFormParte && (
+            <p className="ficha__cambio-estado__error" role="alert">
+              {errorFormParte}
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Personas y pasantías del convenio (endpoint /people/convenio/:id) */}
       <p className="ficha__seccion">Personas y pasantías</p>
       {cargandoPersonas ? (
@@ -989,17 +1388,17 @@ export default function FichaDetalle({
                 persona.tutoria ||
                 persona.asignacion ||
                 persona.seguro) && (
-                <span className="ficha__persona-detalle">
-                  {[
-                    persona.periodo && `Periodo: ${persona.periodo}`,
-                    persona.tutoria && `Tutoría: ${persona.tutoria}`,
-                    persona.asignacion && `Asignación: ${persona.asignacion}`,
-                    persona.seguro && `Seguro: ${persona.seguro}`,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </span>
-              )}
+                  <span className="ficha__persona-detalle">
+                    {[
+                      persona.periodo && `Periodo: ${persona.periodo}`,
+                      persona.tutoria && `Tutoría: ${persona.tutoria}`,
+                      persona.asignacion && `Asignación: ${persona.asignacion}`,
+                      persona.seguro && `Seguro: ${persona.seguro}`,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                )}
             </li>
           ))}
         </ul>
@@ -1007,6 +1406,160 @@ export default function FichaDetalle({
         <p className="ficha__texto">
           Sin personas vinculadas a este instrumento todavía.
         </p>
+      )}
+
+      {/* Vincular persona/pasante nueva al convenio */}
+      {puedeRegistrar && (
+        <div className="ficha__alta">
+          <button
+            type="button"
+            className="tabla__accion"
+            onClick={() => setFormPersonaAbierto((v) => !v)}
+          >
+            {formPersonaAbierto ? "Cancelar vinculación" : "Vincular persona"}
+          </button>
+
+          {formPersonaAbierto && (
+            <form
+              className="ficha__alta__columnas"
+              onSubmit={vincularPersona}
+            >
+              <label className="ficha__alta__campo">
+                <span>Nombre completo *</span>
+                <input
+                  type="text"
+                  value={formPersona.nombre_completo}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      nombre_completo: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: Juan Pérez"
+                  required
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Rol *</span>
+                <select
+                  value={formPersona.rol}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({ ...a, rol: evento.target.value }))
+                  }
+                  required
+                >
+                  <option value="">Seleccionar rol…</option>
+                  <option value="Pasante">Pasante</option>
+                  <option value="Tutor/a académico">Tutor/a académico</option>
+                  <option value="Referente de la empresa">
+                    Referente de la empresa
+                  </option>
+                  <option value="Investigador/a">Investigador/a</option>
+                  <option value="Becario/a">Becario/a</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Carrera (pasantías)</span>
+                <input
+                  type="text"
+                  value={formPersona.carrera}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      carrera: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: Ingeniería en Sistemas"
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Carga horaria (h/semana)</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="40"
+                  value={formPersona.carga_horaria}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      carga_horaria: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: 20"
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Período</span>
+                <input
+                  type="text"
+                  value={formPersona.periodo}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      periodo: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: 2026-09-01 a 2027-02-28"
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Tutoría</span>
+                <input
+                  type="text"
+                  value={formPersona.tutoria}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      tutoria: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: Ing. Hugo Medero"
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Asignación</span>
+                <input
+                  type="text"
+                  value={formPersona.asignacion}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      asignacion: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: $85.000 / mes"
+                />
+              </label>
+              <label className="ficha__alta__campo">
+                <span>Seguro</span>
+                <input
+                  type="text"
+                  value={formPersona.seguro}
+                  onChange={(evento) =>
+                    setFormPersona((a) => ({
+                      ...a,
+                      seguro: evento.target.value,
+                    }))
+                  }
+                  placeholder="Ej.: Seguros del Sur N° 2211"
+                />
+              </label>
+              {errorFormPersona && (
+                <p className="ficha__cambio-estado__error" role="alert">
+                  {errorFormPersona}
+                </p>
+              )}
+              <button
+                type="submit"
+                className="tabla__accion"
+                disabled={enviandoPersona}
+              >
+                {enviandoPersona ? "Vinculando…" : "Vincular al convenio"}
+              </button>
+            </form>
+          )}
+        </div>
       )}
 
       {/* Trazabilidad del trámite: historial de auditoría */}
