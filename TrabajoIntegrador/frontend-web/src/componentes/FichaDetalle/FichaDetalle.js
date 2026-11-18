@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
 import { API_URL } from "../../config/api";
@@ -22,12 +22,38 @@ const NOMBRES_DOCUMENTO = {
   otro: "Otro",
 };
 
-const ETIQUETAS_ACCION = {
-  editar: "Editar en Office / web",
-  comparar: "Comparar cambios",
-  descargar: "Descargar",
-  subir: "Subir nueva versión",
-  aprobar: "Aprobar o rechazar",
+// Transiciones de estado válidas por rol (circuito del enunciado):
+//   · gestión: envía a revisión, registra la firma y cierra el trámite.
+//   · revisión: aprueba o devuelve con observación.
+//   · administración: todas las transiciones.
+// Roles sin entrada (consulta) no pueden cambiar estados.
+const TRANSICIONES_POR_ROL = {
+  administracion: {
+    borrador: ["revision", "archivado"],
+    revision: ["aprobado", "borrador"],
+    aprobado: ["firmado"],
+    firmado: ["rescindido", "archivado"],
+  },
+  gestion: {
+    borrador: ["revision"],
+    aprobado: ["firmado"],
+    firmado: ["rescindido", "archivado"],
+  },
+  revision: {
+    revision: ["aprobado", "borrador"],
+  },
+};
+
+// Etiqueta de cada transición con el lenguaje del enunciado: el equipo
+// revisor "aprueba o devuelve para corrección"; gestión envía a revisión
+// y registra la firma; los estados finales cierran el trámite.
+const ETIQUETA_TRANSICION = {
+  aprobado: "Aprobar",
+  borrador: "Rechazar y devolver para corrección",
+  revision: "Enviar a revisión",
+  firmado: "Registrar firma",
+  rescindido: "Rescindir",
+  archivado: "Archivar",
 };
 
 /**
@@ -49,6 +75,10 @@ export default function FichaDetalle({
   unidades,
   onCerrar,
   onAccionDocumento,
+  rolUsuario = null,
+  onCambioEstado = null,
+  alNotificar = null,
+  onRefrescar = null,
 }) {
   // ------------------------------------------------------------------
   // Vista previa del documento asociado: por defecto se muestra el
@@ -68,6 +98,11 @@ export default function FichaDetalle({
   const [partes, setPartes] = useState([]);
   const [cargandoPartes, setCargandoPartes] = useState(false);
   const [errorPartes, setErrorPartes] = useState("");
+
+  // Personas y pasantías del convenio (endpoint GET /people/convenio/:id).
+  const [personasConvenio, setPersonasConvenio] = useState([]);
+  const [cargandoPersonas, setCargandoPersonas] = useState(false);
+  const [errorPersonas, setErrorPersonas] = useState("");
 
   const [auditoria, setAuditoria] = useState([]);
   const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
@@ -132,6 +167,57 @@ export default function FichaDetalle({
     return () => controlador.abort();
   }, [convenio?.id]);
 
+  // Personas y pasantías vinculadas a este convenio.
+  useEffect(() => {
+    if (!convenio?.id) {
+      setPersonasConvenio([]);
+      return undefined;
+    }
+
+    const controlador = new AbortController();
+
+    async function cargarPersonas() {
+      setCargandoPersonas(true);
+      setErrorPersonas("");
+
+      try {
+        const token = localStorage.getItem("token");
+        const respuesta = await fetch(
+          `${API_URL}/people/convenio/${convenio.id}`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            signal: controlador.signal,
+          },
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(`La API respondió con estado ${respuesta.status}.`);
+        }
+
+        const datos = await respuesta.json();
+
+        if (!Array.isArray(datos.data)) {
+          throw new Error("La respuesta de personas no contiene una lista.");
+        }
+
+        setPersonasConvenio(datos.data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("No se pudieron cargar las personas:", error);
+          setErrorPersonas("No se pudieron cargar las personas y pasantías.");
+        }
+      } finally {
+        if (!controlador.signal.aborted) {
+          setCargandoPersonas(false);
+        }
+      }
+    }
+
+    cargarPersonas();
+
+    return () => controlador.abort();
+  }, [convenio?.id]);
+
   // Trazabilidad del trámite: historial de auditoría del convenio (altas,
   // cambios de estado, observaciones y accesos a documentos).
   useEffect(() => {
@@ -189,34 +275,307 @@ export default function FichaDetalle({
       ? documentoActual
       : (documentos[0] ?? null);
 
-  /** Acciones del dropdown sobre la vista previa. */
-  const manejarAccionDocumento = (id, documento) => {
-    // Descarga real solo si existe una URL servida por alguien; en el demo
-    // no hay backend, queda registrada igualmente.
-    if (
-      id === "descargar" &&
-      documento?.ruta_archivo &&
-      /^(https?:|blob:|data:)/.test(documento.ruta_archivo)
-    ) {
-      const enlace = document.createElement("a");
-      enlace.href = documento.ruta_archivo;
-      enlace.download = documento.nombre_archivo || "documento";
-      enlace.rel = "noopener";
-      document.body.appendChild(enlace);
-      enlace.click();
-      document.body.removeChild(enlace);
-    }
+  // --- Acciones reales sobre el documento -----------------------------------
+  const [ejecutando, setEjecutando] = useState(false);
+  const inputArchivoRef = useRef(null);
 
-    if (typeof onAccionDocumento === "function") {
-      onAccionDocumento({ accion: id, convenio, documento });
+  // --- Circuito del trámite (panel de revisión del enunciado) ---------------
+  const [modalEstadoAbierto, setModalEstadoAbierto] = useState(false);
+  const [estadoNuevo, setEstadoNuevo] = useState("");
+  const [observacionEstado, setObservacionEstado] = useState("");
+  const [errorEstado, setErrorEstado] = useState("");
+  const [enviandoEstado, setEnviandoEstado] = useState(false);
+
+  // Estados destino permitidos según el rol y el estado actual.
+  const estadosDisponibles = useMemo(
+    () => (TRANSICIONES_POR_ROL[rolUsuario] ?? {})[convenio?.estado] ?? [],
+    [rolUsuario, convenio?.estado],
+  );
+
+  // --- Comparar cambios entre versiones del documento -----------------------
+  const [modalCompararAbierto, setModalCompararAbierto] = useState(false);
+
+  // Versiones del mismo tipo de documento (ordenadas por carga): la actual
+  // primero y las anteriores después (el enunciado exige mantenerlas).
+  const versionesDocumento = useMemo(() => {
+    if (!documentoEnVista) return [];
+    return documentos
+      .filter((d) => d.tipo_documento === documentoEnVista.tipo_documento)
+      .sort((a, b) => Number(a.id) - Number(b.id));
+  }, [documentos, documentoEnVista]);
+
+  // Resetea el panel de revisión y el de comparación al cambiar de convenio.
+  useEffect(() => {
+    setModalEstadoAbierto(false);
+    setModalCompararAbierto(false);
+    setEstadoNuevo("");
+    setObservacionEstado("");
+    setErrorEstado("");
+  }, [convenio?.id]);
+
+  const notificar = (titulo, texto, tipo) => {
+    if (typeof alNotificar === "function") alNotificar(titulo, texto, tipo);
+  };
+
+  /** Trae el PDF desde la API con el token (descarga o vista). */
+  async function obtenerPdf(documento, modo) {
+    const token = localStorage.getItem("token");
+    const ruta =
+      modo === "download"
+        ? `${API_URL}/documents/${documento.id}/download`
+        : `${API_URL}/documents/${documento.id}/view`;
+    const respuesta = await fetch(ruta, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    if (!respuesta.ok) {
+      throw new Error(`La API respondió con estado ${respuesta.status}.`);
+    }
+    return respuesta.blob();
+  }
+
+  /** Nombre de archivo para guardar el PDF descargado. */
+  function nombreDescarga(documento) {
+    return `${convenio?.codigo_unico ?? "convenio"}-${
+      documento?.tipo_documento ?? "documento"
+    }.pdf`;
+  }
+
+  function descargarEnlace(blob, documento) {
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = nombreDescarga(documento);
+    enlace.rel = "noopener";
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+
+  function abrirEnPestana(blob) {
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener");
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  /** Abre un documento servido por la API en una pestaña nueva. */
+  async function abrirPdfEnPestana(documento) {
+    const blob = await obtenerPdf(documento, "view");
+    abrirEnPestana(blob);
+  }
+
+  /** Acciones del dropdown sobre la vista previa. */
+  const manejarAccionDocumento = async (id, documento) => {
+    if (!documento || ejecutando) return;
+
+    // "Aprobar / cambiar estado": abre el panel de revisión (no toca el PDF).
+    if (id === "aprobar") {
+      if (estadosDisponibles.length === 0) {
+        notificar(
+          "Sin transiciones disponibles",
+          "Tu rol no permite mover este instrumento desde su estado actual.",
+          "info",
+        );
+        return;
+      }
+      setEstadoNuevo("");
+      setObservacionEstado("");
+      setErrorEstado("");
+      setModalEstadoAbierto(true);
       return;
     }
 
-    setAvisoAccion(
-      `Acción «${ETIQUETAS_ACCION[id] ?? id}» registrada sobre ${
-        documento?.nombre_archivo ?? "el documento"
-      } (demo sin backend).`,
-    );
+    // "Subir nueva versión": dispara el selector de archivos oculto.
+    if (id === "subir") {
+      inputArchivoRef.current?.click();
+      return;
+    }
+
+    setEjecutando(true);
+    try {
+      if (id === "descargar") {
+        const blob = await obtenerPdf(documento, "download");
+        descargarEnlace(blob, documento);
+        notificar(
+          "Documento descargado",
+          `Se guardó ${nombreDescarga(documento)} y quedó registrado en la trazabilidad.`,
+          "exito",
+        );
+      } else if (id === "editar") {
+        await abrirPdfEnPestana(documento);
+        notificar(
+          "Documento abierto",
+          "El PDF se abrió en una pestaña nueva para revisarlo en el navegador.",
+          "info",
+        );
+      } else if (id === "comparar") {
+        // El enunciado exige mantener las cargas anteriores: se comparan
+        // las versiones del mismo tipo desde el panel de versiones.
+        setModalCompararAbierto(true);
+      } else if (typeof onAccionDocumento === "function") {
+        onAccionDocumento({ accion: id, convenio, documento });
+        return;
+      }
+    } catch (error) {
+      console.error("Falló la acción sobre el documento:", error);
+      notificar(
+        "No se pudo completar la acción",
+        error.message || "Error inesperado al procesar el documento.",
+        "error",
+      );
+    } finally {
+      setEjecutando(false);
+    }
+  };
+
+  /** Sube el archivo elegido como nueva versión del tipo en vista. */
+  const subirNuevaVersion = async (evento) => {
+    const archivo = evento.target.files?.[0];
+    evento.target.value = "";
+    if (!archivo || !documentoEnVista || !convenio) return;
+
+    if (archivo.type !== "application/pdf") {
+      notificar("Archivo inválido", "Solo se permiten archivos PDF.", "error");
+      return;
+    }
+    if (archivo.size > 20 * 1024 * 1024) {
+      notificar(
+        "Archivo demasiado grande",
+        "El PDF supera el máximo de 20 MB.",
+        "error",
+      );
+      return;
+    }
+
+    setEjecutando(true);
+    try {
+      const token = localStorage.getItem("token");
+      const datos = new FormData();
+      datos.append("id_convenio", convenio.id);
+      datos.append("tipo_documento", documentoEnVista.tipo_documento);
+      datos.append("archivo", archivo);
+
+      const respuesta = await fetch(`${API_URL}/documents`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: datos,
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        throw new Error(
+          cuerpo?.mensaje || `La API respondió con estado ${respuesta.status}.`,
+        );
+      }
+
+      notificar(
+        "Nueva versión cargada",
+        `Se agregó "${archivo.name}" y la carga anterior se conserva.`,
+        "exito",
+      );
+      if (typeof onRefrescar === "function") onRefrescar();
+    } catch (error) {
+      console.error("No se pudo subir la nueva versión:", error);
+      notificar(
+        "No se pudo subir la nueva versión",
+        error.message || "Error inesperado al subir el archivo.",
+        "error",
+      );
+    } finally {
+      setEjecutando(false);
+    }
+  };
+
+  /** Confirma la transición de estado con su fundamento (auditoría). */
+  const confirmarCambioEstado = async () => {
+    if (!estadoNuevo) {
+      setErrorEstado("Elegí la transición a registrar.");
+      return;
+    }
+    if (!observacionEstado.trim()) {
+      setErrorEstado(
+        "El fundamento es obligatorio: cada transición queda registrada en la auditoría.",
+      );
+      return;
+    }
+    // Regla del enunciado: antes de aprobar un convenio deben existir
+    // al menos dos partes firmantes registradas.
+    if (estadoNuevo === "aprobado" && partes.length < 2) {
+      setErrorEstado(
+        "No se puede aprobar: el convenio necesita al menos dos partes firmantes registradas.",
+      );
+      return;
+    }
+
+    setEnviandoEstado(true);
+    setErrorEstado("");
+    try {
+      await onCambioEstado?.(
+        convenio.id,
+        estadoNuevo,
+        observacionEstado.trim(),
+        convenio,
+      );
+      setModalEstadoAbierto(false);
+      setEstadoNuevo("");
+      setObservacionEstado("");
+    } catch (error) {
+      setErrorEstado(error.message || "No se pudo actualizar el estado.");
+    } finally {
+      setEnviandoEstado(false);
+    }
+  };
+
+  /** Abre una versión puntual del documento en pestaña nueva. */
+  const verVersion = async (version) => {
+    setEjecutando(true);
+    try {
+      await abrirPdfEnPestana(version);
+    } catch (error) {
+      console.error("No se pudo abrir la versión:", error);
+      notificar(
+        "No se pudo abrir la versión",
+        error.message || "Error inesperado al abrir el PDF.",
+        "error",
+      );
+    } finally {
+      setEjecutando(false);
+    }
+  };
+
+  /** Abre las dos versiones a comparar (actual y anterior) en pestañas. */
+  const compararConAnterior = async () => {
+    const actual = versionesDocumento[versionesDocumento.length - 1];
+    const anterior = versionesDocumento[versionesDocumento.length - 2];
+    if (!anterior) {
+      notificar(
+        "Nada para comparar",
+        "Este documento no tiene una carga anterior del mismo tipo.",
+        "info",
+      );
+      return;
+    }
+
+    setEjecutando(true);
+    try {
+      await Promise.all([
+        abrirPdfEnPestana(actual),
+        abrirPdfEnPestana(anterior),
+      ]);
+      notificar(
+        "Comparación lista",
+        "Se abrieron la versión en vista y la carga anterior del mismo tipo para cotejarlas.",
+        "info",
+      );
+    } catch (error) {
+      console.error("No se pudo comparar:", error);
+      notificar(
+        "No se pudo comparar",
+        error.message || "Error inesperado al abrir las versiones.",
+        "error",
+      );
+    } finally {
+      setEjecutando(false);
+    }
   };
 
   if (!convenio) return null;
@@ -312,6 +671,172 @@ export default function FichaDetalle({
         aviso={avisoAccion}
       />
 
+      {/* Selector de archivo oculto que dispara "Subir nueva versión" */}
+      <input
+        ref={inputArchivoRef}
+        type="file"
+        accept="application/pdf"
+        style={{ display: "none" }}
+        onChange={subirNuevaVersion}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+
+      {/* Panel de revisión del trámite (enunciado: aprobar o devolver para
+          corrección, con validación de partes y fundamento obligatorio). */}
+      <VentanaModal
+        abierto={modalEstadoAbierto}
+        titulo={`Panel de revisión — ${convenio.codigo_unico}`}
+        onCerrar={() => setModalEstadoAbierto(false)}
+      >
+        <div className="ficha__cambio-estado">
+          <p className="ficha__cambio-estado__titulo">
+            {convenio.estado === "revision"
+              ? "¿Querés aprobar este convenio?"
+              : `El instrumento está en estado ${
+                  ETIQUETAS_ESTADO[convenio.estado] ?? convenio.estado
+                }. ¿Qué transición querés registrar?`}
+          </p>
+          <p className="ficha__cambio-estado__sub">
+            {convenio.titulo} · Estado actual:{" "}
+            {ETIQUETAS_ESTADO[convenio.estado] ?? convenio.estado}
+            {estadoNuevo
+              ? ` → destino: ${ETIQUETAS_ESTADO[estadoNuevo] ?? estadoNuevo}`
+              : ""}
+          </p>
+          <div className="ficha__cambio-estado__destinos">
+            {estadosDisponibles.map((estado) => (
+              <button
+                key={estado}
+                type="button"
+                className={`tabla__accion${
+                  estadoNuevo === estado ? " tabla__accion--activa" : ""
+                }`}
+                onClick={() => setEstadoNuevo(estado)}
+                disabled={enviandoEstado}
+              >
+                {ETIQUETA_TRANSICION[estado] ??
+                  ETIQUETAS_ESTADO[estado] ??
+                  estado}
+              </button>
+            ))}
+          </div>
+          <label className="ficha__cambio-estado__campo">
+            <span>Fundamento de la transición (obligatorio, queda en la auditoría)</span>
+            <textarea
+              rows="3"
+              value={observacionEstado}
+              onChange={(evento) => setObservacionEstado(evento.target.value)}
+              placeholder="Ej.: aprobado por Resolución CD N° 172/26; se verificaron las dos partes firmantes."
+              disabled={enviandoEstado}
+            />
+          </label>
+          {estadoNuevo === "aprobado" && partes.length < 2 && (
+            <p className="ficha__cambio-estado__error" role="alert">
+              Antes de aprobar deben existir al menos dos partes firmantes
+              registradas en el convenio.
+            </p>
+          )}
+          {errorEstado && (
+            <p className="ficha__cambio-estado__error" role="alert">
+              {errorEstado}
+            </p>
+          )}
+          <div className="ficha__cambio-estado__acciones">
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={() => setModalEstadoAbierto(false)}
+              disabled={enviandoEstado}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={confirmarCambioEstado}
+              disabled={
+                enviandoEstado ||
+                !estadoNuevo ||
+                (estadoNuevo === "aprobado" && partes.length < 2)
+              }
+            >
+              {enviandoEstado ? "Registrando…" : "Registrar transición"}
+            </button>
+          </div>
+        </div>
+      </VentanaModal>
+
+      {/* Comparar cambios: versiones registradas del mismo tipo de documento */}
+      <VentanaModal
+        abierto={modalCompararAbierto}
+        titulo="Comparar cambios entre versiones"
+        onCerrar={() => setModalCompararAbierto(false)}
+      >
+        <div className="ficha__comparar">
+          <p className="ficha__texto">
+            Documento:{" "}
+            <strong>
+              {NOMBRES_DOCUMENTO[documentoEnVista.tipo_documento] ??
+                documentoEnVista.tipo_documento}
+            </strong>{" "}
+            · {versionesDocumento.length}{" "}
+            {versionesDocumento.length === 1
+              ? "versión registrada"
+              : "versiones registradas"}.
+          </p>
+          <ul className="ficha__partes">
+            {versionesDocumento.map((version, indice) => (
+              <li key={version.id}>
+                <strong>
+                  Versión {indice + 1}
+                  {version.id === documentoEnVista.id ? " (en vista)" : ""}
+                </strong>
+                <span>
+                  {version.fecha_subida
+                    ? `Cargada el ${formatoFecha(
+                        String(version.fecha_subida).slice(0, 10),
+                      )}`
+                    : "Fecha de carga no registrada"}{" "}
+                  · documento #{version.id}
+                </span>
+                <button
+                  type="button"
+                  className="tabla__accion"
+                  onClick={() => verVersion(version)}
+                  disabled={ejecutando}
+                >
+                  Ver PDF
+                </button>
+              </li>
+            ))}
+          </ul>
+          {versionesDocumento.length < 2 && (
+            <p className="ficha__texto">
+              Este documento todavía no tiene una carga anterior del mismo
+              tipo: subí una nueva versión para poder comparar los cambios.
+            </p>
+          )}
+          <div className="ficha__cambio-estado__acciones">
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={compararConAnterior}
+              disabled={ejecutando || versionesDocumento.length < 2}
+            >
+              Abrir actual y anterior en pestañas
+            </button>
+            <button
+              type="button"
+              className="tabla__accion"
+              onClick={() => setModalCompararAbierto(false)}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </VentanaModal>
+
       {/* Documentos: alternar cuál se previsualiza */}
       <p className="ficha__seccion ficha__seccion--documentos">
         Documentos cargados
@@ -362,9 +887,6 @@ export default function FichaDetalle({
       <p className="ficha__texto">
         {convenio.objeto || "Sin objeto registrado"}
       </p>
-
-      <p className="ficha__seccion">Alcance</p>
-      <p className="ficha__texto">{convenio.alcance || "—"}</p>
 
       <p className="ficha__seccion">Obligaciones</p>
       <p className="ficha__texto">{convenio.obligaciones || "—"}</p>
@@ -441,6 +963,50 @@ export default function FichaDetalle({
         </ul>
       ) : (
         <p className="ficha__texto">Sin partes registradas aún.</p>
+      )}
+
+      {/* Personas y pasantías del convenio (endpoint /people/convenio/:id) */}
+      <p className="ficha__seccion">Personas y pasantías</p>
+      {cargandoPersonas ? (
+        <p className="ficha__texto">Cargando personas y pasantías…</p>
+      ) : errorPersonas ? (
+        <p className="ficha__texto" role="alert">
+          {errorPersonas}
+        </p>
+      ) : personasConvenio.length > 0 ? (
+        <ul className="ficha__partes">
+          {personasConvenio.map((persona) => (
+            <li key={persona.id}>
+              <strong>{persona.nombre_completo}</strong>
+              <span>
+                {[persona.rol, persona.carrera].filter(Boolean).join(" · ") ||
+                  "Sin rol registrado"}
+                {persona.carga_horaria != null
+                  ? ` · ${persona.carga_horaria} h/semana`
+                  : ""}
+              </span>
+              {(persona.periodo ||
+                persona.tutoria ||
+                persona.asignacion ||
+                persona.seguro) && (
+                <span className="ficha__persona-detalle">
+                  {[
+                    persona.periodo && `Periodo: ${persona.periodo}`,
+                    persona.tutoria && `Tutoría: ${persona.tutoria}`,
+                    persona.asignacion && `Asignación: ${persona.asignacion}`,
+                    persona.seguro && `Seguro: ${persona.seguro}`,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="ficha__texto">
+          Sin personas vinculadas a este instrumento todavía.
+        </p>
       )}
 
       {/* Trazabilidad del trámite: historial de auditoría */}

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const { PUERTO, DB_HOST, DB_USUARIO, DB_CONTRASENA, DB_NOMBRE } = require('./config');
 
 const app = express();
 
@@ -11,11 +12,12 @@ app.use(express.json());
 // Usamos un pool en lugar de una conexión única: si MySQL cierra una conexión
 // inactiva, el pool la descarta y abre otra en la próxima consulta. Con
 // createConnection, ese cierre emitía un error no manejado y tumbaba Node.
+// Las credenciales vienen del entorno (.env); sin .env se usan las de desarrollo.
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'gestion_convenios',
+    host: DB_HOST,
+    user: DB_USUARIO,
+    password: DB_CONTRASENA,
+    database: DB_NOMBRE,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -51,7 +53,7 @@ app.use('/api/documents', documentosRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 
-const PORT = 8000;
+const PORT = PUERTO;
 app.listen(PORT, () => {
     console.log(`Servidor Backend corriendo en http://localhost:${PORT}`);
 });

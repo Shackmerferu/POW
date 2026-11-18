@@ -1,0 +1,10 @@
+# Dependencias instaladas (se reconstruyen con "npm install").
+node_modules/
+
+# Configuración con secretos: nunca al repositorio.
+# La plantilla de ejemplo (.env.example) sí se versiona.
+.env
+backend/.env
+
+# Nota: backend/uploads/ contiene los PDF ficticios de la demo y se
+# versiona a propósito para que la entrega funcione tal cual se descarga.

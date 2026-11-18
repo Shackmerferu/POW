@@ -35,7 +35,7 @@ module.exports = (db) => {
   // 3. ENDPOINT PARA LISTAR TODOS LOS CONVENIOS (CON SUS DOCUMENTOS)
   router.get("/", verificarToken, (req, res) => {
     const query = `
-            SELECT c.*, d.id as doc_id, d.tipo_documento, d.ruta_archivo 
+            SELECT c.*, d.id as doc_id, d.tipo_documento, d.ruta_archivo, d.fecha_subida
             FROM convenios c
             LEFT JOIN documentos d ON c.id = d.id_convenio
         `;
@@ -76,6 +76,7 @@ module.exports = (db) => {
             id: row.doc_id,
             tipo_documento: row.tipo_documento,
             ruta_archivo: row.ruta_archivo,
+            fecha_subida: row.fecha_subida,
           });
         }
       });
@@ -301,13 +302,17 @@ module.exports = (db) => {
         }
 
         function ejecutarActualizacion() {
-          // Si el front manda la fecha, exigimos que coincida (Concurrencia Optimista). Si no, actualizamos igual.
-          let updateQuery = "UPDATE convenios SET estado = ? WHERE id = ?";
+          // Concurrencia optimista: si el cliente manda la fecha de
+          // actualización que leyó, se exige que coincida (409 si otro
+          // usuario movió el convenio primero). Cada transición estampa
+          // fecha_actualizacion = NOW() para la próxima edición.
+          let updateQuery =
+            "UPDATE convenios SET estado = ?, fecha_actualizacion = NOW() WHERE id = ?";
           let valoresUpd = [estado_nuevo, idConvenio];
 
           if (fecha_actualizacion_cliente) {
             updateQuery =
-              "UPDATE convenios SET estado = ? WHERE id = ? AND fecha_actualizacion = ?";
+              "UPDATE convenios SET estado = ?, fecha_actualizacion = NOW() WHERE id = ? AND fecha_actualizacion = ?";
             valoresUpd.push(fecha_actualizacion_cliente);
           }
 

@@ -41,8 +41,15 @@ import {
   recortarTexto,
   textoVigencia,
   ETIQUETAS_TIPO,
+  ETIQUETAS_ESTADO,
 } from "../../utils/formatos";
 import VentanaModal from "../../componentes/VentanaModal/VentanaModal";
+import AvisoFlotante from "../../componentes/AvisoFlotante/AvisoFlotante";
+import {
+  ALMACENES,
+  guardarCache,
+  leerCache,
+} from "../../utils/cacheOffline";
 
 const FILAS_POR_PAGINA = 8;
 
@@ -63,14 +70,29 @@ function Dashboard() {
 
   const alcanceGlobal = puedeTenerAlcanceGlobal(usuario);
 
-  // DATOS REALES DE LA API 
-  // Convenios, unidades y usuarios se traen del backend; solo PERSONAS
-  // y MATRIZ_PERMISOS siguen de demo (no hay endpoint de /people todavía).
+  // DATOS REALES DE LA API
+  // Convenios, unidades, usuarios y personas se traen del backend. Cada
+  // respuesta exitosa se guarda en IndexedDB (un almacén por pestaña); si
+  // la API no responde, se muestra la última copia local guardada.
   const [convenios, setConvenios] = useState([]);
   const [unidades, setUnidades] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [errorApi, setErrorApi] = useState(null);
+
+  // --- Notificaciones emergentes (popups de alta/modificación/baja) ---------
+  const [avisos, setAvisos] = useState([]);
+  const lanzarAviso = (titulo, texto, tipo = "info") => {
+    const id = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    setAvisos((anterior) => [...anterior, { id, titulo, texto, tipo }]);
+    // Se retira solo a los 6 segundos (y puede cerrarse a mano).
+    setTimeout(() => {
+      setAvisos((anterior) => anterior.filter((aviso) => aviso.id !== id));
+    }, 6000);
+  };
+  const descartarAviso = (id) =>
+    setAvisos((anterior) => anterior.filter((aviso) => aviso.id !== id));
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -80,51 +102,115 @@ function Dashboard() {
       fetch(`${API_URL}/agreements`, { headers }).then((res) => res.json()),
       fetch(`${API_URL}/units`, { headers }).then((res) => res.json()),
       fetch(`${API_URL}/usuarios`, { headers }).then((res) => res.json()),
+      fetch(`${API_URL}/people`, { headers }).then((res) => res.json()),
     ])
-      .then(([conveniosRes, unidadesRes, usuariosRes]) => {
+      .then(([conveniosRes, unidadesRes, usuariosRes, personasRes]) => {
         if (
           conveniosRes.status === "fulfilled" &&
           Array.isArray(conveniosRes.value?.data)
         ) {
           setConvenios(conveniosRes.value.data);
+          guardarCache(ALMACENES.convenios, conveniosRes.value.data);
         }
         if (
           unidadesRes.status === "fulfilled" &&
           Array.isArray(unidadesRes.value?.data)
         ) {
           setUnidades(unidadesRes.value.data);
+          guardarCache(ALMACENES.unidades, unidadesRes.value.data);
         }
         if (
           usuariosRes.status === "fulfilled" &&
           Array.isArray(usuariosRes.value?.data)
         ) {
           setUsuarios(usuariosRes.value.data);
+          guardarCache(ALMACENES.usuarios, usuariosRes.value.data);
         }
+        if (
+          personasRes.status === "fulfilled" &&
+          Array.isArray(personasRes.value?.data)
+        ) {
+          setPersonas(personasRes.value.data);
+          guardarCache(ALMACENES.personas, personasRes.value.data);
+        }
+
         const falloAlguno =
           conveniosRes.status === "rejected" ||
           unidadesRes.status === "rejected" ||
-          usuariosRes.status === "rejected";
+          usuariosRes.status === "rejected" ||
+          personasRes.status === "rejected";
+
         if (falloAlguno) {
-          setErrorApi("No se pudieron traer todos los datos desde la API.");
+          // Sin conexión (o API caída): recuperamos la última copia local
+          // por almacén y avisamos con un popup que los datos son locales.
+          Promise.all([
+            leerCache(ALMACENES.convenios),
+            leerCache(ALMACENES.unidades),
+            leerCache(ALMACENES.usuarios),
+            leerCache(ALMACENES.personas),
+          ]).then(
+            ([cConvenios, cUnidades, cUsuarios, cPersonas]) => {
+              if (cConvenios) setConvenios(cConvenios);
+              if (cUnidades) setUnidades(cUnidades);
+              if (cUsuarios) setUsuarios(cUsuarios);
+              if (cPersonas) setPersonas(cPersonas);
+              if (cConvenios || cUnidades || cUsuarios || cPersonas) {
+                lanzarAviso(
+                  "Modo sin conexión",
+                  "No se pudo contactar la API: se muestra la última copia guardada en este dispositivo.",
+                  "error",
+                );
+              } else {
+                setErrorApi(
+                  "No se pudieron traer los datos desde la API y no hay copia local guardada.",
+                );
+              }
+            },
+          );
         }
       })
       .finally(() => setCargando(false));
   }, []);
 
-  // Recarga solo los convenios (se llama después de dar de alta uno nuevo
-  // para que el panel y las métricas reflejen la base al instante).
+  // Recarga solo los convenios (se llama después de dar de alta uno nuevo o
+  // de cambiar un estado, para que el panel y las métricas reflejen la base
+  // al instante). Guarda el caché local, refresca la ficha abierta con la
+  // versión fresca y, si la API no responde, vuelve a la última copia local.
   const recargarConvenios = () => {
     const token = localStorage.getItem("token");
-    fetch(`${API_URL}/agreements`, {
+    return fetch(`${API_URL}/agreements`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     })
       .then((res) => res.json())
       .then((datos) => {
-        if (Array.isArray(datos?.data)) setConvenios(datos.data);
+        if (Array.isArray(datos?.data)) {
+          setConvenios(datos.data);
+          guardarCache(ALMACENES.convenios, datos.data);
+          // La ficha abierta pasa a mostrar el objeto fresco (estado nuevo,
+          // fecha_actualización, documentos actualizados).
+          setConvenioFicha((actual) => {
+            if (!actual) return actual;
+            return (
+              datos.data.find((c) => Number(c.id) === Number(actual.id)) ??
+              actual
+            );
+          });
+        }
       })
-      .catch(() =>
-        setErrorApi("No se pudo actualizar el listado de convenios."),
-      );
+      .catch(() => {
+        leerCache(ALMACENES.convenios).then((cache) => {
+          if (cache) {
+            setConvenios(cache);
+            lanzarAviso(
+              "Modo sin conexión",
+              "No se pudo actualizar desde la API: se muestra la última copia guardada en este dispositivo.",
+              "error",
+            );
+          } else {
+            setErrorApi("No se pudo actualizar el listado de convenios.");
+          }
+        });
+      });
   };
 
   // Recarga solo los usuarios para reflejar al instante un cambio de rol.
@@ -163,7 +249,57 @@ function Dashboard() {
     if (Number(id) === Number(usuario.id)) {
       limpiarSesion();
       navigate("/login", { replace: true });
+      return;
     }
+
+    lanzarAviso(
+      "Modificación registrada",
+      `El usuario ahora tiene el rol ${rolNuevo}. El cambio quedó guardado en la base.`,
+      "exito",
+    );
+  };
+
+  // Cambia el estado de un convenio (transición del circuito del trámite).
+  // Concurrencia optimista: manda la fecha_actualizacion que leyó la ficha;
+  // si otro usuario movió el convenio primero, la API responde 409 y el
+  // panel de la ficha muestra el conflicto. El fundamento queda en auditoría.
+  const cambiarEstadoConvenio = async (
+    id,
+    estadoNuevo,
+    observacion,
+    convenio,
+  ) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${API_URL}/agreements/${id}/estado`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        estado_nuevo: estadoNuevo,
+        observacion,
+        fecha_actualizacion_cliente: convenio?.fecha_actualizacion ?? null,
+      }),
+    });
+
+    const datos = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(datos.mensaje || "No se pudo actualizar el estado.");
+    }
+
+    await recargarConvenios();
+
+    // Popup de la modificación (o de la baja, si el estado es final).
+    const esBaja = estadoNuevo === "rescindido" || estadoNuevo === "archivado";
+    const etiquetaActual =
+      ETIQUETAS_ESTADO[convenio?.estado] ?? convenio?.estado ?? "—";
+    const etiquetaNueva = ETIQUETAS_ESTADO[estadoNuevo] ?? estadoNuevo;
+    lanzarAviso(
+      esBaja ? "Baja registrada" : "Modificación registrada",
+      `${convenio?.codigo_unico ?? `#${id}`}: ${etiquetaActual} → ${etiquetaNueva}. El fundamento quedó en la auditoría.`,
+      esBaja ? "baja" : "exito",
+    );
   };
 
   const [pestaña, setPestaña] = useState("metricas");
@@ -279,6 +415,11 @@ function Dashboard() {
         setAvisoAlta(
           `Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`,
         );
+        lanzarAviso(
+          "Alta registrada",
+          `"${formAlta.titulo.trim()}" se creó en estado Revisión y entró al circuito del trámite.`,
+          "exito",
+        );
         recargarConvenios();
       })
       .catch((err) => setErrorAlta(err.message))
@@ -361,19 +502,27 @@ function Dashboard() {
       }
     });
 
+    // Personas únicas dentro del alcance: se deduplica por nombre porque la
+    // misma persona puede figurar en un convenio y en su renovación (ej.:
+    // Sofía Robles en el convenio 2 y el 10).
+    const idsAlcance = new Set(conveniosAlcance.map((c) => Number(c.id)));
+    const nombresUnicos = new Set(
+      personas
+        .filter((p) => idsAlcance.has(Number(p.id_convenio)))
+        .map((p) => p.nombre_completo),
+    );
+
     return {
       total: conveniosAlcance.length,
       firmados: firmados.length,
       vigentes: vigentes.length,
-      // Personas únicas: queda pendiente el endpoint /people de la API.
-      // Mientras no exista, se informa "—" en lugar de un dato ficticio.
-      personasUnicas: null,
+      personasUnicas: nombresUnicos.size,
       porEstado,
       porTipo,
       porUnidad,
       porAño,
     };
-  }, [conveniosAlcance, unidades]);
+  }, [conveniosAlcance, unidades, personas]);
 
   const vencimientos = useMemo(() => {
     const agrupado = {
@@ -593,6 +742,7 @@ function Dashboard() {
                   alcances={{ usoAlcance: alcanceGlobal }}
                   unidades={unidades}
                   usuarios={usuarios}
+                  personas={personas}
                   puedeCambiarRoles={puedeCambiarRoles(usuario)}
                   cambiarRolUsuario={cambiarRolUsuario}
                 />
@@ -613,6 +763,10 @@ function Dashboard() {
         convenios={convenios}
         unidades={unidades}
         onCerrar={() => setConvenioFicha(null)}
+        rolUsuario={usuario?.rol}
+        onCambioEstado={cambiarEstadoConvenio}
+        alNotificar={lanzarAviso}
+        onRefrescar={recargarConvenios}
       />
 
       {/* Modal de alta: formulario con toda la info del instrumento + PDF.
@@ -807,6 +961,9 @@ function Dashboard() {
           </div>
         </form>
       </VentanaModal>
+
+      {/* Popups de notificación: alta, modificación, baja y errores de operación. */}
+      <AvisoFlotante avisos={avisos} alDescartar={descartarAviso} />
     </div>
   );
 }
@@ -852,7 +1009,7 @@ function Metricas({ metricas }) {
                 ? "—"
                 : formatoEntero(metricas.personasUnicas)
             }
-            detalle="requiere el módulo de personas de la API"
+            detalle="personas distintas vinculadas a los instrumentos del alcance"
           />
         </div>
         <div className="panel-fichas panel-fichas--distribucion">
@@ -1135,6 +1292,7 @@ function Roles({
   alcances: { usoAlcance },
   unidades,
   usuarios,
+  personas,
   puedeCambiarRoles,
   cambiarRolUsuario,
 }) {
@@ -1263,7 +1421,7 @@ function Roles({
       <section className="panel-seccion">
         <VistaSeccion
           titulo="Personas y pasantías"
-          ayuda="Personas vinculadas a los instrumentos del alcance, con rol, periodo y datos complementarios de las pasantías. El listado se completa cuando la API exponga el módulo de personas."
+          ayuda="Personas vinculadas a los instrumentos del alcance, con rol, periodo y datos complementarios de las pasantías (la misma persona puede figurar en más de un convenio)."
         />
         <Tabla
           columnas={[
@@ -1277,9 +1435,31 @@ function Roles({
             { titulo: "Asignación" },
             { titulo: "Seguro" },
           ]}
-          filas={[]}
+          filas={personas}
           mensajeVacio="Sin personas vinculadas en tu alcance todavía."
-          filaRender={() => null}
+          filaRender={(p) => (
+            <tr key={p.id}>
+              <td className="tabla__celda-principal">{p.nombre_completo}</td>
+              <td className="tabla__celda">{p.rol ?? "—"}</td>
+              <td className="tabla__celda">
+                {p.codigo_unico ?? "—"}
+                {p.convenio_titulo ? (
+                  <span className="tabla__celda-neutra">
+                    {" "}
+                    · {recortarTexto(p.convenio_titulo, 40)}
+                  </span>
+                ) : null}
+              </td>
+              <td className="tabla__celda">{p.carrera ?? "—"}</td>
+              <td className="tabla__celda-neutra">
+                {p.carga_horaria != null ? `${p.carga_horaria} h/semana` : "—"}
+              </td>
+              <td className="tabla__celda-neutra">{p.periodo ?? "—"}</td>
+              <td className="tabla__celda">{p.tutoria ?? "—"}</td>
+              <td className="tabla__celda-neutra">{p.asignacion ?? "—"}</td>
+              <td className="tabla__celda-neutra">{p.seguro ?? "—"}</td>
+            </tr>
+          )}
         />
       </section>
     </div>

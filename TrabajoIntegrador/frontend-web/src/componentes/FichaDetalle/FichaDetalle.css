@@ -12,7 +12,7 @@
 
 .ficha__codigo {
   color: #64707d;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   margin-left: auto;
 }
 
@@ -35,7 +35,7 @@
 
 .ficha__datos dt {
   color: #7a838f;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin: 0;
@@ -43,21 +43,21 @@
 
 .ficha__datos dd {
   color: #25313e;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   margin: 0.15rem 0 0;
   line-height: 1.45;
 }
 
 .ficha__seccion {
   color: #1f4f99;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   font-weight: 700;
   margin: 0.8rem 0 0.35rem;
 }
 
 .ficha__texto {
   color: #33404e;
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   line-height: 1.5;
   margin: 0 0 0.6rem;
 }
@@ -84,7 +84,7 @@
 .ficha__partes li {
   border: 1px solid #eef1f4;
   padding: 0.45rem 0.65rem;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   color: #25313e;
   display: flex;
   flex-wrap: wrap;
@@ -94,7 +94,7 @@
 
 .ficha__partes span {
   color: #64707d;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
 }
 
 .ficha__documentos li {
@@ -103,7 +103,7 @@
   align-items: baseline;
   border-bottom: 1px solid #f0f2f5;
   padding: 0.35rem 0.1rem;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   width: 100%;
 }
 
@@ -143,7 +143,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.3rem 0.6rem;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
 }
 
 /* Punto de la línea de tiempo */
@@ -160,7 +160,7 @@
 
 .ficha__historial-fecha {
   color: #7a838f;
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   white-space: nowrap;
 }
 
@@ -187,6 +187,99 @@
   .ficha__datos {
     grid-template-columns: 1fr;
   }
+}
+
+/* --- Personas y pasantías en la ficha ------------------------------------- */
+.ficha__persona-detalle {
+  display: block;
+  color: #64707d;
+  font-size: 0.78rem;
+}
+
+/* --- Panel de cambio de estado dentro de la ficha ------------------------- */
+.ficha__cambio-estado {
+  border: 1px solid #cdd8e9;
+  background-color: #f4f7fc;
+  padding: 0.7rem 0.85rem;
+  margin-bottom: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ficha__cambio-estado__titulo {
+  color: #1f4f99;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.ficha__cambio-estado__sub {
+  margin: 0;
+  color: #64707d;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.ficha__cambio-estado__destinos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Botón de transición seleccionado en el panel de revisión */
+.tabla__accion--activa,
+.tabla__accion--activa:hover {
+  background-color: #1f4f99;
+  color: #fff;
+  border-color: #1f4f99;
+}
+
+/* --- Comparar versiones del documento ------------------------------------- */
+.ficha__comparar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ficha__cambio-estado__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ficha__cambio-estado__campo span {
+  color: #64707d;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ficha__cambio-estado__campo select,
+.ficha__cambio-estado__campo textarea {
+  font: inherit;
+  font-size: 0.88rem;
+  color: #25313e;
+  border: 1px solid #ccd4dc;
+  border-radius: 3px;
+  padding: 0.36rem 0.5rem;
+  background: #fff;
+}
+
+.ficha__cambio-estado__campo textarea {
+  resize: vertical;
+}
+
+.ficha__cambio-estado__error {
+  margin: 0;
+  color: #b3261e;
+  font-size: 0.8rem;
+}
+
+.ficha__cambio-estado__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .ficha__partes + .ficha__seccion {

@@ -344,7 +344,14 @@
   flex-direction: column;
 }
 
-.results p {
+/* Mensajes de estado de la columna de resultados: aviso de carga/error y
+   texto del estado vacío. ANTES era ".results p", que se filtraba dentro
+   del modal de la ficha de detalle y le pisaba sus estilos propios
+   (tamaños y colores de FichaDetalle.css). Ahora apunta solo a estos
+   mensajes, y la ficha se ve idéntica a la del panel. */
+.aviso-consulta,
+.no-contenido p,
+.datos-vacios p {
   margin-top: -4px;
   color: #000;
   font-family: "Montserrat:Bold", Montserrat, sans-serif;
@@ -378,7 +385,9 @@
     padding-left: 26px;
   }
 
-  .results p {
+  .aviso-consulta,
+  .no-contenido p,
+  .datos-vacios p {
     font-size: 0.75rem;
   }
 }

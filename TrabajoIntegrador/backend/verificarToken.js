@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+const { JWT_SECRETO } = require('./config');
+
 module.exports = (req, res, next) => {
     // 1. Buscamos el token en la cabecera de la petición
     const autorizacion = req.headers.authorization || '';
@@ -12,7 +14,7 @@ module.exports = (req, res, next) => {
 
     // 3. Verificamos que el token sea válido y no esté vencido
     try {
-        const datos = jwt.verify(token, 'EL_VIP');
+        const datos = jwt.verify(token, JWT_SECRETO);
         
         // Guardamos los datos del usuario en la request por si la ruta los necesita (ej. saber su rol)
         req.usuario = datos; 
