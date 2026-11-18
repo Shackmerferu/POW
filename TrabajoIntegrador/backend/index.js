@@ -53,7 +53,7 @@ app.use('/api/documents', documentosRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 
-const PORT = PUERTO;
-app.listen(PORT, () => {
+const PORT = 8000;
+app.listen(PORT,'0.0.0.0', () => {
     console.log(`Servidor Backend corriendo en http://localhost:${PORT}`);
 });
