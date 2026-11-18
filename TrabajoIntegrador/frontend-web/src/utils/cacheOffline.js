@@ -1,30 +1,18 @@
-// CACHEAR OFFLINE — persistencia local con IndexedDB para trabajar sin
-// conexión. Hay un almacén por fuente de datos del panel (una por pestaña
-// disponible según el rol), de modo que cada vista guarda su propia copia.
-//
-// Estrategia:
-//   · Lectura: la API primero; si falla, se recupera la última copia local.
-//   · Escritura: cada respuesta exitosa sobrescribe la copia del almacén.
-//
-// Los conflictos de actualización se resuelven con la concurrencia
-// optimista que ya aplica el backend (fecha_actualizacion): el cliente
-// nunca sobrescribe en silencio una versión más reciente del servidor.
+const NOMBRE_BD = 'gestion-convenios';
+const VERSION_BD = 2;
 
-const NOMBRE_BD = "gestion-convenios";
-const VERSION_BD = 1;
-
-// Un almacén por pestaña del panel (más unidades, que alimentan a varias).
 export const ALMACENES = Object.freeze({
-  convenios: "convenios", // pestaña Administración (y base de métricas/vencimientos)
-  metricas: "metricas", // pestaña Métricas
-  usuarios: "usuarios", // pestaña Roles
-  personas: "personas", // tabla Personas y pasantías (pestaña Roles)
-  unidades: "unidades", // apoyo transversal
+  convenios: 'convenios',
+  metricas: 'metricas',
+  usuarios: 'usuarios',
+  personas: 'personas',
+  unidades: 'unidades',
+  pendientes: 'pendientes',
 });
 
 function abrirBD() {
-  if (typeof window === "undefined" || !("indexedDB" in window)) {
-    return Promise.reject(new Error("IndexedDB no está disponible."));
+  if (typeof window === 'undefined' || !('indexedDB' in window)) {
+    return Promise.reject(new Error('IndexedDB no está disponible.'));
   }
 
   return new Promise((resolver, rechazar) => {
@@ -32,11 +20,16 @@ function abrirBD() {
 
     peticion.onupgradeneeded = () => {
       const bd = peticion.result;
-      Object.values(ALMACENES).forEach((almacen) => {
-        if (!bd.objectStoreNames.contains(almacen)) {
+
+      for (const almacen of Object.values(ALMACENES)) {
+        if (bd.objectStoreNames.contains(almacen)) continue;
+
+        if (almacen === ALMACENES.pendientes) {
+          bd.createObjectStore(almacen, { keyPath: 'id' });
+        } else {
           bd.createObjectStore(almacen);
         }
-      });
+      }
     };
 
     peticion.onsuccess = () => resolver(peticion.result);
@@ -44,40 +37,149 @@ function abrirBD() {
   });
 }
 
-/** Guarda `datos` en el almacén indicado (clave única por almacén). */
 export async function guardarCache(almacen, datos) {
+  let bd;
+
   try {
-    const bd = await abrirBD();
+    bd = await abrirBD();
+
     await new Promise((resolver, rechazar) => {
-      const transaccion = bd.transaction(almacen, "readwrite");
-      transaccion.objectStore(almacen).put(datos, "datos");
+      const transaccion = bd.transaction(almacen, 'readwrite');
+      transaccion.objectStore(almacen).put(datos, 'datos');
       transaccion.oncomplete = resolver;
       transaccion.onerror = () => rechazar(transaccion.error);
+      transaccion.onabort = () => rechazar(transaccion.error);
     });
-    bd.close();
+
     return true;
   } catch (error) {
-    // El caché es una mejora: si IndexedDB falla (modo privado, etc.), la
-    // app sigue funcionando normalmente contra la API.
     console.warn(`No se pudo guardar el caché de "${almacen}":`, error);
     return false;
+  } finally {
+    bd?.close();
   }
 }
 
-/** Devuelve la última copia guardada del almacén, o null si no hay. */
 export async function leerCache(almacen) {
+  let bd;
+
   try {
-    const bd = await abrirBD();
-    const datos = await new Promise((resolver, rechazar) => {
-      const transaccion = bd.transaction(almacen, "readonly");
-      const pedido = transaccion.objectStore(almacen).get("datos");
+    bd = await abrirBD();
+
+    return await new Promise((resolver, rechazar) => {
+      const transaccion = bd.transaction(almacen, 'readonly');
+      const pedido = transaccion.objectStore(almacen).get('datos');
       pedido.onsuccess = () => resolver(pedido.result ?? null);
       pedido.onerror = () => rechazar(pedido.error);
     });
-    bd.close();
-    return datos;
   } catch (error) {
     console.warn(`No se pudo leer el caché de "${almacen}":`, error);
     return null;
+  } finally {
+    bd?.close();
+  }
+}
+
+export async function guardarPendiente(operacion) {
+  let bd;
+
+  try {
+    bd = await abrirBD();
+
+    const pendiente = {
+      ...operacion,
+      id:
+        operacion.id ||
+        (window.crypto && typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : null) ||
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      creado_en: operacion.creado_en || new Date().toISOString(),
+      conflicto: false,
+    };
+
+    await new Promise((resolver, rechazar) => {
+      const transaccion = bd.transaction(ALMACENES.pendientes, 'readwrite');
+      transaccion.objectStore(ALMACENES.pendientes).put(pendiente);
+      transaccion.oncomplete = resolver;
+      transaccion.onerror = () => rechazar(transaccion.error);
+      transaccion.onabort = () => rechazar(transaccion.error);
+    });
+
+    return pendiente;
+  } finally {
+    bd?.close();
+  }
+}
+
+export async function listarPendientes() {
+  let bd;
+
+  try {
+    bd = await abrirBD();
+
+    return await new Promise((resolver, rechazar) => {
+      const transaccion = bd.transaction(ALMACENES.pendientes, 'readonly');
+      const pedido = transaccion.objectStore(ALMACENES.pendientes).getAll();
+
+      pedido.onsuccess = () =>
+        resolver(
+          (pedido.result || []).sort((a, b) =>
+            a.creado_en.localeCompare(b.creado_en)
+          )
+        );
+      pedido.onerror = () => rechazar(pedido.error);
+    });
+  } finally {
+    bd?.close();
+  }
+}
+
+export async function eliminarPendiente(id) {
+  let bd;
+
+  try {
+    bd = await abrirBD();
+
+    await new Promise((resolver, rechazar) => {
+      const transaccion = bd.transaction(ALMACENES.pendientes, 'readwrite');
+      transaccion.objectStore(ALMACENES.pendientes).delete(id);
+      transaccion.oncomplete = resolver;
+      transaccion.onerror = () => rechazar(transaccion.error);
+      transaccion.onabort = () => rechazar(transaccion.error);
+    });
+  } finally {
+    bd?.close();
+  }
+}
+
+export async function marcarPendienteEnConflicto(id, mensaje) {
+  let bd;
+
+  try {
+    bd = await abrirBD();
+
+    await new Promise((resolver, rechazar) => {
+      const transaccion = bd.transaction(ALMACENES.pendientes, 'readwrite');
+      const almacen = transaccion.objectStore(ALMACENES.pendientes);
+      const pedido = almacen.get(id);
+
+      pedido.onsuccess = () => {
+        if (!pedido.result) return;
+
+        almacen.put({
+          ...pedido.result,
+          conflicto: true,
+          mensaje_conflicto: mensaje,
+        });
+      };
+
+      pedido.onerror = () => rechazar(pedido.error);
+      transaccion.oncomplete = resolver;
+      transaccion.onerror = () => rechazar(transaccion.error);
+      transaccion.onabort = () => rechazar(transaccion.error);
+    });
+  } finally {
+    bd?.close();
   }
 }

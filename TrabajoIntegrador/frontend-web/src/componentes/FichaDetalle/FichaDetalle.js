@@ -3,7 +3,7 @@ import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
 import { API_URL } from "../../config/api";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
-import { obtenerUsuario } from "../../utils/sesion";
+import EditarFichaConvenio from "./EditarFichaConvenio";
 import "./FichaDetalle.css";
 import {
   ETIQUETAS_ESTADO,
@@ -100,6 +100,7 @@ export default function FichaDetalle({
   onAccionDocumento,
   rolUsuario = null,
   onCambioEstado = null,
+  onGuardarFicha = null,
   alNotificar = null,
   onRefrescar = null,
 }) {
@@ -521,9 +522,16 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
   // --- Panel de revisión del trámite ----------------------------------------
   const [modalEstadoAbierto, setModalEstadoAbierto] = useState(false);
   const [estadoNuevo, setEstadoNuevo] = useState("");
+  const [fechaFirma, setFechaFirma] = useState("");
   const [observacionEstado, setObservacionEstado] = useState("");
   const [errorEstado, setErrorEstado] = useState("");
   const [enviandoEstado, setEnviandoEstado] = useState(false);
+  const [editarFichaAbierta, setEditarFichaAbierta] = useState(false);
+
+  const puedeEditarFicha =
+    ["administracion", "gestion"].includes(
+      String(rolUsuario ?? "").trim().toLowerCase(),
+    ) && typeof onGuardarFicha === "function";
 
   // Estados destino permitidos según el rol y el estado actual.
   const estadosDisponibles = useMemo(
@@ -549,8 +557,10 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
     setModalEstadoAbierto(false);
     setModalCompararAbierto(false);
     setEstadoNuevo("");
+    setFechaFirma("");
     setObservacionEstado("");
     setErrorEstado("");
+    setEditarFichaAbierta(false);
     setAntecedenteElegido(
       convenio?.id_antecedente ? String(convenio.id_antecedente) : "",
     );
@@ -773,6 +783,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       return;
     }
 
+    if (estadoNuevo === "firmado" && !fechaFirma) {
+      setErrorEstado("Ingresá la fecha de firma.");
+      return;
+    }
+
     setEnviandoEstado(true);
     setErrorEstado("");
     try {
@@ -781,9 +796,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
         estadoNuevo,
         observacionEstado.trim(),
         convenio,
+        estadoNuevo === "firmado" ? fechaFirma : null,
       );
       setModalEstadoAbierto(false);
       setEstadoNuevo("");
+      setFechaFirma("");
       setObservacionEstado("");
     } catch (error) {
       setErrorEstado(error.message || "No se pudo actualizar el estado.");
@@ -873,6 +890,25 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
         <EtiquetaEstado estado={convenio.estado} />
         <span className="ficha__codigo">{convenio.codigo_unico}</span>
       </div>
+
+      {puedeEditarFicha && (
+        <button
+          type="button"
+          className="tabla__accion"
+          onClick={() => setEditarFichaAbierta(true)}
+        >
+          Editar ficha
+        </button>
+      )}
+
+      <EditarFichaConvenio
+        convenio={convenio}
+        abierto={editarFichaAbierta}
+        onCerrar={() => setEditarFichaAbierta(false)}
+        onGuardar={(cambios) =>
+          onGuardarFicha?.(convenio.id, cambios, convenio)
+        }
+      />
 
       {/* Datos principales de la ficha */}
       <dl className="ficha__datos">
@@ -978,7 +1014,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
                 type="button"
                 className={`tabla__accion${estadoNuevo === estado ? " tabla__accion--activa" : ""
                   }`}
-                onClick={() => setEstadoNuevo(estado)}
+                onClick={() => {
+                  setEstadoNuevo(estado);
+                  setFechaFirma("");
+                  setErrorEstado("");
+                }}
                 disabled={enviandoEstado}
               >
                 {ETIQUETA_TRANSICION[estado] ??
@@ -987,6 +1027,18 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
               </button>
             ))}
           </div>
+          {estadoNuevo === "firmado" && (
+            <label className="ficha__cambio-estado__campo">
+              <span>Fecha de firma *</span>
+              <input
+                type="date"
+                value={fechaFirma}
+                onChange={(evento) => setFechaFirma(evento.target.value)}
+                required
+                disabled={enviandoEstado}
+              />
+            </label>
+          )}
           <label className="ficha__cambio-estado__campo">
             <span>
               Fundamento de la transición (obligatorio, queda en la auditoría)
