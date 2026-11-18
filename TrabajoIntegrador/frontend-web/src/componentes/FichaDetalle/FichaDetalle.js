@@ -3,6 +3,7 @@ import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
 import { API_URL } from "../../config/api";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
+import { obtenerUsuario } from "../../utils/sesion";
 import "./FichaDetalle.css";
 import {
   ETIQUETAS_ESTADO,
@@ -170,6 +171,8 @@ export default function FichaDetalle({
     [convenios, convenio],
   );
 
+console.log("Rol en FichaDetalle:", rolUsuario);
+console.log("Rol en VistaPreviaDocumento:", rolUsuario);
   // Catálogo de instituciones registradas (para asociarlas al convenio).
 
   /** Recarga el catálogo de instituciones registradas. */
@@ -298,9 +301,7 @@ export default function FichaDetalle({
   const vincularPersona = async (evento) => {
     evento.preventDefault();
     if (!formPersona.nombre_completo.trim() || !formPersona.rol) {
-      setErrorFormPersona(
-        "El nombre de la persona y su rol son obligatorios.",
-      );
+      setErrorFormPersona("El nombre de la persona y su rol son obligatorios.");
       return;
     }
     setEnviandoPersona(true);
@@ -350,23 +351,29 @@ export default function FichaDetalle({
     setErrorRelacion("");
     try {
       const token = localStorage.getItem("token");
-      const respuesta = await fetch(`${API_URL}/agreements/${convenio.id}/links`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      const respuesta = await fetch(
+        `${API_URL}/agreements/${convenio.id}/links`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            id_antecedente: antecedenteElegido
+              ? Number(antecedenteElegido)
+              : null,
+          }),
         },
-        body: JSON.stringify({
-          id_antecedente: antecedenteElegido ? Number(antecedenteElegido) : null,
-        }),
-      });
+      );
       const cuerpo = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) {
         throw new Error(cuerpo?.mensaje || "No se pudo guardar la relación.");
       }
       notificar(
         "Relación registrada",
-        cuerpo?.mensaje || "La vinculación quedó guardada y registrada en la auditoría.",
+        cuerpo?.mensaje ||
+        "La vinculación quedó guardada y registrada en la auditoría.",
         "exito",
       );
       if (typeof onRefrescar === "function") onRefrescar();
@@ -611,6 +618,13 @@ export default function FichaDetalle({
   const manejarAccionDocumento = async (id, documento) => {
     if (!documento || ejecutando) return;
 
+    const esConsulta =
+      String(rolUsuario ?? "").trim().toLowerCase() === "consulta";
+
+    if (esConsulta && (id === "aprobar" || id === "subir")) {
+      return;
+    }
+
     // "Aprobar / cambiar estado": abre el panel de revisión (no toca el PDF).
     if (id === "aprobar") {
       if (estadosDisponibles.length === 0) {
@@ -675,6 +689,12 @@ export default function FichaDetalle({
   const subirNuevaVersion = async (evento) => {
     const archivo = evento.target.files?.[0];
     evento.target.value = "";
+
+    const esConsulta =
+      String(rolUsuario ?? "").trim().toLowerCase() === "consulta";
+
+    if (esConsulta) return;
+
     if (!archivo || !documentoEnVista || !convenio) return;
 
     if (archivo.type !== "application/pdf") {
@@ -730,6 +750,10 @@ export default function FichaDetalle({
 
   /** Confirma la transición de estado con su fundamento (auditoría). */
   const confirmarCambioEstado = async () => {
+    if (String(rolUsuario ?? "").trim().toLowerCase() === "consulta") {
+      setErrorEstado("Tu rol no permite modificar el estado del convenio.");
+      return;
+    }
     if (!estadoNuevo) {
       setErrorEstado("Elegí la transición a registrar.");
       return;
@@ -912,6 +936,7 @@ export default function FichaDetalle({
         documento={documentoEnVista}
         alElegirAccion={manejarAccionDocumento}
         aviso={avisoAccion}
+        rolUsuario={rolUsuario}
       />
 
       {/* Selector de archivo oculto que dispara "Subir nueva versión" */}
@@ -963,7 +988,9 @@ export default function FichaDetalle({
             ))}
           </div>
           <label className="ficha__cambio-estado__campo">
-            <span>Fundamento de la transición (obligatorio, queda en la auditoría)</span>
+            <span>
+              Fundamento de la transición (obligatorio, queda en la auditoría)
+            </span>
             <textarea
               rows="3"
               value={observacionEstado}
@@ -1019,14 +1046,15 @@ export default function FichaDetalle({
             Documento:{" "}
             <strong>
               {documentoEnVista
-                ? NOMBRES_DOCUMENTO[documentoEnVista.tipo_documento] ??
-                documentoEnVista.tipo_documento
+                ? (NOMBRES_DOCUMENTO[documentoEnVista.tipo_documento] ??
+                  documentoEnVista.tipo_documento)
                 : "Sin documento seleccionado"}
             </strong>{" "}
             · {versionesDocumento.length}{" "}
             {versionesDocumento.length === 1
               ? "versión registrada"
-              : "versiones registradas"}.
+              : "versiones registradas"}
+            .
           </p>
           <ul className="ficha__partes">
             {versionesDocumento.map((version, indice) => (
@@ -1056,8 +1084,8 @@ export default function FichaDetalle({
           </ul>
           {versionesDocumento.length < 2 && (
             <p className="ficha__texto">
-              Este documento todavía no tiene una carga anterior del mismo
-              tipo: subí una nueva versión para poder comparar los cambios.
+              Este documento todavía no tiene una carga anterior del mismo tipo:
+              subí una nueva versión para poder comparar los cambios.
             </p>
           )}
           <div className="ficha__cambio-estado__acciones">
@@ -1201,7 +1229,9 @@ export default function FichaDetalle({
               <span>Antecedente (renovación, sustitución o adenda)</span>
               <select
                 value={antecedenteElegido}
-                onChange={(evento) => setAntecedenteElegido(evento.target.value)}
+                onChange={(evento) =>
+                  setAntecedenteElegido(evento.target.value)
+                }
                 disabled={guardandoRelacion}
               >
                 <option value="">— Sin antecedente —</option>
@@ -1420,10 +1450,7 @@ export default function FichaDetalle({
           </button>
 
           {formPersonaAbierto && (
-            <form
-              className="ficha__alta__columnas"
-              onSubmit={vincularPersona}
-            >
+            <form className="ficha__alta__columnas" onSubmit={vincularPersona}>
               <label className="ficha__alta__campo">
                 <span>Nombre completo *</span>
                 <input
@@ -1603,9 +1630,7 @@ function formatoFechaHora(valor) {
   if (!valor) return "—";
   // mysql2 puede entregar Date ya parseado o el texto "aaaa-mm-dd hh:mm:ss".
   const fecha =
-    valor instanceof Date
-      ? valor
-      : new Date(String(valor).replace(" ", "T"));
+    valor instanceof Date ? valor : new Date(String(valor).replace(" ", "T"));
   if (Number.isNaN(fecha.getTime())) return "—";
   const dia = String(fecha.getDate()).padStart(2, "0");
   const mes = String(fecha.getMonth() + 1).padStart(2, "0");
@@ -1622,7 +1647,6 @@ function etiquetaTransicion(registro) {
   // Accesos (descargas, vistas previas): no tienen transición de estado.
   if (previo === "—" && nuevo === "—") return "Acción registrada";
 
-  const nombreEstado = (clave) =>
-    ETIQUETAS_ESTADO[clave] ?? clave ?? "—";
+  const nombreEstado = (clave) => ETIQUETAS_ESTADO[clave] ?? clave ?? "—";
   return `${nombreEstado(previo)} → ${nombreEstado(nuevo)}`;
 }

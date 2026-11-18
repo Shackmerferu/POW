@@ -58,3 +58,14 @@
 .menu-acciones__item--separador {
   border-top: 1px solid #eef1f4;
 }
+
+.menu-acciones__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  color: #89919b;
+}
+
+.menu-acciones__item:disabled:hover {
+  background: none;
+  color: #89919b;
+}

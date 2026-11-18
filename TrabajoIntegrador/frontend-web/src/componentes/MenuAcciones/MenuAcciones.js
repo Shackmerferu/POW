@@ -50,7 +50,11 @@ export default function MenuAcciones({ etiqueta = "Acciones", opciones = [], alE
                 type="button"
                 role="menuitem"
                 className={`menu-acciones__item${opcion.separadorAntes ? " menu-acciones__item--separador" : ""}`}
+                disabled={opcion.deshabilitada}
+                title={opcion.deshabilitada ? "No tenés permisos para realizar esta acción." : ""}
                 onClick={() => {
+                  if (opcion.deshabilitada) return;
+
                   setAbierto(false);
                   alElegir(opcion.id);
                 }}

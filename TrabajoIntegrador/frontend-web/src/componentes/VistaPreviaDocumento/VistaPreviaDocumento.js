@@ -18,7 +18,7 @@ import MenuAcciones from "../MenuAcciones/MenuAcciones";
 import "./VistaPreviaDocumento.css";
 
 const ETIQUETAS_ACCION = {
-  editar: "Editar en Office / web",
+  editar: "Ver en Office / web",
   comparar: "Comparar cambios",
   descargar: "Descargar",
   subir: "Subir nueva versión",
@@ -33,7 +33,12 @@ const NOMBRES_DOCUMENTO = {
   otro: "Otro",
 };
 
-export default function VistaPreviaDocumento({ documento, alElegirAccion, aviso }) {
+export default function VistaPreviaDocumento({
+  documento,
+  alElegirAccion,
+  aviso,
+  rolUsuario,
+}) {
   const [urlPdf, setUrlPdf] = useState(null);
   const [cargandoPdf, setCargandoPdf] = useState(false);
   const [errorPdf, setErrorPdf] = useState("");
@@ -115,15 +120,24 @@ export default function VistaPreviaDocumento({ documento, alElegirAccion, aviso 
         </div>
 
         <MenuAcciones
-          etiqueta="Acciones"
-          opciones={Object.entries(ETIQUETAS_ACCION).map(([id, texto]) => ({
-            id,
-            texto,
-            separadorAntes: id === "aprobar",
-          }))}
-          alElegir={(id) => alElegirAccion(id, documento)}
-          deshabilitado={!documento}
-        />
+  etiqueta="Acciones"
+  opciones={Object.entries(ETIQUETAS_ACCION).map(([id, texto]) => {
+    const esConsulta =
+      String(rolUsuario ?? "").trim().toLowerCase() === "consulta";
+
+    return {
+      id,
+      texto,
+      separadorAntes: id === "aprobar",
+
+      // Consulta no puede aprobar/rechazar ni subir versiones.
+      deshabilitada:
+        esConsulta && (id === "aprobar" || id === "subir"),
+    };
+  })}
+  alElegir={(id) => alElegirAccion(id, documento)}
+  deshabilitado={!documento}
+/>
       </header>
 
       <div className="vista-previa__marco">
