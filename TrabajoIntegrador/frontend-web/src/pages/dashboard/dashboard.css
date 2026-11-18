@@ -256,42 +256,129 @@
 .roles__celda-rol {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  min-width: 12rem;
+}
+
+/* Ancho fijo de la etiqueta: así el botón Cambiar arranca en la misma
+   posición en todas las filas, sin importar el largo del rol. */
+.roles__celda-rol .etiqueta--rol {
+  box-sizing: border-box;
+  flex: 0 0 7rem;
+  text-align: center;
+}
+
+/* El título "Rol" se centra sobre la lista de etiquetas, no sobre el botón. */
+.roles__columna-rol {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 7rem;
+  text-align: center;
+}
+
+/* Botón y confirmación comparten el mismo recuadro para que ninguna fila
+   cambie de ancho al editar o al guardar. */
+.roles__boton-rol,
+.roles__confirmacion {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 5.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 5.75rem;
+  height: 1.75rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .roles__boton-rol {
-  padding: 0.15rem 0.45rem;
-  font-size: 0.72rem;
-  line-height: 1.2;
+  border-color: #d7dce3;
+  background-color: #fff;
+  color: #1f4f99;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.roles__boton-rol:hover {
+  background-color: #eef2f8;
+  border-color: #cdd8e9;
+}
+
+.roles__boton-rol svg {
+  flex: none;
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.roles__confirmacion {
+  color: #1b7a3d;
+  font-weight: 600;
 }
 
 .roles__editor-rol {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 0.3rem;
 }
 
 .roles__editor-rol select {
-  padding: 0.15rem 0.3rem;
-  border: 1px solid #cdd5dd;
+  box-sizing: border-box;
+  width: 7.5rem;
+  height: 1.75rem;
+  padding: 0 0.4rem;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
   background-color: #fff;
   color: #33404e;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1;
 }
 
-.roles__editor-rol .btn {
-  padding: 0.15rem 0.4rem;
-  font-size: 0.72rem;
-  line-height: 1.2;
+.roles__accion-rol {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #64707d;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.roles__confirmacion {
-  color: #1b7a3d;
-  font-size: 0.72rem;
-  font-weight: 600;
-  white-space: nowrap;
+.roles__accion-rol--guardar {
+  border-color: #cdd8e9;
+  background-color: #eef2f8;
+  color: #1f4f99;
+}
+
+.roles__accion-rol:hover:not(:disabled) {
+  background-color: #e4ebf5;
+  border-color: #b9c9e2;
+}
+
+.roles__accion-rol:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.roles__accion-rol svg {
+  width: 0.9rem;
+  height: 0.9rem;
 }
 
 .roles__error-rol {

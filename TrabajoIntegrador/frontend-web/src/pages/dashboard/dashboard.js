@@ -980,7 +980,7 @@ function Administracion({
 // Selector por fila: el botón abre el select de roles y confirma el cambio.
 function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
   const [abierto, setAbierto] = useState(false);
-  const [rolNuevo, setRolNuevo] = useState(usuarioFila.rol);
+  const [rolNuevo, setRolNuevo] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [confirmado, setConfirmado] = useState(false);
   const [error, setError] = useState("");
@@ -994,7 +994,7 @@ function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
   if (!puedeCambiarRoles) return null;
 
   const abrir = () => {
-    setRolNuevo(usuarioFila.rol);
+    setRolNuevo("");
     setError("");
     setConfirmado(false);
     setAbierto(true);
@@ -1006,7 +1006,7 @@ function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
   };
 
   const confirmar = async () => {
-    if (rolNuevo === usuarioFila.rol) {
+    if (!rolNuevo || rolNuevo === usuarioFila.rol) {
       cancelar();
       return;
     }
@@ -1027,7 +1027,7 @@ function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
   if (confirmado) {
     return (
       <span className="roles__confirmacion" role="status" aria-live="polite">
-        ✓ Rol actualizado
+        <span aria-hidden="true">✓</span> Actualizado
       </span>
     );
   }
@@ -1036,58 +1036,97 @@ function SelectorRol({ usuarioFila, puedeCambiarRoles, onCambiar }) {
     return (
       <button
         type="button"
-        className="btn btn-outline-primary btn-sm roles__boton-rol"
+        className="roles__boton-rol"
         onClick={abrir}
+        aria-label={`Cambiar rol de ${usuarioFila.nombre_completo}`}
       >
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M11.5 2.5l2 2L6 12l-2.5.5L4 10l7.5-7.5z"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+          <path d="M10.5 3.5l2 2" stroke="currentColor" strokeWidth="1.2" />
+        </svg>
         Cambiar
       </button>
     );
   }
 
   return (
-    <span className="roles__editor-rol">
-      <select
-        aria-label={`Nuevo rol para ${usuarioFila.nombre_completo}`}
-        value={rolNuevo}
-        onChange={(e) => setRolNuevo(e.target.value)}
-        disabled={guardando}
-      >
-        {Object.values(ROLES).map((rol) => (
-          <option key={rol} value={rol}>
-            {
-              {
-                administracion: "Administración",
-                gestion: "Gestión",
-                revision: "Revisión",
-                consulta: "Consulta",
-              }[rol]
-            }
+    <>
+      <span className="roles__editor-rol">
+        <select
+          aria-label={`Nuevo rol para ${usuarioFila.nombre_completo}`}
+          value={rolNuevo}
+          onChange={(e) => setRolNuevo(e.target.value)}
+          disabled={guardando}
+        >
+          <option value="" disabled>
+            Seleccionar rol…
           </option>
-        ))}
-      </select>
-      <button
-        type="button"
-        className="btn btn-primary btn-sm"
-        onClick={confirmar}
-        disabled={guardando}
-      >
-        {guardando ? "…" : "Guardar"}
-      </button>
-      <button
-        type="button"
-        className="btn btn-outline-secondary btn-sm"
-        onClick={cancelar}
-        disabled={guardando}
-        aria-label="Cancelar"
-      >
-        ✕
-      </button>
+          {Object.values(ROLES)
+            .filter((rol) => rol !== usuarioFila.rol)
+            .map((rol) => (
+              <option key={rol} value={rol}>
+                {
+                  {
+                    administracion: "Administración",
+                    gestion: "Gestión",
+                    revision: "Revisión",
+                    consulta: "Consulta",
+                  }[rol]
+                }
+              </option>
+            ))}
+        </select>
+        <button
+          type="button"
+          className="roles__accion-rol roles__accion-rol--guardar"
+          onClick={confirmar}
+          disabled={guardando || !rolNuevo}
+          aria-label="Guardar rol"
+          title="Guardar"
+        >
+          {guardando ? (
+            "…"
+          ) : (
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M3 8.5l3.2 3.2L13 5"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </button>
+        <button
+          type="button"
+          className="roles__accion-rol"
+          onClick={cancelar}
+          disabled={guardando}
+          aria-label="Cancelar"
+          title="Cancelar"
+        >
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M4 4l8 8M12 4l-8 8"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </span>
       {error && (
         <span className="roles__error-rol" role="alert">
           {error}
         </span>
       )}
-    </span>
+    </>
   );
 }
 
@@ -1152,17 +1191,34 @@ function Roles({
         />
         <Tabla
           columnas={[
-            { titulo: "Legajo" },
-            { titulo: "Nombre y apellido" },
-            { titulo: "Rol" },
-            { titulo: "Alcance" },
+            { titulo: "Legajo", contenido: <span className="tabla__encabezado-centrado">Legajo</span> },
+            {
+              titulo: "Nombre y apellido",
+              contenido: (
+                <span className="tabla__encabezado-centrado">
+                  Nombre y apellido
+                </span>
+              ),
+            },
+            { titulo: "Alcance", contenido: <span className="tabla__encabezado-centrado">Alcance</span> },
+            {
+              titulo: "Rol",
+              contenido: <span className="roles__columna-rol">Rol</span>,
+            },
           ]}
           filas={usuariosVisibles}
           mensajeVacio="Sin usuarios visibles dentro de tu alcance."
           filaRender={(u) => (
             <tr key={u.id}>
-              <td className="tabla__celda-principal">{u.legajo}</td>
-              <td>{u.nombre_completo}</td>
+              <td className="tabla__celda-principal tabla__celda-centrada">
+                {u.legajo}
+              </td>
+              <td className="tabla__celda-centrada">{u.nombre_completo}</td>
+              <td className="tabla__celda-neutra tabla__celda-centrada">
+                {u.id_unidad === null
+                  ? "Global (todas las unidades)"
+                  : nombreUnidad(unidades, u.id_unidad)}
+              </td>
               <td>
                 <div className="roles__celda-rol">
                   <EtiquetaRol rol={u.rol} />
@@ -1172,11 +1228,6 @@ function Roles({
                     onCambiar={cambiarRolUsuario}
                   />
                 </div>
-              </td>
-              <td className="tabla__celda-neutra">
-                {u.id_unidad === null
-                  ? "Global (todas las unidades)"
-                  : nombreUnidad(unidades, u.id_unidad)}
               </td>
             </tr>
           )}
