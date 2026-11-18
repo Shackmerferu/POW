@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Boton from '../components/atoms/Boton';
 import * as FileSystem from 'expo-file-system/legacy';
-import * as Sharing from 'expo-sharing';
+import * as IntentLauncher from 'expo-intent-launcher';
 export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiarQR }) {
     const [mensajeSede, setMensajeSede] = useState('Buscando tu ubicación...');
     const [sedeDetectada, setSedeDetectada] = useState(false);
@@ -108,7 +108,7 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
                 return Alert.alert("Error", "No se encontró el token de sesión.");
             }
 
-            // 1. Consultamos el ID del documento asociado a este convenio en la base de datos
+            // 1. Consultamos el ID del documento asociado a este convenio
             const respuesta = await fetch(`http://${IP_BACKEND}:${PUERTO}/api/documents/convenio/${convenio.id}`, {
                 method: 'GET',
                 headers: {
@@ -129,7 +129,7 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
 
                 Alert.alert("Descargando", "Obteniendo documento seguro del servidor...");
 
-                // 3. Descargamos el archivo físicamente enviando el token JWT en los headers
+                // 3. Descargamos el archivo con los headers de autenticación
                 const downloadRes = await FileSystem.downloadAsync(
                     urlDescarga,
                     rutaDestino,
@@ -141,12 +141,13 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
                 );
 
                 if (downloadRes.status === 200) {
-                    // 4. Abrimos el PDF con el visor del sistema del celular o permitimos compartirlo
-                    if (await Sharing.isAvailableAsync()) {
-                        await Sharing.shareAsync(downloadRes.uri);
-                    } else {
-                        Alert.alert("Éxito", "El PDF se descargó correctamente en el dispositivo.");
-                    }
+                    // 4. Abrimos el PDF directamente en el visor del celular (Android)
+                    const cUri = await FileSystem.getContentUriAsync(downloadRes.uri);
+                    await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                        data: cUri,
+                        flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+                        type: 'application/pdf',
+                    });
                 } else {
                     Alert.alert("Error", "El servidor no pudo completar la descarga.");
                 }
