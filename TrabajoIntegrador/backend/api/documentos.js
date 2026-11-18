@@ -72,7 +72,12 @@ module.exports = (db) => {
     // ==========================================
     // 2. SUBIR DOCUMENTO Y CALCULAR SHA-256 
     // ==========================================
-    router.post('/', verificarToken, upload.single('archivo'), (req, res) => {
+    router.post('/', verificarToken, (req, res, next) => {
+        if (req.usuario?.rol === 'consulta') {
+            return res.status(403).json({ status: 403, mensaje: 'El rol consulta solo tiene permiso de lectura.' });
+        }
+        next();
+    }, upload.single('archivo'), (req, res) => {
         const { id_convenio, tipo_documento } = req.body;
         const file = req.file;
 
@@ -130,12 +135,18 @@ module.exports = (db) => {
     router.get('/:id/download', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
-        db.query('SELECT id_convenio, ruta_archivo, tipo_documento FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+        db.query('SELECT d.id_convenio, d.ruta_archivo, d.tipo_documento, c.estado, c.id_unidad_responsable FROM documentos d INNER JOIN convenios c ON c.id = d.id_convenio WHERE d.id = ?', [idDoc], (error, resultados) => {
             if (error || resultados.length === 0) {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado en la base de datos." });
             }
 
             const documento = resultados[0];
+            if (req.usuario?.rol === 'consulta' && !['aprobado', 'firmado'].includes(documento.estado)) {
+                return res.status(404).json({ status: 404, mensaje: 'Documento no encontrado.' });
+            }
+            if (req.usuario?.id_unidad != null && Number(req.usuario.id_unidad) !== Number(documento.id_unidad_responsable)) {
+                return res.status(404).json({ status: 404, mensaje: 'Documento no encontrado.' });
+            }
             const archivoFisico = documento.ruta_archivo;
             const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', archivoFisico);
 
@@ -159,16 +170,24 @@ module.exports = (db) => {
     router.get('/:id/view', verificarToken, (req, res) => {
         const idDoc = req.params.id;
         
-        db.query('SELECT id_convenio, ruta_archivo FROM documentos WHERE id = ?', [idDoc], (error, resultados) => {
+        db.query('SELECT d.id_convenio, d.ruta_archivo, c.estado, c.id_unidad_responsable FROM documentos d INNER JOIN convenios c ON c.id = d.id_convenio WHERE d.id = ?', [idDoc], (error, resultados) => {
             if (error || resultados.length === 0) {
                 return res.status(404).json({ status: 404, mensaje: "Documento no encontrado." });
             }
 
-            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', resultados[0].ruta_archivo);
+            const documento = resultados[0];
+            if (req.usuario?.rol === 'consulta' && !['aprobado', 'firmado'].includes(documento.estado)) {
+                return res.status(404).json({ status: 404, mensaje: 'Documento no encontrado.' });
+            }
+            if (req.usuario?.id_unidad != null && Number(req.usuario.id_unidad) !== Number(documento.id_unidad_responsable)) {
+                return res.status(404).json({ status: 404, mensaje: 'Documento no encontrado.' });
+            }
+
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', documento.ruta_archivo);
 
             if (fs.existsSync(rutaCompleta)) {
                 registrarAcceso(
-                    resultados[0].id_convenio,
+                    documento.id_convenio,
                     req.usuario.id,
                     `Vista previa del documento (ID #${idDoc}).`
                 );

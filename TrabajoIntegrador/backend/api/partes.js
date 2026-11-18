@@ -54,6 +54,7 @@ module.exports = (db) => {
     
 
     router.post('/asociar', verificarToken, (req, res) => {
+        if (req.usuario?.rol === 'consulta') return res.status(403).json({ status: 403, mensaje: 'El rol consulta solo tiene permiso de lectura.' });
         const { id_convenio, id_parte, rol_parte } = req.body;
 
         if (!id_convenio || !id_parte) {
@@ -87,10 +88,15 @@ module.exports = (db) => {
             SELECT p.id, p.nombre, p.cuit, p.representante 
             FROM partes_firmantes p
             INNER JOIN convenio_partes cp ON p.id = cp.id_parte
+            INNER JOIN convenios c ON c.id = cp.id_convenio
             WHERE cp.id_convenio = ?
+            ${req.usuario.rol === "consulta" ? "AND c.estado IN ('aprobado', 'firmado')" : ""}
+            ${req.usuario.id_unidad != null ? "AND c.id_unidad_responsable = ?" : ""}
         `;
-        
-        db.query(query, [idConvenio], (error, resultados) => {
+        const valores = [idConvenio];
+        if (req.usuario.id_unidad != null) valores.push(req.usuario.id_unidad);
+
+        db.query(query, valores, (error, resultados) => {
             if (error) {
                 console.error("Error consultando partes del convenio:", error);
                 return res.status(500).json({ status: 500, mensaje: "Error en el servidor." });

@@ -1,5 +1,5 @@
 // Toda la lógica del panel vive en un único componente React.
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import "./dashboard.css";
 
@@ -30,6 +30,7 @@ import {
   rutaInicioPorRol,
 } from "../../utils/permisos";
 import { API_URL } from "../../config/api";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 import { exportarCsv, exportarPdf } from "../../utils/exportaciones";
 import { limpiarSesion, obtenerUsuario } from "../../utils/sesion";
 import {
@@ -49,6 +50,10 @@ import {
   ALMACENES,
   guardarCache,
   leerCache,
+  guardarPendiente,
+  listarPendientes,
+  eliminarPendiente,
+  marcarPendienteEnConflicto,
 } from "../../utils/cacheOffline";
 
 const FILAS_POR_PAGINA = 8;
@@ -80,6 +85,9 @@ function Dashboard() {
   const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [errorApi, setErrorApi] = useState(null);
+  const [alertasServidor, setAlertasServidor] = useState([]);
+  const [sincronizando, setSincronizando] = useState(false);
+  const sincronizandoRef = useRef(false);
 
   // --- Notificaciones emergentes (popups de alta/modificación/baja) ---------
   const [avisos, setAvisos] = useState([]);
@@ -93,6 +101,28 @@ function Dashboard() {
   };
   const descartarAviso = (id) =>
     setAvisos((anterior) => anterior.filter((aviso) => aviso.id !== id));
+
+  const cargarAlertasServidor = async () => {
+    if (!navigator.onLine) return;
+
+    const token = localStorage.getItem("token");
+    const respuesta = await fetch(`${API_URL}/agreements/alerts`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    if (!respuesta.ok) {
+      throw new Error(`No se pudieron cargar las alertas (${respuesta.status}).`);
+    }
+
+    const resultado = await respuesta.json();
+    setAlertasServidor(Array.isArray(resultado?.data) ? resultado.data : []);
+  };
+
+  useEffect(() => {
+    cargarAlertasServidor().catch((error) =>
+      console.warn("No se pudieron cargar las alertas:", error),
+    );
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -186,6 +216,9 @@ function Dashboard() {
         if (Array.isArray(datos?.data)) {
           setConvenios(datos.data);
           guardarCache(ALMACENES.convenios, datos.data);
+          cargarAlertasServidor().catch((error) =>
+            console.warn("No se pudieron refrescar las alertas:", error),
+          );
           // La ficha abierta pasa a mostrar el objeto fresco (estado nuevo,
           // fecha_actualización, documentos actualizados).
           setConvenioFicha((actual) => {
@@ -225,9 +258,149 @@ function Dashboard() {
       });
   };
 
+  // Reenvía operaciones JSON guardadas en IndexedDB. Los conflictos 409
+  // permanecen en la cola para que se revisen contra la versión del servidor.
+  const sincronizarPendientes = async () => {
+    if (!navigator.onLine || sincronizandoRef.current) return;
+
+    sincronizandoRef.current = true;
+    setSincronizando(true);
+    let huboCambios = false;
+
+    try {
+      const token = localStorage.getItem("token");
+      const pendientes = await listarPendientes();
+
+      for (const operacion of pendientes) {
+        if (operacion.conflicto) continue;
+
+        let respuesta;
+        try {
+          respuesta = await fetch(`${API_URL}${operacion.ruta}`, {
+            method: operacion.method,
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(operacion.datos),
+          });
+        } catch (errorRed) {
+          if (errorRed instanceof TypeError || !navigator.onLine) break;
+          throw errorRed;
+        }
+
+        const resultado = await respuesta.json().catch(() => ({}));
+
+        if (respuesta.status === 409) {
+          await marcarPendienteEnConflicto(
+            operacion.id,
+            resultado.mensaje || "El convenio cambió en el servidor.",
+          );
+          lanzarAviso(
+            "Hay un cambio para revisar",
+            `La operación sobre ${operacion.ruta} encontró una versión más nueva.`,
+            "error",
+          );
+          continue;
+        }
+
+        if (!respuesta.ok) {
+          // Se conserva en la cola para reintentar después de corregir el error.
+          break;
+        }
+
+        await eliminarPendiente(operacion.id);
+        huboCambios = true;
+      }
+
+      if (huboCambios) {
+        await recargarConvenios();
+        await cargarAlertasServidor().catch(() => {});
+        lanzarAviso(
+          "Cambios sincronizados",
+          "Las operaciones pendientes se guardaron en el servidor.",
+          "exito",
+        );
+      }
+    } catch (error) {
+      console.error("No se pudieron sincronizar las operaciones:", error);
+    } finally {
+      sincronizandoRef.current = false;
+      setSincronizando(false);
+    }
+  };
+
+  useEffect(() => {
+    const alVolverLaConexion = () => sincronizarPendientes();
+    window.addEventListener("online", alVolverLaConexion);
+
+    if (navigator.onLine) alVolverLaConexion();
+
+    return () => window.removeEventListener("online", alVolverLaConexion);
+  }, []);
+
+  const ejecutarOEncolar = async (operacion, avisoOffline) => {
+    if (!navigator.onLine) {
+      await guardarPendiente(operacion);
+      lanzarAviso("Guardado pendiente", avisoOffline, "info");
+      return { pendiente: true };
+    }
+
+    const token = localStorage.getItem("token");
+    let respuesta;
+
+    try {
+      respuesta = await fetch(`${API_URL}${operacion.ruta}`, {
+        method: operacion.method,
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(operacion.datos),
+      });
+    } catch (errorRed) {
+      if (!(errorRed instanceof TypeError) && navigator.onLine) throw errorRed;
+
+      await guardarPendiente(operacion);
+      lanzarAviso("Guardado pendiente", avisoOffline, "info");
+      return { pendiente: true };
+    }
+
+    const resultado = await respuesta.json().catch(() => ({}));
+    if (!respuesta.ok) {
+      throw new Error(resultado.mensaje || `Error ${respuesta.status}.`);
+    }
+
+    return { pendiente: false, resultado };
+  };
+
+  const guardarEdicionFicha = async (id, cambios, convenio) => {
+    const operacion = {
+      method: "PUT",
+      ruta: `/agreements/${id}`,
+      datos: {
+        ...cambios,
+        fecha_actualizacion_cliente: convenio?.fecha_actualizacion_version ?? convenio?.fecha_actualizacion ?? null,
+      },
+    };
+
+    const resultado = await ejecutarOEncolar(
+      operacion,
+      "La edición de la ficha se guardará cuando vuelva la conexión.",
+    );
+
+    if (resultado.pendiente) return;
+
+    await recargarConvenios();
+    await cargarAlertasServidor().catch(() => {});
+    lanzarAviso("Ficha actualizada", "Los cambios quedaron guardados.", "exito");
+  };
+
   // Llama al endpoint propio de cambio de rol. Si el afectado es el usuario
   // actual, el JWT y el localStorage quedaron viejos: cerramos sesión.
   const cambiarRolUsuario = async (id, rolNuevo) => {
+    if (!(await confirmarAccion(`¿Querés cambiar el rol del usuario #${id} a ${rolNuevo}?`))) return;
+
     const token = localStorage.getItem("token");
 
     const res = await fetch(`${API_URL}/usuarios/${id}/rol`, {
@@ -268,27 +441,30 @@ function Dashboard() {
     estadoNuevo,
     observacion,
     convenio,
+    fechaFirma,
   ) => {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${API_URL}/agreements/${id}/estado`, {
+    const etiquetaEstadoNuevo = ETIQUETAS_ESTADO[estadoNuevo] ?? estadoNuevo;
+    if (!(await confirmarAccion(`¿Querés continuar con el cambio de ${convenio?.codigo_unico ?? `#${id}`} a "${etiquetaEstadoNuevo}"?`))) return;
+
+    const operacion = {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify({
+      ruta: `/agreements/${id}/estado`,
+      datos: {
         estado_nuevo: estadoNuevo,
         observacion,
-        fecha_actualizacion_cliente: convenio?.fecha_actualizacion ?? null,
-      }),
-    });
+        fecha_firma: fechaFirma || null,
+        fecha_actualizacion_cliente: convenio?.fecha_actualizacion_version ?? convenio?.fecha_actualizacion ?? null,
+      },
+    };
 
-    const datos = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      throw new Error(datos.mensaje || "No se pudo actualizar el estado.");
-    }
+    const envio = await ejecutarOEncolar(
+      operacion,
+      "El cambio de estado se guardará cuando vuelva la conexión.",
+    );
+    if (envio.pendiente) return;
 
     await recargarConvenios();
+    await cargarAlertasServidor().catch(() => {});
 
     // Popup de la modificación (o de la baja, si el estado es final).
     const esBaja = estadoNuevo === "rescindido" || estadoNuevo === "archivado";
@@ -356,7 +532,7 @@ function Dashboard() {
     setArchivoAlta(archivo);
   };
 
-  const enviarAlta = (evento) => {
+  const enviarAlta = async (evento) => {
     evento.preventDefault();
     setErrorAlta("");
 
@@ -372,12 +548,13 @@ function Dashboard() {
       return;
     }
 
+    if (!(await confirmarAccion(`¿Querés guardar "${formAlta.titulo.trim()}" como borrador?`))) return;
+
     const datos = new FormData();
     datos.append("titulo", formAlta.titulo.trim());
     datos.append("tipo", formAlta.tipo);
     datos.append("id_unidad_responsable", formAlta.id_unidad);
     datos.append("objeto", formAlta.objeto.trim());
-    datos.append("estado", "revision"); // el alta entra directo al circuito de revisión
     datos.append(
       "confidencialidad",
       formAlta.confidencialidad ? "true" : "false",
@@ -413,11 +590,11 @@ function Dashboard() {
         setFormAlta(VACIO_ALTA);
         setArchivoAlta(null);
         setAvisoAlta(
-          `Convenio "${formAlta.titulo.trim()}" creado y enviado a revisión.`,
+          `Borrador "${formAlta.titulo.trim()}" creado. Completá la ficha y cargá un PDF para enviarlo a revisión.`,
         );
         lanzarAviso(
-          "Alta registrada",
-          `"${formAlta.titulo.trim()}" se creó en estado Revisión y entró al circuito del trámite.`,
+          "Borrador guardado",
+          `"${formAlta.titulo.trim()}" se creó como borrador. Cargá el PDF y completá los datos antes de enviarlo a revisión.`,
           "exito",
         );
         recargarConvenios();
@@ -691,6 +868,11 @@ function Dashboard() {
                 ? "Alcance: global (todas las unidades)"
                 : `Alcance: ${nombreUnidad(unidades, usuario?.id_unidad)}`}
             </p>
+            {sincronizando && (
+              <p className="dashboard__aviso" role="status" aria-live="polite">
+                Sincronizando cambios pendientes…
+              </p>
+            )}
           </header>
 
           {pestaña === "administracion" && avisoAlta && (
@@ -750,6 +932,8 @@ function Dashboard() {
               {pestaña === "vencimientos" && (
                 <Vencimientos
                   agrupado={vencimientos}
+                  alertasServidor={alertasServidor}
+                  convenios={convenios}
                   abrirFicha={setConvenioFicha}
                 />
               )}
@@ -765,12 +949,13 @@ function Dashboard() {
         onCerrar={() => setConvenioFicha(null)}
         rolUsuario={usuario?.rol}
         onCambioEstado={cambiarEstadoConvenio}
+        onGuardarFicha={guardarEdicionFicha}
         alNotificar={lanzarAviso}
         onRefrescar={recargarConvenios}
       />
 
-      {/* Modal de alta: formulario con toda la info del instrumento + PDF.
-          El convenio se crea en estado "revision" para entrar al circuito. */}
+      {/* El alta guarda un borrador; el envío a revisión requiere la ficha
+          completa y, al menos, un PDF registrado. */}
       <VentanaModal
         abierto={modalAltaAbierto}
         titulo="Agregar convenio"
@@ -778,8 +963,9 @@ function Dashboard() {
       >
         <form className="form-alta" onSubmit={enviarAlta} noValidate>
           <p className="form-alta__nota">
-            Los campos marcados con * son obligatorios. El convenio se crea en
-            estado <strong>Revisión</strong> y el código único se genera solo.
+            Completá los datos disponibles y guardá el convenio como borrador.
+            Para enviarlo a revisión, la ficha debe tener título, tipo, unidad
+            objeto y al menos un PDF. El código único se genera automáticamente.
           </p>
 
           <div className="form-alta__campo">
@@ -956,7 +1142,7 @@ function Dashboard() {
               Cancelar
             </button>
             <button type="submit" className="btn-panel" disabled={enviandoAlta}>
-              {enviandoAlta ? "Guardando…" : "Crear convenio en revisión"}
+              {enviandoAlta ? "Guardando…" : "Guardar borrador"}
             </button>
           </div>
         </form>
@@ -1466,9 +1652,52 @@ function Roles({
   );
 }
 
-function Vencimientos({ agrupado, abrirFicha }) {
+function Vencimientos({
+  agrupado,
+  alertasServidor = [],
+  convenios = [],
+  abrirFicha,
+}) {
   return (
     <div className="vencimientos">
+      {alertasServidor.length > 0 && (
+        <section className="panel-seccion">
+          <VistaSeccion
+            titulo="Alertas de preaviso"
+            ayuda="Se muestran según los días de preaviso registrados para cada convenio."
+          />
+          <ul className="vencimientos__alertas">
+            {alertasServidor.map((alerta) => {
+              const convenio = convenios.find(
+                (item) => Number(item.id) === Number(alerta.id),
+              );
+              const vencido = Number(alerta.dias_restantes) < 0;
+
+              return (
+                <li key={alerta.id}>
+                  <strong>{alerta.codigo_unico}</strong>
+                  {" · "}
+                  {alerta.titulo}
+                  {" · "}
+                  {vencido
+                    ? `Vencido hace ${Math.abs(alerta.dias_restantes)} días`
+                    : `Vence en ${alerta.dias_restantes} días`}
+                  {convenio && (
+                    <button
+                      type="button"
+                      className="tabla__accion"
+                      onClick={() => abrirFicha(convenio)}
+                    >
+                      Abrir ficha
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
       <section className="panel-seccion">
         <VistaSeccion
           titulo="Plazos de cada instrumento"

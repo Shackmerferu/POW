@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import VentanaModal from "../VentanaModal/VentanaModal";
 import { EtiquetaEstado, EtiquetaTipo } from "../Etiqueta/Etiqueta";
 import { API_URL } from "../../config/api";
+import { confirmarAccion } from "../../utils/confirmarAccion";
 import VistaPreviaDocumento from "../VistaPreviaDocumento/VistaPreviaDocumento";
-import { obtenerUsuario } from "../../utils/sesion";
+import EditarFichaConvenio from "./EditarFichaConvenio";
 import "./FichaDetalle.css";
 import {
   ETIQUETAS_ESTADO,
@@ -100,6 +101,7 @@ export default function FichaDetalle({
   onAccionDocumento,
   rolUsuario = null,
   onCambioEstado = null,
+  onGuardarFicha = null,
   alNotificar = null,
   onRefrescar = null,
 }) {
@@ -171,8 +173,8 @@ export default function FichaDetalle({
     [convenios, convenio],
   );
 
-console.log("Rol en FichaDetalle:", rolUsuario);
-console.log("Rol en VistaPreviaDocumento:", rolUsuario);
+  console.log("Rol en FichaDetalle:", rolUsuario);
+  console.log("Rol en VistaPreviaDocumento:", rolUsuario);
   // Catálogo de instituciones registradas (para asociarlas al convenio).
 
   /** Recarga el catálogo de instituciones registradas. */
@@ -200,6 +202,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       setErrorFormParte("Elegí una institución del listado.");
       return;
     }
+    if (!(await confirmarAccion(`¿Querés asociar ${partesCatalogo.find((item) => String(item.id) === String(parteElegida))?.nombre ?? "esta institución"} al convenio ${convenio.codigo_unico}?`))) return;
     setEnviandoParte(true);
     setErrorFormParte("");
     try {
@@ -244,6 +247,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       );
       return;
     }
+    if (!(await confirmarAccion(`¿Querés registrar "${formParte.nombre.trim()}" y asociarla al convenio ${convenio.codigo_unico}?`))) return;
     setEnviandoParte(true);
     setErrorFormParte("");
     try {
@@ -304,6 +308,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       setErrorFormPersona("El nombre de la persona y su rol son obligatorios.");
       return;
     }
+    if (!(await confirmarAccion(`¿Querés vincular a ${formPersona.nombre_completo.trim()} al convenio ${convenio.codigo_unico} como ${formPersona.rol}?`))) return;
     setEnviandoPersona(true);
     setErrorFormPersona("");
     try {
@@ -347,6 +352,10 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
 
   /** Guarda (o desvincula) el antecedente del instrumento. */
   const guardarRelacion = async () => {
+    const destino = antecedenteElegido
+      ? convenios.find((item) => String(item.id) === String(antecedenteElegido))?.codigo_unico ?? `#${antecedenteElegido}`
+      : "sin antecedente (desvincular)";
+    if (!(await confirmarAccion(`¿Querés actualizar la relación del convenio ${convenio.codigo_unico} con ${destino}?`))) return;
     setGuardandoRelacion(true);
     setErrorRelacion("");
     try {
@@ -521,9 +530,16 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
   // --- Panel de revisión del trámite ----------------------------------------
   const [modalEstadoAbierto, setModalEstadoAbierto] = useState(false);
   const [estadoNuevo, setEstadoNuevo] = useState("");
+  const [fechaFirma, setFechaFirma] = useState("");
   const [observacionEstado, setObservacionEstado] = useState("");
   const [errorEstado, setErrorEstado] = useState("");
   const [enviandoEstado, setEnviandoEstado] = useState(false);
+  const [editarFichaAbierta, setEditarFichaAbierta] = useState(false);
+
+  const puedeEditarFicha =
+    ["administracion", "gestion"].includes(
+      String(rolUsuario ?? "").trim().toLowerCase(),
+    ) && typeof onGuardarFicha === "function";
 
   // Estados destino permitidos según el rol y el estado actual.
   const estadosDisponibles = useMemo(
@@ -549,8 +565,10 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
     setModalEstadoAbierto(false);
     setModalCompararAbierto(false);
     setEstadoNuevo("");
+    setFechaFirma("");
     setObservacionEstado("");
     setErrorEstado("");
+    setEditarFichaAbierta(false);
     setAntecedenteElegido(
       convenio?.id_antecedente ? String(convenio.id_antecedente) : "",
     );
@@ -710,6 +728,7 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       return;
     }
 
+    if (!(await confirmarAccion(`¿Querés agregar "${archivo.name}" como nueva versión del documento ${documentoEnVista.tipo_documento} del convenio ${convenio.codigo_unico}?`))) return;
     setEjecutando(true);
     try {
       const token = localStorage.getItem("token");
@@ -758,6 +777,18 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       setErrorEstado("Elegí la transición a registrar.");
       return;
     }
+    if (estadoNuevo === "revision") {
+      const datosCompletos =
+        String(convenio?.titulo ?? "").trim() &&
+        String(convenio?.tipo ?? "").trim() &&
+        String(convenio?.objeto ?? "").trim() &&
+        convenio?.id_unidad_responsable;
+      const pdfCargado = documentos.some((documento) => documento?.id);
+      if (!datosCompletos || !pdfCargado) {
+        setErrorEstado("Antes de enviar a revisión, completá título, tipo, unidad responsable y objeto, y cargá al menos un PDF.");
+        return;
+      }
+    }
     if (!observacionEstado.trim()) {
       setErrorEstado(
         "El fundamento es obligatorio: cada transición queda registrada en la auditoría.",
@@ -773,6 +804,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
       return;
     }
 
+    if (estadoNuevo === "firmado" && !fechaFirma) {
+      setErrorEstado("Ingresá la fecha de firma.");
+      return;
+    }
+
     setEnviandoEstado(true);
     setErrorEstado("");
     try {
@@ -781,9 +817,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
         estadoNuevo,
         observacionEstado.trim(),
         convenio,
+        estadoNuevo === "firmado" ? fechaFirma : null,
       );
       setModalEstadoAbierto(false);
       setEstadoNuevo("");
+      setFechaFirma("");
       setObservacionEstado("");
     } catch (error) {
       setErrorEstado(error.message || "No se pudo actualizar el estado.");
@@ -873,6 +911,27 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
         <EtiquetaEstado estado={convenio.estado} />
         <span className="ficha__codigo">{convenio.codigo_unico}</span>
       </div>
+
+      {puedeEditarFicha && (
+        <div className="ficha__acciones-edicion">
+          <button
+            type="button"
+            className="menu-acciones__toggle ficha__boton-editar"
+            onClick={() => setEditarFichaAbierta(true)}
+          >
+            Editar ficha
+          </button>
+        </div>
+      )}
+
+      <EditarFichaConvenio
+        convenio={convenio}
+        abierto={editarFichaAbierta}
+        onCerrar={() => setEditarFichaAbierta(false)}
+        onGuardar={(cambios) =>
+          onGuardarFicha?.(convenio.id, cambios, convenio)
+        }
+      />
 
       {/* Datos principales de la ficha */}
       <dl className="ficha__datos">
@@ -978,7 +1037,11 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
                 type="button"
                 className={`tabla__accion${estadoNuevo === estado ? " tabla__accion--activa" : ""
                   }`}
-                onClick={() => setEstadoNuevo(estado)}
+                onClick={() => {
+                  setEstadoNuevo(estado);
+                  setFechaFirma("");
+                  setErrorEstado("");
+                }}
                 disabled={enviandoEstado}
               >
                 {ETIQUETA_TRANSICION[estado] ??
@@ -987,6 +1050,18 @@ console.log("Rol en VistaPreviaDocumento:", rolUsuario);
               </button>
             ))}
           </div>
+          {estadoNuevo === "firmado" && (
+            <label className="ficha__cambio-estado__campo">
+              <span>Fecha de firma *</span>
+              <input
+                type="date"
+                value={fechaFirma}
+                onChange={(evento) => setFechaFirma(evento.target.value)}
+                required
+                disabled={enviandoEstado}
+              />
+            </label>
+          )}
           <label className="ficha__cambio-estado__campo">
             <span>
               Fundamento de la transición (obligatorio, queda en la auditoría)
