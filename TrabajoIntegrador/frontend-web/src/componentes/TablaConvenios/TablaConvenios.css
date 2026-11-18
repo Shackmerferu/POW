@@ -27,6 +27,23 @@
   scrollbar-color: #cdd8e9 #fff;
 }
 
+@media (max-width: 760px) {
+  /* En pantallas angostas, el scroll queda en la página completa. */
+  .tablaconvenios {
+    height: auto;
+  }
+
+  .convenios-lista {
+    flex: 0 0 auto;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .tablaconvenios__pie {
+    flex-wrap: wrap;
+  }
+}
+
 .tablaconvenios__pie {
   display: flex;
   flex-shrink: 0;

@@ -51,6 +51,7 @@
   body {
     min-width: 320px;
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   button,
@@ -65,10 +66,10 @@
 }
 
 .app-shell {
-  /* La página completa queda enjaulada en la ventana: ni el header ni el
-     buscador scrollean, el único scroll es el listado de convenios. */
-  height: 100vh;
-  overflow: hidden;
+  /* El contenido puede crecer y la página conserva el scroll del navegador. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   background: #f9fafb;
@@ -77,8 +78,8 @@
 /* El header (.top-navigation) ahora vive en componentes/HeaderPrincipal.css */
 
 .search-section {
-  flex: 1;
-  min-height: 0;
+  flex: 1 0 auto;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   padding: 32px 6.77vw 40px;
@@ -86,7 +87,8 @@
 }
 
 .search-header {
-  height: 75px;
+  min-height: 75px;
+  height: auto;
 }
 
 .search-header h1 {
@@ -108,10 +110,10 @@
 .search-layout {
   display: grid;
   grid-template-columns: 427px minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: auto;
   column-gap: 92px;
-  flex: 1;
-  min-height: 0;
+  flex: 1 0 auto;
+  min-height: auto;
   padding-top: 24px;
 }
 
@@ -321,8 +323,8 @@
   align-items: flex-start;
   gap: 45px;
   min-width: 0;
-  height: 100%;
-  min-height: 0;
+  height: auto;
+  min-height: 220px;
   margin-top: 38px;
 }
 
@@ -339,7 +341,7 @@
 .contenido-dinamico {
   display: flex;
   min-width: 0;
-  height: 100%;
+  height: auto;
   min-height: 0;
   flex-direction: column;
 }
@@ -392,13 +394,8 @@
   }
 }
 
-@media (max-width: 560px) {
-  /* En pantallas chicas todo se apila: vuelve el scroll normal de página. */
-  .app-shell {
-    height: auto;
-    overflow: visible;
-  }
-
+@media (max-width: 760px) {
+  /* En tablets y móviles el formulario y los resultados se apilan. */
   .search-section {
     min-height: auto;
     overflow: visible;
@@ -420,6 +417,7 @@
     grid-template-rows: auto;
     min-height: auto;
     padding-top: 30px;
+    row-gap: 0;
   }
 
   .search-form {
@@ -428,13 +426,20 @@
 
   .results {
     height: auto;
-    min-height: 220px;
-    margin-top: 48px;
-    padding-left: 20px;
+    min-height: auto;
+    margin-top: 36px;
+    padding-left: 0;
+    gap: 0;
+  }
+
+  .vertical-line {
+    display: none;
   }
 
   .contenido-dinamico {
     height: auto;
+    width: 100%;
+    overflow: visible;
   }
 }
 

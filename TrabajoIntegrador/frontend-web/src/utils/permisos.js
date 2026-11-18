@@ -60,7 +60,8 @@ const PERMISOS_POR_ROL = Object.freeze({
     firmarConvenios: false,
     administrarUsuarios: false,
     cambiarRoles: false,
-    verConfiguracion: false,
+    // Configuración contiene preferencias de accesibilidad personales, no funciones administrativas.
+    verConfiguracion: true,
     descargarDocumentos: true,
     alcanceGlobal: false,
     rutaInicio: RUTAS.CONVENIOS,
