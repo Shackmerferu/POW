@@ -748,5 +748,64 @@ router.put("/:id/links", verificarToken, (req, res) => {
   );
 });
 
+const PALABRAS_OFENSIVAS = [
+    "idiota", "estupido", "tonto", "basura", "inutil",
+    "boludo", "pelotudo", "forro", "mierda", "puto", "puta", "garca", "ladron"
+  ];
+
+  function filtrarComentarioOfensivo(texto) {
+    const normalizado = String(texto || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    const esOfensivo = PALABRAS_OFENSIVAS.some((p) =>
+      new RegExp(`\\b${p}\\b`, "i").test(normalizado)
+    );
+    return esOfensivo ? "comentario ofensivo" : String(texto).trim();
+  }
+
+  // LISTAR COMENTARIOS DE UN CONVENIO
+  router.get("/:id/comentarios", verificarToken, (req, res) => {
+    const query = `
+      SELECT c.id, c.texto, c.fecha_creacion, u.nombre_completo AS usuario
+      FROM comentarios_convenio c
+      INNER JOIN usuarios u ON u.id = c.id_usuario
+      WHERE c.id_convenio = ?
+      ORDER BY c.fecha_creacion DESC
+    `;
+    db.query(query, [req.params.id], (error, resultados) => {
+      if (error) {
+        return res.status(500).json({ status: 500, mensaje: "Error cargando comentarios." });
+      }
+      res.json({ status: 200, data: resultados });
+    });
+  });
+
+  // CREAR COMENTARIO (con filtro automático)
+  router.post("/:id/comentarios", verificarToken, (req, res) => {
+    const { texto } = req.body || {};
+    if (!texto || !String(texto).trim()) {
+      return res.status(400).json({ status: 400, mensaje: "El comentario no puede estar vacío." });
+    }
+
+    const textoFinal = filtrarComentarioOfensivo(texto);
+    db.query(
+      "INSERT INTO comentarios_convenio (id_convenio, id_usuario, texto) VALUES (?, ?, ?)",
+      [req.params.id, req.usuario.id, textoFinal],
+      (error, resultado) => {
+        if (error) {
+          return res.status(500).json({ status: 500, mensaje: "Error guardando comentario." });
+        }
+        res.status(201).json({
+          status: 201,
+          id: resultado.insertId,
+          texto: textoFinal,
+          fueFiltrado: textoFinal === "comentario ofensivo"
+        });
+      }
+    );
+  });
+
 return router; // Devolvemos el router configurado
 };

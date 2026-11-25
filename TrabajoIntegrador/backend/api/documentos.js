@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const verificarToken = require('../verificarToken');
+const { PDFDocument } = require('pdf-lib');
 
 //  CONFIGURACIÓN DE MULTER
 
@@ -72,12 +73,12 @@ module.exports = (db) => {
     // ==========================================
     // 2. SUBIR DOCUMENTO Y CALCULAR SHA-256 
     // ==========================================
-    router.post('/', verificarToken, (req, res, next) => {
+     router.post('/', verificarToken,async (req, res, next) => {
         if (req.usuario?.rol === 'consulta') {
             return res.status(403).json({ status: 403, mensaje: 'El rol consulta solo tiene permiso de lectura.' });
         }
         next();
-    }, upload.single('archivo'), (req, res) => {
+    }, upload.single('archivo'), async (req, res) => {
         const { id_convenio, tipo_documento } = req.body;
         const file = req.file;
 
@@ -91,40 +92,62 @@ module.exports = (db) => {
         }
 
         try {
-            // Generamos el Hash SHA-256
-            const fileBuffer = fs.readFileSync(file.path);
+            let fileBuffer = fs.readFileSync(file.path);
+
+            // Estampamos la marca en los metadatos del PDF si viene de la app (o siempre)
+            const origen = req.body.origen || 'App Móvil Convenios UNLPam';
+            const fechaMarca = new Date().toISOString();
+            const marcaObj = {
+                origen,
+                usuario_id: req.usuario.id,
+                usuario_rol: req.usuario.rol,
+                id_convenio: Number(id_convenio),
+                tipo_documento,
+                fecha_hora: fechaMarca
+            };
+
+            const pdfDoc = await PDFDocument.load(fileBuffer, { ignoreEncryption: true });
+            pdfDoc.setAuthor(`Usuario #${req.usuario.id} (${req.usuario.rol})`);
+            pdfDoc.setCreator(origen);
+            pdfDoc.setProducer('API Convenios UNLPam');
+            pdfDoc.setSubject(JSON.stringify(marcaObj));
+            pdfDoc.setKeywords([
+                `convenio:${id_convenio}`,
+                `usuario:${req.usuario.id}`,
+                `fecha:${fechaMarca}`,
+                'verificado_app_movil'
+            ]);
+
+            const pdfMarcadoBytes = await pdfDoc.save();
+            fs.writeFileSync(file.path, pdfMarcadoBytes);
+            fileBuffer = Buffer.from(pdfMarcadoBytes);
+
+            // Generamos el Hash SHA-256 sobre el PDF ya marcado
             const hashSha256 = crypto.createHash('sha256').update(fileBuffer).digest('hex');
 
             const query = `
-                INSERT INTO documentos (id_convenio, tipo_documento, ruta_archivo, hash_sha256) 
+                INSERT INTO documentos (id_convenio, tipo_documento, ruta_archivo, hash_sha256)
                 VALUES (?, ?, ?, ?)
             `;
 
-            const valores = [
-                id_convenio, 
-                tipo_documento, 
-                file.filename, 
-                hashSha256
-            ];
-
-            db.query(query, valores, (error, resultados) => {
+            db.query(query, [id_convenio, tipo_documento, file.filename, hashSha256], (error, resultados) => {
                 if (error) {
                     console.error("Error en DB:", error);
-                    fs.unlinkSync(file.path); 
+                    fs.unlinkSync(file.path);
                     return res.status(500).json({ status: 500, mensaje: "Error guardando en la base de datos." });
                 }
 
                 res.status(201).json({
                     status: 201,
-                    mensaje: "Documento subido con éxito.",
+                    mensaje: "Documento subido y marcado con éxito.",
                     nuevoId: resultados.insertId,
-                    hash: hashSha256
+                    hash: hashSha256,
+                    marca: marcaObj
                 });
             });
-
         } catch (error) {
-            console.error("Error procesando:", error);
-            res.status(500).json({ status: 500, mensaje: "Error interno con el archivo." });
+            console.error("Error procesando PDF:", error);
+            res.status(500).json({ status: 500, mensaje: "Error interno procesando el PDF." });
         }
     });
 
@@ -194,6 +217,44 @@ module.exports = (db) => {
                 res.sendFile(rutaCompleta); 
             } else {
                 res.status(404).json({ status: 404, mensaje: "El archivo físico no existe en el disco." });
+            }
+        });
+    });
+
+    // ==========================================
+    // 5. LEER METADATOS / MARCA DEL PDF (/:id/metadata)
+    // ==========================================
+    router.get('/:id/metadata', verificarToken, (req, res) => {
+        const idDoc = req.params.id;
+        db.query('SELECT ruta_archivo, tipo_documento, hash_sha256 FROM documentos WHERE id = ?', [idDoc], async (error, resultados) => {
+            if (error || resultados.length === 0) {
+                return res.status(404).json({ status: 404, mensaje: "Documento no encontrado." });
+            }
+
+            const rutaCompleta = path.join(__dirname, '../../backend/uploads/documentos', resultados[0].ruta_archivo);
+            if (!fs.existsSync(rutaCompleta)) {
+                return res.status(404).json({ status: 404, mensaje: "Archivo físico no encontrado." });
+            }
+
+            try {
+                const bytes = fs.readFileSync(rutaCompleta);
+                const pdfDoc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+                let marca = null;
+                try { marca = JSON.parse(pdfDoc.getSubject() || 'null'); } catch {}
+
+                return res.json({
+                    status: 200,
+                    metadata: {
+                        autor: pdfDoc.getAuthor() || 'Sin marca',
+                        creador: pdfDoc.getCreator() || 'Desconocido',
+                        productor: pdfDoc.getProducer() || 'Desconocido',
+                        keywords: pdfDoc.getKeywords() || '',
+                        hash_sha256: resultados[0].hash_sha256,
+                        marca
+                    }
+                });
+            } catch (e) {
+                return res.status(500).json({ status: 500, mensaje: "No se pudieron leer los metadatos del PDF." });
             }
         });
     });
