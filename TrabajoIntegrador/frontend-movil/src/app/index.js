@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,22 +12,40 @@ import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
 export default function App() {
     const { colors } = useAppColorScheme();
-    const [pantallaActual, setPantallaActual] = useState('login'); 
+    const [cargandoSesion, setCargandoSesion] = useState(true);
+    const [pantallaActual, setPantallaActual] = useState('login');
     const [dni, setDni] = useState('');
     const [password, setPassword] = useState('');
     const [soportaBiometria, setSoportaBiometria] = useState(false);
     const [codigoEscaneado, setCodigoEscaneado] = useState(null);
 
+    // Estados para MFA simulado
+    const [esperandoMFA, setEsperandoMFA] = useState(false);
+    const [codigoMFAGenerado, setCodigoMFAGenerado] = useState('');
+    const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
+    const [sesionPendiente, setSesionPendiente] = useState(null);
+
+    const IP_BACKEND = '192.168.137.1';
+    const PUERTO = '8000';
+
     useEffect(() => {
         (async () => {
-            const compatible = await LocalAuthentication.hasHardwareAsync();
-            const enrolado = await LocalAuthentication.isEnrolledAsync();
-            setSoportaBiometria(compatible && enrolado);
+            try {
+                // 1. Si ya está logueado, no vuelve a pedir login
+                const tokenGuardado = await AsyncStorage.getItem('@token_jwt');
+                if (tokenGuardado) {
+                    setPantallaActual('home');
+                }
+
+                // 2. Verificar soporte biométrico
+                const compatible = await LocalAuthentication.hasHardwareAsync();
+                const enrolado = await LocalAuthentication.isEnrolledAsync();
+                setSoportaBiometria(compatible && enrolado);
+            } finally {
+                setCargandoSesion(false);
+            }
         })();
     }, []);
-
-    const IP_BACKEND = '192.168.1.11';
-    const PUERTO = '8000';
 
     const loginClasico = async () => {
         if (!dni || !password) return Alert.alert("Error", "Completá los datos");
@@ -41,11 +59,17 @@ export default function App() {
 
             const data = await respuesta.json();
 
-            if (respuesta.ok) {
-                // Guardamos el token y el objeto del usuario (rol e id_unidad) para validar permisos en el QR
-                await AsyncStorage.setItem('@token_jwt', data.token);
-                await AsyncStorage.setItem('@usuario_actual', JSON.stringify(data.usuario || {}));
-                setPantallaActual('home');
+            if (respuesta.ok && data.token) {
+                // Disparamos MFA simulado (SMS/Mail)
+                const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+                setCodigoMFAGenerado(codigo);
+                setSesionPendiente({ token: data.token, usuario: data.usuario || {} });
+                setEsperandoMFA(true);
+
+                Alert.alert(
+                    "Código MFA (SMS/Email simulado)",
+                    `Tu código de verificación es: ${codigo}`
+                );
             } else {
                 Alert.alert("Acceso denegado", data.mensaje || "Credenciales incorrectas");
             }
@@ -55,18 +79,66 @@ export default function App() {
         }
     };
 
+    const confirmarMFA = async () => {
+        if (codigoMFAIngresado.trim() !== codigoMFAGenerado) {
+            return Alert.alert("Código incorrecto", "Verificá el código de 6 dígitos enviado.");
+        }
+
+        await AsyncStorage.setItem('@token_jwt', sesionPendiente.token);
+        await AsyncStorage.setItem('@usuario_actual', JSON.stringify(sesionPendiente.usuario));
+        await AsyncStorage.setItem('@biometria_habilitada', 'true');
+
+        setEsperandoMFA(false);
+        setCodigoMFAIngresado('');
+        setSesionPendiente(null);
+        setPantallaActual('home');
+    };
+
     const loginBiometrico = async () => {
+        const tokenPrevio = await AsyncStorage.getItem('@token_jwt_biometria');
+        const userPrevio = await AsyncStorage.getItem('@usuario_actual');
+
+        if (!tokenPrevio) {
+            return Alert.alert(
+                "Biometría no vinculada",
+                "Iniciá sesión una vez con usuario y contraseña para vincular tu huella/rostro."
+            );
+        }
+
         const auth = await LocalAuthentication.authenticateAsync({
             promptMessage: 'Acceso a Gestión de Convenios',
             fallbackLabel: 'Usar contraseña'
         });
-        if (auth.success) setPantallaActual('home');
+
+        if (auth.success) {
+            await AsyncStorage.setItem('@token_jwt', tokenPrevio);
+            if (userPrevio) await AsyncStorage.setItem('@usuario_actual', userPrevio);
+            setPantallaActual('home');
+        }
     };
+
+    const cerrarSesion = async () => {
+        // Guardamos respaldo para permitir re-ingreso biométrico en la demo
+        const tokenActual = await AsyncStorage.getItem('@token_jwt');
+        if (tokenActual) {
+            await AsyncStorage.setItem('@token_jwt_biometria', tokenActual);
+        }
+        await AsyncStorage.removeItem('@token_jwt');
+        setPantallaActual('login');
+    };
+
+    if (cargandoSesion) {
+        return (
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <ActivityIndicator size="large" color={colors.accent} />
+            </View>
+        );
+    }
 
     if (pantallaActual === 'qr') {
         return (
-            <LectorQRScreen 
-                alCerrar={() => setPantallaActual('home')} 
+            <LectorQRScreen
+                alCerrar={() => setPantallaActual('home')}
                 alEscanear={(datoQR) => {
                     setCodigoEscaneado(datoQR);
                     setPantallaActual('home');
@@ -77,11 +149,12 @@ export default function App() {
 
     if (pantallaActual === 'home') {
         return (
-            <HomeScreen 
-                irASostenibilidad={() => setPantallaActual('sostenibilidad')} 
+            <HomeScreen
+                irASostenibilidad={() => setPantallaActual('sostenibilidad')}
                 irAQR={() => setPantallaActual('qr')}
                 codigoQR={codigoEscaneado}
                 limpiarQR={() => setCodigoEscaneado(null)}
+                cerrarSesion={cerrarSesion}
             />
         );
     }
@@ -93,11 +166,33 @@ export default function App() {
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Text style={[styles.titulo, { color: colors.accent }]}>Convenios UNLPam</Text>
-            <InputTexto placeholder="DNI o Legajo" valor={dni} onChangeText={setDni} />
-            <InputTexto placeholder="Contraseña" valor={password} onChangeText={setPassword} oculto={true} />
-            <Boton titulo="Ingresar" onPress={loginClasico} />
-            {soportaBiometria && (
-                <Boton titulo="Ingresar con Huella / FaceID" onPress={loginBiometrico} secundario={true} />
+
+            {esperandoMFA ? (
+                <>
+                    <Text style={{ color: colors.text, textAlign: 'center', marginBottom: 15 }}>
+                        Ingresá el código de 6 dígitos enviado por SMS/Email
+                    </Text>
+                    <InputTexto
+                        placeholder="Código MFA (6 dígitos)"
+                        valor={codigoMFAIngresado}
+                        onChangeText={setCodigoMFAIngresado}
+                    />
+                    <Boton titulo="Verificar Código" onPress={confirmarMFA} />
+                    <Boton
+                        titulo="Reenviar código"
+                        onPress={() => Alert.alert("Código MFA", `Tu código es: ${codigoMFAGenerado}`)}
+                        secundario={true}
+                    />
+                </>
+            ) : (
+                <>
+                    <InputTexto placeholder="Email / DNI" valor={dni} onChangeText={setDni} />
+                    <InputTexto placeholder="Contraseña" valor={password} onChangeText={setPassword} oculto={true} />
+                    <Boton titulo="Ingresar" onPress={loginClasico} />
+                    {soportaBiometria && (
+                        <Boton titulo="Ingresar con Huella / FaceID" onPress={loginBiometrico} secundario={true} />
+                    )}
+                </>
             )}
         </View>
     );
