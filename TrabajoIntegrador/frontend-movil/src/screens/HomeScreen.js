@@ -49,7 +49,7 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
   const [modalFirmaVisible, setModalFirmaVisible] = useState(false);
   const [trazosFirma, setTrazosFirma] = useState([]);
 
-  const IP_BACKEND = '192.168.137.1';
+  const IP_BACKEND = '192.168.1.7';
   const PUERTO = '8000';
   const BASE_URL = `http://${IP_BACKEND}:${PUERTO}`;
 

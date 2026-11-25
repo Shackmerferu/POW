@@ -25,7 +25,7 @@ export default function App() {
     const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
     const [sesionPendiente, setSesionPendiente] = useState(null);
 
-    const IP_BACKEND = '192.168.137.1';
+    const IP_BACKEND = '192.168.1.7';
     const PUERTO = '8000';
 
     useEffect(() => {
