@@ -6,41 +6,61 @@ import {
   TabTriggerSlotProps,
   TabListProps,
 } from 'expo-router/ui';
+import type { ComponentProps } from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTabBar } from '@/contexts/TabBarContext';
 
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 export default function AppTabs() {
+  const { tabBarHidden } = useTabBar();
+
   return (
     <Tabs>
       <TabSlot style={{ height: '100%' }} />
-      <TabList asChild>
-        <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton>Convenios</TabButton>
-          </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Modo eco</TabButton>
-          </TabTrigger>
-          <TabTrigger name="qr" href="/qr" asChild>
-            <TabButton>Escanear QR</TabButton>
-          </TabTrigger>
-        </CustomTabList>
-      </TabList>
+      {!tabBarHidden && (
+        <TabList asChild>
+          <CustomTabList>
+            <TabTrigger name="home" href="/" asChild>
+              <TabButton>Convenios</TabButton>
+            </TabTrigger>
+            <TabTrigger name="qr" href="/qr" asChild>
+              <TabButton>Escanear QR</TabButton>
+            </TabTrigger>
+            <TabTrigger name="explore" href="/explore" asChild>
+              <TabButton>Modo eco</TabButton>
+            </TabTrigger>
+            <TabTrigger name="profile" href="/profile" asChild>
+              <TabButton>Perfil</TabButton>
+            </TabTrigger>
+          </CustomTabList>
+        </TabList>
+      )}
     </Tabs>
   );
 }
 
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+  const theme = useTheme();
+  const scheme = useColorScheme();
+  const fondo = scheme === 'dark'
+    ? isFocused ? theme.backgroundSelected : theme.backgroundElement
+    : isFocused ? '#d4dee9' : '#e7ecf1';
+  const colorTexto = scheme === 'dark'
+    ? isFocused ? theme.text : theme.textSecondary
+    : isFocused ? theme.accent : '#435161';
+
   return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
-      <ThemedView
-        type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
-        style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
+    <Pressable
+      {...(props as unknown as ComponentProps<typeof Pressable>)}
+      style={({ pressed }) => pressed && styles.pressed}>
+      <ThemedView type="backgroundElement" style={[styles.tabButtonView, { backgroundColor: fondo }]}>
+        <ThemedText type="small" style={{ color: colorTexto }}>
           {children}
         </ThemedText>
       </ThemedView>

@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { useAppColorScheme } from '../../contexts/ColorSchemeContext';
+import { useFontScale } from '../../contexts/FontScaleContext';
+import { escalarEstilos } from '../../utils/escalaTexto';
 
 export default function InputTexto({ placeholder, valor, onChangeText, oculto }) {
     const { colors } = useAppColorScheme();
+    const { escala } = useFontScale();
+    const estilos = escalarEstilos(styles, escala);
+
     return (
-        <View style={styles.contenedor}>
+        <View style={estilos.contenedor}>
             <TextInput
-                style={[styles.input, { backgroundColor: colors.backgroundElement, borderColor: colors.border, color: colors.text }]}
+                style={[estilos.input, { backgroundColor: colors.backgroundElement, borderColor: colors.border, color: colors.text }]}
                 placeholder={placeholder}
                 value={valor}
                 onChangeText={onChangeText}
@@ -26,6 +31,7 @@ const styles = StyleSheet.create({
         borderRadius: 8, 
         borderWidth: 1, 
         borderColor: '#ccc', 
-        color: '#000' 
+        color: '#000',
+        fontSize: 16,
     }
 });

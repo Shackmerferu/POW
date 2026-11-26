@@ -13,20 +13,16 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as LocalAuthentication from 'expo-local-authentication';
 
 import Boton from '../components/atoms/Boton';
+import HeaderApp from '../components/molecules/HeaderApp';
 import FirmaPad from '../components/molecules/FirmaPad';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
+import { ESCALAS_TEXTO, useFontScale } from '../contexts/FontScaleContext';
 
-const ESCALAS = [
-  { label: 'Chica', valor: 0.88 },
-  { label: 'Mediana', valor: 1 },
-  { label: 'Grande', valor: 1.2 },
-];
-
-export default function PerfilScreen({ alCerrar, onCambioEscala }) {
+export default function PerfilScreen({ alCerrarSesion }) {
   const { colors } = useAppColorScheme();
+  const { escala, cambiarEscala } = useFontScale();
   const [usuario, setUsuario] = useState(null);
   const [fotoUri, setFotoUri] = useState(null);
-  const [escala, setEscala] = useState(1);
   const [trazos, setTrazos] = useState([]);
   const [identidad, setIdentidad] = useState(null);
 
@@ -38,9 +34,6 @@ export default function PerfilScreen({ alCerrar, onCambioEscala }) {
       }
       const fotoGuardada = await AsyncStorage.getItem('@perfil_foto');
       if (fotoGuardada) setFotoUri(fotoGuardada);
-
-      const escalaGuardada = await AsyncStorage.getItem('@perfil_font_scale');
-      if (escalaGuardada) setEscala(Number(escalaGuardada) || 1);
 
       const idStr = await AsyncStorage.getItem('@identidad_registrada');
       if (idStr) {
@@ -62,12 +55,6 @@ export default function PerfilScreen({ alCerrar, onCambioEscala }) {
     } catch {
       Alert.alert('Error', 'No se pudo seleccionar la imagen.');
     }
-  };
-
-  const cambiarEscala = async (nuevoValor) => {
-    setEscala(nuevoValor);
-    await AsyncStorage.setItem('@perfil_font_scale', String(nuevoValor));
-    onCambioEscala?.(nuevoValor);
   };
 
   const registrarIdentidad = async () => {
@@ -99,6 +86,8 @@ export default function PerfilScreen({ alCerrar, onCambioEscala }) {
   const styles = createStyles(colors, escala);
 
   return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <HeaderApp alCerrarSesion={alCerrarSesion} />
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.titulo}>Mi Perfil e Identidad</Text>
 
@@ -131,7 +120,7 @@ export default function PerfilScreen({ alCerrar, onCambioEscala }) {
       <View style={styles.tarjeta}>
         <Text style={styles.subtitulo}>🔠 Tamaño de letra</Text>
         <View style={styles.filaBotones}>
-          {ESCALAS.map((op) => (
+          {ESCALAS_TEXTO.map((op) => (
             <TouchableOpacity
               key={op.label}
               style={[styles.chip, escala === op.valor && styles.chipActivo]}
@@ -160,8 +149,8 @@ export default function PerfilScreen({ alCerrar, onCambioEscala }) {
         <Boton titulo="Guardar Firma + Validar Huella" onPress={registrarIdentidad} />
       </View>
 
-      <Boton titulo="Volver al Panel" onPress={alCerrar} secundario={true} />
     </ScrollView>
+    </View>
   );
 }
 

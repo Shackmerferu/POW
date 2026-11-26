@@ -1,17 +1,22 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useAppColorScheme } from '../../contexts/ColorSchemeContext';
+import { useFontScale } from '../../contexts/FontScaleContext';
+import { escalarEstilos } from '../../utils/escalaTexto';
 
 export default function Boton({ titulo, onPress, secundario }) {
     const { colors } = useAppColorScheme();
+    const { escala } = useFontScale();
+    const estilos = escalarEstilos(styles, escala);
+
     return (
         <TouchableOpacity 
-            style={[styles.boton, { borderColor: colors.accent }, secundario
+            style={[estilos.boton, { borderColor: colors.accent }, secundario
                 ? { backgroundColor: colors.backgroundSelected }
                 : { backgroundColor: '#003366' }]} 
             onPress={onPress}
         >
-            <Text style={[styles.texto, { color: secundario ? colors.accent : '#ffffff' }]}>
+            <Text style={[estilos.texto, { color: secundario ? colors.accent : '#ffffff' }]}>
                 {titulo}
             </Text>
         </TouchableOpacity>

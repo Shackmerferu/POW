@@ -3,11 +3,14 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import Boton from '../components/atoms/Boton';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
+import { useFontScale } from '../contexts/FontScaleContext';
+import { escalarEstilos } from '../utils/escalaTexto';
 
 /** @param {{ alCerrar: () => void, alEscanear?: (codigo: string) => void }} props */
 export default function LectorQRScreen({ alCerrar, alEscanear }) {
     const { colors } = useAppColorScheme();
-    const styles = createStyles(colors);
+    const { escala } = useFontScale();
+    const styles = createStyles(colors, escala);
     const [permiso, pedirPermiso] = useCameraPermissions();
     const [escaneado, setEscaneado] = useState(false);
     const [tiempo, setTiempo] = useState(60);
@@ -17,16 +20,24 @@ export default function LectorQRScreen({ alCerrar, alEscanear }) {
         let intervalo;
         if (permiso?.granted && !escaneado && tiempo > 0) {
             intervalo = setInterval(() => setTiempo(t => t - 1), 1000);
-        } else if (tiempo === 0 && !escaneado) {
+        }
+        return () => clearInterval(intervalo);
+    }, [permiso, escaneado, tiempo]);
+
+    useEffect(() => {
+        if (tiempo !== 0 || escaneado) return undefined;
+
+        const aviso = setTimeout(() => {
             setEscaneado(true);
             Alert.alert(
                 "Tiempo agotado", 
                 "No pudimos leer ningún código. Volvé a intentarlo cuando tengas el convenio a mano.",
                 [{ text: "Volver a convenios", onPress: alCerrar }]
             );
-        }
-        return () => clearInterval(intervalo);
-    }, [permiso, escaneado, tiempo]);
+        }, 0);
+
+        return () => clearTimeout(aviso);
+    }, [tiempo, escaneado, alCerrar]);
 
     // Si aún no hay permisos o se denegaron
     if (!permiso) return <View />;
@@ -68,10 +79,10 @@ export default function LectorQRScreen({ alCerrar, alEscanear }) {
     );
 }
 
-const createStyles = (colors) => StyleSheet.create({
+const createStyles = (colors, s = 1) => escalarEstilos(StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: colors.background },
     titulo: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: colors.accent },
     temporizador: { fontSize: 16, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: colors.warning },
     texto: { fontSize: 16, textAlign: 'center', marginBottom: 20, color: colors.text },
     marcoCamara: { height: 350, width: '100%', borderRadius: 12, overflow: 'hidden', marginBottom: 20, borderWidth: 2, borderColor: colors.accent }
-});
+}), s);

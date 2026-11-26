@@ -19,7 +19,7 @@ export default function FloatingThemeToggle() {
         style={({ pressed }) => [
           styles.button,
           {
-            top: Math.max(insets.top, Platform.OS === 'web' ? 8 : 12) + 8,
+            bottom: Math.max(insets.bottom, 8) + (Platform.OS === 'web' ? 8 : 96),
             left: Math.max(insets.left, 8) + 8,
             backgroundColor: colorScheme === 'light' ? '#003366' : '#f2b84b',
             borderColor: colorScheme === 'light' ? '#ffffff' : '#18324d',

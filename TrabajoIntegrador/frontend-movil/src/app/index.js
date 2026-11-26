@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import InputTexto from '../components/molecules/InputTexto';
 import Boton from '../components/atoms/Boton';
 import HomeScreen from '../screens/HomeScreen';
-import PerfilScreen from '../screens/PerfilScreen';
-import AyudaNotificacionesScreen from '../screens/AyudaNotificacionesScreen';
+import ManualUsoScreen from '../screens/ManualUsoScreen';
+import NotificacionesScreen from '../screens/NotificacionesScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
+import { useFontScale } from '../contexts/FontScaleContext';
+import { useTabBar } from '../contexts/TabBarContext';
 import { API_BASE_URL } from '../constants/api';
+import { limpiarSesionActual } from '../utils/sesion';
+import { escalarEstilos } from '../utils/escalaTexto';
 
 export default function App() {
     const { colors } = useAppColorScheme();
+    const { escala } = useFontScale();
+    const { setTabBarHidden } = useTabBar();
+    const navigation = useNavigation();
+    const styles = createStyles(colors, escala);
     const [cargandoSesion, setCargandoSesion] = useState(true);
     const [pantallaActual, setPantallaActual] = useState('login');
     const [dni, setDni] = useState('');
     const [password, setPassword] = useState('');
     const [soportaBiometria, setSoportaBiometria] = useState(false);
-    const { codigoQR: parametroQR } = useLocalSearchParams();
+    const { codigoQR: parametroQR, vista } = useLocalSearchParams();
+    const vistaActual = Array.isArray(vista) ? vista[0] : vista;
     const codigoEscaneado = Array.isArray(parametroQR) ? parametroQR[0] : parametroQR;
 
     // Estados para MFA simulado
@@ -27,9 +36,6 @@ export default function App() {
     const [codigoMFAGenerado, setCodigoMFAGenerado] = useState('');
     const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
     const [sesionPendiente, setSesionPendiente] = useState(null);
-
-    const IP_BACKEND = 'localhost';
-    const PUERTO = '8000';
 
     useEffect(() => {
         (async () => {
@@ -49,6 +55,43 @@ export default function App() {
             }
         })();
     }, []);
+
+    // El footer (barra de pestañas) no debe mostrarse en la pantalla de login.
+    useEffect(() => {
+        setTabBarHidden(pantallaActual === 'login' || vistaActual === 'login');
+        return () => setTabBarHidden(false);
+    }, [pantallaActual, vistaActual, setTabBarHidden]);
+
+    // Al volver a la pestaña Convenios siempre mostramos el listado, no una
+    // ficha, el buscador avanzado ni las pantallas de notificaciones/manual.
+    useEffect(() => {
+        const volverAlListado = () => {
+            setPantallaActual((actual) =>
+                actual === 'notificaciones' || actual === 'manual' ? 'home' : actual
+            );
+        };
+        const alEnfocar = navigation.addListener('focus', volverAlListado);
+        const alPresionar = navigation.addListener('tabPress', volverAlListado);
+        return () => {
+            alEnfocar();
+            alPresionar();
+        };
+    }, [navigation]);
+
+    const irAInicio = () => {
+        setPantallaActual('home');
+        router.setParams({ vista: undefined });
+    };
+
+    const abrirNotificaciones = () => {
+        setPantallaActual('notificaciones');
+        router.setParams({ vista: undefined });
+    };
+
+    const abrirManual = () => {
+        setPantallaActual('manual');
+        router.setParams({ vista: undefined });
+    };
 
     const loginClasico = async () => {
         if (!dni || !password) return Alert.alert("Faltan datos", "Ingresá tu DNI o correo y tu contraseña para continuar.");
@@ -95,6 +138,7 @@ export default function App() {
         setCodigoMFAIngresado('');
         setSesionPendiente(null);
         setPantallaActual('home');
+        router.setParams({ vista: undefined });
     };
 
     const loginBiometrico = async () => {
@@ -117,17 +161,14 @@ export default function App() {
             await AsyncStorage.setItem('@token_jwt', tokenPrevio);
             if (userPrevio) await AsyncStorage.setItem('@usuario_actual', userPrevio);
             setPantallaActual('home');
+            router.setParams({ vista: undefined });
         }
     };
 
     const cerrarSesion = async () => {
-        // Guardamos respaldo para permitir re-ingreso biométrico en la demo
-        const tokenActual = await AsyncStorage.getItem('@token_jwt');
-        if (tokenActual) {
-            await AsyncStorage.setItem('@token_jwt_biometria', tokenActual);
-        }
-        await AsyncStorage.removeItem('@token_jwt');
+        await limpiarSesionActual();
         setPantallaActual('login');
+        router.setParams({ vista: undefined });
     };
 
     if (cargandoSesion) {
@@ -138,11 +179,11 @@ export default function App() {
         );
     }
 
-    if (pantallaActual === 'home') {
+    if (vistaActual !== 'login' && (pantallaActual === 'home' || vistaActual === 'convenios')) {
         return (
             <HomeScreen
-            irAAyuda={() => setPantallaActual('ayuda')}
-            irAPerfil={() => setPantallaActual('perfil')}
+                irANotificaciones={abrirNotificaciones}
+                irAManual={abrirManual}
                 codigoQR={codigoEscaneado}
                 limpiarQR={() => router.setParams({ codigoQR: undefined })}
                 cerrarSesion={cerrarSesion}
@@ -150,12 +191,23 @@ export default function App() {
         );
     }
 
-    if (pantallaActual === 'perfil') {
-  return <PerfilScreen alCerrar={() => setPantallaActual('home')} />;
-}
-if (pantallaActual === 'ayuda') {
-  return <AyudaNotificacionesScreen alCerrar={() => setPantallaActual('home')} />;
-}
+    if (pantallaActual === 'notificaciones' && vistaActual !== 'login') {
+        return (
+            <NotificacionesScreen
+                alVolver={irAInicio}
+                alCerrarSesion={cerrarSesion}
+            />
+        );
+    }
+
+    if (pantallaActual === 'manual' && vistaActual !== 'login') {
+        return (
+            <ManualUsoScreen
+                alVolver={irAInicio}
+                alCerrarSesion={cerrarSesion}
+            />
+        );
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -192,7 +244,11 @@ if (pantallaActual === 'ayuda') {
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f4f4f4' },
-    titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 40, color: '#003366' }
-});
+const createStyles = (colors, s = 1) =>
+    escalarEstilos(
+        StyleSheet.create({
+            container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: colors.background },
+            titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 40, color: colors.accent },
+        }),
+        s
+    );

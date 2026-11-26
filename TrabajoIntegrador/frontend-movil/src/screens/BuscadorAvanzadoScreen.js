@@ -1,7 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import Paginador from '../components/molecules/Paginador';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
-import Boton from '../components/atoms/Boton';
+import { useFontScale } from '../contexts/FontScaleContext';
+import { escalarEstilos } from '../utils/escalaTexto';
+
+const ELEMENTOS_POR_PAGINA = 10;
 
 const etiquetasEstado = {
   todos: 'Todos',
@@ -11,13 +15,30 @@ const etiquetasEstado = {
   borrador: 'Borrador',
 };
 
-export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCerrar, esOffline }) {
+export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, esOffline }) {
   const { colors } = useAppColorScheme();
-  const styles = createStyles(colors);
+  const { escala } = useFontScale();
+  const styles = createStyles(colors, escala);
 
   const [texto, setTexto] = useState('');
   const [anio, setAnio] = useState('');
   const [estadoFiltro, setEstadoFiltro] = useState('todos');
+  const [pagina, setPagina] = useState(1);
+
+  const cambiarTexto = (t) => {
+    setTexto(t);
+    setPagina(1);
+  };
+
+  const cambiarAnio = (a) => {
+    setAnio(a);
+    setPagina(1);
+  };
+
+  const cambiarEstado = (e) => {
+    setEstadoFiltro(e);
+    setPagina(1);
+  };
 
   const filtrados = useMemo(() => {
     return convenios.filter((c) => {
@@ -53,6 +74,13 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
     }));
   }, [filtrados]);
 
+  const totalPaginas = Math.ceil(arbol.length / ELEMENTOS_POR_PAGINA);
+  const paginaActual = Math.min(pagina, Math.max(totalPaginas, 1));
+  const arbolPaginado = arbol.slice(
+    (paginaActual - 1) * ELEMENTOS_POR_PAGINA,
+    paginaActual * ELEMENTOS_POR_PAGINA
+  );
+
   if (esOffline) {
     return (
       <View style={styles.container}>
@@ -62,7 +90,6 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
             No hay conexión a internet. La búsqueda con filtros estará disponible cuando vuelvas a conectarte.
           </Text>
         </View>
-        <Boton titulo="Volver a convenios" onPress={alCerrar} secundario={true} />
       </View>
     );
   }
@@ -77,7 +104,7 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         placeholder="Nombre, número o resolución"
         placeholderTextColor={colors.textSecondary}
         value={texto}
-        onChangeText={setTexto}
+        onChangeText={cambiarTexto}
       />
       <TextInput
         style={styles.input}
@@ -85,7 +112,7 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         placeholderTextColor={colors.textSecondary}
         keyboardType="numeric"
         value={anio}
-        onChangeText={setAnio}
+        onChangeText={cambiarAnio}
       />
 
       <View style={styles.filaFiltros}>
@@ -93,7 +120,7 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
           <TouchableOpacity
             key={est}
             style={[styles.chip, estadoFiltro === est && styles.chipActivo]}
-            onPress={() => setEstadoFiltro(est)}
+            onPress={() => cambiarEstado(est)}
           >
             <Text style={[styles.chipTexto, estadoFiltro === est && styles.chipTextoActivo]}>
               {etiquetasEstado[est]}
@@ -102,7 +129,9 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         ))}
       </View>
 
-      <Text style={styles.contador}>{filtrados.length === 1 ? '1 convenio encontrado' : `${filtrados.length} convenios encontrados`}</Text>
+      <Text style={styles.contador}>
+        {filtrados.length === 1 ? '1 convenio encontrado' : `${filtrados.length} convenios encontrados`}
+      </Text>
 
       {filtrados.length === 0 && (
         <View style={styles.cardOffline}>
@@ -110,7 +139,7 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         </View>
       )}
 
-      {arbol.map((padre) => (
+      {arbolPaginado.map((padre) => (
         <View key={padre.id} style={styles.nodoPadre}>
           <TouchableOpacity onPress={() => alSeleccionar(padre)}>
             <Text style={styles.codigoPadre}>
@@ -152,13 +181,18 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         </View>
       ))}
 
-      <Boton titulo="Volver a convenios" onPress={alCerrar} secundario={true} />
+      <Paginador
+        pagina={paginaActual}
+        totalPaginas={totalPaginas}
+        alCambiar={setPagina}
+      />
     </ScrollView>
   );
 }
 
-const createStyles = (colors) =>
-  StyleSheet.create({
+const createStyles = (colors, s = 1) =>
+  escalarEstilos(
+    StyleSheet.create({
     container: { flexGrow: 1, padding: 18, backgroundColor: colors.background },
     titulo: { fontSize: 22, fontWeight: 'bold', color: colors.accent, marginBottom: 14, textAlign: 'center' },
     input: {
@@ -199,4 +233,6 @@ const createStyles = (colors) =>
     hojaHijo: { fontSize: 11, color: colors.textSecondary, marginTop: 2 },
     cardOffline: { backgroundColor: colors.backgroundElement, padding: 20, borderRadius: 10, marginVertical: 20 },
     textoOffline: { color: colors.text, textAlign: 'center', fontSize: 15 },
-  });
+    }),
+    s
+  );

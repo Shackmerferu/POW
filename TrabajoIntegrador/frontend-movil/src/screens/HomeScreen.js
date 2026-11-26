@@ -16,12 +16,17 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
+import { useNavigation } from 'expo-router';
 
 import Boton from '../components/atoms/Boton';
+import HeaderApp from '../components/molecules/HeaderApp';
+import Paginador from '../components/molecules/Paginador';
 import FirmaPad from '../components/molecules/FirmaPad';
 import BuscadorAvanzadoScreen from './BuscadorAvanzadoScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
+import { useFontScale } from '../contexts/FontScaleContext';
 import { API_BASE_URL } from '../constants/api';
+import { escalarEstilos } from '../utils/escalaTexto';
 
 const etiquetaEstado = (estado) => ({
   aprobado: 'Listo para firmar',
@@ -54,9 +59,13 @@ const tituloMovimiento = (movimiento) => {
   return 'Actividad del convenio';
 };
 
-export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyuda, codigoQR, limpiarQR, cerrarSesion }) {
+const ELEMENTOS_POR_PAGINA = 10;
+
+export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, limpiarQR, cerrarSesion }) {
   const { colors } = useAppColorScheme();
-  const styles = createStyles(colors);
+  const { escala } = useFontScale();
+  const navigation = useNavigation();
+  const styles = createStyles(colors, escala);
 
   const [mensajeSede, setMensajeSede] = useState('Buscando tu ubicación...');
   const [coordsActuales, setCoordsActuales] = useState(null);
@@ -69,6 +78,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
   const [mostrarBuscadorAvanzado, setMostrarBuscadorAvanzado] = useState(false);
   const [tabActiva, setTabActiva] = useState('movimientos'); // 'movimientos' | 'pendientes'
   const [convenioSeleccionado, setConvenioSeleccionado] = useState(null);
+  const [paginaConvenios, setPaginaConvenios] = useState(1);
 
   // Detalle del convenio seleccionado
   const [firmantes, setFirmantes] = useState([]);
@@ -79,15 +89,33 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
   const [historialConvenio, setHistorialConvenio] = useState([]);
   const [cargandoHistorial, setCargandoHistorial] = useState(false);
   const [errorHistorial, setErrorHistorial] = useState('');
+  const [paginaAuditoria, setPaginaAuditoria] = useState(1);
   const actualizarAutomaticamenteRef = useRef(null);
 
   // Modal de Firma a mano + Huella
   const [modalFirmaVisible, setModalFirmaVisible] = useState(false);
   const [trazosFirma, setTrazosFirma] = useState([]);
 
-  const IP_BACKEND = 'localhost';
-  const PUERTO = '8000';
-  const BASE_URL = `http://${IP_BACKEND}:${PUERTO}`;
+  const renderHeaderApp = () => (
+    <HeaderApp
+      alCerrarSesion={cerrarSesion}
+      alAbrirNotificaciones={irANotificaciones}
+    />
+  );
+
+  // Al tocar la pestaña Convenios volvemos siempre al listado principal.
+  useEffect(() => {
+    const volverAlListado = () => {
+      setConvenioSeleccionado(null);
+      setMostrarBuscadorAvanzado(false);
+      setTabActiva('movimientos');
+      setBusquedaHeader('');
+      setPaginaConvenios(1);
+      setPaginaAuditoria(1);
+    };
+    const unsubscribe = navigation.addListener('tabPress', volverAlListado);
+    return unsubscribe;
+  }, [navigation]);
 
   const filtrarPorRol = (listaCompleta, user) => {
     const rol = String(user?.rol || '').trim().toLowerCase();
@@ -108,7 +136,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
         try {
           userObj = JSON.parse(userStr);
           setUsuarioActual(userObj);
-        } catch (e) {}
+        } catch {}
       }
 
       // Cargamos caché offline primero y luego intentamos refrescar de la API
@@ -119,9 +147,10 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
           if (Array.isArray(parsed.lista)) {
             setConvenios(filtrarPorRol(parsed.lista, userObj));
           }
-        } catch (e) {}
+        } catch {}
       }
 
+      // eslint-disable-next-line react-hooks/immutability
       await traerConvenios(userObj);
 
       // Ubicación
@@ -162,6 +191,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
           String(c.id) === qrLimpio
       );
       if (encontrado) {
+        // eslint-disable-next-line react-hooks/immutability
         await abrirFichaConvenio(encontrado);
       } else {
         Alert.alert('No encontramos el convenio', 'Revisá que el código sea correcto e intentá escanearlo nuevamente.');
@@ -230,6 +260,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
   };
 
   const abrirFichaConvenio = async (convenio) => {
+    setPaginaAuditoria(1);
     setConvenioSeleccionado(convenio);
     setFirmantes([]);
     setComentarios([]);
@@ -499,19 +530,18 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
     return { firmadosUltimoAnio, vigentes, enTramite };
   }, [convenios]);
 
-  // Últimos 10 movimientos (más reciente a más antiguo)
+  // Convenios ordenados por actualización reciente (máximo 10 movimientos).
   const ultimosMovimientos = useMemo(() => {
     return [...convenios]
       .sort((a, b) => new Date(b.fecha_actualizacion || 0) - new Date(a.fecha_actualizacion || 0))
       .slice(0, 10);
   }, [convenios]);
 
-  // Mis Pendientes por firmar (estado aprobado, máx 10, más reciente a más antiguo)
+  // Todos los pendientes de firma, ordenados por actualización reciente.
   const misPendientes = useMemo(() => {
     return [...convenios]
       .filter((c) => String(c.estado || '').toLowerCase() === 'aprobado')
-      .sort((a, b) => new Date(b.fecha_actualizacion || 0) - new Date(a.fecha_actualizacion || 0))
-      .slice(0, 10);
+      .sort((a, b) => new Date(b.fecha_actualizacion || 0) - new Date(a.fecha_actualizacion || 0));
   }, [convenios]);
 
   const listaVisible = useMemo(() => {
@@ -524,6 +554,19 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
         String(c.codigo_unico || '').toLowerCase().includes(q)
     );
   }, [esOffline, tabActiva, misPendientes, ultimosMovimientos, busquedaHeader, convenios]);
+
+  const totalPaginasConvenios = Math.ceil(listaVisible.length / ELEMENTOS_POR_PAGINA);
+  const paginaConveniosActual = Math.min(paginaConvenios, Math.max(totalPaginasConvenios, 1));
+  const conveniosPaginados = listaVisible.slice(
+    (paginaConveniosActual - 1) * ELEMENTOS_POR_PAGINA,
+    paginaConveniosActual * ELEMENTOS_POR_PAGINA
+  );
+  const totalPaginasAuditoria = Math.ceil(historialConvenio.length / ELEMENTOS_POR_PAGINA);
+  const paginaAuditoriaActual = Math.min(paginaAuditoria, Math.max(totalPaginasAuditoria, 1));
+  const historialPaginado = historialConvenio.slice(
+    (paginaAuditoriaActual - 1) * ELEMENTOS_POR_PAGINA,
+    paginaAuditoriaActual * ELEMENTOS_POR_PAGINA
+  );
 
   useEffect(() => {
     actualizarAutomaticamenteRef.current = async () => {
@@ -545,15 +588,19 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
   // --- PANTALLA BUSCADOR AVANZADO ---
   if (mostrarBuscadorAvanzado) {
     return (
-      <BuscadorAvanzadoScreen
-        convenios={convenios}
-        esOffline={esOffline}
-        alSeleccionar={(c) => {
-          setMostrarBuscadorAvanzado(false);
-          abrirFichaConvenio(c);
-        }}
-        alCerrar={() => setMostrarBuscadorAvanzado(false)}
-      />
+      <View style={styles.pantallaHome}>
+        {renderHeaderApp()}
+        <View style={{ flex: 1 }}>
+          <BuscadorAvanzadoScreen
+            convenios={convenios}
+            esOffline={esOffline}
+            alSeleccionar={(c) => {
+              setMostrarBuscadorAvanzado(false);
+              abrirFichaConvenio(c);
+            }}
+          />
+        </View>
+      </View>
     );
   }
 
@@ -564,7 +611,9 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
     const puedeFirmar = String(convenioSeleccionado.estado || '').toLowerCase() === 'aprobado';
 
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.pantallaHome}>
+      {renderHeaderApp()}
+      <ScrollView style={styles.scrollHome} contentContainerStyle={styles.container}>
         <Text style={styles.titulo}>Detalles del convenio</Text>
 
         <View style={styles.tarjeta}>
@@ -617,7 +666,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
             <Text style={styles.detalleTexto}>Todavía no hay movimientos registrados para este convenio.</Text>
           ) : null}
 
-          {historialConvenio.map((movimiento, indice) => (
+          {historialPaginado.map((movimiento, indice) => (
             <View key={movimiento.id || `${movimiento.fecha_registro}-${indice}`} style={styles.historialFila}>
               <View style={styles.historialColumna}>
                 <View
@@ -626,7 +675,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
                     String(movimiento.estado_nuevo || '').toLowerCase() === 'firmado' && styles.historialPuntoFinal,
                   ]}
                 />
-                {indice < historialConvenio.length - 1 && <View style={styles.historialLinea} />}
+                {indice < historialPaginado.length - 1 && <View style={styles.historialLinea} />}
               </View>
               <View style={styles.historialContenido}>
                 <Text style={styles.historialFecha}>{fechaLegible(movimiento.fecha_registro)}</Text>
@@ -640,6 +689,16 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
               </View>
             </View>
           ))}
+          {historialConvenio.length > 0 && (
+            <Text style={styles.historialFecha}>
+              Mostrando {historialPaginado.length} de {historialConvenio.length} cambios.
+            </Text>
+          )}
+          <Paginador
+            pagina={paginaAuditoriaActual}
+            totalPaginas={totalPaginasAuditoria}
+            alCambiar={setPaginaAuditoria}
+          />
         </View>
 
         {/* Comprobante de documento firmado */}
@@ -723,8 +782,6 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
           )}
         </View>
 
-        <Boton titulo="Volver a convenios" onPress={() => setConvenioSeleccionado(null)} secundario={true} />
-
         {/* MODAL DE FIRMA MANUSCRITA + HUELLA */}
         <Modal visible={modalFirmaVisible} animationType="slide" transparent={true}>
           <View style={styles.modalFondo}>
@@ -737,12 +794,14 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
           </View>
         </Modal>
       </ScrollView>
+      </View>
     );
   }
 
   // --- PANTALLA PRINCIPAL HOME ---
   return (
     <View style={styles.pantallaHome}>
+    {renderHeaderApp()}
     <ScrollView style={styles.scrollHome} contentContainerStyle={styles.container}>
       {/* Header con Buscador rápido */}
       <View style={styles.header}>
@@ -757,7 +816,10 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
             placeholderTextColor={colors.textSecondary}
             editable={!esOffline}
             value={busquedaHeader}
-            onChangeText={setBusquedaHeader}
+            onChangeText={(texto) => {
+              setBusquedaHeader(texto);
+              setPaginaConvenios(1);
+            }}
           />
           <TouchableOpacity
             style={styles.btnAvanzado}
@@ -793,20 +855,26 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
         <TouchableOpacity
           style={[styles.tab, tabActiva === 'movimientos' && !esOffline && styles.tabActiva]}
           disabled={esOffline}
-          onPress={() => setTabActiva('movimientos')}
+          onPress={() => {
+            setTabActiva('movimientos');
+            setPaginaConvenios(1);
+          }}
         >
           <Text style={styles.tabTexto}>Actualizados recientemente</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, (tabActiva === 'pendientes' || esOffline) && styles.tabActiva]}
-          onPress={() => setTabActiva('pendientes')}
+          onPress={() => {
+            setTabActiva('pendientes');
+            setPaginaConvenios(1);
+          }}
         >
           <Text style={styles.tabTexto}>Pendientes de firma ({misPendientes.length})</Text>
         </TouchableOpacity>
       </View>
 
       {/* Listado */}
-      {listaVisible.map((item) => (
+      {conveniosPaginados.map((item) => (
         <TouchableOpacity
           key={item.id}
           style={styles.itemConvenio}
@@ -829,21 +897,36 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyu
         </Text>
       )}
 
-      <View style={{ marginTop: 10 }}>
-        <Boton titulo="🔄 Actualizar Convenios" onPress={() => traerConvenios()} />
-        <Boton titulo="📷 Escanear Código QR" onPress={irAQR} />
-        <Boton titulo="👤 Mi Perfil e Identidad" onPress={irAPerfil} secundario={true} />
-        <Boton titulo="🔔 Notificaciones y Manual" onPress={irAAyuda} secundario={true} />
-        <Boton titulo="🌱 Impacto y Sostenibilidad" onPress={irASostenibilidad} secundario={true} />
-        {cerrarSesion && <Boton titulo="Cerrar Sesión" onPress={cerrarSesion} secundario={true} />}
+      {listaVisible.length > 0 && (
+        <Text style={styles.historialFecha}>
+          Mostrando {(paginaConveniosActual - 1) * ELEMENTOS_POR_PAGINA + 1}–{Math.min(paginaConveniosActual * ELEMENTOS_POR_PAGINA, listaVisible.length)} de {listaVisible.length} convenios.
+        </Text>
+      )}
+      <Paginador
+        pagina={paginaConveniosActual}
+        totalPaginas={totalPaginasConvenios}
+        alCambiar={setPaginaConvenios}
+      />
+
+      <View style={styles.filaAyuda}>
+        <TouchableOpacity
+          style={[styles.accesoAyuda, styles.accesoManual]}
+          onPress={irAManual}
+          accessibilityRole="button"
+          accessibilityLabel="Abrir manual de uso"
+        >
+          <Text style={styles.iconoAccesoAyuda}>📖</Text>
+          <Text style={styles.textoAccesoAyuda}>Manual de uso</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
     </View>
   );
 }
 
-const createStyles = (colors) =>
-  StyleSheet.create({
+const createStyles = (colors, s = 1) =>
+  escalarEstilos(
+    StyleSheet.create({
     pantallaHome: { flex: 1, backgroundColor: colors.background },
     scrollHome: { flex: 1 },
     container: { flexGrow: 1, padding: 16, backgroundColor: colors.background },
@@ -866,6 +949,22 @@ const createStyles = (colors) =>
     boxNumero: { fontSize: 24, fontWeight: 'bold', color: colors.accent },
     boxLabel: { fontSize: 12, color: colors.textSecondary, marginTop: 2, textAlign: 'center' },
     filaTabs: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+    filaAyuda: { flexDirection: 'row', gap: 10, marginTop: 10, marginBottom: 8 },
+    accesoAyuda: {
+      flex: 1,
+      minHeight: 58,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 7,
+      paddingHorizontal: 8,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    accesoManual: { backgroundColor: colors.backgroundSelected },
+    iconoAccesoAyuda: { fontSize: 17 },
+    textoAccesoAyuda: { color: colors.accent, fontSize: 12, fontWeight: '700' },
     tab: {
       flex: 1,
       paddingVertical: 10,
@@ -937,4 +1036,6 @@ const createStyles = (colors) =>
     comentarioAutor: { fontSize: 12, fontWeight: 'bold', color: colors.accent },
     modalFondo: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
     modalContenido: { borderRadius: 12, padding: 18 },
-  });
+    }),
+    s
+  );
