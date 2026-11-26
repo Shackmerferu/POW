@@ -1,0 +1,51 @@
+# Dependencias (EAS las instala en el servidor mediante npm/yarn/pnpm)
+node_modules/
+
+# Carpetas nativas generadas (EAS ejecuta prebuild en la nube si no se suben)
+android/
+ios/
+
+# Cachés y archivos temporales de Expo / Metro / Babel
+.expo/
+.expo-shared/
+dist/
+web-build/
+*.tsbuildinfo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Registros de errores (logs)
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+pnpm-debug.log*
+
+# Variables de entorno locales (en EAS se gestionan desde Secrets/Environment Variables)
+.env
+.env*.local
+
+# Control de versiones e historial local
+.git/
+
+# Entornos de editores e IDEs
+.vscode/
+.idea/
+.claude
+
+# Artefactos de compilación previos y certificados locales
+*.apk
+*.aab
+*.ipa
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Carpetas de pruebas o documentación innecesaria para compilar
+__tests__/
+coverage/
+docs/

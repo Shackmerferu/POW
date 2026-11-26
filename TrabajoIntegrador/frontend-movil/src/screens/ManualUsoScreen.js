@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, Text, ScrollView } from 'react-native';
 
 import Boton from '../components/atoms/Boton';
 import HeaderApp from '../components/molecules/HeaderApp';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { useFontScale } from '../contexts/FontScaleContext';
-import { escalarEstilos } from '../utils/escalaTexto';
+import { createStyles } from '../styles/ManualUsoScreen.styles';
 
 const SECCIONES_MANUAL = [
   {
@@ -33,7 +33,7 @@ const SECCIONES_MANUAL = [
 export default function ManualUsoScreen({ alCerrarSesion, alVolver }) {
   const { colors } = useAppColorScheme();
   const { escala } = useFontScale();
-  const styles = createStyles(colors, escala);
+  const styles = useMemo(() => createStyles(colors, escala), [colors, escala]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -53,22 +53,3 @@ export default function ManualUsoScreen({ alCerrarSesion, alVolver }) {
     </View>
   );
 }
-
-const createStyles = (colors, s = 1) =>
-  escalarEstilos(
-    StyleSheet.create({
-      container: { flexGrow: 1, padding: 18, backgroundColor: colors.background },
-      titulo: { fontSize: 22, fontWeight: 'bold', color: colors.accent, textAlign: 'center', marginBottom: 14 },
-      tarjeta: {
-        backgroundColor: colors.backgroundElement,
-        padding: 14,
-        borderRadius: 10,
-        marginBottom: 12,
-        borderWidth: 1,
-        borderColor: colors.border,
-      },
-      cardTitulo: { fontSize: 15, fontWeight: 'bold', color: colors.accent, marginBottom: 5 },
-      texto: { fontSize: 13, color: colors.text, lineHeight: 19 },
-    }),
-    s
-  );

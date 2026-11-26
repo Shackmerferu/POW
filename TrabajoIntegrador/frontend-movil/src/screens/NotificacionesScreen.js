@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -14,13 +13,13 @@ import HeaderApp from '../components/molecules/HeaderApp';
 import { API_BASE_URL } from '../constants/api';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { useFontScale } from '../contexts/FontScaleContext';
-import { escalarEstilos } from '../utils/escalaTexto';
+import { createStyles } from '../styles/NotificacionesScreen.styles';
 
 export default function NotificacionesScreen({ alCerrarSesion, alVolver }) {
   const { colors, colorScheme } = useAppColorScheme();
   const { escala } = useFontScale();
   const insets = useSafeAreaInsets();
-  const styles = createStyles(colors, escala);
+  const styles = useMemo(() => createStyles(colors, escala), [colors, escala]);
 
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -202,40 +201,4 @@ export default function NotificacionesScreen({ alCerrarSesion, alVolver }) {
   );
 }
 
-const createStyles = (colors, s = 1) =>
-  escalarEstilos(
-    StyleSheet.create({
-      container: { flexGrow: 1, padding: 18, backgroundColor: colors.background },
-      titulo: { fontSize: 22, fontWeight: 'bold', color: colors.accent, textAlign: 'center', marginBottom: 8 },
-      subInfo: { fontSize: 12, color: colors.textSecondary, marginBottom: 10, textAlign: 'center' },
-      tarjeta: {
-        backgroundColor: colors.backgroundElement,
-        padding: 14,
-        borderRadius: 10,
-        marginBottom: 12,
-        borderWidth: 1,
-        borderColor: colors.border,
-      },
-      tarjetaAlerta: { borderLeftWidth: 4, borderLeftColor: '#d97706' },
-      cardTitulo: { fontSize: 15, fontWeight: 'bold', color: colors.accent, marginBottom: 5 },
-      texto: { fontSize: 13, color: colors.text, lineHeight: 19 },
-      avisoFlotante: {
-        position: 'absolute',
-        left: 12,
-        right: 12,
-        zIndex: 10,
-        elevation: 6,
-        paddingVertical: 12,
-        paddingHorizontal: 14,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderLeftWidth: 6,
-        shadowColor: '#000',
-        shadowOpacity: 0.18,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 3 },
-      },
-      avisoTexto: { fontSize: 13, fontWeight: '600', lineHeight: 19 },
-    }),
-    s
-  );
+

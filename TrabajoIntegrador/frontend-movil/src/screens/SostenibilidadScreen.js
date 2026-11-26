@@ -1,13 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, Text } from 'react-native';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { useFontScale } from '../contexts/FontScaleContext';
-import { escalarEstilos } from '../utils/escalaTexto';
+import { createStyles } from '../styles/SostenibilidadScreen.styles';
 
 export default function SostenibilidadScreen() {
     const { colors } = useAppColorScheme();
     const { escala } = useFontScale();
-    const styles = createStyles(colors, escala);
+    const styles = useMemo(() => createStyles(colors, escala), [colors, escala]);
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Text style={[styles.titulo, { color: colors.positive }]}>Ahorro con la gestión digital</Text>
@@ -27,13 +27,3 @@ export default function SostenibilidadScreen() {
         </View>
     );
 }
-
-const createStyles = (colors, s = 1) => escalarEstilos(StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: colors.background },
-    titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
-    tarjeta: { backgroundColor: colors.positiveBackground, padding: 20, borderRadius: 12, marginBottom: 20, borderWidth: 1, borderColor: colors.border },
-    dato: { fontSize: 16, fontWeight: 'bold', color: colors.positive, marginBottom: 10 },
-    cajaSupuestos: { backgroundColor: colors.backgroundElement, padding: 15, borderRadius: 8, marginBottom: 30, borderWidth: 1, borderColor: colors.border },
-    supuestosTitulo: { fontWeight: 'bold', marginBottom: 10, color: colors.text },
-    supuestoItem: { color: colors.textSecondary, marginBottom: 5, fontSize: 14 }
-}), s);

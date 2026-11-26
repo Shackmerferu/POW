@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Image,
@@ -17,6 +16,7 @@ import HeaderApp from '../components/molecules/HeaderApp';
 import FirmaPad from '../components/molecules/FirmaPad';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { ESCALAS_TEXTO, useFontScale } from '../contexts/FontScaleContext';
+import { createStyles } from '../styles/PerfilScreen.styles';
 
 export default function PerfilScreen({ alCerrarSesion }) {
   const { colors, colorScheme, toggleColorScheme, setColorScheme } = useAppColorScheme();
@@ -91,7 +91,7 @@ export default function PerfilScreen({ alCerrarSesion }) {
     Alert.alert('✅ Identidad Registrada', 'Tu firma manuscrita y validación biométrica quedaron guardadas.');
   };
 
-  const styles = createStyles(colors, escala);
+  const styles = useMemo(() => createStyles(colors, escala), [colors, escala]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -174,66 +174,3 @@ export default function PerfilScreen({ alCerrarSesion }) {
     </View>
   );
 }
-
-const createStyles = (colors, s) =>
-  StyleSheet.create({
-    container: { flexGrow: 1, padding: 18, backgroundColor: colors.background },
-    titulo: { fontSize: 22 * s, fontWeight: 'bold', color: colors.accent, textAlign: 'center', marginBottom: 16 },
-    tarjeta: {
-      backgroundColor: colors.backgroundElement,
-      padding: 15,
-      borderRadius: 10,
-      marginBottom: 14,
-      borderWidth: 1,
-      borderColor: colors.border,
-    },
-    filaPerfil: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-    avatarWrap: { alignItems: 'center' },
-    avatar: { width: 68, height: 68, borderRadius: 34, borderWidth: 2, borderColor: colors.accent },
-    avatarPlaceholder: {
-      width: 68,
-      height: 68,
-      borderRadius: 34,
-      backgroundColor: colors.accent,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    avatarInicial: { color: '#fff', fontSize: 26, fontWeight: 'bold' },
-    linkFoto: { fontSize: 11 * s, color: colors.accent, marginTop: 4, fontWeight: '600' },
-    nombre: { fontSize: 17 * s, fontWeight: 'bold', color: colors.text, marginBottom: 4 },
-    dato: { fontSize: 13 * s, color: colors.textSecondary, marginBottom: 2 },
-    btnTema: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 8,
-      paddingHorizontal: 10,
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.background,
-      minWidth: 58,
-    },
-    iconoTema: { fontSize: 20 },
-    textoTema: { fontSize: 11 * s, fontWeight: '600', color: colors.text, marginTop: 2 },
-    subtitulo: { fontSize: 15 * s, fontWeight: 'bold', color: colors.accent, marginBottom: 10 },
-    filaBotones: { flexDirection: 'row', gap: 8 },
-    chip: {
-      flex: 1,
-      paddingVertical: 9,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: colors.border,
-      alignItems: 'center',
-      backgroundColor: colors.background,
-    },
-    chipActivo: { backgroundColor: colors.accent, borderColor: colors.accent },
-    chipTexto: { fontSize: 13 * s, fontWeight: '600', color: colors.text },
-    chipTextoActivo: { color: '#fff' },
-    badgeOk: {
-      backgroundColor: colors.positiveBackground,
-      padding: 8,
-      borderRadius: 6,
-      marginBottom: 8,
-    },
-    textoOk: { color: colors.positive, fontWeight: 'bold', fontSize: 12 * s },
-  });
