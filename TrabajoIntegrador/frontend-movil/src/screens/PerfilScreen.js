@@ -8,8 +8,10 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import { useIsFocused } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as LocalAuthentication from 'expo-local-authentication';
 
 import Boton from '../components/atoms/Boton';
@@ -18,29 +20,63 @@ import FirmaPad from '../components/molecules/FirmaPad';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { ESCALAS_TEXTO, useFontScale } from '../contexts/FontScaleContext';
 
+const obtenerClaveUsuario = (u) => {
+  const raw = u?.id || u?.dni || u?.legajo || u?.email || u?.nombre_completo || 'generico';
+  return String(raw).trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+};
+
 export default function PerfilScreen({ alCerrarSesion }) {
   const { colors, colorScheme, toggleColorScheme, setColorScheme } = useAppColorScheme();
   const { escala, cambiarEscala } = useFontScale();
+  const estaEnFoco = useIsFocused();
+
   const [usuario, setUsuario] = useState(null);
   const [fotoUri, setFotoUri] = useState(null);
   const [trazos, setTrazos] = useState([]);
   const [identidad, setIdentidad] = useState(null);
 
+  // Recarga los datos cada vez que entrás a la pestaña Perfil
   useEffect(() => {
+    if (!estaEnFoco) return;
+
+    let activo = true;
     (async () => {
+      let uObj = null;
       const uStr = await AsyncStorage.getItem('@usuario_actual');
       if (uStr) {
-        try { setUsuario(JSON.parse(uStr)); } catch {}
+        try {
+          uObj = JSON.parse(uStr);
+        } catch {}
       }
-      const fotoGuardada = await AsyncStorage.getItem('@perfil_foto');
-      if (fotoGuardada) setFotoUri(fotoGuardada);
+      if (!activo) return;
+      setUsuario(uObj);
 
-      const idStr = await AsyncStorage.getItem('@identidad_registrada');
+      const clave = obtenerClaveUsuario(uObj);
+
+      const fotoGuardada = await AsyncStorage.getItem(`@perfil_foto_${clave}`);
+      if (fotoGuardada) {
+        const info = await FileSystem.getInfoAsync(fotoGuardada);
+        if (activo) setFotoUri(info.exists ? `${fotoGuardada}?t=${Date.now()}` : null);
+      } else if (activo) {
+        setFotoUri(null);
+      }
+
+      const idStr = await AsyncStorage.getItem(`@identidad_registrada_${clave}`);
       if (idStr) {
-        try { setIdentidad(JSON.parse(idStr)); } catch {}
+        try {
+          if (activo) setIdentidad(JSON.parse(idStr));
+        } catch {
+          if (activo) setIdentidad(null);
+        }
+      } else if (activo) {
+        setIdentidad(null);
       }
     })();
-  }, []);
+
+    return () => {
+      activo = false;
+    };
+  }, [estaEnFoco]);
 
   const cambiarTema = () => {
     if (typeof toggleColorScheme === 'function') {
@@ -57,9 +93,16 @@ export default function PerfilScreen({ alCerrarSesion }) {
         copyToCacheDirectory: true,
       });
       if (res.canceled || !res.assets?.length) return;
-      const uri = res.assets[0].uri;
-      setFotoUri(uri);
-      await AsyncStorage.setItem('@perfil_foto', uri);
+
+      const origenUri = res.assets[0].uri;
+      const clave = obtenerClaveUsuario(usuario);
+      const extension = (res.assets[0].name || 'jpg').split('.').pop() || 'jpg';
+      const destinoUri = `${FileSystem.documentDirectory}perfil_${clave}.${extension}`;
+
+      await FileSystem.copyAsync({ from: origenUri, to: destinoUri });
+
+      setFotoUri(`${destinoUri}?t=${Date.now()}`);
+      await AsyncStorage.setItem(`@perfil_foto_${clave}`, destinoUri);
     } catch {
       Alert.alert('Error', 'No se pudo seleccionar la imagen.');
     }
@@ -86,7 +129,8 @@ export default function PerfilScreen({ alCerrarSesion }) {
       usuario: usuario?.nombre_completo || 'Usuario',
     };
 
-    await AsyncStorage.setItem('@identidad_registrada', JSON.stringify(registro));
+    const clave = obtenerClaveUsuario(usuario);
+    await AsyncStorage.setItem(`@identidad_registrada_${clave}`, JSON.stringify(registro));
     setIdentidad(registro);
     Alert.alert('✅ Identidad Registrada', 'Tu firma manuscrita y validación biométrica quedaron guardadas.');
   };

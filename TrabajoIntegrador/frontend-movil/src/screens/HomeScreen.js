@@ -73,6 +73,8 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
   const [usuarioActual, setUsuarioActual] = useState(null);
   const [esOffline, setEsOffline] = useState(false);
 
+  const esConsulta = String(usuarioActual?.rol || '').trim().toLowerCase() === 'consulta';
+
   // Navegación interna del Home
   const [busquedaHeader, setBusquedaHeader] = useState('');
   const [mostrarBuscadorAvanzado, setMostrarBuscadorAvanzado] = useState(false);
@@ -120,10 +122,9 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
   const filtrarPorRol = (listaCompleta, user) => {
     const rol = String(user?.rol || '').trim().toLowerCase();
     if (rol === 'consulta') {
-      return listaCompleta.filter((c) => {
-        const est = String(c.estado || '').trim().toLowerCase();
-        return est === 'firmado' || est === 'aprobado';
-      });
+      return listaCompleta.filter(
+        (c) => String(c.estado || '').trim().toLowerCase() === 'firmado'
+      );
     }
     return listaCompleta;
   };
@@ -230,7 +231,7 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
       return convenios;
     } catch {
       setEsOffline(true);
-      setTabActiva('pendientes');
+      if (!esConsulta) setTabActiva('pendientes');
       return convenios;
     }
   };
@@ -376,7 +377,7 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
         `${detalleMarca}\n\nCódigo de integridad: ${String(m.hash_sha256 || '').slice(0, 20)}...`
       );
     } catch {
-        Alert.alert('No pudimos verificar el documento', 'Intentá de nuevo en unos momentos.');
+      Alert.alert('No pudimos verificar el documento', 'Intentá de nuevo en unos momentos.');
     }
   };
 
@@ -546,7 +547,14 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
   }, [convenios]);
 
   const listaVisible = useMemo(() => {
-    const base = esOffline ? misPendientes : tabActiva === 'pendientes' ? misPendientes : ultimosMovimientos;
+    const base = esConsulta
+      ? ultimosMovimientos
+      : esOffline
+        ? misPendientes
+        : tabActiva === 'pendientes'
+          ? misPendientes
+          : ultimosMovimientos;
+
     const q = busquedaHeader.trim().toLowerCase();
     if (!q || esOffline) return base;
     return convenios.filter(
@@ -554,7 +562,7 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
         String(c.titulo || '').toLowerCase().includes(q) ||
         String(c.codigo_unico || '').toLowerCase().includes(q)
     );
-  }, [esOffline, tabActiva, misPendientes, ultimosMovimientos, busquedaHeader, convenios]);
+  }, [esConsulta, esOffline, tabActiva, misPendientes, ultimosMovimientos, busquedaHeader, convenios]);
 
   const totalPaginasConvenios = Math.ceil(listaVisible.length / ELEMENTOS_POR_PAGINA);
   const paginaConveniosActual = Math.min(paginaConvenios, Math.max(totalPaginasConvenios, 1));
@@ -609,7 +617,7 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
   if (convenioSeleccionado) {
     const padre = convenios.find((c) => Number(c.id) === Number(convenioSeleccionado.id_antecedente));
     const estaFirmado = String(convenioSeleccionado.estado || '').toLowerCase() === 'firmado';
-    const puedeFirmar = String(convenioSeleccionado.estado || '').toLowerCase() === 'aprobado';
+    const puedeFirmar = !esConsulta && String(convenioSeleccionado.estado || '').toLowerCase() === 'aprobado';
 
     return (
       <View style={styles.pantallaHome}>
@@ -808,7 +816,11 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
       <View style={styles.header}>
         <Text style={styles.titulo}>Buscar convenios</Text>
         <Text style={styles.textoUbicacion}>
-          {esOffline ? 'Sin conexión. Podés consultar los convenios pendientes de firma guardados en este dispositivo.' : mensajeSede}
+          {esOffline
+            ? esConsulta
+              ? 'Sin conexión. Podés consultar los convenios firmados guardados en este dispositivo.'
+              : 'Sin conexión. Podés consultar los convenios pendientes de firma guardados en este dispositivo.'
+            : mensajeSede}
         </Text>
         <View style={styles.filaBuscador}>
           <TextInput
@@ -841,21 +853,25 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
           <Text style={styles.boxNumero}>{metricas.vigentes}</Text>
           <Text style={styles.boxLabel}>Convenios vigentes</Text>
         </View>
-        <View style={styles.boxMetric}>
-          <Text style={styles.boxNumero}>{metricas.enTramite}</Text>
-          <Text style={styles.boxLabel}>En proceso</Text>
-        </View>
-        <View style={styles.boxMetric}>
-          <Text style={[styles.boxNumero, { color: '#d35400' }]}>{misPendientes.length}</Text>
-          <Text style={styles.boxLabel}>Pendientes de firma</Text>
-        </View>
+        {!esConsulta && (
+          <>
+            <View style={styles.boxMetric}>
+              <Text style={styles.boxNumero}>{metricas.enTramite}</Text>
+              <Text style={styles.boxLabel}>En proceso</Text>
+            </View>
+            <View style={styles.boxMetric}>
+              <Text style={[styles.boxNumero, { color: '#d35400' }]}>{misPendientes.length}</Text>
+              <Text style={styles.boxLabel}>Pendientes de firma</Text>
+            </View>
+          </>
+        )}
       </View>
 
       {/* Selector de listado: Últimos movimientos vs Mis Pendientes */}
       <View style={styles.filaTabs}>
         <TouchableOpacity
-          style={[styles.tab, tabActiva === 'movimientos' && !esOffline && styles.tabActiva]}
-          disabled={esOffline}
+          style={[styles.tab, (tabActiva === 'movimientos' || esConsulta) && styles.tabActiva]}
+          disabled={esOffline && !esConsulta}
           onPress={() => {
             setTabActiva('movimientos');
             setPaginaConvenios(1);
@@ -863,15 +879,18 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
         >
           <Text style={styles.tabTexto}>Actualizados recientemente</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, (tabActiva === 'pendientes' || esOffline) && styles.tabActiva]}
-          onPress={() => {
-            setTabActiva('pendientes');
-            setPaginaConvenios(1);
-          }}
-        >
-          <Text style={styles.tabTexto}>Pendientes de firma ({misPendientes.length})</Text>
-        </TouchableOpacity>
+
+        {!esConsulta && (
+          <TouchableOpacity
+            style={[styles.tab, (tabActiva === 'pendientes' || esOffline) && styles.tabActiva]}
+            onPress={() => {
+              setTabActiva('pendientes');
+              setPaginaConvenios(1);
+            }}
+          >
+            <Text style={styles.tabTexto}>Pendientes de firma ({misPendientes.length})</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Listado */}
@@ -893,7 +912,9 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
       {listaVisible.length === 0 && (
         <Text style={styles.tipo}>
           {esOffline
-            ? 'No hay convenios pendientes de firma guardados en este dispositivo.'
+            ? esConsulta
+              ? 'No hay convenios firmados guardados en este dispositivo.'
+              : 'No hay convenios pendientes de firma guardados en este dispositivo.'
             : 'No encontramos convenios. Probá con otro nombre o número.'}
         </Text>
       )}
