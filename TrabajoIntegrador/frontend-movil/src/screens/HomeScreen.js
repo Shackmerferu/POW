@@ -22,7 +22,7 @@ import FirmaPad from '../components/molecules/FirmaPad';
 import BuscadorAvanzadoScreen from './BuscadorAvanzadoScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
-export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, codigoQR, limpiarQR, cerrarSesion }) {
+export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyuda, codigoQR, limpiarQR, cerrarSesion }) {
   const { colors } = useAppColorScheme();
   const styles = createStyles(colors);
 
@@ -686,6 +686,7 @@ export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, codigo
         <Boton titulo="🔄 Actualizar Convenios" onPress={() => traerConvenios()} />
         <Boton titulo="📷 Escanear Código QR" onPress={irAQR} />
         <Boton titulo="👤 Mi Perfil e Identidad" onPress={irAPerfil} secundario={true} />
+        <Boton titulo="🔔 Notificaciones y Manual" onPress={irAAyuda} secundario={true} />
         <Boton titulo="🌱 Impacto y Sostenibilidad" onPress={irASostenibilidad} secundario={true} />
         {cerrarSesion && <Boton titulo="Cerrar Sesión" onPress={cerrarSesion} secundario={true} />}
       </View>

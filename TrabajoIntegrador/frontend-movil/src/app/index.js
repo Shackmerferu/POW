@@ -9,6 +9,7 @@ import Boton from '../components/atoms/Boton';
 import LectorQRScreen from '../screens/LectorQRScreen';
 import HomeScreen from '../screens/HomeScreen';
 import PerfilScreen from '../screens/PerfilScreen';
+import AyudaNotificacionesScreen from '../screens/AyudaNotificacionesScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
 export default function App() {
@@ -151,6 +152,7 @@ export default function App() {
     if (pantallaActual === 'home') {
         return (
             <HomeScreen
+            irAAyuda={() => setPantallaActual('ayuda')}
             irAPerfil={() => setPantallaActual('perfil')}
                 irASostenibilidad={() => setPantallaActual('sostenibilidad')}
                 irAQR={() => setPantallaActual('qr')}
@@ -163,6 +165,9 @@ export default function App() {
 
     if (pantallaActual === 'perfil') {
   return <PerfilScreen alCerrar={() => setPantallaActual('home')} />;
+}
+if (pantallaActual === 'ayuda') {
+  return <AyudaNotificacionesScreen alCerrar={() => setPantallaActual('home')} />;
 }
 
     if (pantallaActual === 'sostenibilidad') {
