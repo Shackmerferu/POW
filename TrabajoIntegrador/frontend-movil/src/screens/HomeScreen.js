@@ -22,7 +22,7 @@ import FirmaPad from '../components/molecules/FirmaPad';
 import BuscadorAvanzadoScreen from './BuscadorAvanzadoScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
-export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiarQR, cerrarSesion }) {
+export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, codigoQR, limpiarQR, cerrarSesion }) {
   const { colors } = useAppColorScheme();
   const styles = createStyles(colors);
 
@@ -49,7 +49,7 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
   const [modalFirmaVisible, setModalFirmaVisible] = useState(false);
   const [trazosFirma, setTrazosFirma] = useState([]);
 
-  const IP_BACKEND = '192.168.1.7';
+  const IP_BACKEND = 'localhost';
   const PUERTO = '8000';
   const BASE_URL = `http://${IP_BACKEND}:${PUERTO}`;
 
@@ -685,6 +685,7 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
       <View style={{ marginTop: 10 }}>
         <Boton titulo="🔄 Actualizar Convenios" onPress={() => traerConvenios()} />
         <Boton titulo="📷 Escanear Código QR" onPress={irAQR} />
+        <Boton titulo="👤 Mi Perfil e Identidad" onPress={irAPerfil} secundario={true} />
         <Boton titulo="🌱 Impacto y Sostenibilidad" onPress={irASostenibilidad} secundario={true} />
         {cerrarSesion && <Boton titulo="Cerrar Sesión" onPress={cerrarSesion} secundario={true} />}
       </View>

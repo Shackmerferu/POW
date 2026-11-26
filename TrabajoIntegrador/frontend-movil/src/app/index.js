@@ -8,6 +8,7 @@ import InputTexto from '../components/molecules/InputTexto';
 import Boton from '../components/atoms/Boton';
 import LectorQRScreen from '../screens/LectorQRScreen';
 import HomeScreen from '../screens/HomeScreen';
+import PerfilScreen from '../screens/PerfilScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
 export default function App() {
@@ -25,7 +26,7 @@ export default function App() {
     const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
     const [sesionPendiente, setSesionPendiente] = useState(null);
 
-    const IP_BACKEND = '192.168.1.7';
+    const IP_BACKEND = 'localhost';
     const PUERTO = '8000';
 
     useEffect(() => {
@@ -150,6 +151,7 @@ export default function App() {
     if (pantallaActual === 'home') {
         return (
             <HomeScreen
+            irAPerfil={() => setPantallaActual('perfil')}
                 irASostenibilidad={() => setPantallaActual('sostenibilidad')}
                 irAQR={() => setPantallaActual('qr')}
                 codigoQR={codigoEscaneado}
@@ -158,6 +160,10 @@ export default function App() {
             />
         );
     }
+
+    if (pantallaActual === 'perfil') {
+  return <PerfilScreen alCerrar={() => setPantallaActual('home')} />;
+}
 
     if (pantallaActual === 'sostenibilidad') {
         return <SostenibilidadScreen alCerrar={() => setPantallaActual('home')} />;
