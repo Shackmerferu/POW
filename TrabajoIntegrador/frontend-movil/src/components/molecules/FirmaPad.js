@@ -35,14 +35,14 @@ export default function FirmaPad({ onCambioFirma, colores }) {
   return (
     <View style={styles.wrapper}>
       <Text style={[styles.label, { color: colores?.text || '#333' }]}>
-        Dibujá tu firma con el dedo dentro del recuadro:
+        Dibujá tu firma con el dedo en el recuadro:
       </Text>
       <View
         style={[styles.canvas, { borderColor: colores?.accent || '#003366' }]}
         {...panResponder.panHandlers}
       >
         {puntos.length === 0 && (
-          <Text style={styles.placeholder}>Firmar aquí...</Text>
+          <Text style={styles.placeholder}>Trazá tu firma aquí</Text>
         )}
         {puntos.map((p, idx) => (
           <View
@@ -52,7 +52,7 @@ export default function FirmaPad({ onCambioFirma, colores }) {
         ))}
       </View>
       <TouchableOpacity onPress={limpiar} style={styles.btnLimpiar}>
-        <Text style={styles.txtLimpiar}>🗑️ Limpiar firma</Text>
+        <Text style={styles.txtLimpiar}>Borrar y volver a firmar</Text>
       </TouchableOpacity>
     </View>
   );

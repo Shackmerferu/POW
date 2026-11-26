@@ -3,6 +3,14 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import Boton from '../components/atoms/Boton';
 
+const etiquetasEstado = {
+  todos: 'Todos',
+  aprobado: 'Listo para firmar',
+  firmado: 'Firmado',
+  revision: 'En revisión',
+  borrador: 'Borrador',
+};
+
 export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCerrar, esOffline }) {
   const { colors } = useAppColorScheme();
   const styles = createStyles(colors);
@@ -48,31 +56,32 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
   if (esOffline) {
     return (
       <View style={styles.container}>
-        <Text style={styles.titulo}>Buscador Avanzado</Text>
+        <Text style={styles.titulo}>Búsqueda de convenios</Text>
         <View style={styles.cardOffline}>
           <Text style={styles.textoOffline}>
-            📡 Estás en Modo Offline. El buscador avanzado no está disponible sin conexión.
+            No hay conexión a internet. La búsqueda con filtros estará disponible cuando vuelvas a conectarte.
           </Text>
         </View>
-        <Boton titulo="Volver al Panel" onPress={alCerrar} secundario={true} />
+        <Boton titulo="Volver a convenios" onPress={alCerrar} secundario={true} />
       </View>
     );
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Buscador Avanzado (Árbol)</Text>
+      <Text style={styles.titulo}>Buscar convenios</Text>
+      <Text style={styles.contador}>Encontrá convenios por nombre, número, resolución, año o estado.</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Buscar por título, código o resolución..."
+        placeholder="Nombre, número o resolución"
         placeholderTextColor={colors.textSecondary}
         value={texto}
         onChangeText={setTexto}
       />
       <TextInput
         style={styles.input}
-        placeholder="Filtrar por año (ej: 2026)"
+        placeholder="Año (por ejemplo, 2026)"
         placeholderTextColor={colors.textSecondary}
         keyboardType="numeric"
         value={anio}
@@ -87,32 +96,38 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
             onPress={() => setEstadoFiltro(est)}
           >
             <Text style={[styles.chipTexto, estadoFiltro === est && styles.chipTextoActivo]}>
-              {est.toUpperCase()}
+              {etiquetasEstado[est]}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      <Text style={styles.contador}>Resultados encontrados: {filtrados.length}</Text>
+      <Text style={styles.contador}>{filtrados.length === 1 ? '1 convenio encontrado' : `${filtrados.length} convenios encontrados`}</Text>
+
+      {filtrados.length === 0 && (
+        <View style={styles.cardOffline}>
+          <Text style={styles.textoOffline}>No encontramos convenios con esos datos. Probá cambiar la búsqueda o los filtros.</Text>
+        </View>
+      )}
 
       {arbol.map((padre) => (
         <View key={padre.id} style={styles.nodoPadre}>
           <TouchableOpacity onPress={() => alSeleccionar(padre)}>
             <Text style={styles.codigoPadre}>
-              📁 {padre.codigo_unico || `ID #${padre.id}`} [{String(padre.estado || '').toUpperCase()}]
+              {padre.codigo_unico || `N.º ${padre.id}`} · {etiquetasEstado[String(padre.estado || '').toLowerCase()] || 'Estado no disponible'}
             </Text>
             <Text style={styles.tituloNodo}>{padre.titulo}</Text>
           </TouchableOpacity>
 
           {/* Resolución asignada */}
           {padre.resolucion ? (
-            <Text style={styles.hoja}>├── 📜 Resolución: {padre.resolucion}</Text>
+            <Text style={styles.hoja}>Resolución: {padre.resolucion}</Text>
           ) : null}
 
           {/* Documentación asignada al padre */}
           {(padre.documentos || []).map((doc) => (
             <Text key={doc.id} style={styles.hoja}>
-              ├── 📄 Doc ({doc.tipo_documento}): {doc.ruta_archivo}
+              Documento ({doc.tipo_documento}): {doc.ruta_archivo}
             </Text>
           ))}
 
@@ -121,15 +136,15 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
             <View key={hijo.id} style={styles.nodoHijo}>
               <TouchableOpacity onPress={() => alSeleccionar(hijo)}>
                 <Text style={styles.codigoHijo}>
-                  └── 📂 Hijo: {hijo.codigo_unico || `ID #${hijo.id}`} - {hijo.titulo}
+                  Convenio relacionado: {hijo.codigo_unico || `N.º ${hijo.id}`} · {hijo.titulo}
                 </Text>
               </TouchableOpacity>
               {hijo.resolucion ? (
-                <Text style={styles.hojaHijo}>    ├── 📜 Res: {hijo.resolucion}</Text>
+                <Text style={styles.hojaHijo}>Resolución: {hijo.resolucion}</Text>
               ) : null}
               {(hijo.documentos || []).map((d) => (
                 <Text key={d.id} style={styles.hojaHijo}>
-                      └── 📄 {d.tipo_documento}: {d.ruta_archivo}
+                      Documento ({d.tipo_documento}): {d.ruta_archivo}
                 </Text>
               ))}
             </View>
@@ -137,7 +152,7 @@ export default function BuscadorAvanzadoScreen({ convenios, alSeleccionar, alCer
         </View>
       ))}
 
-      <Boton titulo="Volver al Panel" onPress={alCerrar} secundario={true} />
+      <Boton titulo="Volver a convenios" onPress={alCerrar} secundario={true} />
     </ScrollView>
   );
 }

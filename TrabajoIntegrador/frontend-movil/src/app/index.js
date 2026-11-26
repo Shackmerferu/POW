@@ -9,6 +9,7 @@ import Boton from '../components/atoms/Boton';
 import LectorQRScreen from '../screens/LectorQRScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
+import { API_BASE_URL } from '../constants/api';
 
 export default function App() {
     const { colors } = useAppColorScheme();
@@ -24,9 +25,6 @@ export default function App() {
     const [codigoMFAGenerado, setCodigoMFAGenerado] = useState('');
     const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
     const [sesionPendiente, setSesionPendiente] = useState(null);
-
-    const IP_BACKEND = '192.168.1.7';
-    const PUERTO = '8000';
 
     useEffect(() => {
         (async () => {
@@ -48,10 +46,10 @@ export default function App() {
     }, []);
 
     const loginClasico = async () => {
-        if (!dni || !password) return Alert.alert("Error", "Completá los datos");
+        if (!dni || !password) return Alert.alert("Faltan datos", "Ingresá tu DNI o correo y tu contraseña para continuar.");
 
         try {
-            const respuesta = await fetch(`http://${IP_BACKEND}:${PUERTO}/api/auth`, {
+            const respuesta = await fetch(`${API_BASE_URL}/api/auth`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ dni: dni, contrasena: password })
@@ -67,21 +65,21 @@ export default function App() {
                 setEsperandoMFA(true);
 
                 Alert.alert(
-                    "Código MFA (SMS/Email simulado)",
-                    `Tu código de verificación es: ${codigo}`
+                    "Código de verificación",
+                    `Para esta demostración, usá este código: ${codigo}`
                 );
             } else {
-                Alert.alert("Acceso denegado", data.mensaje || "Credenciales incorrectas");
+                Alert.alert("No pudimos iniciar sesión", data.mensaje || "Revisá tu DNI o correo y tu contraseña.");
             }
         } catch (error) {
             console.log(error);
-            Alert.alert("Error de conexión", "No se pudo conectar al servidor Node.js.");
+            Alert.alert("Sin conexión", "No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.");
         }
     };
 
     const confirmarMFA = async () => {
         if (codigoMFAIngresado.trim() !== codigoMFAGenerado) {
-            return Alert.alert("Código incorrecto", "Verificá el código de 6 dígitos enviado.");
+            return Alert.alert("El código no coincide", "Revisá el código de 6 dígitos e intentá de nuevo.");
         }
 
         await AsyncStorage.setItem('@token_jwt', sesionPendiente.token);
@@ -100,8 +98,8 @@ export default function App() {
 
         if (!tokenPrevio) {
             return Alert.alert(
-                "Biometría no vinculada",
-                "Iniciá sesión una vez con usuario y contraseña para vincular tu huella/rostro."
+                "Primero iniciá sesión",
+                "Ingresá con tu DNI o correo y contraseña para habilitar el acceso con huella o reconocimiento facial."
             );
         }
 
@@ -165,32 +163,32 @@ export default function App() {
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <Text style={[styles.titulo, { color: colors.accent }]}>Convenios UNLPam</Text>
+            <Text style={[styles.titulo, { color: colors.accent }]}>Gestión de convenios</Text>
 
             {esperandoMFA ? (
                 <>
                     <Text style={{ color: colors.text, textAlign: 'center', marginBottom: 15 }}>
-                        Ingresá el código de 6 dígitos enviado por SMS/Email
+                        Ingresá el código de 6 dígitos que aparece en el mensaje para confirmar tu identidad.
                     </Text>
                     <InputTexto
-                        placeholder="Código MFA (6 dígitos)"
+                        placeholder="Código de verificación"
                         valor={codigoMFAIngresado}
                         onChangeText={setCodigoMFAIngresado}
                     />
-                    <Boton titulo="Verificar Código" onPress={confirmarMFA} />
+                    <Boton titulo="Confirmar código" onPress={confirmarMFA} />
                     <Boton
-                        titulo="Reenviar código"
-                        onPress={() => Alert.alert("Código MFA", `Tu código es: ${codigoMFAGenerado}`)}
+                        titulo="Volver a mostrar el código"
+                        onPress={() => Alert.alert("Código de verificación", `Para esta demostración, usá este código: ${codigoMFAGenerado}`)}
                         secundario={true}
                     />
                 </>
             ) : (
                 <>
-                    <InputTexto placeholder="Email / DNI" valor={dni} onChangeText={setDni} />
+                    <InputTexto placeholder="DNI o correo electrónico" valor={dni} onChangeText={setDni} />
                     <InputTexto placeholder="Contraseña" valor={password} onChangeText={setPassword} oculto={true} />
                     <Boton titulo="Ingresar" onPress={loginClasico} />
                     {soportaBiometria && (
-                        <Boton titulo="Ingresar con Huella / FaceID" onPress={loginBiometrico} secundario={true} />
+                        <Boton titulo="Ingresar con huella o rostro" onPress={loginBiometrico} secundario={true} />
                     )}
                 </>
             )}

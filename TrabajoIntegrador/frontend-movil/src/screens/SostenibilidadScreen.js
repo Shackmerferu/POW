@@ -8,22 +8,22 @@ export default function SostenibilidadScreen({ alCerrar }) {
     const styles = createStyles(colors);
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <Text style={[styles.titulo, { color: colors.positive }]}>Impacto Institucional</Text>
+            <Text style={[styles.titulo, { color: colors.positive }]}>Ahorro con la gestión digital</Text>
             
             <View style={styles.tarjeta}>
-                <Text style={styles.dato}>🌳 5.000 Hojas de papel ahorradas</Text>
-                <Text style={styles.dato}>⏱️ 1.200 Horas de gestión optimizadas</Text>
-                <Text style={styles.dato}>🚗 300 Viajes físicos de firma evitados</Text>
+                <Text style={styles.dato}>🌳 5.000 hojas de papel ahorradas</Text>
+                <Text style={styles.dato}>⏱️ 1.200 horas de gestión ahorradas</Text>
+                <Text style={styles.dato}>🚗 300 viajes para firmar evitados</Text>
             </View>
 
             <View style={styles.cajaSupuestos}>
-                <Text style={styles.supuestosTitulo}>Supuestos utilizados (Proyección Anual):</Text>
-                <Text style={styles.supuestoItem}>• 100 convenios procesados al año por la UNLPam.</Text>
-                <Text style={styles.supuestoItem}>• 50 fojas impresas por cada expediente físico.</Text>
-                <Text style={styles.supuestoItem}>• 12 horas de cadetería y seguimiento por trámite.</Text>
+                <Text style={styles.supuestosTitulo}>¿Cómo se estimó este ahorro?</Text>
+                <Text style={styles.supuestoItem}>• Se calcula sobre 100 convenios gestionados por año.</Text>
+                <Text style={styles.supuestoItem}>• Se estima que cada convenio reemplaza 50 hojas impresas.</Text>
+                <Text style={styles.supuestoItem}>• Se consideran 12 horas de traslados y seguimiento ahorradas por trámite.</Text>
             </View>
 
-            <Boton titulo="Volver al Panel" onPress={alCerrar} />
+            <Boton titulo="Volver a convenios" onPress={alCerrar} />
         </View>
     );
 }
