@@ -6,7 +6,6 @@ import { BlurTargetView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import FloatingThemeToggle from '@/components/FloatingThemeToggle';
 import AppTabs from '@/components/app-tabs';
 import { ColorSchemeProvider, useAppColorScheme } from '@/contexts/ColorSchemeContext';
 import { FontScaleProvider } from '@/contexts/FontScaleContext';
@@ -44,7 +43,6 @@ function ThemedApplication() {
             <BlurTargetView ref={blurTargetRef} style={{ flex: 1 }}>
               <AnimatedSplashOverlay />
               <AppTabs />
-              <FloatingThemeToggle />
             </BlurTargetView>
           </View>
         </TabBarContext.Provider>

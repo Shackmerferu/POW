@@ -21,7 +21,7 @@ export default function QRScreen() {
       <LectorQRScreen
         key="lector-qr-activo"
         alCerrar={() => router.replace('/')}
-        alEscanear={(codigo) => router.replace({ pathname: '/', params: { codigoQR: codigo } })}
+        alEscanear={(codigo) => router.navigate({ pathname: '/', params: { codigoQR: String(codigo).trim() } })}
       />
     </View>
   );

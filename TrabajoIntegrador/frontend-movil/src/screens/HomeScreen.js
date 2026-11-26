@@ -184,12 +184,13 @@ export default function HomeScreen({ irANotificaciones, irAManual, codigoQR, lim
     (async () => {
       let listaActual = convenios.length ? convenios : await traerConvenios();
       const qrLimpio = String(codigoQR).trim().toLowerCase();
-      const encontrado = listaActual.find(
-        (c) =>
-          String(c.codigo_unico || '').toLowerCase() === qrLimpio ||
-          qrLimpio.includes(String(c.codigo_unico || '').toLowerCase()) ||
+      const encontrado = listaActual.find((c) => {
+        const cod = String(c.codigo_unico || '').trim().toLowerCase();
+        return (
+          (cod !== '' && (cod === qrLimpio || qrLimpio.includes(cod))) ||
           String(c.id) === qrLimpio
-      );
+        );
+      });
       if (encontrado) {
         // eslint-disable-next-line react-hooks/immutability
         await abrirFichaConvenio(encontrado);
