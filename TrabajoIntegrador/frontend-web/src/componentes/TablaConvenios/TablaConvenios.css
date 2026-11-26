@@ -44,6 +44,26 @@
   }
 }
 
+@media (max-width: 560px) {
+  .convenios-tarjeta {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .convenios-tarjeta__codigo {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .tablaconvenios__pie {
+    align-items: flex-start;
+  }
+}
+
 .tablaconvenios__pie {
   display: flex;
   flex-shrink: 0;

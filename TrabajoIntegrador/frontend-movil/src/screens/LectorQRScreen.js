@@ -20,8 +20,8 @@ export default function LectorQRScreen({ alCerrar }) {
             setEscaneado(true);
             Alert.alert(
                 "Tiempo agotado", 
-                "No se reconoció ningún código QR en 1 minuto.",
-                [{ text: "Volver", onPress: alCerrar }]
+                "No pudimos leer ningún código. Volvé a intentarlo cuando tengas el convenio a mano.",
+                [{ text: "Volver a convenios", onPress: alCerrar }]
             );
         }
         return () => clearInterval(intervalo);
@@ -32,8 +32,8 @@ export default function LectorQRScreen({ alCerrar }) {
     if (!permiso.granted) {
         return (
             <View style={[styles.container, { backgroundColor: colors.background }]}>
-                <Text style={styles.texto}>Necesitamos acceso a la cámara para leer el expediente</Text>
-                <Boton titulo="Otorgar Permiso" onPress={pedirPermiso} />
+                <Text style={styles.texto}>Para leer el código del convenio, necesitamos permiso para usar la cámara.</Text>
+                <Boton titulo="Permitir acceso a la cámara" onPress={pedirPermiso} />
                 <Boton titulo="Cancelar" onPress={alCerrar} secundario={true} />
             </View>
         );
@@ -42,16 +42,16 @@ export default function LectorQRScreen({ alCerrar }) {
     const manejarEscaneo = ({ data }) => {
         setEscaneado(true);
         Alert.alert(
-            "Expediente Encontrado", 
-            `Código seguro: ${data}\nRedirigiendo a la ficha del convenio...`,
-            [{ text: "OK", onPress: alCerrar }]
+            "Convenio encontrado",
+            "Ya encontramos el convenio. Vamos a abrir sus detalles.",
+            [{ text: "Volver a convenios", onPress: alCerrar }]
         );
     };
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <Text style={styles.titulo}>Escáner de Expedientes</Text>
-            <Text style={styles.temporizador}>Cierre automático en: {tiempo}s</Text>
+            <Text style={styles.titulo}>Escanear código del convenio</Text>
+            <Text style={styles.temporizador}>Buscando código… {tiempo} s</Text>
             
            <View style={styles.marcoCamara}>
     <CameraView
@@ -62,7 +62,7 @@ export default function LectorQRScreen({ alCerrar }) {
     />
 </View>
 
-            <Boton titulo="Cancelar Escaneo" onPress={alCerrar} secundario={true} />
+            <Boton titulo="Cancelar y volver" onPress={alCerrar} secundario={true} />
         </View>
     );
 }
