@@ -54,7 +54,7 @@ const tituloMovimiento = (movimiento) => {
   return 'Actividad del convenio';
 };
 
-export default function HomeScreen({ codigoQR, limpiarQR, cerrarSesion }) {
+export default function HomeScreen({ irASostenibilidad, irAPerfil, irAQR, irAAyuda, codigoQR, limpiarQR, cerrarSesion }) {
   const { colors } = useAppColorScheme();
   const styles = createStyles(colors);
 
@@ -84,6 +84,10 @@ export default function HomeScreen({ codigoQR, limpiarQR, cerrarSesion }) {
   // Modal de Firma a mano + Huella
   const [modalFirmaVisible, setModalFirmaVisible] = useState(false);
   const [trazosFirma, setTrazosFirma] = useState([]);
+
+  const IP_BACKEND = 'localhost';
+  const PUERTO = '8000';
+  const BASE_URL = `http://${IP_BACKEND}:${PUERTO}`;
 
   const filtrarPorRol = (listaCompleta, user) => {
     const rol = String(user?.rol || '').trim().toLowerCase();
@@ -826,7 +830,12 @@ export default function HomeScreen({ codigoQR, limpiarQR, cerrarSesion }) {
       )}
 
       <View style={{ marginTop: 10 }}>
-        {cerrarSesion && <Boton titulo="Cerrar sesión" onPress={cerrarSesion} secundario={true} />}
+        <Boton titulo="🔄 Actualizar Convenios" onPress={() => traerConvenios()} />
+        <Boton titulo="📷 Escanear Código QR" onPress={irAQR} />
+        <Boton titulo="👤 Mi Perfil e Identidad" onPress={irAPerfil} secundario={true} />
+        <Boton titulo="🔔 Notificaciones y Manual" onPress={irAAyuda} secundario={true} />
+        <Boton titulo="🌱 Impacto y Sostenibilidad" onPress={irASostenibilidad} secundario={true} />
+        {cerrarSesion && <Boton titulo="Cerrar Sesión" onPress={cerrarSesion} secundario={true} />}
       </View>
     </ScrollView>
     </View>

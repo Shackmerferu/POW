@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputTexto from '../components/molecules/InputTexto';
 import Boton from '../components/atoms/Boton';
 import HomeScreen from '../screens/HomeScreen';
+import PerfilScreen from '../screens/PerfilScreen';
+import AyudaNotificacionesScreen from '../screens/AyudaNotificacionesScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { API_BASE_URL } from '../constants/api';
 
@@ -25,6 +27,9 @@ export default function App() {
     const [codigoMFAGenerado, setCodigoMFAGenerado] = useState('');
     const [codigoMFAIngresado, setCodigoMFAIngresado] = useState('');
     const [sesionPendiente, setSesionPendiente] = useState(null);
+
+    const IP_BACKEND = 'localhost';
+    const PUERTO = '8000';
 
     useEffect(() => {
         (async () => {
@@ -136,12 +141,21 @@ export default function App() {
     if (pantallaActual === 'home') {
         return (
             <HomeScreen
+            irAAyuda={() => setPantallaActual('ayuda')}
+            irAPerfil={() => setPantallaActual('perfil')}
                 codigoQR={codigoEscaneado}
                 limpiarQR={() => router.setParams({ codigoQR: undefined })}
                 cerrarSesion={cerrarSesion}
             />
         );
     }
+
+    if (pantallaActual === 'perfil') {
+  return <PerfilScreen alCerrar={() => setPantallaActual('home')} />;
+}
+if (pantallaActual === 'ayuda') {
+  return <AyudaNotificacionesScreen alCerrar={() => setPantallaActual('home')} />;
+}
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
