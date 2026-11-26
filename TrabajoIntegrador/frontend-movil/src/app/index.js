@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import SostenibilidadScreen from '../screens/SostenibilidadScreen';
 import InputTexto from '../components/molecules/InputTexto';
 import Boton from '../components/atoms/Boton';
-import LectorQRScreen from '../screens/LectorQRScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 import { API_BASE_URL } from '../constants/api';
@@ -18,7 +17,8 @@ export default function App() {
     const [dni, setDni] = useState('');
     const [password, setPassword] = useState('');
     const [soportaBiometria, setSoportaBiometria] = useState(false);
-    const [codigoEscaneado, setCodigoEscaneado] = useState(null);
+    const { codigoQR: parametroQR } = useLocalSearchParams();
+    const codigoEscaneado = Array.isArray(parametroQR) ? parametroQR[0] : parametroQR;
 
     // Estados para MFA simulado
     const [esperandoMFA, setEsperandoMFA] = useState(false);
@@ -133,32 +133,14 @@ export default function App() {
         );
     }
 
-    if (pantallaActual === 'qr') {
-        return (
-            <LectorQRScreen
-                alCerrar={() => setPantallaActual('home')}
-                alEscanear={(datoQR) => {
-                    setCodigoEscaneado(datoQR);
-                    setPantallaActual('home');
-                }}
-            />
-        );
-    }
-
     if (pantallaActual === 'home') {
         return (
             <HomeScreen
-                irASostenibilidad={() => setPantallaActual('sostenibilidad')}
-                irAQR={() => setPantallaActual('qr')}
                 codigoQR={codigoEscaneado}
-                limpiarQR={() => setCodigoEscaneado(null)}
+                limpiarQR={() => router.setParams({ codigoQR: undefined })}
                 cerrarSesion={cerrarSesion}
             />
         );
-    }
-
-    if (pantallaActual === 'sostenibilidad') {
-        return <SostenibilidadScreen alCerrar={() => setPantallaActual('home')} />;
     }
 
     return (

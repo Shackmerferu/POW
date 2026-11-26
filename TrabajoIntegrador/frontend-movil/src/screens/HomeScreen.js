@@ -54,7 +54,7 @@ const tituloMovimiento = (movimiento) => {
   return 'Actividad del convenio';
 };
 
-export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiarQR, cerrarSesion }) {
+export default function HomeScreen({ codigoQR, limpiarQR, cerrarSesion }) {
   const { colors } = useAppColorScheme();
   const styles = createStyles(colors);
 
@@ -829,26 +829,6 @@ export default function HomeScreen({ irASostenibilidad, irAQR, codigoQR, limpiar
         {cerrarSesion && <Boton titulo="Cerrar sesión" onPress={cerrarSesion} secundario={true} />}
       </View>
     </ScrollView>
-    <View style={styles.footer}>
-      <TouchableOpacity
-        style={styles.footerBoton}
-        onPress={irAQR}
-        accessibilityRole="button"
-        accessibilityLabel="Escanear QR de un convenio"
-      >
-        <Text style={styles.footerIcono}>▦</Text>
-        <Text style={styles.footerTexto}>Escanear QR</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerBoton}
-        onPress={irASostenibilidad}
-        accessibilityRole="button"
-        accessibilityLabel="Ver Modo eco: ahorro de papel y traslados"
-      >
-        <Text style={styles.footerIcono}>♻</Text>
-        <Text style={styles.footerTexto}>Modo eco</Text>
-      </TouchableOpacity>
-    </View>
     </View>
   );
 }
@@ -858,27 +838,6 @@ const createStyles = (colors) =>
     pantallaHome: { flex: 1, backgroundColor: colors.background },
     scrollHome: { flex: 1 },
     container: { flexGrow: 1, padding: 16, backgroundColor: colors.background },
-    footer: {
-      flexDirection: 'row',
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      backgroundColor: colors.backgroundElement,
-      paddingHorizontal: 12,
-      paddingTop: 8,
-      paddingBottom: 8,
-      gap: 10,
-    },
-    footerBoton: {
-      flex: 1,
-      minHeight: 54,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 10,
-      backgroundColor: colors.backgroundSelected,
-      paddingVertical: 6,
-    },
-    footerIcono: { fontSize: 18, color: colors.accent, marginBottom: 2 },
-    footerTexto: { fontSize: 12, fontWeight: '700', color: colors.accent },
     header: { marginBottom: 14 },
     titulo: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', color: colors.accent, marginBottom: 6 },
     textoUbicacion: { fontSize: 13, textAlign: 'center', color: colors.textSecondary, marginBottom: 10 },

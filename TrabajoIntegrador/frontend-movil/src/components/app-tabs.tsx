@@ -14,16 +14,24 @@ export default function AppTabs() {
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Convenios</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
-          renderingMode="template"
+          sf="doc.text.magnifyingglass"
+          md="manage_search"
         />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Ayuda</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Modo eco</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
+          sf="leaf"
+          md="eco"
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="qr">
+        <NativeTabs.Trigger.Label>Escanear QR</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf="qrcode.viewfinder"
+          md="qr_code_scanner"
         />
       </NativeTabs.Trigger>
     </NativeTabs>

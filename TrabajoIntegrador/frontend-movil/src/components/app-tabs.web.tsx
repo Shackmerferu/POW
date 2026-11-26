@@ -23,7 +23,10 @@ export default function AppTabs() {
             <TabButton>Convenios</TabButton>
           </TabTrigger>
           <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Ayuda</TabButton>
+            <TabButton>Modo eco</TabButton>
+          </TabTrigger>
+          <TabTrigger name="qr" href="/qr" asChild>
+            <TabButton>Escanear QR</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>

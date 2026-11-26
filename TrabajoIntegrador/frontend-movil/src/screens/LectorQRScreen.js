@@ -4,7 +4,8 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import Boton from '../components/atoms/Boton';
 import { useAppColorScheme } from '../contexts/ColorSchemeContext';
 
-export default function LectorQRScreen({ alCerrar }) {
+/** @param {{ alCerrar: () => void, alEscanear?: (codigo: string) => void }} props */
+export default function LectorQRScreen({ alCerrar, alEscanear }) {
     const { colors } = useAppColorScheme();
     const styles = createStyles(colors);
     const [permiso, pedirPermiso] = useCameraPermissions();
@@ -44,7 +45,7 @@ export default function LectorQRScreen({ alCerrar }) {
         Alert.alert(
             "Convenio encontrado",
             "Ya encontramos el convenio. Vamos a abrir sus detalles.",
-            [{ text: "Volver a convenios", onPress: alCerrar }]
+            [{ text: "Ver convenio", onPress: () => alEscanear?.(data) }]
         );
     };
 
