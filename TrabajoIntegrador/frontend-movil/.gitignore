@@ -1,43 +1,89 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# =========================================================
+#  .gitignore - frontend-movil (Expo / React Native)
+#  Ver https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# =========================================================
 
-# dependencies
+# Dependencias
 node_modules/
+.pnp
+.pnp.js
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# Carpetas nativas generadas (se regeneran con expo prebuild)
+/ios
+/android
+.gradle/
+**/build/
 .kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
 
 # Metro
 .metro-health-check*
 
-# debug
+# Tests y cobertura
+coverage/
+.nyc_output/
+
+# Variables de entorno (nunca subir secretos)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+pnpm-debug.log*
 
-# macOS
-.DS_Store
-*.pem
-
-# local env files
-.env*.local
-
-# typescript
+# Cachés y archivos temporales
+.eslintcache
+.cache/
 *.tsbuildinfo
+*.tmp
+*.temp
+*.bak
+*.orig
+*~
+*.orig.*
 
-example
+# Archivos del sistema operativo
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# generated native folders
-/ios
-/android
+# Editor / IDE
+.vscode/
+.idea/
+*.suo
+*.swp
+*.swo
+
+# Herramientas de asistentes de IA
+.claude/
+.cursor/
+.aider*
+
+# Certificados y artefactos de compilación
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+*.apk
+*.aab
+*.ipa
+
+# Archivos comprimidos
+*.zip
+*.rar
+*.7z
