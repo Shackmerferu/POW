@@ -1,0 +1,28 @@
+/* --- Tarjeta dato (métricas) ---------------------------------------------- */
+.tarjeta-dato {
+  display: block;
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.8rem 0.95rem 0.75rem;
+}
+
+.tarjeta-dato__titulo {
+  color: #64707d;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.tarjeta-dato__cantidad {
+  color: #1f4f99;
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin: 0.3rem 0 0.15rem;
+}
+
+.tarjeta-dato__detalle {
+  color: #7a838f;
+  font-size: 0.78rem;
+  margin: 0;
+}

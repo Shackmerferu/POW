@@ -1,0 +1,71 @@
+/* --- Menú de acciones (dropdown puro, sin Bootstrap) --------------------- */
+.menu-acciones {
+  position: relative;
+}
+
+.menu-acciones__toggle {
+  font: inherit;
+  font-size: 0.8rem;
+  border: 1px solid #1f4f99;
+  background-color: #1f4f99;
+  color: #fff;
+  border-radius: 3px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.menu-acciones__toggle:hover:enabled {
+  background-color: #1a4280;
+}
+
+.menu-acciones__toggle:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.menu-acciones__lista {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 210px;
+  background-color: #fff;
+  border: 1px solid #d6dde7;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  z-index: 30;
+}
+
+.menu-acciones__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  color: #25313e;
+  padding: 0.42rem 0.75rem;
+  cursor: pointer;
+}
+
+.menu-acciones__item:hover {
+  background-color: #eef2f8;
+  color: #1f4f99;
+}
+
+/* Línea divisoria sutil antes de la acción de cierre (aprobar/rechazar) */
+.menu-acciones__item--separador {
+  border-top: 1px solid #eef1f4;
+}
+
+.menu-acciones__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  color: #89919b;
+}
+
+.menu-acciones__item:disabled:hover {
+  background: none;
+  color: #89919b;
+}

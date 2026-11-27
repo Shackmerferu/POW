@@ -1,0 +1,61 @@
+/* --- Bloque distribución -------------------------------------------------- */
+.bloque-distribucion {
+  border: 1px solid #e0e5ea;
+  background-color: #fff;
+  padding: 0.85rem 0.95rem;
+}
+
+.bloque-distribucion__titulo {
+  color: #1f4f99;
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+}
+
+.bloque-distribucion__vacio {
+  color: #96a0ac;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.bloque-distribucion__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bloque-distribucion__franja {
+  display: grid;
+  grid-template-columns: minmax(86px, 190px) 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #33404e;
+}
+
+.bloque-distribucion__item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bloque-distribucion__pista {
+  display: block;
+  height: 10px;
+  background-color: #eef1f5;
+  overflow: hidden;
+}
+
+.bloque-distribucion__barra {
+  display: block;
+  height: 100%;
+  background: #1f4f99;
+}
+
+.bloque-distribucion__cantidad {
+  min-width: 1.6rem;
+  text-align: right;
+  color: #1f4f99;
+  font-weight: 600;
+}

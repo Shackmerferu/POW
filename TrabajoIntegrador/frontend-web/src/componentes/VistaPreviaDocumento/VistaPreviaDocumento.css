@@ -1,0 +1,113 @@
+/* --- Vista previa del documento ----------------------------------------- */
+.vista-previa {
+  border: 1px solid #dfe4ea;
+  background-color: #f8fafc;
+  padding: 0.7rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.vista-previa__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.vista-previa__tipo {
+  color: #64707d;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.vista-previa__nombre {
+  color: #1f4f99;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0.1rem 0 0.1rem;
+}
+
+.vista-previa__meta {
+  color: #7a838f;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.vista-previa__marco {
+  height: 720px;
+  border: 1px solid #dfe4ea;
+  background-color: #f1f3f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.vista-previa__iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Hoja simulada (cuando no hay URL real qué incrustar) */
+.vista-previa__hoja {
+  width: min(280px, 80%);
+  height: 84%;
+  background-color: #fff;
+  border: 1px solid #dfe4ea;
+  padding: 1rem 0.9rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.vista-previa__linea {
+  display: block;
+  height: 6px;
+  background-color: #eef1f5;
+  width: 80%;
+}
+
+.vista-previa__linea--titulo {
+  width: 55%;
+  background-color: #cdd8e9;
+}
+
+.vista-previa__linea--firma {
+  margin-top: auto;
+  width: 40%;
+}
+
+.vista-previa__band {
+  color: #93a0ad;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0.4rem 0 0;
+}
+
+.vista-previa__vacio {
+  color: #9aa4af;
+  font-size: 0.88rem;
+}
+
+.vista-previa__aviso {
+  background-color: #eef2f8;
+  border: 1px solid #cdd8e9;
+  color: #1f4f99;
+  font-size: 0.84rem;
+  padding: 0.5rem 0.65rem;
+  margin: 0;
+}
+
+.vista-previa__nota {
+  color: #93a0ad;
+  font-size: 0.78rem;
+  margin: 0;
+}

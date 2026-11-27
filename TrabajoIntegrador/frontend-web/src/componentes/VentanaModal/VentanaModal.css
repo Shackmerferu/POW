@@ -1,0 +1,47 @@
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 34, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.4rem 1rem;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.modal-ficha {
+  width: min(760px, 100%);
+  background: #fff;
+  border: 1px solid #d6dde7;
+}
+
+.modal-ficha__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.15rem 0.85rem;
+  border-bottom: 1px solid #e6eaee;
+}
+
+.modal-ficha__cabecera h2 {
+  color: #1f4f99;
+  font-size: 1.1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.modal-ficha__cerrar {
+  border: 1px solid #d6dde7;
+  background: #fff;
+  color: #4a5560;
+  border-radius: 3px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.modal-ficha__cuerpo {
+  padding: 0.95rem 1.15rem 1.2rem;
+}

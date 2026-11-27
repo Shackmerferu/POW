@@ -1,0 +1,271 @@
+/* --- Listado de convenios como cartas alargadas ---------------------------
+   Contenedor con scroll vertical propio: no crece más allá del panel de
+   resultados de la página de búsqueda. Cada convenio es una tarjeta
+   horizontal (bloque de código a la izquierda, título + descripción a la
+   derecha), como las tarjetas del listado de termos.
+   El pie con el total y la paginación queda anclado al fondo del
+   contenedor, tenga o no resultados el listado. */
+.tablaconvenios {
+  display: flex;
+  min-width: 0;
+  /* Alto fijo de 480px como en el diseño original: el scroll queda solo
+     dentro de .convenios-lista (las tarjetas), nunca en la página. */
+  height: 480px;
+  flex-direction: column;
+}
+
+.convenios-lista {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #cdd8e9 #fff;
+}
+
+@media (max-width: 760px) {
+  /* En pantallas angostas, el scroll queda en la página completa. */
+  .tablaconvenios {
+    height: auto;
+  }
+
+  .convenios-lista {
+    flex: 0 0 auto;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .tablaconvenios__pie {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 560px) {
+  .convenios-tarjeta {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .convenios-tarjeta__codigo {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .tablaconvenios__pie {
+    align-items: flex-start;
+  }
+}
+
+.tablaconvenios__pie {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #e0e5ea;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.tablaconvenios__total {
+  color: #64707d;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.convenios-tarjeta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #e0e5ea;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.convenios-tarjeta:hover,
+.convenios-tarjeta:focus-within {
+  border-color: #1f4f99;
+}
+
+/* Contenido atenuado cuando el velo está visible */
+.convenios-tarjeta:hover > :not(.convenios-tarjeta__abrir),
+.convenios-tarjeta:focus-within > :not(.convenios-tarjeta__abrir) {
+  opacity: 0.3;
+  transition: opacity 0.15s ease;
+}
+
+/* Velo "Abrir": cubre la carta y aparece centrado al pasar el mouse */
+.convenios-tarjeta__abrir {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background-color: rgba(31, 79, 153, 0.12);
+  color: #1f4f99;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.convenios-tarjeta:hover .convenios-tarjeta__abrir,
+.convenios-tarjeta:focus-within .convenios-tarjeta__abrir {
+  opacity: 1;
+}
+
+/* Bloque izquierdo: ocupa el lugar de la imagen del card de termos. */
+.convenios-tarjeta__codigo {
+  display: flex;
+  flex-shrink: 0;
+  width: 150px;
+  min-height: 84px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #cdd8e9;
+  border-radius: 4px;
+  background-color: #eef2f8;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.convenios-tarjeta__codigo-etiqueta {
+  color: #64707d;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.convenios-tarjeta__codigo-valor {
+  color: #1f4f99;
+  font-size: 0.85rem;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.convenios-tarjeta__texto {
+  min-width: 0;
+  flex: 1;
+}
+
+.convenios-tarjeta__titulo {
+  color: #1f4f99;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.15rem;
+}
+
+.convenios-tarjeta__descripcion {
+  color: #5a6472;
+  font-size: 0.82rem;/* Modal y ficha de convenio */
+html.accesibilidad-contraste .modal-ficha,
+html.accesibilidad-contraste .modal-ficha__cabecera,
+html.accesibilidad-contraste .modal-ficha__cuerpo,
+html.accesibilidad-contraste .ficha__datos > div,
+html.accesibilidad-contraste .ficha__partes li,
+html.accesibilidad-contraste .ficha__documentos li {
+  background: #fff;
+  border-color: #000;
+  color: #1a1a1a;
+}
+
+html.accesibilidad-contraste .modal-ficha__cabecera h2,
+html.accesibilidad-contraste .ficha__seccion,
+html.accesibilidad-contraste .ficha__codigo,
+html.accesibilidad-contraste .ficha__datos dt,
+html.accesibilidad-contraste .ficha__datos dd,
+html.accesibilidad-contraste .ficha__texto,
+html.accesibilidad-contraste .ficha__partes,
+html.accesibilidad-contraste .ficha__partes li,
+html.accesibilidad-contraste .ficha__partes span,
+html.accesibilidad-contraste .ficha__documento-tipo,
+html.accesibilidad-contraste .ficha__documento-nombre,
+html.accesibilidad-contraste .ficha__documento-fecha {
+  color: #1a1a1a;
+}
+
+html.accesibilidad-contraste .modal-ficha__cerrar {
+  background: #fff;
+  border-color: #000;
+  color: #000;
+}
+
+html.accesibilidad-contraste .ficha__documento--seleccionado {
+  background: #e8e8e8;
+  border: 1px solid #000;
+}
+
+/* Vista previa y documentos */
+html.accesibilidad-contraste .vista-previa,
+html.accesibilidad-contraste .vista-previa__marco,
+html.accesibilidad-contraste .vista-previa__hoja,
+html.accesibilidad-contraste .vista-previa__aviso {
+  background: #fff;
+  border-color: #000;
+}
+
+html.accesibilidad-contraste .vista-previa__tipo,
+html.accesibilidad-contraste .vista-previa__nombre,
+html.accesibilidad-contraste .vista-previa__meta,
+html.accesibilidad-contraste .vista-previa__band,
+html.accesibilidad-contraste .vista-previa__vacio,
+html.accesibilidad-contraste .vista-previa__nota,
+html.accesibilidad-contraste .vista-previa__aviso {
+  color: #1a1a1a;
+}
+
+html.accesibilidad-contraste .vista-previa__linea {
+  background: #bfbfbf;
+}
+
+html.accesibilidad-contraste .vista-previa__linea--titulo {
+  background: #808080;
+}
+
+/* Etiquetas dentro de la ficha */
+html.accesibilidad-contraste .etiqueta {
+  background: #fff;
+  border-color: #000;
+  color: #000;
+}
+
+html.accesibilidad-contraste .etiqueta--tipo,
+html.accesibilidad-contraste .etiqueta--rol {
+  background: #fff;
+  border-color: #000;
+  color: #000;
+}
+  line-height: 1.45;
+  margin: 4px 0 8px;
+}
+
+.convenios-tarjeta__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.convenios-tarjeta__dato {
+  color: #7a838f;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}

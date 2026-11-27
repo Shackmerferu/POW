@@ -1,0 +1,32 @@
+/* --- Paginación ------------------------------------------------------------ */
+.paginacion {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-content: flex-end;
+  margin-top: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.paginacion__pagina,
+.paginacion__flecha {
+  border: 1px solid #dbe0e6;
+  background: #fff;
+  color: #3a4653;
+  min-width: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.paginacion__flecha:disabled {
+  color: #aeb6c0;
+  cursor: default;
+}
+
+.paginacion__pagina--activa {
+  background-color: #dbe7f4; /* azul claro sutil sobre el blanco */
+  border-color: #1f4f99;
+  color: #1f4f99;
+  font-weight: 700;
+}
